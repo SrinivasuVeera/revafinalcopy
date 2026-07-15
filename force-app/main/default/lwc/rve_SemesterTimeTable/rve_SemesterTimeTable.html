@@ -1,0 +1,284 @@
+<template>
+
+    <div style="background-color: #EDEDED;">
+        <!-- Theory Subjects Table -->
+        <template if:true={hasTheoryData}>
+            <div class="slds-box " style="border-color:transparent">
+                <h3><b>Theory Subjects</b></h3>
+                <section>
+                    <table class="slds-text-heading_small">
+                        <!-- Table headers -->
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Subject
+                                </th>
+                                <th scope="col">
+                                    Semester
+                                </th>
+                                <th scope="col">
+                                    Course Code
+                                </th>
+                                <th scope="col">
+                                    Date of Examination
+                                </th>
+                                <th scope="col">
+                                    Start Time
+                                </th>
+                                <th scope="col">
+                                    End Time
+                                </th>
+                                <th scope="col">
+                                    QP Code
+                                </th>
+                            </tr>
+                        </thead>
+                        <!-- Table body -->
+                        <tbody>
+                            <template for:each={examData} for:item="examItem">
+                                <template if:true={examItem.Rve_QP_Code__c}>
+                                    <tr key={examItem.Id}>
+                                        <td class="medium-ch" data-cell="Subject">
+                                            {examItem.Rve_Subject__c}
+                                        </td>
+                                        <td class="medium-ch" data-cell="Semester">
+                                            {examItem.Rve_Semester__c}
+                                        </td>
+                                        <td class="medium-ch" data-cell="Course Code">
+                                            {examItem.Course_Code__c}
+                                        </td>
+                                        <td class="medium-ch" data-cell="Date of Examination">
+                                            {examItem.Date_Of_Examination__c}
+                                        </td>
+                                        <td class="medium-ch" data-cell="Start Time">
+                                            {examItem.Rve_Start_Time__c}
+                                        </td>
+                                        <td class="medium-ch" data-cell="End Time">
+                                            {examItem.Rve_End_Time__c}
+                                        </td>
+                                        <td class="medium-ch" data-cell="QP Code">
+                                            {examItem.Rve_QP_Code__c}
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table>
+
+
+                </section>
+                <!-- Table Container -->
+                <!-- <table
+                    class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-max-medium-table_stacked-horizontal">
+                
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Subject"><b>Subject</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Semester"><b>Semester</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Course Code"><b>Course Code</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Date of Examination"><b>Date of Examination</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Start Time"><b>Start Time</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="End Time"><b>End Time</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="QP Code"><b>QP Code</b></div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                   
+                    <tbody>
+                        <template for:each={examData} for:item="examItem">
+                            <template if:true={examItem.Rve_QP_Code__c}>
+                                <tr key={examItem.Id} class="slds-hint-parent">
+                                    <td data-label="Subject">
+                                        <div class="slds-truncate" title={examItem.Rve_Subject__c}>
+                                            {examItem.Rve_Subject__c}</div>
+                                    </td>
+
+                                    <td scope="row" data-label="Semester">
+                                        <div class="slds-truncate" title={examItem.Rve_Semester__c}>
+                                            {examItem.Rve_Semester__c}</div>
+                                    </td>
+                                    <td scope="row" data-label="Course Code">
+                                        <div class="slds-truncate" title={examItem.Course_Code__c}>
+                                            {examItem.Course_Code__c}</div>
+                                    </td>
+                                    <td scope="row" data-label="Date of Examination">
+                                        <div class="slds-truncate" title={examItem.Date_Of_Examination__c}>
+                                            {examItem.Date_Of_Examination__c}</div>
+                                    </td>
+                                    <td scope="row" data-label="Start Time">
+                                        <div class="slds-truncate" title={examItem.Rve_Start_Time__c}>
+                                            {examItem.Rve_Start_Time__c}</div>
+                                    </td>
+                                    <td scope="row" data-label="End Time">
+                                        <div class="slds-truncate" title={examItem.Rve_End_Time__c}>
+                                            {examItem.Rve_End_Time__c}</div>
+                                    </td>
+                                    <td scope="row" data-label="QP Code">
+                                        <div class="slds-truncate" title={examItem.Rve_QP_Code__c}>
+                                            {examItem.Rve_QP_Code__c}</div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table> -->
+            </div>
+        </template>
+
+        <!-- Practical Subjects Table -->
+        <template if:true={hasPracticalData}>
+            <div class="slds-p-around_medium slds-box" style="border-color:transparent">
+                <h3><b>Practical Subjects</b></h3>
+                <section>
+                    <table class="slds-text-heading_small">
+                        <!-- Table headers -->
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col">
+                                    Subject
+                                </th>
+                                <th scope="col">
+                                    Semester
+                                </th>
+                                <th scope="col">
+                                    Course Code
+                                </th>
+                                <th scope="col">
+                                    Date of Examination
+                                </th>
+                                <th scope="col">
+                                    Start Time
+                                </th>
+                                <th scope="col">
+                                    End Time
+                                </th>
+                                <th scope="col">
+                                    Batch
+                                </th>
+                            </tr>
+                        </thead>
+                        <!-- Table body -->
+                        <tbody>
+                            <template for:each={examData} for:item="examItem">
+                                <template if:false={examItem.Rve_QP_Code__c}>
+                                    <tr key={examItem.Id} class="slds-hint-parent">
+                                        <td class="medium-ch" data-cell="Subject">
+                                            <div>{examItem.Rve_Subject__c}</div>
+                                        </td>
+                                        <td class="medium-ch" data-cell="Semester">
+                                            <div>{examItem.Rve_Semester__c}</div>
+                                        </td>
+                                        <td class="medium-ch" data-cell="Course Code">
+                                            <div>{examItem.Course_Code__c}</div>
+                                        </td>
+                                        <td class="medium-ch" data-cell="Date of Examination">
+                                            <div>{examItem.Date_Of_Examination__c}</div>
+                                        </td>
+                                        <td class="medium-ch" data-cell="Start Time">
+                                            <div>{examItem.Rve_Start_Time__c}</div>
+                                        </td>
+                                        <td class="medium-ch" data-cell="End Time">
+                                            <div>{examItem.Rve_End_Time__c}</div>
+                                        </td>
+                                        <td class="medium-ch" data-cell="Batch">
+                                            <div>{examItem.Rve_Batch__c}</div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table>
+
+                </section>
+                <!-- Table Container -->
+                <!-- <table
+                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-max-medium-table_stacked-horizontal">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Subject"><b>Subject</b></div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Semester"><b>Semester</b></div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Course Code"><b>Course Code</b></div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Date of Examination"><b>Date of Examination</b>
+                                    </div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Start Time"><b>Start Time</b></div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="End Time"><b>End Time</b></div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Batch"><b>Batch</b></div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={examData} for:item="examItem">
+                                <template if:false={examItem.Rve_QP_Code__c}>
+                                    <tr key={examItem.Id} class="slds-hint-parent">
+                                        <td data-label="Subject">
+                                            <div class="slds-truncate" title={examItem.Rve_Subject__c}>
+                                                {examItem.Rve_Subject__c}</div>
+                                        </td>
+                                        <td data-label="Semester">
+                                            <div class="slds-truncate" title={examItem.Rve_Semester__c}>
+                                                {examItem.Rve_Semester__c}</div>
+                                        </td>
+                                        <td data-label="Course Code">
+                                            <div class="slds-truncate" title={examItem.Course_Code__c}>
+                                                {examItem.Course_Code__c}</div>
+                                        </td>
+                                        <td data-label="Date of Examination">
+                                            <div class="slds-truncate" title={examItem.Date_Of_Examination__c}>
+                                                {examItem.Date_Of_Examination__c}</div>
+                                        </td>
+                                        <td data-label="Start Time">
+                                            <div class="slds-truncate" title={examItem.Rve_Start_Time__c}>
+                                                {examItem.Rve_Start_Time__c}</div>
+                                        </td>
+                                        <td data-label="End Time">
+                                            <div class="slds-truncate" title={examItem.Rve_End_Time__c}>
+                                                {examItem.Rve_End_Time__c}</div>
+                                        </td>
+                                        <td data-label="Batch">
+                                            <div class="slds-truncate" title={examItem.Rve_Batch__c}>
+                                                {examItem.Rve_Batch__c}</div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table> -->
+
+            </div>
+        </template>
+
+        <!-- No Data Found -->
+        <template if:false={hasPracticalData}>
+            <template if:false={hasTheoryData}>
+                <div class="slds-p-around_medium">No Time Table available</div>
+            </template>
+        </template>
+    </div>
+</template>

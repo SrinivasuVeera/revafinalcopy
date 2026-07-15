@@ -1,0 +1,15 @@
+.THIS.mystles{		
+		 background-color : #ebadd6;
+	}
+.THIS div.lookupComp{
+    position: absolute;
+    z-index:0;
+}
+
+.THIS div.lookupComp1{
+    z-index:1;
+}
+
+.THIS .inputFeild input { 
+    text-align: center;
+}

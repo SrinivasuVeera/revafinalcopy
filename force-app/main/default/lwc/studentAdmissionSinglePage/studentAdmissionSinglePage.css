@@ -1,0 +1,267 @@
+/* ===============================
+   1. FORCE FULL SCREEN (Fixes White Gap)
+   =============================== */
+:host {
+    display: block;    
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99; 
+    /* overflow: hidden; */
+}
+
+/*.portal-background {
+    height: 100%;
+    width: 100%;
+    background: #f5f7fb;  
+    
+    display: flex;
+    justify-content: center;  
+    align-items: center;      
+
+    padding: 16px;
+    box-sizing: border-box;
+}*/
+
+.portal-background{
+
+  display: grid;
+  align-items: center;
+  height: 100%;
+  overflow: visible;
+}
+
+.text-overlay {
+    /* width: 100%;
+    max-width: 520px;  
+    margin: 0 auto; */
+    overflow: visible;
+}
+
+
+.admission-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px 20px;
+    /height: 100vh; 
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    /* border-radius: 10px; */
+    max-height: 90vh;
+    overflow-y: auto; 
+}
+
+.admission-header {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.otp-input-small {
+    width: 110px !important;
+}
+
+/* Center the numbers inside the OTP box for a better look */
+.otp-input-small lightning-input {
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+.title-gradient {   
+    font-size: clamp(18px, 1.8vw, 24px); 
+    font-weight: 700;
+    color: #000;    
+}
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    overflow: visible;
+}
+
+.email-row{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: flex-start; 
+     
+}
+.email-row lightning-button, 
+.otp-row lightning-button {
+    margin-top: 25px !important; 
+}
+.otp-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Align labels at the top */
+    gap: 50px;                /* Tight spacing between elements */
+    margin-top: 5px;
+    width: 100%;
+}
+
+.otp-input-small {
+    width: 80px !important;  /* Very compact for 4-6 digits */
+    flex-shrink: 0;
+}
+
+/* Push buttons down to align with the input box, skipping the label */
+.otp-row lightning-button {
+    margin-top: px !important; 
+    flex-shrink: 0;
+}
+
+/* Make buttons smaller to fit the row better */
+.otp-row lightning-button button {
+    padding: 0 10px !important;
+    font-size: 12px !important;
+    height: 34px !important;
+}
+/* Row Layouts */
+.mobile-input-row, .mobile-otp-row {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    align-items: flex-start;
+    margin-top: 8px;
+    width: 100%;
+}
+
+/* CLIPPING TRICK: Country Code */
+.phone-code-box {
+    width: 85px !important; /* Fits "(+91) |" perfectly */
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* Mobile Number fills remaining space */
+.mobile-number-box {
+    flex: 1;
+}
+
+/* Align buttons to the Input Boxes (skipping the label) */
+.mobile-row-btn, .mobile-otp-row lightning-button {
+    margin-top: 20px !important; 
+    gap: 8px;
+}
+
+/* OTP Input Specific */
+.otp-input-small {
+    width: 90px !important;
+    flex-shrink: 0;
+}
+
+/* Button Compression for the 3-item row */
+.mobile-otp-row lightning-button button {
+    padding: 0 8px !important;
+    font-size: 12px !important;
+}
+
+.msg-text {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Success tick alignment */
+.verified-icon-inline {
+    margin-top: 22px;
+    --slds-c-icon-color-foreground-default: #2e844a;
+}
+
+/* Ensure messages don't take up too much vertical space */
+.msg-text {
+    font-size: 11px;
+    margin-left: 5px;
+}
+lightning-input, lightning-combobox {
+    --slds-c-input-radius-border: 12px;
+    --slds-c-input-sizing-height: 44px;
+}
+
+lightning-button button {
+    height: 42px;
+    border-radius: 10px !important;
+}
+
+/* --- MOBILE ADAPTATION --- */
+@media (max-width: 1024px) {
+    /*.portal-background {
+        justify-content: center;
+        align-items: center;
+    }*/
+
+    .text-overlay {
+        /* width: 100%;
+        max-width: 480px; */
+    }
+
+    /*.admission-card {
+        max-height: 92vh;
+    }*/
+}
+
+
+/* SMALL PHONES (iPhone SE, etc.) */
+@media (max-width: 480px) {
+    .two-col {
+        grid-template-columns: 1fr; /* Stack columns */
+    }
+
+    .otp-row, .mobile-otp-row {
+        flex-wrap: wrap; /* Allows buttons to wrap if the phone is too narrow */
+        gap: 6px;
+    }
+
+    .title-gradient { font-size: 18px; }
+    
+    /* Ensure messages stay compact */
+    .msg-text { font-size: 11px; }
+}
+
+/* Custom Red Scrollbar for Admission Card */
+.admission-card::-webkit-scrollbar {
+    width: 4px;
+}
+.admission-card::-webkit-scrollbar-thumb {
+    background: #c30010;
+    border-radius: 10px;
+}
+
+/* Verified Success Tick */
+.verified-icon-inline {
+    margin-top: 22px;
+    --slds-c-icon-color-foreground-default: #2e844a;
+}
+
+:host .slds-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+ 
+:host .slds-col {
+    flex: unset !important;
+}
+
+@media only screen and (min-width: 1024px) {
+ 
+    :host .slds-medium-size_6-of-12,
+    :host .slds-large-size_6-of-12,
+    :host .slds-x-large-size_6-of-12 {
+        width: 50% !important;
+        max-width: 50% !important;
+        flex: 0 0 50% !important;
+    }
+}
+.already-registered {
+    font-size: 0.875rem;
+}
+.already-registered a {
+    margin-left: 4px;
+    font-weight: 600;
+}
+.already-registered {
+    font-size: 0.875rem;
+}
+.already-registered a {
+    margin-left: 4px;
+    font-weight: 600;
+}

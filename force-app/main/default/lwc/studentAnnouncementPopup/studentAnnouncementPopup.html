@@ -1,0 +1,39 @@
+<template>
+    <template if:true={showAnnouncement}>
+        <section class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">📢Announcement</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                  <h3 class="popup-title" style="font-weight: bold; text-align: center;">{popupTitle}</h3>
+                    <lightning-formatted-rich-text value={announcementMessage}></lightning-formatted-rich-text>
+                    
+                   <!-- <template if:true={fileUrl}>
+    <template if:true={isImage}>
+        <div style="text-align: center; margin-top: 10px;">
+            <img src={fileUrl} alt="Announcement Image" style="max-width: 100%; max-height: 300px;" />
+        </div>
+    </template>
+    <template if:false={isImage}>
+        <a href={fileUrl} target="_blank">
+            <lightning-icon icon-name="utility:attachment" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+            {fileName}
+        </a>
+    </template>
+</template>-->
+                    <template if:true={fileName}>
+                        <p style="margin-top: 1rem;">
+                            📎 <a href={fileUrl} target="_blank" rel="noopener noreferrer">{fileName}</a>
+                        </p>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+                    <lightning-button variant="brand" label="Mark as Read" onclick={handleMarkAsRead}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

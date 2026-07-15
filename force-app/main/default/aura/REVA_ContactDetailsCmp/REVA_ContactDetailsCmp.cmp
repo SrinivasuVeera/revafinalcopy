@@ -1,0 +1,71 @@
+<aura:component controller="REVA_ContactDetailsCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute type="Contact" name="ContactDetails" /> 
+    <aura:attribute type="string" name="StudentFeeId" />
+    <aura:attribute type="string" name="CaseRelatedID" />
+    <aura:attribute type="string" name="ProfStuCourseId" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />   
+
+    <div style="box-shadow: 2px 4px 9px -4px #6e6e6e; border: 1px solid #F07F07; padding: 5px;border-radius: 10px;">
+    
+        <div class="slds-box" style="background-color:#c7c7c7; color:black; border:0px;">
+        <div style="font-size:large"><b>{!v.ContactDetails.Name}</b></div>
+        </div>
+    
+    <!-- <lightning:card title="{!v.ContactDetails.Name}" > -->
+        <aura:set attribute="actions">
+            <lightning:button name="{!v.ContactDetails.Id}" label="Details" variant="brand" class="orange-button" onclick="{!c.doRedirect}"/>
+        </aura:set>
+        <div class="slds-grid slds-gutters">
+            <!--   <div class="slds-col" >
+                <div class="slds-align_absolute-center">
+                <img src="{!v.ContactDetails.Image_Url__c}" alt="Image" width="200" height = "200"/>
+                </div>
+            </div>-->
+            <div class="slds-col">  
+                <table cellpadding="3" class="slds-table">
+                    <tr>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 600;">SRN Number</td>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 500;">:&nbsp;&nbsp;&nbsp;{!v.ContactDetails.SRN_Number__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 600;">Application Number</td>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 500;">:&nbsp;&nbsp;&nbsp;{!v.ContactDetails.Application_Number__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 600;">School</td>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 500;">:&nbsp;&nbsp;&nbsp;{!v.ContactDetails.School__r.Name}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 600;">Academic Program</td>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 500;">:&nbsp;&nbsp;&nbsp;{!v.ContactDetails.Primary_Academic_Program__r.Name}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 600;">Program Plan</td>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 500;">:&nbsp;&nbsp;&nbsp;{!v.ContactDetails.Program_Batch__r.Name}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 600;">Mobile Number</td>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 500;">:&nbsp;&nbsp;&nbsp;{!v.ContactDetails.MobilePhone}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 600;">Email</td>
+                        <td style="background-color:#fef1e8; font-size: 17px; font-weight: 500;">:&nbsp;&nbsp;&nbsp;{!v.ContactDetails.hed__WorkEmail__c}</td>
+                    </tr>                    
+                </table>
+            </div>
+        </div>
+    <!-- </lightning:card> -->
+    </div>
+ <!--   <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+            <lightning:button name="{!v.StudentFeeId}" label="Fee" variant="brand" onclick="{!c.doRedirect}"/>
+        </div>
+       <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+            <lightning:button name="{!v.CaseRelatedID}" label="Mentoring" variant="brand" onclick="{!c.doRedirect}"/>
+        </div>
+        <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+            <lightning:button name="{!v.ProfStuCourseId}" label="Support Request" variant="brand" onclick="{!c.doRedirect}"/>
+        </div>
+    </div> -->
+</aura:component>

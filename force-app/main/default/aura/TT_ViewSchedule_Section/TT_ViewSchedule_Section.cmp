@@ -1,0 +1,84 @@
+<aura:component controller="TT_ViewSchedule_SectionCls" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="ScheduleWrpList" type="List"/>
+    <aura:attribute name="programName" type="String"/>
+    <aura:attribute name="schoolName" type="String"/>
+    <aura:attribute name="semName" type="String"/>
+    <aura:attribute name="secName" type="String"/>
+    <aura:attribute name="acaYear" type="String"/>
+    <aura:attribute name="timeSlot" type="List"/>
+    <aura:attribute name="profs" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="slds-box">
+        <div style="text-align:center;font-size:x-large"><b>REVA UNIVERSITY</b></div>
+        <div style="text-align:center;font-size:large"><b>{!v.schoolName} - {!v.programName}</b></div>
+        <div style="text-align:center;font-size:larger"><b>TIME TABLE</b></div>
+        <div class="slds-grid slds-gutters">
+        	<div class="slds-col slds-size_4-of-5"> 
+            	Semester : {!v.semName} &nbsp;&nbsp; Section: {!v.secName}
+            </div>
+            <div class="slds-col slds-size_1-of-5" style="text-align:right"> 
+            	Academic Year : {!v.acaYear}
+            </div>
+            
+        </div>
+    </div>
+    <aura:if isTrue ="{!v.ScheduleWrpList.length > 0}" >
+       <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+               <thead>
+                    <tr>
+                        <th style="text-align:center">Day/Time</th>
+                        <aura:iteration items="{!v.timeSlot}" var="t" indexVar="index">
+                            <th colspan="1" style="text-align:center">{!t.sTime} - {!t.eTime}
+                            </th>                            
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                
+                <tbody class="CustomColumnText"> 
+                    <aura:iteration items="{!v.ScheduleWrpList}" var="schList" indexVar="i">
+                        <tr>
+                            <td colspan="1" style="text-align:center"><b>{!schList.dayName}</b></td>
+                            <aura:iteration items="{!schList.lst_Slots}" var="slotsList" indexVar="index">
+                                <td colspan="1" style="{!slotsList.courseNames == 'Break' ? 'background-color:rgb(254 147 57 / 46%);white-space:pre-wrap;text-align:center;' : 'white-space: pre-wrap;text-align:center;'}" >
+                                    {!slotsList.courseNames}
+                                </td>
+                            </aura:iteration>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+                
+            </table>
+    </aura:if>
+    <aura:if isTrue ="{!v.ScheduleWrpList.length == 0}" >
+        No Schedule to show
+    </aura:if>
+    <br/><br/>
+    <aura:if isTrue ="{!v.profs.length > 0}" >
+       <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+               <thead>
+                    <tr>
+                        <th style="text-align:center;width: 10rem;">S No</th>
+                        <th style="text-align:center;width: 15rem;">Course Code</th>
+                        <th style="text-align:center">Course Name</th>
+                        <th style="text-align:center">Name of the Faculty</th>
+                    </tr>
+                </thead>
+                
+                <tbody class="CustomColumnText"> 
+                    <aura:iteration items="{!v.profs}" var="eachPro" indexVar="i">
+                        <tr>
+                            <td colspan="1" style="text-align:center;width: 10rem;">{!i+1}</td>
+                             <td colspan="1" style="text-align:center;width: 15rem;">{!eachPro.courseCode}</td>
+                             <td colspan="1" style="text-align:center">{!eachPro.coursename}</td>
+                             <td colspan="1" style="text-align:center">{!eachPro.facultyName}</td>
+                           
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+                
+            </table>
+    </aura:if>
+    
+    
+</aura:component>

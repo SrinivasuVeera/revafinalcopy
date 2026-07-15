@@ -1,0 +1,50 @@
+<aura:component controller="ALU_SummaryRollUpCmp_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.loadData}"/>
+    <aura:attribute name="wrapperList" type="object"/> 
+    <div class="slds-p-around--large">
+        <h1 style="font-size:25px;">{!v.wrapperList.headermsg}</h1> 
+    </div>
+    <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+        <div class="slds-size_1-of-1">
+            <div class="slds-box slds-box_x-small slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='action:add_contact' alternativeText='add_contact' size='large' title='Total Alumni Connected'></lightning:icon>
+                <div  class ="slds-text-align_center"><H1 class="slds-text-heading_large">{!v.wrapperList.userCount}</H1><span><b class="sizeFont">Alumni Connected</b></span></div></div></div>
+        </div>
+        <div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small  slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='custom:custom48' alternativeText='custom48' size='large' title='Achievements'></lightning:icon>
+                <div class ="slds-text-align_center"> <H1  class="slds-text-heading_large">{!v.wrapperList.totalAchievers}</H1><span><b class="sizeFont">Achivers</b></span></div></div></div>
+        </div>
+        <div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small  slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='standard:job_position' alternativeText='job_position' size='large' title='Job Openings'></lightning:icon>
+                <div class ="slds-text-align_center"><H1  class="slds-text-heading_large">{!v.wrapperList.totalJobOpenings}</H1><span><b class="sizeFont">Job Openings</b></span></div></div></div>
+        </div>
+        <div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='standard:job_profile' alternativeText='job_profile' size='large' title='Job Requirements'></lightning:icon>
+                <div class ="slds-text-align_center">  <H1  class="slds-text-heading_large">{!v.wrapperList.totalJobRequirements}</H1><span><b class="sizeFont">Job Requirements</b></span></div></div></div>
+        </div>
+        <div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small  slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='utility:event_ext' alternativeText='event_ext' size='large' title='Events'></lightning:icon>
+                <div class ="slds-text-align_center"> <H1  class="slds-text-heading_large">{!v.wrapperList.totalFutureEvents}</H1><span><b class="sizeFont">Live Events</b></span></div></div></div>
+        </div>
+        <div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='utility:event' alternativeText='event' size='large' title='Live Events'></lightning:icon>
+                <div class ="slds-text-align_center"> <H1  class="slds-text-heading_large">{!v.wrapperList.totalLiveEvents}</H1><span><b class="sizeFont">Today's Events</b></span></div></div></div>
+        </div>
+       <!-- <div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small  slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='standard:contact_list' alternativeText='contact_list' size='large' title='Live Events registration'></lightning:icon>
+                <div class ="slds-text-align_center"><H1 class="slds-text-heading_large">{!v.wrapperList.totalNumberMemberRegsted}</H1><span><b class="sizeFont">Todays Events registration</b></span></div></div></div>
+        </div> -->
+        <div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small  slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='standard:record' alternativeText='record' size='large' title='Activities'></lightning:icon>
+                <div class ="slds-text-align_center"> <H1  class="slds-text-heading_large">{!v.wrapperList.totalActivities}</H1><span><b class="sizeFont">Activities</b></span></div></div></div>
+        </div>
+        
+        <!--<div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small  slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='standard:partner_fund_request' alternativeText='partner_fund_request' size='large' title='Alumni Contributed'></lightning:icon>
+                <div class ="slds-text-align_center"> <H1  class="slds-text-heading_large">{!v.wrapperList.totalNumberofPaymets}</H1><span><b class="sizeFont">Alumni Contributed</b></span></div></div></div>
+        </div>-->
+        <!--<div class="slds-size_1-of-3">
+            <div class="slds-box slds-box_x-small  slds-m-around_x-small"><div class="custom-box"><lightning:icon iconName='custom:custom17' alternativeText='custom17' size='large' title=' Total Amount'></lightning:icon>
+                <div class ="slds-text-align_center"> <H1  class="slds-text-heading_large">{!v.wrapperList.totalAmount}</H1><span><b class="sizeFont">Contribution Till Date</b></span></div></div></div>
+        </div>-->
+    </div>
+</aura:component>

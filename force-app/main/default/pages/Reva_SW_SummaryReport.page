@@ -1,0 +1,149 @@
+<apex:page standardController="Case" extensions="CaseContactController" renderAs="pdf">
+    <head>
+            <style type="text/css" media="print">
+               .table-header {
+                background-color: grey; /* Set your desired background color */
+                color: black; /* Set the text color */
+            }
+            .point-container {
+        display: table;
+    }
+    .point {
+        display: table-row;
+    }
+    .point::before {
+        content: "\2022"; /* Bullet character */
+        padding-right: 5px; /* Add some space between bullet and text */
+    }
+    .reva-logo {
+        height: 100px;
+        text-align: center;
+
+    }
+    .watermark {
+            color: #ccc; /* Set color of the watermark */
+            font-style: italic; /* Italicize the text */
+            position: absolute; /* Position the watermark absolutely */
+           /* transform: translate(-50%, -50%); /* Center the watermark */
+            z-index: -1; /* Set z-index to ensure it's behind other elements */
+            top: 25%; /* Position from the top */
+            left: 20%; /* Position from the left */
+    }
+    .content {
+                position: relative;
+                z-index: 1;
+                text-align: left;
+                margin: 0 20px;           
+     }
+                .big-square-box {
+                border: 1px solid black;
+                width: 100%;
+                margin-top: 20px;
+                padding: 10px;
+                box-sizing: border-box;
+                inline-block;
+    			word-wrap: break-word;
+            }
+                .title-heading {
+                background-color: grey; color: white;
+                text-align: center;
+                padding: 5px;
+                margin: 10px 0;
+                margin-left: 45px;
+                margin-right: 45px;
+                font-size: 34px;
+                font-weight: bold;
+                }
+           
+            </style>
+        </head>
+    
+    
+     <div style="width:100%; margin-top:25px;">
+            <center><img style="margin-top:-25px" width="255" height="110" src="{!$Resource.REVA_LOGO}"/></center>
+        </div>
+        
+    
+     <div class="title-heading" style="background-color: grey; color: white;
+                text-align: center;
+                padding: 5px;
+                margin: 10px 0;
+                margin-left: 45px;
+                margin-right: 45px;
+                font-size: 34px;
+                font-weight: bold;">MANODHAARA CASE SUMMARY</div>
+    
+    <div style="background-color: #4d4f52; text-align: center; padding: 2px;">
+            <h1 style="margin: 0; color: white;">MANODHAARA CASE SUMMARY</h1>
+        </div>
+    
+    <div class="watermark" >
+            <apex:image url="{!URLFOR($Resource.Reva_Watermark)}" height="500px" ></apex:image>
+        </div>
+    
+    <div class="content" style="margin: 10px 45px; font-weight:bold; font-size: 15px;">
+                        <div>
+                            <span class="field-label">Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                            <span class="field-value">{!contact.Name}</span>
+                        </div>
+        <br/>
+                        
+                        <div>
+                            <span class="field-label">SRN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                            <span class="field-value">{!contact.SRN_Number__c}</span>
+                        </div>
+        <br/>
+                        <div>
+                            <span class="field-label">School&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                            <span class="field-value">{!contact.Course__c}</span>
+                        </div>
+        <br/>
+                        <div>
+                            <span class="field-label">Programme Batch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                            <span class="field-value">{!contact.Program_Batch__r.Name}</span>
+                        </div>
+        <br/>
+                        <div>
+                            <span class="field-label">Semester&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                            <span class="field-value">{!contact.Active_Semester__r.Name}</span>
+                        </div>
+        <br/>
+                        <div>
+                            <span class="field-label">Case Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                            <span class="field-value">{!caseRecord.CaseNumber}</span>
+                        </div>
+        <br/>
+                        <div>
+                            <span class="field-label">Number of Sessions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                            <span class="field-value">{!appointmentCount}</span>
+                        </div>
+        <br/><br/>
+                
+                		<div class="big-square-box" style="border: 2px solid black;
+                
+                width: 100%;
+                margin-top: 20px;
+                padding: 10px;
+                box-sizing: border-box;  font-size: 15px; display: inline-block;
+    			word-wrap: break-word;">
+                            <div>
+                            <span class="field-label">Case Description:</span>
+                            <span >{!caseRecord.Description}</span>
+                            </div>
+                            <br/>
+                            <div>
+                            <span class="field-label">Reason for Closing :</span>
+                            <span >{!caseRecord.Reason_for_C__c}</span>
+                        </div>
+                            
+                        </div>
+    </div>
+    <br/><br/>
+     <div class="test-solution" style="position: relative;
+                font-weight: bold;
+                font-size: 14px; text-align:right; margin-right:45px;">
+            Dr. Anand &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+         _______________ <br/>
+            Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br/>
+        </div>
+</apex:page>

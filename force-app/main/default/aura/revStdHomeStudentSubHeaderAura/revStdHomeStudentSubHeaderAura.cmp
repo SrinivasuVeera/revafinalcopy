@@ -1,0 +1,84 @@
+<!--
+@description       :  
+@author            : owais.ahanger@cloudodyssey.co
+@group             : 
+@last modified on  : 06-04-2024
+@last modified by  : owais.ahanger@cloudodyssey.co
+-->
+<aura:component controller="RevaGuestHouseController" implements="forceCommunity:availableForAllPageTypes" access="global">
+    
+    <!--AddedbyRajashekar for non-teaching staff we need to hide the icons & 
+        added existing controller RevaGuestHouseController to fetch loggedin user profile-->
+     <aura:attribute name="nonTeachingStaff" type="string"/>
+     <aura:handler  name="init" value="{!this}" action="{!c.doinit}"/>
+
+    <!--ends here -->
+
+    <div class="sub-header-wrapper">
+               
+        <!-- AddedbyRajashekar26Aug2024 Newcode -->
+         <aura:if  isTrue="{!v.nonTeachingStaff != 'Non Teaching Profile'}">
+             
+             <div class=" sub-header search-container">
+                 <c:revStdHomeStudentSearch />
+             </div>  
+             
+             <div class="sub-header E-Library">
+                 <c:revStdHomeStudentRegForm />
+             </div>
+             
+             <div class="sub-header E-Library" title="E-Library">
+                 <a href='https://library.reva.edu.in/opac/' target='_blank'>E-Library</a>
+             </div>
+             
+             <div class="sub-header My-360">
+                 <div class="img-container-my-360">
+                     <c:revStdHomeStudentMy360 />                
+                 </div>
+             </div>
+             
+             <div class="sub-header Notification">
+                 <forceCommunity:notifications />
+             </div>
+             
+             <div class="sub-header Logout">
+                 <div class="img-container">
+                     <c:revStdHomeStudentLogOut />
+                 </div>
+             </div>
+        </aura:if>
+        <!-- New code ends here  -->
+        
+        <!--Old code-->
+           <!--
+            <div class=" sub-header search-container">
+            <c:revStdHomeStudentSearch />
+            </div>  
+        
+            <div class="sub-header E-Library">
+               <c:revStdHomeStudentRegForm />
+            </div>
+                  
+            <div class="sub-header E-Library" title="E-Library">
+                <a href='https://library.reva.edu.in/opac/' target='_blank'>E-Library</a>
+            </div>
+            
+            <div class="sub-header My-360">
+                <div class="img-container-my-360">
+                    <c:revStdHomeStudentMy360 />                
+                </div>
+            </div>
+            
+            <div class="sub-header Notification">
+                <forceCommunity:notifications />
+            </div>
+    
+            <div class="sub-header Logout">
+                <div class="img-container">
+                    <c:revStdHomeStudentLogOut />
+                </div>
+            </div> -->
+        <!-- Old code ends here  -->
+    </div>
+
+</aura:component>

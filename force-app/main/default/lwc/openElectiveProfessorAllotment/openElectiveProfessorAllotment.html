@@ -1,0 +1,109 @@
+<template>
+    <lightning-card title="Course & Semester Selection">
+        <div class="slds-m-around_medium">
+            <!-- Course Lookup -->
+            <lightning-combobox
+                name="Course Category"
+                label="Course Category"
+                placeholder="Choose Course Category"
+                value={ChangedCourseType}
+                onchange={handleCourseTypeChange}
+                options={courseType}>
+            </lightning-combobox>
+            <template if:true={opensearchCourse}>
+            <lightning-input type="search" label="Search Course"  placeholder="search Courses" 
+                value={selectedCourse} onchange={handleSearch} ></lightning-input>
+            <template if:true={courses.length}>
+                <div class="slds-dropdown slds-dropdown_fluid">
+                    <ul class="slds-dropdown__list">
+                        <template for:each={courses} for:item="course">
+                            <li key={course.Id} class="slds-dropdown__item">
+                                <a onclick={selectCourse} 
+                                    data-id={course.Id} data-name={course.Name}>
+                                    {course.Name}
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+
+            <!-- Semester Table -->
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Course Code</th>
+                        <th>Assigned Professor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <template for:each={semesters} for:item="semester" for:index="index">
+                        <tr key={semester.Id}>
+                            <td>{semester.Name}</td>
+                            <td>{semester.Course_Offering__r.Course_ID__c}</td>
+                            <td>
+                               <lightning-input  type="search"  placeholder="search professor" data-index={index}
+                                               value={selectedProf} onchange={handleprofSearch}></lightning-input>
+                                    <template if:true={faculty.length}>
+                                        <div class="slds-dropdown slds-dropdown_fluid">
+                                            <ul class="slds-dropdown__list">
+                                                <template for:each={faculty} for:item="faculty">
+                                                    <li key={faculty.Id} class="slds-dropdown__item">
+                                                        <a onclick={selectProfessor} 
+                                                            data-id={faculty.Id} data-name={faculty.Name} data-index={index}>
+                                                            {faculty.Name} - {faculty.Employee_Number__c}
+                                                        </a>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </template>
+                            </td>
+                        </tr>
+                    </template> -->
+
+                    <template for:each={semesters} for:item="semester" for:index="index">
+                        <tr key={semester.Id}>
+                            <td>{semester.Name}</td>
+                            <td>{semester.Course_Offering__r.Course_ID__c}</td>
+                            <td>
+                                <lightning-input type="search"
+                                                 placeholder="Search professor"
+                                                 data-index={index}
+                                                 value={semester.searchValue}
+                                                 onchange={handleprofSearch}>
+                                </lightning-input>
+                    
+                                <template if:true={semester.showDropdown}>
+                                    <div class="slds-dropdown slds-dropdown_fluid">
+                                        <ul class="slds-dropdown__list">
+                                            <template for:each={semester.facultyList} for:item="faculty">
+                                                <li key={faculty.Id} class="slds-dropdown__item">
+                                                    <a onclick={selectProfessor}
+                                                       data-id={faculty.Id}
+                                                       data-name={faculty.Name}
+                                                       data-index={index}>
+                                                       {faculty.Name} - {faculty.Employee_Number__c}
+                                                    </a>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                    
+                </tbody>
+            </table>
+              <br>
+            <!-- Submit Button -->
+                <template if:true={showsave}>
+                    <lightning-button label="Create Course Connections" onclick={handleSubmit}></lightning-button>
+                    <lightning-spinner variant="brand" size="large" if:true={isLoading}> </lightning-spinner>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

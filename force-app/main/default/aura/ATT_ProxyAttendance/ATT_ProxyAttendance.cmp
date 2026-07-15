@@ -1,0 +1,126 @@
+<aura:component controller="ATT_ProxyAttendance_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="Showsrn" type="boolean" default="false"/>
+    <aura:attribute name="SelectedSrnNumber" type="string"/>
+    <aura:attribute name="selectedFromDate" type="DateTime"/>
+    <aura:attribute name="selectedToDate" type="DateTime"/>
+    <aura:attribute name="selectedReason" type="string"/>
+    <aura:attribute name="lst_ProgramEnrollment" type="list"/>
+    
+    <aura:attribute name="selFromDate" type="string"/>
+    <aura:attribute name="selToDate" type="string"/>
+    
+    <aura:attribute name="FromDatesel" type="date"/>
+    <aura:attribute name="ToDatesel" type="date"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">                    
+                    <div class="slds-media__body">                        
+                        <div class="slds-float_right">
+                            <lightning:button type="button" variant="neutral" label="Cancel" onclick="{!c.closeAction}"/>  
+                            
+                            <!-- <lightning:button type="button" variant="brand" label="Save and New" onclick="{!c.OnSave}" disabled="{!and(v.selectedFromDate == null , v.selectedToDate ==null)}"/>  -->       
+                            <lightning:button type="button" variant="brand" label="Save" onclick="{!c.OnSave}" disabled="{!and(v.selectedFromDate == null , v.selectedToDate ==null)}"/>         
+                        </div>
+                        <p class="slds-text-body_small"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+    <div class="slds-scrollable_y">
+        <div class="slds-theme_default">
+            <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                <div class="slds-box slds-size_1-of-4">
+                    <lightning:input type="string" name="input2" label="Student SRN" value="{!v.SelectedSrnNumber}" onchange="{!c.onchangeSrnNumber}"/>                    
+                </div>
+            </div>            
+            <aura:if isTrue="{!not(empty(v.lst_ProgramEnrollment))}">
+                <aura:if isTrue="{!v.Showsrn}">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped" style="overflow: visible;width=80%">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <td class="slds-is-resizable" scope="col" >
+                                    <b style="width:20%;"> Name</b>    
+                                </td> 
+                                <td class="slds-is-resizable" scope="col">
+                                    <b style="width:20%;"> School</b>    
+                                </td>
+                            </tr>
+                            <tr class="slds-text-heading--label">                                    
+                                <td class="slds-is-resizable" scope="col">
+                                    {!v.lst_ProgramEnrollment[0].Name}    
+                                </td>
+                                <td class="slds-is-resizable" scope="col">
+                                    {!v.lst_ProgramEnrollment[0].hed__Account__r.Name}    
+                                </td>
+                            </tr>
+                            <tr class="slds-text-heading--label">
+                                <td class="slds-is-resizable" scope="col">
+                                    <b style="width:20%;"> Program</b>    
+                                </td> 
+                                <td class="slds-is-resizable" scope="col">
+                                    <b style="width:20%;"> Semester</b>    
+                                </td>
+                            </tr>
+                            <tr class="slds-text-heading--label">
+                                <td class="slds-is-resizable" scope="col">
+                                    {!v.lst_ProgramEnrollment[0].hed__Program_Plan__r.Name}    
+                                </td>
+                                <td class="slds-is-resizable" scope="col">
+                                    {!v.lst_ProgramEnrollment[0].Semester__r.Name} 
+                                </td>
+                            </tr>
+                            <tr class="slds-text-heading--label">
+                                <td class="slds-is-resizable" scope="col">
+                                    <b style="width:20%;"> Section</b>    
+                                </td>                                
+                            </tr>
+                            <tr class="slds-text-heading--label">
+                                <td class="slds-is-resizable" scope="col">
+                                    {!v.lst_ProgramEnrollment[0].Section__r.Name} 
+                                </td>
+                            </tr>
+                        </thead>
+                        
+                    </table>
+                    <br/>
+                    <div class="slds-grid slds-wrap">   
+                        <div class="slds-col slds-size_1-of-4">
+                            <lightning:input type="datetime" name="input1" label="Date From" value="{!v.selectedFromDate}" />                         
+                        </div>
+                        <div class="slds-col slds-size_1-of-4"></div>
+                        <div class="slds-col slds-size_1-of-4">
+                            <lightning:input type="datetime" name="input1" label="Date to" value="{!v.selectedToDate}" />
+                        </div>                        
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning:input type="string" name="input1" label="Reason" value="{!v.selectedReason}" /> <br/>
+                    </div><br/><br/><br/><br/><br/><br/><br/>
+                    <aura:set attribute="else">
+                        <div style="text-align:center;color:red;">
+                            SRN Number is Incorrect..!
+                        </div>
+                    </aura:set>
+                </aura:if><br/><br/>
+                <aura:set attribute="else">
+                    <div style="text-align:center;color:red;">
+                        No Program Enrollment Records Found..!
+                    </div>
+                </aura:set>
+            </aura:if><br/><br/>
+        </div><br/><br/>
+    </div><br/><br/>
+</aura:component>

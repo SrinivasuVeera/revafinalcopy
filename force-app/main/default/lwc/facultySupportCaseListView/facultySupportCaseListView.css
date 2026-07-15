@@ -1,0 +1,120 @@
+@font-face {
+    font-family: "NunitoSans";
+    src: url("/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/NunitoSans/NunitoSans_10pt-Regular.ttf")
+        format("TrueType");
+}
+* {
+    font-family: "NunitoSans", "RobotoSlab", "Roboto", "Dosis", Helvetica !important;
+}
+
+.field-value label {
+    color: var(--reva-brand-color) !important;
+    font-weight: 600 !important;
+}
+
+tr {
+    border-top: 4px solid white;
+    font-size: 0.8rem;
+}
+
+section {
+    overflow: auto;
+}
+table {
+    border-collapse: collapse;
+    overflow: auto;
+    width: 100%;
+    border-spacing: 0;
+    background-color: white;
+}
+
+.pointer-hover {
+    cursor: pointer;
+}
+table,
+th,
+td {
+    /* border-collapse: collapse; */
+    padding: 1rem;
+    text-align: left;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: var(--reva-table-heading-background-color);
+    /*  cursor: pointer; */
+    text-transform: uppercase;
+    color: white;
+}
+
+tbody tr {
+    background-color: var(--reva-table-row-background-color) !important;
+}
+
+.custom-box {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    margin-top: 15px;
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header:first-child {
+    margin-left: 1rem;
+}
+
+.header:last-child {
+    margin-right: 1rem;
+}
+.modal-container {
+    padding: 1.5rem;
+    background-color: #f7f7f7;
+}
+
+.case-number {
+    color: var(--reva-brand-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+.button-container {
+    margin-top: 18px;
+    text-align: center;
+}
+@media (max-width: 650px) {
+    td {
+        display: grid;
+        grid-template-columns: 16ch auto;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    td:first-child {
+        padding-top: 2rem;
+    }
+
+    td:last-child {
+        padding-bottom: 2rem;
+    }
+    th {
+        display: none;
+    }
+    td::before {
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+    }
+}
+
+@media (max-width: 500px) {
+    .modal-container {
+        padding: 0.5rem;
+        background-color: #f7f7f7;
+    }
+    table {
+        font-size: 12px;
+    }
+}

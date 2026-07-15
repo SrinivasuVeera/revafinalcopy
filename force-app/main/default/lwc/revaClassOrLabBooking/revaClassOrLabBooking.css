@@ -1,0 +1,41 @@
+.delete-btn{
+    margin-top: 1.5rem;
+}
+.selected-item-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 12px;
+}
+.button-icon {
+    margin-right: 5px; /* Adjust the space as needed */
+}
+.badge{
+    font-size: 11px;
+    padding: 5px;
+    cursor: pointer;
+    margin-top: 7px;
+    text-wrap: wrap;
+    color: #F07F07;
+}
+
+.add-more-btn{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+}
+.line{
+    border: 2px dashed grey;
+    margin: 1rem;
+}
+.book-slots-btn{
+    text-align: right;
+    margin-right: 1rem;
+}
+.facility-helptext{
+    color: red;
+    font-size: 10px;
+   
+}

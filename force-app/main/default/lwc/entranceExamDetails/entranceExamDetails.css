@@ -1,0 +1,32 @@
+.exam-container {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    position: relative; /* Enable relative positioning for the delete icon */
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.form-row > * {
+    flex: 1 1 calc(33.333% - 1rem);
+    min-width: 150px;
+}
+.form-row1 > * {
+    flex: 1 1 calc(13.333% - 1rem);
+    min-width: 150px;
+}
+.delete-icon-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem; /* Add space from the inputs above */
+}
+
+.delete-icon-container > lightning-button-icon {
+    margin-right: 0;
+}

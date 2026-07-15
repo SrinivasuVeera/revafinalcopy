@@ -1,0 +1,56 @@
+.custom-standard-container {
+    background-color: white;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    padding: 0.75rem; 
+    margin: 0.5rem 0;
+}
+
+.custom-orange-button {
+    background-color: #f36f21; 
+    border-color: #f36f21;
+    color: white;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .25rem;
+    font-weight: 400;
+    padding: 0 1rem;
+    white-space: nowrap;
+}
+
+.custom-orange-button:hover:not([disabled]) {
+    background-color: #d65a12;
+    border-color: #d65a12;
+}
+
+.custom-orange-button[disabled] {
+    background-color: #c9c7c5;
+    border-color: #c9c7c5;
+    color: white;
+    cursor: not-allowed;
+}
+.custom-orange-button lightning-icon {
+    --slds-c-icon-color-foreground-default: white;
+}
+.slds-path__scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* IE/Edge */
+    -ms-overflow-style: none;
+}
+
+/* Chrome, Safari, Edge */
+.slds-path__scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.slds-path__scroller_inner {
+    min-width: max-content;
+}

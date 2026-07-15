@@ -1,0 +1,33 @@
+<template>
+    <div class="page-wrapper">
+        <article class="auth-card slds-card slds-p-around_large">
+            
+            <lightning-tabset variant="scoped">
+                
+                <lightning-tab label="Register">
+                    <div class="slds-p-around_small">
+                        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Create Account</h2>
+                        <div class="slds-form slds-form_stacked">
+                            <lightning-input label="Full Name" type="text" class="slds-m-bottom_x-small"></lightning-input>
+                            <lightning-input label="Email" type="email" class="slds-m-bottom_x-small"></lightning-input>
+                            <lightning-input label="Password" type="password" class="slds-m-bottom_x-small"></lightning-input>
+                            <lightning-button variant="brand" label="Register" class="slds-m-top_medium slds-size_1-of-1"></lightning-button>
+                        </div>
+                    </div>
+                </lightning-tab>
+
+                <lightning-tab label="Login">
+                    <div class="slds-p-around_small">
+                        <h2 class="slds-text-heading_medium slds-m-bottom_medium">Welcome Back</h2>
+                        <div class="slds-form slds-form_stacked">
+                            <lightning-input label="Email" type="email" class="slds-m-bottom_x-small"></lightning-input>
+                            <lightning-input label="Password" type="password" class="slds-m-bottom_x-small"></lightning-input>
+                            <lightning-button variant="brand" label="Login" class="slds-m-top_medium slds-size_1-of-1"></lightning-button>
+                        </div>
+                    </div>
+                </lightning-tab>
+
+            </lightning-tabset>
+        </article>
+    </div>
+</template>

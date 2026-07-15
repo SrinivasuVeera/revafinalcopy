@@ -1,0 +1,79 @@
+<template>
+
+    <template if:true={showForm}>
+
+        <lightning-card title="RISE Entrance Exam">
+
+            <div class="slds-p-around_medium">
+
+                <!-- Applying CET smaller width -->
+                <div class="slds-grid slds-wrap slds-gutters">
+
+                    <div class="slds-col slds-size_1-of-3">
+
+                        <lightning-combobox
+                            label="Applying for RISE"
+                            value={applyingRise}
+                            options={yesNoOptions}
+                            onchange={handleRiseChange}>
+                        </lightning-combobox>
+
+                    </div>
+
+                </div>
+<!--
+                <br/>
+
+                <!- Exam fields in same row ->
+
+                <template if:true={showExamFields}>
+
+                    <div class="slds-grid slds-wrap slds-gutters">
+
+                        <div class="slds-col slds-size_1-of-3">
+
+                            <lightning-combobox
+                                label="Exam Date"
+                                value={examDate}
+                                options={examDateOptions}
+                                onchange={handleExamDate}
+                                required={showExamFields}>
+                            </lightning-combobox>
+
+                        </div>
+
+                       <!- <div class="slds-col slds-size_1-of-3">
+
+                            <lightning-combobox
+                                label="Exam Type"
+                                value={examType}
+                                options={examTypeOptions}
+                                onchange={handleExamType}
+                                required={showExamFields}>
+                            </lightning-combobox>
+
+                        </div>->
+
+                    </div>
+
+                </template>-->
+
+                <br/>
+
+                <lightning-button
+                    label="Submit"
+                    variant="brand"
+                    onclick={handleSubmit}>
+                </lightning-button>
+
+            </div>
+
+        </lightning-card>
+
+    </template>
+
+    <template if:false={showForm}>
+        <p>You have already submitted the RISE details.</p>
+    </template>
+
+</template>

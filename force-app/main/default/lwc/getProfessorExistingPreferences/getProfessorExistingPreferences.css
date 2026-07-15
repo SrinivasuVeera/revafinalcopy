@@ -1,0 +1,54 @@
+.blinking {
+    animation: blink-animation 2s steps(5, start) infinite;
+    font-size: large;
+    font-weight: bold;
+}
+
+.preferenceError {
+    font-size: large;
+    font-weight: bold;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+:host {
+    font-family: 'NunitoSans', 'RobotoSlab', 'Roboto', 'Dosis', Helvetica !important;
+
+}
+
+.slds-table_compact tbody tr {
+    height: 1.8rem !important;
+}
+
+
+.compact-row td {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    line-height: 0rem !important;
+    font-size: 0.85rem !important;
+    /* smaller text */
+}
+
+/* Make combobox inside the cell tighter */
+.tight-combobox .slds-combobox {
+    line-height: 1rem !important;
+    min-height: 1.5rem !important;
+    font-size: 0.85rem !important;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+
+.section-header {
+    font-weight: bold;
+    background-color: #c7cfdca8;
+    color: #ea7e08;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 1rem;
+}

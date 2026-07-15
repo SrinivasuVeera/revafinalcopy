@@ -1,0 +1,129 @@
+<aura:component controller="ASM_StdIAMarksViewv2"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <!-- <aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+    </aura:html> -->
+    <aura:attribute type="List" name="iaDataList" />
+    <aura:attribute type="List" name="iaDataListDetail" />
+    <aura:attribute type="String" name="iaType" default="" />
+    <aura:attribute type="String" name="semName" default="" />
+    <aura:attribute name="showDetailView" type="boolean" default="false" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+    <!-- <div class="slds-theme_default slds-box"> -->
+    <div class="slds-form" role="list">
+        <div class="slds-form__row">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-is-editing">
+                    <lightning:input label="Semester" value="{!v.semName}" disabled="true" class="semDK" />
+                </div>
+            </div>
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-is-editing">
+                    <lightning:select value="{!v.iaType}" label="IA Type" onchange="{!c.doInit}" required="true"
+                        class="semDK">
+                        <option value="">--Select--</option>
+                        <option value="IA1">IA1</option>
+                        <option value="IA2">IA2</option>
+                    </lightning:select>
+                </div>
+            </div>
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-is-editing">
+                    <lightning:input type="toggle" label="Detail Result?" name="input2" checked="{!v.showDetailView}"
+                        messageToggleActive="" messageToggleInactive="" />
+                </div>
+            </div>
+        </div>
+        <!-- </div><br/> -->
+        <aura:if isTrue="{!v.iaType != ''}">
+            <aura:if isTrue="{!not(empty(v.iaDataList))}">
+                <div>
+                    <aura:if isTrue="{!!v.showDetailView}">
+                        <table class="slds-table slds-table_bordered ia-marks-table"
+                            aria-label="Example table of Opportunities with vertical borders">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Course Name"><b>COURSE NAME</b></div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Secured Marks"><b>SECURED MARKS</b></div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Maximum Marks"><b>MAXIMUM MARKS</b></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.iaDataList}" var="iam">
+                                    <tr class="slds-hint-parent">
+                                        <td data-label="Course">
+                                            <div class="slds-truncate"
+                                                title="{!iam.Course_Offering__r.hed__Course__r.Name}">
+                                                {!iam.Course_Offering__r.hed__Course__r.Name}</div>
+                                        </td>
+                                        <td data-label="Secured Marks">
+                                            <div class="slds-truncate" title="{!iam.Total_Secured_Marks_New__c}">
+                                                {!iam.Total_Secured_Marks_New__c} </div>
+                                        </td>
+                                        <td data-label="Maximum Marks">
+                                            <div class="slds-truncate"
+                                                title="{!iam.Course_Offering__r.hed__Course__r.Maximum_Internal_Marks__c}">
+                                                {!iam.Course_Offering__r.hed__Course__r.Maximum_Internal_Marks__c}</div>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                        <aura:set attribute="else">
+                            <aura:iteration items="{!v.iaDataListDetail}" var="crs">
+                                <div class="slds-box">
+                                    <div style="text-align:center;font-size:20px;">
+                                        <u>{!crs.crsType}</u>
+                                    </div>
+                                    <aura:if isTrue="{!crs.crsType == 'Theory'}">
+                                        <c:ASM_StdTheoryIAView iaMarks="{!crs.list_IAMarks}" />
+                                    </aura:if>
+                                    <aura:if isTrue="{!crs.crsType == 'Project'}">
+                                        <c:ASM_StdProjIAView iaMarks="{!crs.list_IAMarks}" />
+                                    </aura:if>
+                                    <aura:if isTrue="{!crs.crsType == 'Practical'}">
+                                        <c:ASM_StdLabIAView iaMarks="{!crs.list_IAMarks}" />
+                                    </aura:if>
+                                </div>
+                            </aura:iteration>
+                        </aura:set>
+                    </aura:if>
+                </div>
+                <aura:set attribute="else">
+                    <div style="text-align:center;color:red; font-size:13px;font-weight:700">
+                        No data found
+                    </div>
+
+                </aura:set>
+            </aura:if>
+            <aura:set attribute="else">
+                <div style="text-align:center;color:red; font-size:13px;font-weight:700">
+                    Select an IA Type
+                </div>
+
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

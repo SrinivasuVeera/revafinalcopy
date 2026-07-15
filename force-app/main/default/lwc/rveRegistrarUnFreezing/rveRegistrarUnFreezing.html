@@ -1,0 +1,66 @@
+<template>
+    <div style="width:30%">
+        <lightning-combobox
+        name="School"
+        label="Select School"
+        value={selectedCourseOffering}
+        placeholder="Select School"
+        options={SchoolOptions}
+        onchange={handleSchoolChange}>
+    </lightning-combobox>
+    </div>
+
+    <template if:true={EnableProgram}>
+        <div style="width:30%">
+    <lightning-combobox
+        name="Program Batch"
+        label="Select Program Batch"
+        value={selectedCourse}
+        placeholder="Select Program Batch"
+        options={ProgramOptions}
+        onchange={handleProgramChange}>
+        </lightning-combobox>
+        </div>
+</template>
+<br/>
+
+    <template if:true={DisableProgram}>
+        <div class="slds-text-align_center">
+            <span class="slds-text-heading_medium">No Active Program Batch Available</span>
+        </div> 
+        </template>
+
+        <template if:true={EnableSem}>
+        <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" style="overflow: visible;" width="50%">
+            <thead>
+                <tr class="slds-line-height_reset">
+                   
+                    <th class="slds-text-align_center" scope="col" style="width:15%;">Semester</th>
+                    <th class="slds-text-align_center" scope="col" style="width:15%;">School Director Freezed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={SemesterOptions} for:item="crs" for:index="index">
+                    <tr key={crs.id}>
+                        <td>
+                            <div class="slds-text-align_center">
+                                {crs.Name}
+                            </div>
+                           </td>
+                        <td>
+                            <div class="slds-align_absolute-center">
+
+                            <lightning-button label="Unfreeze" variant="brand" name={index} disabled={crs.FreezeCheck} data-id={crs.id} onclick={handleUnfreezeClick}></lightning-button>
+                            </div>
+                        </td>
+                        </tr>
+                </template>
+            </tbody>
+
+        </table>
+        </template>
+        <template if:true={DisableSem}>
+            <div class="slds-text-align_center">
+                <span class="slds-text-heading_medium">No Active Semester Available</span>
+            </div>
+</template>

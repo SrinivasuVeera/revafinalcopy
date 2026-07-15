@@ -1,0 +1,169 @@
+<!--
+  @description       : 
+  @author            : owais.ahanger@cloudodyssey.co
+  @group             : 
+  @last modified on  : 06-06-2024
+  @last modified by  : owais.ahanger@cloudodyssey.co
+-->
+<template>
+    <div class="container">
+
+        <template if:false={showData}>
+            <template if:false={isEdit}>
+                <div class="slds-m-around_medium">
+                    <lightning-button variant="brand" label="Edit" title="Edit" onclick={handleEditClick}
+                        class="slds-m-right_x-small" if:false={isEditing}>
+                    </lightning-button>
+                    <lightning-button variant="success" label="Save" title="Save" onclick={handleSaveClick} disabled={isButtonDisabled}
+                        class="slds-m-right_x-small" if:true={isEditing}>
+                    </lightning-button>
+                    <lightning-button variant="destructive" label="Cancel" title="Cancel" onclick={handleCancelClick}
+                        if:true={isEditing}>
+                    </lightning-button>
+                </div>
+
+                <table class="slds-table slds-table_cell-buffer  slds-max-medium-table_stacked-horizontal time-table">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Course ID">Course ID</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Course Name">Course Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="IA Type">IA Type</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Exam Date">Exam Date</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Start Time">Start Time</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="End Time">End Time</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <template for:each={examScheduleItems} for:item="item" for:index="index">
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td data-label="Course ID">
+                                    <div class="slds-truncate" title={item.CourseId}>
+                                        {item.CourseId}</div>
+                                </td>
+                                <td data-label="Course">
+                                    <div class="slds-truncate" title={item.Name}>
+                                        {item.Name}
+                                    </div>
+                                </td>
+                                <td data-label="IA Type">
+                                    <div class="slds-truncate" title={item.IaType}>
+                                        {item.IaType}</div>
+
+                                </td>
+                                <td data-label="Exam Date">
+                                    <template if:true={isEditing}>
+                                        <lightning-input type="date" value={item.hed_Date__c}
+                                            onchange={handleDateChange} data-field="hed_Date__c" data-index={index} disabled={item.isEditLocked}
+                                            name="date"></lightning-input>
+                                    </template>
+                                    <template if:false={isEditing}>
+                                        <div class="slds-truncate" title={item.hed_Date__c}>{item.hed_Date__c}</div>
+                                    </template>
+                                </td>
+                                <td data-label="Start Time">
+                                    <template if:true={isEditing}>
+                                        <lightning-combobox name="hed_Start_Time__c" label="Start Time"
+                                            value={item.hed_Start_Time__c} placeholder="Please Select Time"
+                                            options={timeOptions} onchange={handleStartTimeChange} disabled={item.isEditLocked}
+                                            data-field="hed_Start_Time__c" data-index={index}></lightning-combobox>
+                                    </template>
+                                    <template if:false={isEditing}>
+                                        <div class="slds-truncate" title={item.hed_Start_Time__c}>
+                                            {item.hed_Start_Time__c}</div>
+                                    </template>
+                                </td>
+                                <td data-label="End Time">
+                                    <template if:true={isEditing}>
+                                        <lightning-combobox name="hed_End_Time__c" label="End Time"
+                                            value={item.hed_End_Time__c} placeholder="Please Select Time"
+                                            options={timeOptions} onchange={handleEndTimeChange} disabled={item.isEditLocked}
+                                            data-field="hed_End_Time__c" data-index={index}></lightning-combobox>
+                                    </template>
+                                    <template if:false={isEditing}>
+                                        <div class="slds-truncate" title={item.hed_End_Time__c}>{item.hed_End_Time__c}
+                                        </div>
+                                    </template>
+                                </td>
+                            </tr>
+                        </template>
+
+                    </tbody>
+                </table>
+            </template>
+
+            <template if:true={isEdit}>
+                <div class="slds-p-around_medium align_absolute-center"> No Exam Schedule is Found </div>
+            </template>
+        </template>
+        <!-- Display Time Table to Student -->
+        <template if:true={showData}>
+            <div class="slds-scrollable_x">
+                <table class="slds-table slds-table_cell-buffer slds-max-medium-table_stacked-horizontal time-table">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Course ID">Course ID</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Course">Course Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="IA Type">IA Type</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Exam Date">Exam Date</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Start Time">Start Time</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="End Time">End Time</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <template for:each={courseData} for:item="item" for:index="index">
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td data-label="Course ID">
+                                    <div class="slds-truncate">{item.CourseId}</div>
+                                </td>
+                                <td data-label="Course">
+                                    <div class="slds-truncate">
+                                        {item.Name}
+                                    </div>
+                                </td>
+                                <td data-label="IA Type">
+                                    <div class="slds-truncate">{item.IaType}</div>
+                                </td>
+                                <td data-label="Exam Date">
+                                    <div class="slds-truncate">{item.hed_Date__c}</div>
+                                </td>
+                                <td data-label="Start Time">
+                                    <div class="slds-truncate">{item.hed_Start_Time__c}</div>
+                                </td>
+                                <td data-label="End Time">
+                                    <div class="slds-truncate">{item.hed_End_Time__c}</div>
+                                </td>
+                            </tr>
+                        </template>
+
+                    </tbody>
+                </table>
+            </div>
+        </template>
+    </div>
+</template>

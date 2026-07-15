@@ -1,0 +1,109 @@
+<template>
+    <template if:true={hasRecords}>
+   
+       <lightning-card key={batchItem.batchName} title="IA Attendance" icon-name="utility:record_alt">
+           
+       <template for:each={processedList} for:item="batchItem" for:index="batchIndex">
+      <!--     <template for:each={mapData} for:item="map" >-->
+           <lightning-card key={batchItem.batchName} title={batchItem.batchName} icon-name="custom:custom55">
+               <div class="slds-m-around_medium" > 
+                    <b class="slds-float_right"> Course Name: {batchItem.courseName} </b>
+                   <table key={batchItem.batchName} class="slds-table slds-table_cell-buffer slds-table_bordered">
+                       <thead>
+                           <tr>
+                               <th>SRN Number</th>
+                               <th>Student Name</th>                              
+                               <template lwc:if={qrattendancestatus}>
+                                 <th>QR Attendance</th>     
+                               </template>    
+                               <template lwc:else>
+                                     <th>Manual Attendance</th> 
+                                </template>
+                               <!-- <th>Attendance</th>  -->
+                               <th>Malpractices</th>
+                               <th>Remarks</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <template for:each={batchItem.contacts} for:item="contact" for:index="contactIndex">
+                               <tr key={contact.contactid}>
+                                   <td>{contact.SRNNo}</td>
+                                   <td>{contact.cname}</td>
+                                   <template if:true={qrattendancestatus}>
+                                        <td>
+                                                <lightning-input type="checkbox" 
+                                                    checked={contact.QRAttendanceCheckbox}                                          
+                                                    data-batch-index={batchIndex} 
+                                                    data-contact-index={contactIndex}
+                                                    disabled="true">
+                                                </lightning-input>
+                                        </td> 
+                                   </template>
+                                   <template if:false={qrattendancestatus}>
+                                        <td>
+                                                <lightning-input type="checkbox" 
+                                                checked={contact.Attendancecheckbox} 
+                                                onchange={handleAttendanceChange} 
+                                                data-batch-index={batchIndex} 
+                                                data-contact-index={contactIndex}>
+                                                </lightning-input>
+                                        </td>
+                                   </template> 
+                                   <!-- <td>
+                                                <lightning-input type="checkbox" 
+                                                checked={contact.Attendancecheckbox} 
+                                                onchange={handleAttendanceChange} 
+                                                data-batch-index={batchIndex} 
+                                                data-contact-index={contactIndex}>
+                                                </lightning-input>
+                                    </td>    -->
+                                    <td>
+                                        <lightning-input type="checkbox" 
+                                        checked={contact.malpracticescheckbox} 
+                                        onchange={handlemalpracticesChange} 
+                                        data-batch-index={batchIndex} 
+                                        data-contact-index={contactIndex}>
+                                        </lightning-input>
+                                    </td>
+                                    <td>
+                                        <lightning-input type="text" 
+                                        value={contact.description} 
+                                        onchange={handleDescriptionChange} 
+                                        data-batch-index={batchIndex} 
+                                        data-contact-index={contactIndex}>
+                                        </lightning-input>
+                                   </td>
+                               </tr>
+                           </template>
+                       </tbody>
+                   </table>
+               </div>
+           </lightning-card>
+         <!--  </template>-->
+       </template>
+   
+      
+       <!-- Save button outside the loop -->
+       <div class="slds-m-top_medium">         
+         <!-- <template lwc:if={getQRAttendanceStatus}>
+            <lightning-button label="Update Attendance" data-action="update" onclick={saveAttendance}></lightning-button>
+         </template>    
+         <template lwc:else> -->
+            <!-- <lightning-button label="Save Attendance" data-action="save" onclick={saveAttendance}></lightning-button> -->
+         <!-- </template> -->
+         <!-- <template if:false={getQRAttendanceStatus}> -->
+            <lightning-button label="Save Attendance" data-action="save" onclick={saveAttendance}></lightning-button>
+         <!-- </template> -->
+       </div>
+       </lightning-card>
+   
+   
+   </template>
+        <template if:false={hasRecords}>
+       <!-- Display message if no records are found -->
+       <lightning-card title="No Records Found" icon-name="utility:error">
+           <div class="slds-text-color_error">You do not have sufficient access to this component 30 minutes prior to the start time and {Settingval} hours after the end time.</div>
+       </lightning-card>
+       </template>
+   
+   </template>

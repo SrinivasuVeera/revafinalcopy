@@ -1,0 +1,21 @@
+<template>
+    <lightning-card>
+      <lightning-button-group>
+        <lightning-button label="All" onclick={handleClick}></lightning-button>
+        <lightning-button label="Unpaid" onclick={handleClick}></lightning-button>
+        <lightning-button label="Paid" onclick={handleClick}></lightning-button>
+    </lightning-button-group>
+    </lightning-card>
+    <template if:true={callList}>
+      <div style="height: 300px;">
+        <lightning-datatable
+                key-field="recordId"
+                data={callList}
+                max-row-selection="1"
+                onrowselection={navigateToRecord}
+                selected-rows={selectedRows}
+                columns={columns}>
+        </lightning-datatable>
+      </div>  
+    </template>
+  </template>

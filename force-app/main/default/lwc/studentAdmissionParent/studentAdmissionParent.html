@@ -1,0 +1,15 @@
+<template>
+    <!--
+        Single wrapper div.
+        Desktop: position:fixed full-viewport, card on right.
+        Mobile:  position:fixed full-viewport, scroll handled
+                 by -webkit-overflow-scrolling on an inner div.
+    -->
+    <div class="page-wrapper" style={wrapperStyle}>
+        <div class="scroll-inner">
+            <div class="auth-card">
+                <c-student-admission-single-page-new></c-student-admission-single-page-new>
+            </div>
+        </div>
+    </div>
+</template>

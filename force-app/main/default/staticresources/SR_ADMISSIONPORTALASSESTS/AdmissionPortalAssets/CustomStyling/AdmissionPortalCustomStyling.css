@@ -1,0 +1,1033 @@
+
+  :root{
+    --slds-c-checkbox-mark-color-foreground:#00679A;
+    --sds-c-checkbox-mark-color-foreground:#00679A; 
+    --lwc-colorBackgroundSpinnerDot:red;
+      --slds-c-input-shadow:#00679A;
+      --sds-c-radio-mark-color-foreground:#00679A;
+      --reva-admission-portal-page-background-color:rgb(234,243,248);
+      --reva-admission-portal-brand-color:#00679A;
+      --reva-admission-portal-component-bgcolor:#F6F6F6;
+    }
+    
+    
+    @font-face {
+    font-family: 'NunitoSans';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/NunitoSans/NunitoSans_10pt-Regular.ttf') format('TrueType');
+}
+    body,
+    html {
+        font-family: 'NunitoSans', Helvetica !important;
+    }
+    
+  
+    .header-wrapper{
+        background-color:var(--reva-admission-portal-page-background-color) !important;
+                padding: 0px 12px 5px 12px !important;
+        }
+    
+    .siteforceContentArea .comm-layout-column .ui-widget:not(:last-child){
+        margin-bottom:0 !important;
+    }
+    
+    c-school-program-pl lightning-card article{
+        background-color:var(--reva-admission-portal-component-bgcolor) !important;
+    }
+    c-school-program-pl .slds-text-heading_small{
+        color:#00000099 !important;
+    }
+    c-school-program-pl lightning-base-combobox .slds-combobox__input{
+        background-color:#ffffff !important;
+    }
+    c-registration-form-container flowruntime-flow{
+        border-radius:10px;
+    }
+    c-registration-form-container .registration-form-wrapper flowruntime-email .slds-input{
+        width:45% !important;
+    }
+    .screen  .container lightning-card .slds-card{
+        border:none !important;
+    }
+    @media only screen and (max-width:767px){
+         c-registration-form-container .registration-form-wrapper flowruntime-email .slds-input{
+        width:100% !important;
+    }
+    }
+ .forceCommunityThemeHeaderCompact .themeHeaderInner {
+    opacity: 1;
+    display: flex;
+    position: relative;
+    z-index: 3;
+    align-items: center;
+    height: 100%;
+    min-height: 34px;
+    max-width: 100%;
+    display: none !important;
+}
+
+    .slds-spinner:before{
+        background:#00679A;
+    }
+    flowruntime-flow{
+        background-color:#F6F6F6 !important;
+    }
+    .container.cFEE_ApplicationPayment{
+    border: 1px solid #9EC5E4 ;
+    background-color: #CDEAF8 ;
+    border-radius: 10px;
+    padding: 12px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom:50px
+    }
+    
+    .slds-button_neutral {
+    border: 1px solid #00679A;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-top: var(--slds-c-button-spacing-block-start, var(--sds-c-button-spacing-block-start, 0));
+    padding-right: var(--slds-c-button-spacing-inline-end, var(--sds-c-button-spacing-inline-end, 0));
+    padding-bottom: var(--slds-c-button-spacing-block-end, var(--sds-c-button-spacing-block-end, 0));
+    padding-left: var(--slds-c-button-spacing-inline-start, var(--sds-c-button-spacing-inline-start, 0));
+    background: none;
+    background-color: var(--slds-c-button-color-background, var(--sds-c-button-color-background, transparent));
+    background-clip: border-box;
+    border-style: solid;
+    border-width: var(--slds-c-button-sizing-border, var(--sds-c-button-sizing-border, var(--lwc-borderWidthThin,1px)));
+    border-radius: var(--slds-c-button-radius-border, var(--sds-c-button-radius-border, var(--lwc-buttonBorderRadius,.25rem)));
+    box-shadow: var(--slds-c-button-shadow, var(--sds-c-button-shadow));
+    line-height: var(--slds-c-button-line-height, var(--sds-c-button-line-height, var(--lwc-lineHeightButton,1.875rem)));
+    text-decoration: none;
+    color: #00679A !important;
+    -webkit-appearance: none;
+    white-space: normal;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: white !important;
+}
+
+    .slds-radio [type=radio]:checked+.slds-radio__label .slds-radio_faux:after, .slds-radio [type=radio]:checked+.slds-radio__label .slds-radio--faux:after {
+    width: 0.5rem;
+    height: 0.5rem;
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    border-radius: var(--lwc-borderRadiusCircle,50%);
+    background: none;
+    background-color: var(--slds-c-radio-mark-color-foreground, var(--sds-c-radio-mark-color-foreground, var(--lwc-brandAccessible,rgb(477, 43, 4545))));
+}
+
+    
+    .siteforceContentArea .cb-section_column .ui-widget:not(:last-child){
+        margin-bottom:0 !important;
+    }
+    
+    div [data-region-name="content"] .cb-section_column:nth-child(2){
+        background:red !important;
+    }
+
+    body .apexp .bPageBlock.apexDefaultPageBlock .pbHeader {
+    background: red;
+    }
+    .registration-form-wrapper section lightning-formatted-rich-text span p span{
+        background:var(--reva-admission-portal-component-bgcolor) !important;
+    }
+
+/*Application table*/
+.forceBaseListView table {
+    table-layout:fixed !important;
+}
+.forceBaseListView table thead th,
+.forceBaseListView table tbody td{
+    white-space:normal !important;
+    word-wrap:break-word !important;
+    background-color:var(--reva-admission-portal-component-bgcolor) !important;
+}
+
+slot c-pincode-details lightning-card .slds-card .slds-p-horizontal_small,
+slot c-pincode-details lightning-card .slds-card .slds-card__body {
+    padding:0px !important;
+}
+/*pincode background*/
+slot c-pincode-details lightning-card .slds-card{
+    background:transparent !important;
+    padding:0px !important;
+}
+
+.tabs__nav {
+    border-bottom: 0px solid white !important;
+    background-color: white;
+}
+
+.pbSubsection table{
+    table-layout:fixed !important;
+}
+
+.apexp .bPageBlock .detailList{
+    table-layout: fixed !important;
+}
+
+.slds-tabs_scoped__nav .slds-tabs--scoped__nav {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid white;
+}
+
+.slds-is-active .slds-tabs_scoped__link {
+    background-color: var(--reva-admission-portal-brand-color) !important;
+    color: white !important;
+}
+
+.slds-tabs_scoped__item {
+    position: relative !important;
+    margin-bottom: calc(-1 * var(--lwc-borderWidthThin, 1px)) !important;
+    background-color: #9EC5E4 !important;
+}
+
+.uiTabset--default .tabs__item.active>a {
+    color: white !important;
+    font-weight: var(--lwc-fontWeightBold, 700);
+    background-color: var(--reva-admission-portal-brand-color) !important;
+}
+
+.uiTabset--default .tabs__item .tabs__item {
+    margin-left: 1px !important;
+    padding: 1px !important;
+    border-radius:5px;
+}
+
+.tabs__item {
+    margin-left: 1px !important;
+    padding: 1px !important;
+}
+
+.forceCommunityTabset.uiTabset>.uiTabBar .uiTabItem {
+    /*height: 41px !important;*/
+    max-width: 55% !important;
+    min-width: 60px !important;
+    text-align: center !important;
+    background-color: #9EC5E4 !important;
+    font-weight: 600 !important;
+}
+
+.uiTabItem .tabHeader {
+    text-transform: none !important;
+    padding: 9px 9px 9px 8px !important;
+    border-bottom: none !important;
+}
+
+.uiTabset--default {
+    background-color: transparent !important;
+   border: 1px solid var(--reva-admission-portal-brand-color) !important;
+    border-radius: 10px !important;
+    padding: 5px !important;
+    box-shadow: 2px 4px 9px -4px !important;
+}
+.uiTabset--default:last-child{
+    margin-bottom:50px;
+}
+
+.THIS .slds-tabs_scoped__item+.slds-tabs_scoped__item {
+    background-color: #9EC5E4 !important;
+    margin: 0px 2px 0px 0px !important;
+}
+
+.slds-tabs_scoped__content .slds-tabs--scoped__content {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    border-bottom-left-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    padding: var(--lwc-spacingMedium, 1rem);
+    background-color: red !important;
+}
+
+.calendarHome .slds-page-header {
+    margin: var(--lwc-spacingNone, 0);
+    padding: var(--lwc-spacingMedium, 1rem);
+    background-color: var(--reva-admission-portal-brand-color);
+    color: white;
+}
+
+.forceCalendar>.calendarSidebar {
+    width: 304px;
+    right: 0;
+    bottom: 0;
+    top: 70px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: var(--reva-admission-portal-brand-color);
+    color: white;
+}
+
+.calendarListPanel {
+    font-size: var(--lwc-fontSize2, 0.75rem);
+    background-color: var(--reva-admission-portal-brand-color);
+}
+
+#centerPanel {
+    text-align: left;
+    min-width: 298px;
+    max-width: 330px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    display: inline-block;
+    position: relative;
+    font-family: var(--lwc-fontFamily, Helvetica);
+    font-size: 14px;
+    color: var(--lwc-colorTextDefault, rgb(13, 12, 12));
+    text-decoration: none;
+    vertical-align: middle;
+    z-index: 0;
+    align-items: right;
+    position: absolute !important;
+    right: 0 !important;
+    margin-right: 9%;
+    background-color: white !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 20px !important;
+}
+
+.salesforceIdentityLoginForm2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+}
+
+.salesforceIdentityLoginBody2 .cCenterPanel:before {
+    position: absolute;
+    top: 0px !important;
+    bottom: 0px !important;
+    left: 0px !important;
+    right: 0px !important;
+    padding: 0px !important;
+    z-index: -1;
+    background-color: white !important;
+    border-radius: 4px
+}
+
+#sfdc_username_container {
+    margin-bottom: 10px;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 25px !important;
+    background-color: #6CA5D5;
+    width: 90%
+}
+
+#sfdc_password_container {
+    margin-bottom: 10px;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 25px !important;
+    background-color: #6CA5D5;
+    width: 90%;
+}
+
+.salesforceIdentityLoginForm2 .inputIcon {
+    color: var(--lwc-colorTextPlaceholder, rgba(0, 0, 0, 0.86));
+    float: right !important;
+    padding-right: 10%;
+    padding-top: 7px;
+}
+
+.salesforceIdentityLoginBody2 .inputBox {
+    color: var(--lwc-colorTextPlaceholder, rgba(0, 0, 0, 0.86));
+    font-family: var(--lwc-fontFamily, Helvetica);
+    outline: none;
+    background-color: #6CA5D5 !important;
+}
+
+.salesforceIdentityLoginForm2 .uiButton {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: var(--lwc-colorTextButtonBrand, rgb(255, 255, 255));
+    cursor: pointer;
+    background-color: #12478A !important;
+    padding: 5px 50px !important;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    font-size: 16px;
+    font-family: var(--lwc-fontFamily, Helvetica);
+    font-weight: 700;
+    line-height: 1.42857143;
+    border-radius: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    border-radius: 25px !important;
+}
+
+.inverseTextColor {
+    text-align: center;
+}
+
+.salesforceIdentityLoginForm2 .inverseTextColor {
+    color: cornflowerblue !important;
+}
+
+.salesforceIdentityEmployeeLoginLink2.employeeLoginLink a.inverseTextColor {
+    color: cornflowerblue !important;
+}
+
+/* Forgot password button*/
+.salesforceIdentityForgotPassword2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+}
+
+.salesforceIdentityForgotPassword2 .uiButton {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: var(--lwc-colorTextButtonBrand, rgb(255, 255, 255));
+    cursor: pointer;
+    background-color: #12478A !important;
+    padding: 5px 50px !important;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    font-size: 16px;
+    font-family: var(--lwc-fontFamily, Helvetica);
+    font-weight: 700;
+    line-height: 1.42857143;
+    border-radius: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    border-radius: 25px !important;
+}
+
+.salesforceIdentityForgotPassword2 .inputContainer {
+    margin-bottom: 10px;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 25px !important;
+    background-color: #6CA5D5 !important;
+    width: 90%
+}
+
+.salesforceIdentityForgotPassword2 .inputContainer {
+    margin-bottom: 7px;
+    border: 1px solid #ccc;
+    border-radius: 25px !important;
+    background-color: #6CA5D5 !important;
+    width: 100%;
+    padding: 9px;
+}
+
+.salesforceIdentityForgotPassword2 .inputIcon {
+    color: var(--lwc-colorTextPlaceholder, rgba(0, 0, 0, 0.86));
+    font-size: 22px;
+    float: right !important;
+}
+
+/*Self register*/
+.salesforceIdentitySelfRegister2 .inputContainer {
+    margin-bottom: 10px;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 25px !important;
+    background-color: #6CA5D5;
+    width: 90%
+}
+
+.salesforceIdentitySelfRegister2 .inputContainer {
+    margin-bottom: 10px;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 25px !important;
+    background-color: #6CA5D5 !important;
+    width: 100%
+}
+
+.salesforceIdentitySelfRegister2 .inputIcon {
+    color: var(--lwc-colorTextPlaceholder, rgba(0, 0, 0, 0.86));
+    font-size: 22px;
+    float: right !important;
+}
+
+.salesforceIdentitySelfRegister2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+}
+
+.salesforceIdentitySelfRegister2 .uiButton {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: var(--lwc-colorTextButtonBrand, rgb(255, 255, 255));
+    cursor: pointer;
+    background-color: #12478A !important;
+    padding: 5px 50px !important;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    font-size: 16px;
+    font-family: var(--lwc-fontFamily, Helvetica);
+    font-weight: 700;
+    line-height: 1.42857143;
+    border-radius: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    border-radius: 25px !important;
+}
+
+@media screen and (max-width: 700px) {
+	.salesforceIdentityLoginBody2 {
+		background: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Logos/mobile-login-image.png') 50% 100%/cover no-repeat fixed !important;
+
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
+    #centerPanel {
+        margin: auto;
+        width: 100vw;
+        height: auto;
+        text-align: left;
+        display: inline-block;
+        position: relative !important;
+        font-family: var(--lwc-fontFamily, Helvetica);
+        font-size: 14px;
+        color: var(--lwc-colorTextDefault, rgb(13, 12, 12));
+        text-decoration: none;
+        vertical-align: middle;
+        z-index: 0;
+        background-color: #ffffff00 !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: center;
+        align-items: stretch;
+        right: 0px !important;
+        text-align: left;
+        min-width: 298px;
+        max-width: 330px;
+        margin-top: 5%;
+        margin-bottom: 5%;
+        align-items: right;
+        position: relative !important;
+        box-shadow: none !important;
+    }
+
+    .salesforceIdentityLoginBody2 .cCenterPanel:before {
+        background-color: #ffffff00 !important;
+        box-shadow: none !important;
+    }
+   .salesforceIdentityLoginBody2 .cCenterPanel .siteforceContentArea {
+    background-color: transparent;
+    position: relative;
+    top: 35px;
+}
+}
+
+.forceHighlightsStencilDesktop.slds-page-header {
+    border-radius: 10px;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    box-shadow: 2px 4px 9px -4px;
+}
+
+.forceDetailPanelDesktop.slds-card {
+    margin-bottom: 0 !important;
+    border: 1px solid var(--reva-admission-portal-brand-color) !important;
+    padding: var(--lwc-varSpacingVerticalMedium, 0rem) var(--lwc-varSpacingHorizontalMedium, 1rem);
+    box-shadow: 2px 4px 9px -4px;
+}
+
+.oneActionsRibbon li.slds-button--neutral>a {
+    color: black;
+}
+
+/* for profile Image*/
+@media only screen and (min-width: 64.0625em) {
+    .forceCommunityUserProfileBody .cProfileViewBody {
+        background-color: #9EC5E4 !important;
+        border-radius: var(--lwc-fcSpacingXxSmall, 7px);
+        overflow: hidden;
+        border: 1px solid var(--reva-admission-portal-brand-color) !important;
+        box-shadow: 2px 4px 9px -4px !important;
+    }
+}
+
+/*Account Page*/
+/*.forceCommunityRecordHeadline .forceHighlightsStencilDesktop.slds-page-header {
+    background-color: #c7c7c7 !important;
+}*/
+
+.forceHighlightsStencilDesktop.slds-page-header {
+    border-radius: 10px !important;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    box-shadow: 2px 4px 9px -4px;
+}
+
+.forceHighlightsStencilDesktop .slds-page-header__detail-row {
+    border-bottom: 1px solid var(--reva-admission-portal-brand-color);
+    border-radius: 0px 0px 10px 10px;
+    background-color: #9EC5E4;
+    padding: var(--lwc-varSpacingVerticalMedium, 1rem) var(--lwc-varSpacingHorizontalMedium, 1rem);
+    margin: var(--lwc-varSpacingVerticalMedium, 1rem) calc(-1 * var(--lwc-varSpacingHorizontalMedium, 1rem)) calc(-1 * var(--lwc-varSpacingVerticalMedium, 1rem));
+}
+
+/* Account Page ------ Variation -- Account List*/
+.forceCommunityRecordListDesktop.slds-card {
+    border: 1px solid var(--reva-admission-portal-brand-color) !important;
+    border-radius: 15px;
+    padding: 1%;
+    box-shadow: 2px 4px 9px -4px;
+}
+
+.groupDependentFieldEnabled .forceCommunityRecordListDesktop.slds-card {
+    border: none !important;
+}
+
+/*Group object---------variation -----detail*/
+.forceCommunityGroupHighlightStencilNapili.forceRecordLayout {
+    padding: var(--lwc-fcSpacingLarge, 28px);
+    border: 1px solid var(--reva-admission-portal-brand-color) !important;
+    border-radius: 15px;
+    box-shadow: 2px 4px 9px -4px;
+}
+
+.forceChatterGroupDetailCard {
+    border: none !important;
+    margin: 0;
+}
+
+@media only screen and (min-width: 64.0625em) {
+    .forceCommunityGroupRecordHomeTabs .detailRelatedList {
+        float: right;
+        width: 38%;
+        border: 1px solid var(--reva-admission-portal-brand-color);
+        padding: 1%;
+    }
+}
+
+#messageDetailView {
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    border-radius: 15px;
+}
+
+.forceChatterMessagesListView.container,
+.forceChatterMessagesListView.mobile-view.container {
+    height: var(--lwc-maxDMContainerHeight, 95vh);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    border-radius: 15px;
+}
+
+/*Message chat*/
+.forceChatterMessages .right-box {
+    border-left-width: 0;
+    border: none;
+}
+
+.forceChatterMessages .left-box {
+    border-left-width: 0;
+    border: none;
+}
+
+.forceChatterMessageDetailViewHeader.header-box {
+    border-radius: 15px 15px 0px 0px;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+}
+
+.forceChatterMessagesListView .inboxHeader {
+    min-height: var(--lwc-minDMHeaderHeight, 5rem);
+    flex: 0 0 auto;
+    border: none;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.forceCommunityReportPage.reportPageFrameWrapper {
+    overflow: hidden;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    border-radius: 9px;
+    padding: 1%;
+}
+
+.forceCommunityAnalyticsObjectHome .folderNavigator {
+    position: relative;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    border-radius: 9px;
+    padding: 1%;
+}
+
+/*Report Builder*/
+.reportsReportBuilder {
+    position: absolute;
+    border: none;
+    width: calc(100% + 1.5rem);
+    height: calc(100% + 1.5rem);
+    margin: -0.75rem;
+    display: inherit;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    border-radius: 10px;
+}
+
+.forceCommunitySearch {
+    display: flex;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    border-radius: 10px;
+}
+
+/*User Setting Button*/
+.slds-button_brand .slds-button--brand {
+    text-align: center;
+    justify-content: center;
+    transition: border .15s linear;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    background-color: var(--reva-admission-portal-brand-color) !important;
+}
+
+/*feedback form*/
+.surveyRuntimeSurvey .surveyScreenContent {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+    min-height: 100%;
+    background-color: white;
+}
+
+.surveyAnswerInputTemplate.container {
+    width: 100%;
+    position: relative;
+    background-color: #d3d3d330;
+}
+
+.surveyRuntimeActionBar {
+    background-color: #d3d3d330 !important;
+    max-width: var(--lwc-runtimePanelMaxWidth, 760px);
+    margin: 0 auto var(--lwc-squareIconLargeBoundaryAlt, 5rem);
+    border: 1px solid var(--reva-admission-portal-brand-color) !important;
+    border-top: none;
+    border-radius: 0 0 var(--lwc-spacingXxSmall, 0.25rem) var(--lwc-spacingXxSmall, 0.25rem);
+}
+
+.surveyRuntimeActionBar .navigationButtons button {
+    min-width: 85px;
+    background-color: var(--reva-admission-portal-brand-color);
+    border: 1px solid var(--reva-admission-portal-brand-color);
+}
+
+.navigationButtons .slds-button_neutral {
+    border-color: rgb(216, 221, 230);
+    color: white !important;
+}
+
+#combobox-button-28 {
+    background-color: #9EC5E4;
+}
+
+#combobox-button-31 {
+    background-color: #9EC5E4;
+}
+
+#combobox-button-34 {
+    background-color: #9EC5E4;
+}
+
+.forceCommunityUserSettingsInternal .settingsEmail {
+    background-color: #9EC5E4;
+    display: block;
+    height: 35px;
+    padding: var(--lwc-fcSpacingXxSmall, 7px) var(--lwc-fcSpacingSmall, 14px);
+    font-size: var(--lwc-fcFontSizeSmall, 0.75rem);
+    line-height: var(--lwc-fcSpacingLarge, 28px);
+    color: var(--lwc-colorTextDefault, rgb(13, 12, 12));
+    border: 1px solid var(--lwc-colorBorderInput, rgba(5, 5, 5, 0.83));
+    border-radius: 4px;
+    width: 100%;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.slds-button_brand,
+.slds-button--brand {
+    text-align: center;
+    justify-content: center;
+    transition: border .15s linear;
+    background-color: var(--reva-admission-portal-brand-color);
+    border: 1px solid var(--reva-admission-portal-brand-color);
+}
+
+.surveyRuntimeScreen {
+    border: 1px solid var(--reva-admission-portal-brand-color) !important;
+    background-color: var(--lwc-runtimeActionBarBgColor, rgba(255, 255, 255, 0.98));
+    max-width: var(--lwc-runtimePanelMaxWidth, 760px);
+    margin: var(--lwc-squareIconLargeBoundaryAlt, 5rem) auto 0;
+    border-bottom: none !important;
+    border-radius: var(--lwc-borderRadiusMedium, 0.25rem) var(--lwc-borderRadiusMedium, 0.25rem) 0 0;
+}
+
+.slds-color__border_gray-6 {
+    border-color: var(--reva-admission-portal-brand-color) !important;
+}
+
+.forceCommunitySurveyCommunity {
+    background-color: var(--lwc-colorBackground, #FFFFFF);
+    border: 1px solid white !important;
+}
+
+.surveyRuntimeSurvey .slds-progress-bar {
+    display: none;
+}
+
+/*User setting cancel button*/
+.slds-button .slds-button_neutral .cancelButton {
+    color: black !important;
+}
+
+.slds-button_neutral .slds-button--neutral {
+    text-align: center;
+    justify-content: center;
+    transition: border .15s linear;
+    color: black;
+}
+
+/*resource page*/
+.forceContentFilesListDesktop .slds-page-header--fileshome {
+    padding-left: var(--lwc-spacingNone, 0);
+    padding-right: var(--lwc-spacingNone, 0);
+    background-color: transparent;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    padding: 1% !important;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.forceContentFilesHomeDesktop .leftNav {
+    background-color: var(--lwc-colorForegroundPrimary, rgb(255, 255, 255));
+    flex: 0 0 auto;
+    width: 200px;
+    position: relative;
+    border: 1px solid var(--reva-admission-portal-brand-color);
+}
+
+.forceListViewManager .uiScroller.native {
+    border: 1px solid var(--reva-admission-portal-brand-color);
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.forceContentFilesHomeDesktop .fileList {
+    border: none;
+    width: calc(100% - 200px);
+    flex: 1;
+    position: relative;
+}
+
+/*My appointment*/
+.forceRelatedListSingleContainer .slds-card {
+    position: relative;
+    padding-top: var(--slds-c-card-spacing-block-start, var(--sds-c-card-spacing-block-start, var(--sds-c-card-spacing-block, 0)));
+    padding-right: var(--slds-c-card-spacing-inline-end, var(--sds-c-card-spacing-inline-end, var(--sds-c-card-spacing-inline, 0)));
+    padding-bottom: var(--slds-c-card-spacing-block-end, var(--sds-c-card-spacing-block-end, var(--sds-c-card-spacing-block, 0)));
+    padding-left: var(--slds-c-card-spacing-inline-start, var(--sds-c-card-spacing-inline-start, var(--sds-c-card-spacing-inline, 0)));
+    background: var(--slds-c-card-color-background, var(--sds-c-card-color-background, var(--slds-g-color-neutral-base-100, var(--lwc-cardColorBackground, rgb(255, 255, 255)))));
+    border-width: var(--slds-c-card-sizing-border, var(--sds-c-card-sizing-border, var(--lwc-borderWidthThin, 1px)));
+    border-style: hidden !important;
+    border-color: white !important;
+    border: none !important;
+    border-radius: var(--slds-c-card-radius-border, var(--sds-c-card-radius-border, var(--lwc-borderRadiusMedium, 0.25rem)));
+    background-clip: padding-box;
+    box-shadow: var(--slds-c-card-shadow, var(--sds-c-card-shadow, var(--lwc-cardShadow, none)));
+    color: var(--slds-c-card-text-color, var(--sds-c-card-text-color));
+}
+.forceCommunitySection .cb-section_column:only-child {
+    background: #EAF3F8;
+}
+.header-wrapper {
+    background-color:transparent !important;
+}
+/*Box inside box*/
+.slds-card {
+    position: relative;
+    padding-top: var(--slds-c-card-spacing-block-start, var(--sds-c-card-spacing-block-start, var(--sds-c-card-spacing-block, 0)));
+    padding-right: var(--slds-c-card-spacing-inline-end, var(--sds-c-card-spacing-inline-end, var(--sds-c-card-spacing-inline, 0)));
+    padding-bottom: var(--slds-c-card-spacing-block-end, var(--sds-c-card-spacing-block-end, var(--sds-c-card-spacing-block, 0)));
+    padding-left: var(--slds-c-card-spacing-inline-start, var(--sds-c-card-spacing-inline-start, var(--sds-c-card-spacing-inline, 0)));
+    background: var(--slds-c-card-color-background, var(--sds-c-card-color-background, var(--slds-g-color-neutral-base-100, var(--lwc-cardColorBackground,rgb(255, 255, 255)))));
+    border-width: var(--slds-c-card-sizing-border, var(--sds-c-card-sizing-border, var(--lwc-borderWidthThin,1px)));
+    border-style: solid;
+    border-color: var(--slds-c-card-color-border, var(--sds-c-card-color-border, var(--slds-g-color-border-base-1, var(--lwc-cardColorBorder,rgb(0, 103, 154)))));
+    border-radius: 10px !important;
+    background-clip: padding-box;
+    box-shadow: var(--slds-c-card-shadow, var(--sds-c-card-shadow, var(--lwc-cardShadow,none)));
+    color: var(--slds-c-card-text-color, var(--sds-c-card-text-color));
+    border: none;
+}
+.runtime_industries_actionplanHighlightsPanel{
+    border: 1px solid var(--reva-admission-portal-brand-color) !important;
+    border-radius: 10px !important;
+    box-shadow: 2px 4px 9px -4px !important;
+}
+.slds-combobox__input{
+    background-color:#9EC5E4;
+}
+.slds-input_faux{
+    background-color:#9EC5E4;
+} 
+.slds-combobox__input-value{
+    background-color:#9EC5E4;
+}
+.omniscript-article{
+    background-color:#F6F6F6;
+}
+.listViewContent{
+    background-color:#F6F6F6;
+}
+    article.slds-card.flowRuntimeForFlexipage.forceCommunityFlowCommunity{
+        border:none !important;
+    }
+	.slds-progress_vertical .slds-progress__item.slds-is-completed .slds-progress__marker_icon-success svg{
+     	fill: #00679A !important;   
+	}
+
+	.slds-input-has-icon_right .slds-input {
+        margin-left: 0px !important; 
+    }
+	
+	    forceRecordLayout uiVirtualDataGrid--default uiVirtualDataGrid{
+        background-color: #F6F6F6 !important;
+    }
+    .forceCommunityRecordListMobile .slds-line-height_reset{
+        background-color: #F6F6F6 !important;
+    }
+    .forceCommunityObjectHome .forceActionRow.uiInfiniteListRow .body {
+        background-color: #F6F6F6 !important;
+        border-bottom-color: var(--lwc-colorBorder,rgb(0, 103, 154));
+		}
+    
+    .forceSearchMruMobileItem {
+        	background-color: #F6F6F6 !important;
+    	}
+
+	 div.slds-form-element.vlc-flex.vlc-disclosure div.slds-box:nth-child(2){
+        display:none !important;
+        border:none !important;
+    }
+
+
+@media screen and (max-width: 767px) {
+    .cb-section .cb-section_column .contactSupportButton{
+        padding:0px !important;
+        font-size:13px !important;
+    }
+    .uiOutputRichText h3 strong{
+        font-size:14px !important;
+    }
+    .omni-hz-stepchart-label[omnistudio-omniscriptStepChartItems_omniscriptStepChartItems_horizontal] {
+        left: calc(-10% + 8px) !important;
+        top: 0px !important;
+        max-width: 11rem !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display:none !important;
+    }
+    h1.slds-text-heading--medium {
+        font-size:14px !important;
+    }
+    .slds-accordion__summary-action h3.slds-truncate{
+        font-size:12px !important;
+    }
+    slds-form-element__legend slds-form-element__label slds-show_inline slds-float_none slds-var-p-top_xxx-small{
+        font-size:12px !important;
+    }
+    c-pincode-details lightning-card article.slds-card{
+        background-color:transparent !important;
+    }
+    .omni-block_content[omnistudio-omniscriptBlock_omniscriptBlock] {
+    padding-left: 0rem !important;
+    padding-right: 0rem !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: row;
+    align-content: space-between;
+	}
+    lightning-formatted-rich-text.slds-rich-text-editor__output span h4 span{
+        font-size:12px !important;
+    }
+    .container .slds-rich-text-editor__output span p strong{
+        font-size:12px !important;
+    }
+    .omniscript-article .slds-file-selector__dropzone {
+    /* border: var(--lwc-borderWidthThin,1px) solid var(--lwc-colorBorder,#dddbda); */
+        width: 100%;
+        overflow: hidden;
+        border: none !important;
+	}
+   /* .vlc-slds-box__no-border[omnistudio-omniscriptDisclosure_omniscriptDisclosure]>.slds-box[omnistudio-omniscriptDisclosure_omniscriptDisclosure] {
+        border: none !important;
+	}*/
+
+    lightning-button.apply{
+        margin:0px!important;
+    }
+    div.container div.slds-var-m-bottom_small lightning-layout-item.slds-p-around_small.slds-size_12-of-12{
+        padding:0px 2px 10px 2px !important;
+    }
+    .slds-input-has-icon_right .slds-input {
+        margin-left: 0px !important; 
+    }
+    .div.slds-form-element.slds-form-container.slds-text-block h2 strong span{
+        color:red !important;
+        font-size:12px !important;
+    }
+    div.uiOutputRichText p a{
+        background-color: transparent !important;
+        color: rgb(0, 102, 204);
+    }
+    .uiInput--input.input:focus, .uiInput--input .input:focus, .uiInput--input.input:active, .uiInput--input .input:active {
+    outline: 0;
+    border-color:var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundInputActive,rgb(255, 255, 255)));
+    background-color: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundInputActive,rgb(255, 255, 255)));
+    /* box-shadow: var(--lwc-shadowButtonFocus,0 0 3px #0176d3); */
+    border: none !important;
+	}
+    .forceCommunitySection .cb-section_column:only-child{
+        padding:2px 8px 2px 8px !important;
+    }
+    .themeLayoutStarterWrapper .a11y-banner{
+        display:none !important;
+    }
+    }
+    @media screen and (max-width: 1023px) {
+        .forceCommunitySection .cb-section_row{
+            min-height:0px !important;
+        }
+    }

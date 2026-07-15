@@ -1,0 +1,103 @@
+<template>
+    <template if:true={spinner}>
+        <div class="slds-spinner_container">
+            <div role="alert" class="slds-spinner slds-spinner_brand slds-spinner_large">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <div class="slds-form slds-box">
+        <div class="slds-form__row">
+            <div class="slds-form__item">
+                <label class="slds-form-element__label">Course Name:</label>
+                <div class="slds-form-element__label">
+                    <b>{courseName}</b>
+                </div>
+            </div>
+            <div class="slds-form__item">
+                <label class="slds-form-element__label">Section:</label>
+                <div class="slds-form-element__label">
+                    <b>{sectionName}</b>
+                </div>
+            </div>
+            <div class="slds-form__item">
+                <label class="slds-form-element__label">IA Type:</label>
+                <div class="slds-form-element__label">
+                    <b>{iaType}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={hasStudents}>
+        <div class="slds-box">
+            <div class="slds-scrollable_y" style="height:150px;">
+                <table class="slds-table slds-table_bordered slds-table_fixed-layout">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Theory Marks<br/>Max: {theoryMax}</th>
+                            <th>Seminar/Practical Marks<br/>Max: {seminarMax}</th>
+                            <th>Quiz/Practical Marks<br/>Max: {quizMax}</th>
+                            <th>Total Marks<br/>Max: {totalMax}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={studentList} for:item="crs" for:index="index">
+                            <tr key={crs.crsConn.Id}>
+                                <td>{crs.crsConn.hed__Contact__r.Name}<br/>{crs.crsConn.hed__Contact__r.SRN_Number__c}</td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" step="0.1" min="-1" max={theoryMax}
+                                                     value={crs.iaMark.Theory_Secured_Marks__c} 
+                                                     data-id={crs.crsConn.Id} data-index={index}
+                                                        data-field="Theory_Secured_Marks__c"
+                                                     onchange={handleInputChange}></lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" step="0.1" min="-1" max={seminarMax}
+                                                     value={crs.iaMark.Seminar_Secured_Marks__c} data-index={index}
+                                                     data-id={crs.crsConn.Id} data-field="Seminar_Secured_Marks__c"
+                                                     onchange={handleInputChange}></lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" step="0.1" min="-1" max={quizMax}
+                                                     value={crs.iaMark.Quiz_Secured_marks__c} 
+                                                     data-index={index}
+                                                     data-id={crs.crsConn.Id} 
+                                                     data-field="Quiz_Secured_marks__c"
+                                                     onchange={handleInputChange}></lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom: 20px;">
+                                    {crs.iaMark.Total_Secured_Marks_New__c}
+                                    </div>
+                                </td>
+                            </tr>
+                           
+                        </template>
+                    </tbody>
+                </table>
+                
+            </div>
+            <div class="slds-align_absolute-center slds-m-top_medium">
+                <lightning-button label="Update Marks" onclick={saveIaMarks} variant="brand"></lightning-button>&nbsp;
+                <lightning-button label="Back to List" onclick={backToList}></lightning-button>
+            </div>
+        </div>
+        <br/>
+       
+    </template>
+
+    <template if:false={hasStudents}>
+        <p>No students enrolled for this Course & Section.</p>
+    </template>
+</template>

@@ -1,0 +1,22 @@
+.slds-cell-edit__button {
+    margin-top: 20px;
+    margin-left: -20px;
+    z-index: 1;
+}
+
+.slds-form-element_readonly {
+    display: flex;
+    align-items: center;
+}
+/* This targets the container of the output fields */
+lightning-output-field {
+    border-bottom: 1px solid #e5e5e5; /* Standard Salesforce light grey line */
+    display: block;
+    padding-bottom: 2px;
+    margin-bottom: 2px;
+}
+
+/* Optional: remove the line from the very last field so it looks cleaner */
+.slds-col lightning-output-field:last-child {
+    border-bottom: none;
+}

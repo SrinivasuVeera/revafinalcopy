@@ -1,0 +1,213 @@
+<template>
+    <template if:true={isStep1}>
+    <lightning-card title="Mentee Allocation">
+       <!-- <div class="slds-text-align_center slds-m-bottom_medium">
+            <h1 class="slds-text-title slds-text-heading_medium slds-font-bold">Mentees Allocation</h1>
+        </div>
+        -->
+        <div class="slds-m-around_medium">
+            <p>Mentees Allocation for {programBatchName} - {termName}</p>
+        </div>
+
+        <div class="slds-m-around_medium">
+            <lightning-input 
+                    type="number" 
+                    label="No of Mentees for Mentor"
+                    value={menteesPerMentor}
+                    onchange={handleMenteeCountChange}
+                    min="1"
+                    max={totalUnassignedRecords}
+                    step="1"
+                    message-when-range-overflow="Value cannot exceed total unassigned mentees"
+                    required>
+            </lightning-input>
+        </div>
+
+        <div class="slds-m-around_medium">
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+            <p><strong>Total No of Mentees:</strong> {totalUnassignedRecords}</p>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <p class="slds-m-left_small"><strong>Remaining Mentees:</strong> {remainingMentees}</p>
+        </div>
+    </div>
+    <template if:true={isAllocationActive}>
+    <c-multi-select-pick-list 
+            multi-select="true" 
+            onselectoption={handleSchoolChange} 
+            options={schoolOptions} 
+            selected-values={selectedSchools} 
+            label="Select Cross School Mentors">
+        </c-multi-select-pick-list>
+</template>
+</div>
+        <div class="slds-m-around_medium">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer" title="Mentee Allocation Table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Total Mentees</th>
+                        <th>Same School Mentor</th>
+                        <template if:true={selectedSchools.length}>
+                            <th>Cross School Mentor</th>
+                        </template>
+                        <th>Max Mentees</th>
+                        <th>Assigned Mentees</th>
+                        <template if:true={isAllocationActive}>
+                        <th>Action</th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={tableData} for:item="row">
+                        <tr key={row.id}>
+                            <td class="slds-text-align_center">{row.sNo}</td>
+                            <td class="slds-text-align_center">
+                                <template if:true={isAllocationActive}>
+                                    <template if:false={remainingMenteesZero}>
+                                        <lightning-input
+                                            type="number"
+                                            data-id={row.id}
+                                            value={row.totalMentees}
+                                            onchange={handleTotalMenteesChange}
+                                            min="0"
+                                            max={row.maxMentees}
+                                            step="1"
+                                            class="slds-align_absolute-center">
+                                        </lightning-input>
+                                    </template>                                    
+                                    <template if:true={remainingMenteesZero}>
+                                        {row.totalMentees}
+                                    </template>
+                                </template>
+                                <template if:false={isAllocationActive}>
+                                    {row.totalMentees}
+                                </template>
+                                </td>
+                            <td class="slds-text-align_center">
+                                <template if:true={isAllocationActive}>
+                                <lightning-combobox 
+                                    data-id={row.id}
+                                    value={row.professor}
+                                    options={row.professorOptions}
+                                    onchange={handleProfessorChange}
+                                    >
+                                </lightning-combobox>
+                                </template>
+                                <template if:false={isAllocationActive}>
+                                <lightning-combobox 
+                                    data-id={row.id}
+                                    value={row.professor}
+                                    options={row.professorOptions}
+                                    disabled>
+                                </lightning-combobox>
+                            </template> 
+                            </td>
+                            <template if:true={selectedSchools.length}>
+                                <td class="slds-text-align_center">
+                                    <lightning-combobox 
+                                        data-id={row.id}
+                                        value={row.crossSchoolProfessor}
+                                        options={row.crossSchoolProfessorOptions}
+                                        onchange={handleCrossSchoolProfessorChange}
+                                        placeholder="Select Professor">
+                                    </lightning-combobox>
+                                </td>
+                            </template>
+                            <td class="slds-text-align_center">{row.maxMentees}</td>
+                            <td class="slds-text-align_center">{row.assignedMentees}</td>
+                            <td class="slds-text-align_center">
+                                <template if:true={isAllocationActive}>
+                                <lightning-button-icon icon-name="utility:delete"
+                                    alternative-text="Delete"
+                                    data-id={row.id}
+                                    onclick={handleDeleteRow}
+                                    variant="border-filled">
+                                </lightning-button-icon>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        <div class="slds-m-around_medium slds-text-align_right">
+    <lightning-button 
+        label="Add Row" 
+        variant="brand" 
+        icon-name="utility:add"
+        onclick={handleAddRow} 
+        disabled={isAddRowDisabled}
+        if:true={isAllocationActive}>
+    </lightning-button>
+</div>
+        <div class="slds-m-around_medium slds-text-align_right">
+            <lightning-button label="Next" variant="brand" onclick={handleNext} disabled={isSubmitDisabled}></lightning-button>
+        </div>
+    </lightning-card> 
+    </template>
+    <template if:true={isStep2}>
+        <lightning-card title="Mentees Allocation">
+            <div class="slds-m-around_medium">
+                <p>Review the final allocation for each mentee. You can make individual changes before submitting.</p>
+            </div>
+             <template if:true={showInlineEditPanel}>
+                <div class="slds-p-horizontal_medium slds-p-vertical_small slds-m-top_medium slds-box slds-box_border-top">
+                    <div class="slds-grid slds-gutters slds-wrap slds-grid_vertical-align-end">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                            <span class="slds-form-element__label slds-p-top_large">Update {selectedRowsCount} selected items</span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
+                            <lightning-combobox
+                                name="newProfessorInline"
+                                label="New Mentor"
+                                variant="label-hidden"
+                                value={newProfessorIdForUpdate}
+                                options={finalProfessorOptions}
+                                onchange={handleNewProfessorSelection}
+                                placeholder="Select New Mentor">
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-text-align_right">
+                             <lightning-button label="Apply" variant="brand" onclick={handleApplyInlineUpdate}></lightning-button>
+                             <lightning-button label="Cancel" class="slds-m-left_x-small" onclick={handleCancelInlineUpdate}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            
+            <div class="slds-m-around_medium">
+                <lightning-datatable
+                    key-field="ContactId"
+                    data={confirmationTableData}
+                    columns={datatableColumns}
+                    onrowselection={handleRowSelection}> 
+                </lightning-datatable>
+            </div>
+
+            <div class="slds-modal__footer slds-grid slds-grid_align-space">
+                <lightning-button label="Back" variant="neutral" disabled={isSubmitDisabled} onclick={handleBack}></lightning-button>
+                <div class="slds-m-horizontal_x-small"></div> <!-- Spacer -->
+                <lightning-button label="Submit Allocation" variant="brand" disabled={isFinalSubmitButtonDisabled} onclick={handleFinalSubmit}></lightning-button>
+            </div>
+        </lightning-card>
+    </template>   
+<template if:true={showConfirmationModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header" style="background-color: #ff8c00">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Confirmation Required</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <p>There are still {remainingMentees} unassigned mentees. Do you want to proceed with the current allocation?</p>
+            </div>   
+            <footer class="slds-modal__footer">                 
+            <button class="slds-button slds-button_neutral" onclick={handleModalNo}>No</button>                 
+            <button class="slds-button slds-button_brand" onclick={handleModalYes}>Yes</button>             
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+</template>

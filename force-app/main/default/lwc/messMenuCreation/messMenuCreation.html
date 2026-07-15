@@ -1,0 +1,62 @@
+<template>
+
+    <lightning-card>
+        <div class="title">
+            <strong>MESS MENU CREATION PAGE</strong>
+        </div>
+        <div class="line"></div>
+        <div class="date-container">
+            <div>
+                <strong>MEAL DATE</strong>
+             <!--<lightning-input type="date" onchange={handleDateChange}></lightning-input>--> 
+              <lightning-input type="date" onchange={handleDateChange} min={minDate} max={maxDate}></lightning-input>
+              
+            <template for:each={mealDates} for:item="date">
+                <div key={date} class="date-item">
+                   <span class="date-value">{date}</span>
+                     <lightning-button-icon icon-name="utility:close" alternative-text="Remove" title="Remove Date" onclick={removeDate} data-id={date}></lightning-button-icon> 
+                </div>
+            </template> 
+            </div>
+            <div>
+                <lightning-button label="SAVE" variant="brand" onclick={handleSave}></lightning-button>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div>
+            <!-- <template lwc:if={renderParent}>
+                <template for:each={menuTypes} for:item="menu">
+                    <div key={menu} class="slds-m-around_medium">
+                        <c-menu-item-selector menu-type={menu} picklist-values-from-parent={picklistValues}
+                            onselectionchange={handleSelectionChange}></c-menu-item-selector>
+                    </div>
+                </template>
+            </template> -->
+
+            <template lwc:if={renderParent}>
+                <template for:each={preprocessedMenuTypes} for:item="menu">
+                <div key={menu.type} class="slds-m-around_medium">
+                <c-menu-item-selector
+                                menu-type={menu.type}
+                                picklist-values-from-parent={picklistValues}
+                                start-time={menu.startTime}
+                                end-time={menu.endTime}
+                                onselectionchange={handleSelectionChange}>
+                </c-menu-item-selector>
+                </div>
+                </template>
+                </template>
+        </div>
+    
+    </lightning-card>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+
+
+</template>

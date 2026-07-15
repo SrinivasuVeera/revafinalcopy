@@ -1,0 +1,137 @@
+<template>
+    <lightning-card title="Class Adjustments" >
+        <lightning-layout multiple-rows="true" class="slds-var-m-bottom_medium">
+            <!-- Start Date -->
+            <lightning-layout-item flexibility="auto" padding="around-small">
+                <lightning-input type="date" label="From Date" value={selectedDate} onchange={handleDateChange} required></lightning-input>
+            </lightning-layout-item>
+        
+            <!-- End Date -->
+            <lightning-layout-item flexibility="auto" padding="around-small">
+                <lightning-input type="date" label="To Date" value={endDate} onchange={handleEndDateChange} required></lightning-input>
+            </lightning-layout-item>
+        
+            <!-- Availability Picklist -->
+            <lightning-layout-item flexibility="auto" padding="around-small">
+                <lightning-combobox 
+                    label="Select Professor Type" 
+                    value={selectedAvailability} 
+                    options={availabilityOptions} 
+                    onchange={handleAvailabilityChange} 
+                    required>
+                </lightning-combobox>
+            </lightning-layout-item>
+        
+            <!-- Fetch Button -->
+            <lightning-layout-item flexibility="auto" >
+                <div style="padding: 2rem;">
+            <lightning-button  label="Fetch Available Professors" 
+                                  variant="brand" 
+                                  onclick={fetchSchedules} 
+                                 >
+                </lightning-button>
+                </div>
+                </lightning-layout-item>
+        
+        </lightning-layout>
+        
+   
+        <div class="slds-m-around_medium">
+        <template if:true={schedules.length}>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">Course ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Start Time - End Time</th>
+                        <th scope="col">Section/Group Details</th>
+                        <th scope="col">Available Professors</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={schedules} for:item="schedule">
+                        <tr key={schedule.Id}>
+                            <td>{schedule.Course_ID__c}</td>
+                            <td>{schedule.Date__c}</td>
+                            <td>{schedule.formattedStartTime} - {schedule.formattedEndTime}</td>
+                            <td>{schedule.Course_Offering_Section__c}</td>
+                            <!-- Conditional rendering of comboboxes based on the availability of professor options -->
+                            <td>
+                                <template if:true={schedule.showProfessorOptions}>
+                                    <div class="green-dropdown">
+                                    <lightning-combobox
+                                        placeholder="Same Section Available professor"
+                                        value={schedule.selectedProfessor}
+                                        options={schedule.professorOptions}
+                                        onchange={handleProfessorChange}
+                                        data-id={schedule.Id}>
+                                    </lightning-combobox>
+                                    </div>
+                                </template>
+
+                                <template if:true={schedule.showOtherSectionOptions}>
+                                    <div class="blue-dropdown">
+                                    <lightning-combobox
+                                        placeholder="Other Section Available professor"
+                                        value={schedule.selectedOtherSectionProfessor}
+                                        options={schedule.otherSectionProfessorOptions}
+                                        onchange={handleOtherSectionProfessorChange}
+                                        data-id={schedule.Id}>
+                                    </lightning-combobox>
+                                    </div>
+                                </template>
+
+                                <template if:true={schedule.showEntireSemOptions}>
+                                    <div class="orange-dropdown">
+                                    <lightning-combobox
+                                        placeholder="Entire School Available professor"
+                                        value={schedule.selectedEntireSemProfessor}
+                                        options={schedule.EntireSemisterProfessor}
+                                        onchange={handleEntireSemProfessorChange}
+                                        data-id={schedule.Id}>
+                                    </lightning-combobox>
+                                    </div>
+                                </template>
+
+                                <template if:false={message}>    
+                                    <p>Professors not available.</p>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:false={schedules.length}>
+            <p>No Course Offering details found.</p>
+        </template>
+    </div>
+
+        <div class="slds-m-around_medium">
+            <template if:false={proceed}>
+            <lightning-button label="Proceed" variant="brand" onclick={SaveHandler} class="slds-m-top_small" ></lightning-button>
+        </template>
+        </div>
+
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-m-top_small">{error}</div>
+        </template>
+    </lightning-card>
+
+
+    <lightning-card title="Requested Classes for Adjustument">
+        <div class="slds-m-around_medium">
+        <template if:true={classAdjustments.length}>
+            <lightning-datatable
+                data={classAdjustments}
+                columns={columns}
+                key-field="id">
+            </lightning-datatable>
+        </template>
+        <template if:false={classAdjustments.length}>
+            <p>No class adjustments found.</p>
+        </template>
+    </div>
+    </lightning-card>
+    
+</template>

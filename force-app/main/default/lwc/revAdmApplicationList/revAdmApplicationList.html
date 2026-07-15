@@ -1,0 +1,44 @@
+<template>
+
+    <template lwc:if={applicationsResult}>
+        <div class="application-content-wrapper">
+            <div class="heading-label">MY APPLICATIONS</div>
+            <div class="list-view-content">
+                <table class="applications-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" title="Application Name" aria-label="Application Name">Application Name</th>
+                            <th scope="col" title="Application Number" aria-label="Application Number">
+                                Application Number
+                            </th>
+                            <th scope="col" title="Application Status" aria-label="Application Status"> Application
+                                Status
+                            </th>
+                            <th scope="col" title="Application Review Status" aria-label="Application Review Status">
+                                Application Review Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td><a title={applicationName} data-navigable="true" target="_self"
+                                    href={applicationUrl}>{applicationName}</a>
+                            </td>
+                            <td>{applicationNumber}</td>
+                            <td>{applicationStatus}</td>
+                            <td>{applicationReviewStatus}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- <div class="view-all-link">
+                <a aria-label="View All Applications" href={viewAllApplicationUrl}>View All</a>
+            </div> -->
+        </div>
+    </template>
+    <template lwc:else>
+        <!-- <div>Hello</div> -->
+    </template>
+</template>

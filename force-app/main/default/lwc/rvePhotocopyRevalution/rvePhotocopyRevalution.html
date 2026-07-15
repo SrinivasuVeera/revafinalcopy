@@ -1,0 +1,170 @@
+<template>
+    <!-- Spinner -->
+    <template if:true={Spinner}>
+        <div class="slds-align_absolute-center slds-p-around_medium">
+            <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+
+
+    <!-- Instruction Section -->
+    <template if:true={showInstructions}>
+        <div class="container slds-box slds-theme_default slds-p-around_large">
+            <h2 class="slds-text-heading_medium slds-m-bottom_large instruction-heading">Instructions</h2>
+            <ul class="slds-list_dotted slds-text-body_regular instruction-list">
+                <li>Students can apply within the notified deadline only.</li>
+                <li>Fee for <strong>Revaluation Only</strong>: ₹{revalFee}</li>
+                <li>Fee for <strong>Photocopy Only</strong>: ₹{photoFee}</li>
+                <!-- <li>Fee for <strong>Both Revaluation & Photocopy</strong>: ₹{combinedFee}</li> -->
+                <li>Applications once submitted cannot be withdrawn.</li>
+                <li>Revaluation results are final and binding.</li>
+                <li>Ensure all subjects selected are correct before submission.</li>
+            </ul>
+
+            <div class="slds-m-top_medium">
+                <lightning-input type="checkbox" label="I acknowledge and agree to the above instructions"
+                    onchange={handleCheckboxChange}>
+                </lightning-input>
+            </div>
+
+            <div class="slds-m-top_large slds-align_absolute-center">
+                <lightning-button label="Proceed" variant="brand" onclick={handleProceed} disabled={isDisabled}>
+                </lightning-button>
+            </div>
+        </div>
+    </template>
+
+
+
+    <template if:false={showInstructions}>
+        <div class="slds-box slds-theme_default">
+            <h2 class="slds-text-heading_medium slds-m-bottom_medium">Student Results</h2>
+            <!-- Nealy added -->
+            <!-- <p><strong>Revaluation End Date:</strong> {firstRevalEndDate}</p>
+            <p><strong>Photocopy End Date:</strong> {firstPhotocopyEndDate}</p> -->
+
+
+            <!-- ended here -->
+            <div style="overflow-x: auto;">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered
+                slds-max-medium-table_stacked" aria-label=" Detail Result Table">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Course"><b>Course</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Max. Marks"><b>Max. Marks</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Secured Marks"><b>Secured Marks</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="No. of Credits"><b>No. of Credits</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Grade Points"><b>Grade Points</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Credit Points"><b>Credit Points</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Grade"><b>Grade</b></div>
+                            </th>
+                            <!-- <th scope="col">
+                                <div class="slds-truncate" title="Pass"><b>Pass</b></div>
+                            </th> -->
+                            <!-- <th scope="col">
+                                <div class="slds-truncate" title="Due Date(s)"><b>Due Date(s)</b></div>
+                            </th> -->
+                            <th scope="col">
+                                <div class="slds-truncate" title="Action"><b>Action</b></div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={resultDataList} for:item="res">
+                            <tr key={res.id} class="slds-hint-parent">
+                                <td data-label="Course">
+                                    <div class="slds-truncate" title={res.courseName}>
+                                        {res.courseName}<br />{res.courseId}
+                                    </div>
+                                </td>
+                                <td data-label="Max. Marks">
+                                    <div class="slds-truncate" title={res.maxMarks}>{res.maxMarks}</div>
+                                </td>
+                                <td data-label="Secured Marks">
+                                    <div class="slds-truncate" title={res.securedMarks}>{res.securedMarks}</div>
+                                </td>
+                                <td data-label="No. of Credits">
+                                    <div class="slds-truncate" title={res.noOfCredits}>{res.noOfCredits}</div>
+                                </td>
+                                <td data-label="Grade Points">
+                                    <div class="slds-truncate" title={res.gradePoints}>{res.gradePoints}</div>
+                                </td>
+
+                                <td data-label="Credit Points">
+                                    <div class="slds-truncate" title={res.creditPoints}>{res.creditPoints}</div>
+                                </td>
+                                <td data-label="Grade">
+                                    <div class="slds-truncate" title={res.grade}>{res.grade}</div>
+                                </td>
+                                <!-- <td data-label="Pass">
+                                    <div class="slds-truncate" title={res.result}>{res.result}</div>
+                                </td> -->
+
+
+
+
+                                <td data-label="Action">
+                                    <!-- <template for:each={res.availableOptions} for:item="option">
+                                        <lightning-input type="checkbox" label={option.label} data-id={res.id}
+                                            data-value={option.value} checked={option.checked}
+                                            disabled={option.disabled} onchange={handleOptionChange} key={option.value}>
+                                        </lightning-input>
+                                    </template> -->
+
+                                    <template for:each={res.availableOptions} for:item="option">
+                                        <div key={option.value} class="slds-m-bottom_xx-small">
+                                            <lightning-input type="checkbox" label={option.label} data-id={res.id}
+                                                data-value={option.value} checked={option.checked}
+                                                disabled={option.disabled} onchange={handleOptionChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={res.showPhotocopyLink}>
+                                        <div class="slds-m-top_xx-small">
+                                            <a href="javascript:void(0)" data-id={res.id} data-url={res.previewUrl}
+                                                onclick={handlePhotocopyClick} class="slds-text-link">
+                                                Download Photocopy
+                                            </a>
+
+
+
+                                        </div>
+                                    </template>
+
+                                </td>
+
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+
+
+            <template if:true={resultDataList.length}>
+                <div class="slds-align_absolute-center slds-m-top_large">
+
+                    <lightning-button variant="brand" label="Submit" onclick={handleFinalSubmit}
+                        disabled={isButtonDisabled}></lightning-button>
+                </div>
+            </template>
+        </div>
+    </template>
+
+
+</template>

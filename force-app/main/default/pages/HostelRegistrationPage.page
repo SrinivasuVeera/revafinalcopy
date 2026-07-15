@@ -1,0 +1,342 @@
+<apex:page controller="HostelRegistrationPage" renderAs="pdf" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false">
+<html>
+<head>
+    <style>
+        @page { size: A4; margin: 25px; }
+        * { font-family: Arial, sans-serif; font-size: 12px; }
+        h2 { text-align: center; margin: 0 0 15px; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 6.5px; }
+        th, td { border: 1px solid #000; padding: 4px 6px; vertical-align: top; }
+
+        td.label { width: 25%; font-weight: bold; background: #f7f7f7; }
+        td.value { width: 25%; }
+
+        th.section-bar {
+            background: #666; color: #fff; font-size: 16px;
+            font-weight: bold; text-align: left; padding: 6px; border-color: #666;
+        }
+    </style>
+</head>
+
+<body>
+ 
+  <table style="width:100%; border-collapse:collapse; margin-bottom:6px;">
+    <tr style="height: 130px;"> <!-- Increased row height -->
+        <!-- Left: Logo -->
+        <td style="width:25%; text-align:left; padding:10px; border:none;">
+            <apex:image url="{!logoURL}" width="150" height="70" />
+        </td>
+
+        <!-- Center: Title -->
+        <td style="width:50%; text-align:center; padding:15px; border:none;">
+           <div style="font-size:20px; color:#f7931e; font-weight:bold;">REVA UNIVERSITY</div><br/>
+           <div style="font-size:19px;font-weight:bold;">HOSTEL ALLOTMENT FORM</div><br/>
+           <div style="font-size:16px;font-weight:bold;">Academic Year (2025-2026)</div>
+           <div style="font-size:15px; font-weight:bold; margin-top:5px;">
+                Student Name:<apex:outputText value="{!contactRecord.Name}" />
+            </div>
+            <div style="font-size:14px; font-weight:bold; margin-top:2px;">
+             Hostel Request Id: <apex:outputText value="{!hostelRecord.Name}" />
+            </div>
+        </td>
+
+        <!-- Right: Passport Photo -->
+        <td style="width:25%; text-align:right; padding:10px; border:none;">
+            <apex:image url="{!passportPhotoURL}" width="112" height="150" style="border:1px solid #000;" />
+        </td>
+      </tr>
+   </table>
+     <!-- ===== HOSTEL DETAILS ===== -->
+    <apex:outputPanel rendered="{!NOT(ISBLANK(hostelRecord.Id))}">
+        <div style="background:#ffffff; padding:5px;">
+             <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 10px; display:inline-block; font-size:14px; margin-bottom:5px;">
+                Hostel Registration Details
+             </div>
+            
+
+            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                <apex:repeat value="{!hostelFieldRows}" var="row">
+                    <tr>
+                        <td class="label">{!row[0].label}</td>
+                        <td class="value">
+                            <apex:outputField value="{!hostelRecord[row[0].fieldPath]}"/>
+                        </td>
+
+                        <apex:outputPanel rendered="{!row.size > 1}" layout="none">
+                            <td class="label">{!row[1].label}</td>
+                            <td class="value">
+                                <apex:outputField value="{!hostelRecord[row[1].fieldPath]}"/>
+                            </td>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!row.size == 1}" layout="none">
+                            <td></td><td></td>
+                        </apex:outputPanel>
+                    </tr>
+                </apex:repeat>
+                <tr>
+             <td class="label">Block</td>
+              <td class="value">
+                <!--<apex:outputField value="{!hostelRoomRecord.Block__c}" />-->
+                 <apex:outputField value="{!hostelRecord.Reva_Hostel_Room__r.Block__c}" />
+              </td>
+
+          <td class="label">Floor</td>
+           <td class="value">
+             <!-- <apex:outputField value="{!hostelRoomRecord.Floor__c}" />-->
+             <apex:outputField value="{!hostelRecord.Reva_Hostel_Room__r.Floor__c}" />
+          </td>
+        </tr>
+     </table>              
+        </div>
+        </apex:outputPanel>
+         <!-- ===== PERSONAL INFORMATION ===== -->
+    <div style="background:#ffffff; padding:4px;">
+        <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 10px; display:inline-block; font-size:14px; margin-bottom:5px;">
+          Student Details
+        </div>
+
+      <table style="width:100%; border-collapse:collapse; font-size:13px;">
+        <apex:repeat value="{!contactFieldRows}" var="row">
+            <tr>
+                <td class="label">{!row[0].label}</td>
+                <td class="value">
+                    <apex:outputField value="{!contactRecord[row[0].fieldPath]}"/>
+                </td>
+
+                <apex:outputPanel rendered="{!row.size > 1}" layout="none">
+                    <td class="label">{!row[1].label}</td>
+                    <td class="value">
+                        <apex:outputField value="{!contactRecord[row[1].fieldPath]}"/>
+                    </td>
+                </apex:outputPanel>
+
+                <apex:outputPanel rendered="{!row.size == 1}" layout="none">
+                    <td></td><td></td>
+                </apex:outputPanel>
+            </tr>
+        </apex:repeat>
+      </table>
+  </div>
+    
+     <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 10px; display:inline-block; font-size:14px; margin-bottom:5px;">
+        Address Information
+    </div>
+      <table style="width:100%; margin-top:5px; table-layout:fixed;">
+    <tr>
+        <!-- Permanent Address (Left) -->
+        <td style="width:50%; vertical-align:top;">
+            <p style="font-weight:bold;">Permanent Address:</p>
+
+            <p>
+                {!IF(NOT(ISBLANK(permanentAddress.hed__MailingStreet__c)),
+                    permanentAddress.hed__MailingStreet__c,
+                    '....................................................................................')}
+            </p>
+            <p>
+                {!IF(NOT(ISBLANK(permanentAddress.Post_Office_Name__c)),
+                    permanentAddress.Post_Office_Name__c,
+                    '....................................................................................')}
+            </p>
+
+            <p>
+                {!IF(NOT(ISBLANK(permanentAddress.hed__MailingCity__c)),
+                    permanentAddress.hed__MailingCity__c,
+                    '............................')}
+                &nbsp;&nbsp;
+                {!IF(NOT(ISBLANK(permanentAddress.hed__MailingPostalCode__c)),
+                    permanentAddress.hed__MailingPostalCode__c,
+                    '............................')}
+            </p>
+
+            <p>
+                {!IF(NOT(ISBLANK(permanentAddress.hed__MailingState__c)),
+                    permanentAddress.hed__MailingState__c,
+                    '....................................................')}
+            </p>
+
+            <p>
+                {!IF(NOT(ISBLANK(permanentAddress.hed__MailingCountry__c)),
+                    permanentAddress.hed__MailingCountry__c,
+                    '....................................................')}
+            </p>
+        </td>
+
+        <!-- Mailing Address (Right) -->
+        <td style="width:50%; vertical-align:top;">
+            <p style="font-weight:bold;">Mailing Address:</p>
+
+            <p>
+                {!IF(NOT(ISBLANK(mailingAddress.hed__MailingStreet__c)),
+                    mailingAddress.hed__MailingStreet__c,
+                    '....................................................................................')}
+            </p>
+
+            <p>
+                {!IF(NOT(ISBLANK(mailingAddress.Post_Office_Name__c)),
+                    mailingAddress.Post_Office_Name__c,
+                    '....................................................................................')}
+            </p>
+
+            <p>
+                {!IF(NOT(ISBLANK(mailingAddress.hed__MailingCity__c)),
+                    mailingAddress.hed__MailingCity__c,
+                    '........................')}
+                &nbsp;&nbsp;
+                 {!IF(NOT(ISBLANK(mailingAddress.Post_Office_Name__c)),
+                    mailingAddress.Post_Office_Name__c,
+                    '........................')}
+                &nbsp;&nbsp;
+                 {!IF(NOT(ISBLANK(mailingAddress.hed__MailingPostalCode__c)),
+                    mailingAddress.hed__MailingPostalCode__c,
+                    '....................')}
+            </p>
+
+            <p>
+               {!IF(NOT(ISBLANK(mailingAddress.hed__MailingState__c)),
+                    mailingAddress.hed__MailingState__c,
+                    '......................')}
+                &nbsp;&nbsp;
+                {!IF(NOT(ISBLANK(mailingAddress.hed__MailingCountry__c)),
+                    mailingAddress.hed__MailingCountry__c,
+                    '.....................')}
+            </p>
+        </td>
+    </tr>
+    </table><br/>
+    
+   <!-- <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 10px; display:inline-block; font-size:14px; margin-bottom:5px;">
+        Payment Details
+    </div>
+<table border="1" style="width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed;">
+    <colgroup>
+        <col style="width: 33%;" />
+        <col style="width: 33%;" />
+        <col style="width: 34%;" />
+    </colgroup>
+    <thead style="background: #f2f2f2;">
+        <tr>
+            <th style="padding: 6px;">Total Amount</th>
+            <th style="padding: 6px;"> Amount Paid</th>
+            <th style="padding: 6px;"> Amount Pending</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding: 6px;">
+                <apex:outputText value="{!IF(hasHostelFeeRecord, hostelFeeRecord.Amount__c, '.')}" />
+            </td>
+            <td style="padding: 6px;">
+                <apex:outputText value="{!IF(hasHostelFeeRecord, hostelFeeRecord.Amount_Paid__c, '')}" />
+            </td>
+            <td style="padding: 6px;">
+                <apex:outputText value="{!IF(hasHostelFeeRecord, hostelFeeRecord.Amount_Pending__c, '')}" />
+            </td>
+        </tr>
+    </tbody>
+</table>-->
+
+    <!-- ===== PERSONAL THINGS SECTION ===== -->
+<div style="background:#ffffff; padding:5px; font-size:15px; margin-bottom:5px;">
+    <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 15px; display:inline-block; font-size:14px; margin-bottom:5px;">
+        Personal Belongings
+    </div>
+
+    <table style="width:100%; border:1px solid black; border-collapse:collapse; font-size:16px; table-layout:fixed;">
+        <colgroup>
+            <col style="width: 50%;" />
+            <col style="width: 50%;" />
+        </colgroup>
+        <tr style="background:#fdddc1; font-weight:bold; text-align:center;">
+            <td style="border:1px solid black; padding:6px;">Are You Having Laptop/Computer:</td>
+            <td style="border:1px solid black; padding:6px;">Are You Having Vehicle:</td>
+        </tr>
+        <tr>
+            <td style="border:1px solid black; padding:6px;">Manufacturer:</td>
+            <td style="border:1px solid black; padding:6px;">Make</td>
+        </tr>
+        <tr>
+            <td style="border:1px solid black; padding:6px;">IMEI No:</td>
+            <td style="border:1px solid black; padding:6px;">Registration No:</td>
+        </tr>
+        <tr>
+            <td style="border:1px solid black; padding:6px;">Insurance Yes/No:</td>
+            <td style="border:1px solid black; padding:6px;">Insurance Yes/No</td>
+        </tr>
+    </table>
+    </div><br/>
+
+  <!-- ===== DOCUMENTS AND SIGNATURES ===== -->
+<div style="background:#ffffff; padding:5px; font-size:16px;">
+    <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 12px; display:inline-block; font-size:16px;">
+        Documents Required For Hostel Admission :
+    </div>
+    
+     <div style="line-height: 1.8;">
+         <br/>
+        1. 3 Passport Size and 2 Stamp Size Recent Photographs <br/>
+        2. Admission letter (New Students) / Last qualifying result attested by HOD (REVA Students) <br/>
+        3. Copy of 10th std Result sheet <br/>
+        4. Permanent address proof <br/>
+        5. Medical Certificate <br/>
+        6. Proof of registered Mobile no. / Landline no. of the Parents <br/>
+        7. Proof of Address and contact no. of local guardian<br/>
+        8. AAdhar Copy (Indians)<br/>
+        9. Passport + Valied Visa Copy (Foregin)<br/>
+    </div>
+   
+ <!-- ===== TERMS AND DECLARATION ===== -->
+    <h3 style="font-size: 18px; font-weight: bold; margin-top: 20px; text-align: center;">
+    Terms and Conditions
+     </h3>
+    <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 12px; display:inline-block; font-size:16px;">
+        Undertaking and Declaration by the Student</div>
+    <ol style="font-size: 16px; line-height: 1.8;">
+        <li>I ............................................................ S/o/D/o Mr./Mrs./Ms. .............................................................. have carefully read and understood the anti‑ragging laws.</li>
+        <li>I have received a copy of the UGC Regulations (2009) and have gone through it.</li>
+        <li>I hereby undertake:
+            <ul style="margin-left:22px;">
+                <li>I will not indulge in ragging.</li>
+                <li>I will not abet or propagate ragging.</li>
+                <li>I will not harm anyone physically or otherwise.</li>
+            </ul>
+        </li>
+        <li>If found guilty, I agree to the punishment under UGC rules and Indian law.</li>
+    </ol>
+    <div style="background:#f7931e; color:white; font-weight:bold; padding:6px 12px; display:inline-block; font-size:16px;">
+        Undertaking and Declaration by the Parent/Guardian</div>
+    <ol style="font-size: 16px; line-height: 1.8;">
+        <li>I----------------------------------------------,F/o.M/o----------------------------------------------------------have carefully read and 
+        fully understood the law prohibiting ragging and the directions of the Supreme Court and the Central/state Government
+        in this regard as well as the UGC Regulations on curbing the Menace of ragging in Higher Educational Institutions,2009.</li>
+        <li>I assure you that my son/daughter /Ward will not indulge in any act of ragging.</li>
+        <li>I hereby agree that if he/she is found guilty of any aspect of ragging,he/she may be punished as per the provisions of the</li>
+        <li>UGC Regulations mentioned above and or as per the law of land in force.</li>
+    </ol>
+        <table style="width:100%; margin-top:30px; font-size:12px; border-collapse:collapse;">
+            <tr>
+                <td style="text-align:Start; padding:10px; font-size:14px;">
+                    <br/><br/>
+                    Signature of the Student<br/>
+                   
+                </td>
+                <td style="text-align:Start; padding:10px; font-size:14px;">
+                    <br/><br/>
+                    Signature of the Parent/Guardian<br/>
+                  </td>
+                <td style="text-align:Start; padding:10px; font-size:14px;">
+                    <br/><br/>
+                    Signature of the Admissions Incharge<br/>
+                   <!-- Date :<br/>
+                    Place :-->
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+</html>
+
+</apex:page>

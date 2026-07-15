@@ -1,0 +1,43 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false">
+    <head>
+        <title>Application Submitted</title>
+        <style>
+            body { font-family: 'Arial', sans-serif; background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+            .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; max-width: 500px; }
+            .icon { font-size: 50px; color: #4CAF50; margin-bottom: 20px; }
+            h1 { color: #333; font-size: 24px; margin-bottom: 15px; }
+            p { color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 25px; }
+            
+            .btn-group { display: flex; flex-direction: column; gap: 10px; }
+            
+            .btn-primary { background-color: #fbaf17; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: block; transition: background 0.3s; }
+            .btn-primary:hover { background-color: #e59d15; }
+            
+            .btn-secondary { background-color: #00679A; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: block; transition: background 0.3s; }
+            .btn-secondary:hover { background-color: #004d74; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="icon">✔</div>
+            <h1>Form Submitted</h1>
+            <p>
+                GrayQuest EMI form has been submitted successfully. 
+                <b>Please complete the remaining application journey on the GrayQuest portal.</b>
+            </p>
+            
+            <div class="btn-group">
+                <!-- Primary Action: Go to GrayQuest -->
+                <a href="https://customer.grayquest.com/" target="_blank" class="btn-primary">Go to GrayQuest Portal</a>
+                
+                <!-- Secondary Action: Go back to REVA Portal -->
+                <!-- Note: Ensure this URL matches your specific Sandbox/Production environment -->
+                <a href="https://reva-university--revapar.sandbox.my.site.com/Admissions/s/" class="btn-secondary">Back to Admissions Portal</a>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <small style="color: #999;">You can safely close this tab now.</small>
+            </div>
+        </div>
+    </body>
+</apex:page>

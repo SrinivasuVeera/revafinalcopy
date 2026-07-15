@@ -1,0 +1,68 @@
+.maincontainer{
+    border: solid;
+    border-color: var( --reva-brand-color);
+    border-radius: 10px;
+    padding:10px;
+    border-width: 2px;
+    width: 100%;
+}
+h1{
+    color: var( --reva-brand-color);
+    font-weight: bolder;
+    font-size: 0.8rem;    
+    padding-bottom: 10px;
+}
+
+ p{
+    font-size: 0.8rem;
+} 
+hr{
+    margin-top: 10px;
+    border-color: var( --reva-brand-color); 
+    border-width: 1px;
+}
+
+.otp-verify-container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.otp-verify-container:first-child{
+    width: 35%;
+}
+.otp-verify-container:last-child{
+    width: 15%;
+}
+/* .verify-button{
+    padding-left: 20px;
+    padding-right: 20px;
+    color:white;
+    background-color: var( --reva-brand-color);
+    margin-left: 30px;
+    height: 2rem;
+} */
+.slds-form-element__control input{
+    height: 2rem;
+    width: 25vw;
+}
+label{
+    font-weight: 700;
+}
+input{
+    background-color: #ededed;
+}
+@media (max-width:900px){
+.slds-form-element__control input{
+    height: 2rem;
+    width: 45vw;
+}
+}
+
+@media(max-width:800px){
+    h1, p, input{
+        font-size: 12px;
+    }
+
+}

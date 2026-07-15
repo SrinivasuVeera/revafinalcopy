@@ -1,0 +1,227 @@
+/* ── Search Panel ────────────────────────────────── */
+.search-panel {
+    background: #f4f6f9;
+    border-left: 4px solid #0070d2;
+    border-radius: 6px;
+}
+
+.panel-title {
+    font-weight: 700;
+    color: #0070d2;
+    display: flex;
+    align-items: center;
+}
+
+.button-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* ── Info Bar ────────────────────────────────────── */
+.info-bar {
+    align-items: center;
+    border-bottom: 1px solid #e0e5ee;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.record-count-label {
+    display: flex;
+    align-items: center;
+}
+
+.count-badge {
+    background: #0070d2;
+    color: #fff;
+    font-weight: 600;
+}
+
+.unsaved-indicator {
+    font-size: 0.75rem;
+    color: #c23934;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* ── Table Container ─────────────────────────────── */
+.table-container {
+    overflow-x: auto;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rise-table {
+    width: 100%;
+    /* font-size: 0.8125rem; */
+    font-size: 0.9rem;
+}
+
+/* ── Table Header ────────────────────────────────── */
+.rise-table thead tr th {
+    /* background: #16325c; */
+    background: #e7590d;
+    color: #fff;
+    font-weight: 700;
+    /* font-size: 0.75rem; */
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 10px 8px;
+    white-space: nowrap;
+    border: none;
+}
+
+.rise-table thead tr th.highlight-col {
+    background: #0070d2;
+    /* background: #f4a261; light orange*/
+    /* background: #0D9BE7; blue*/
+    color: #fff;
+    position: relative;
+}
+
+.rise-table thead tr th.highlight-col::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ffd700;
+}
+
+/* ── Table Body ──────────────────────────────────── */
+.rise-table tbody tr:hover {
+    background: #e8f4fd !important;
+}
+
+.rise-table tbody tr.row-modified {
+    background: #fffbe6 !important;
+    border-left: 3px solid #ffd700;
+}
+
+.highlight-cell {
+    background: #f0f8ff;
+    border-left: 1px solid #b8d4f0;
+}
+
+/* ── Column Widths ───────────────────────────────── */
+.col-seq    { width: 40px;  text-align: center; }
+.col-appno  { width: 110px; }
+.col-name   { width: 150px; }
+.col-email  { width: 170px; }
+.col-mobile { width: 110px; }
+.col-program{ width: 140px; }
+.col-date   { width: 105px; }
+.col-score  { width: 90px;  }
+.col-violation { width: 100px; }
+.col-pushed { width: 105px; }
+.col-actual { width: 120px; }
+.col-result { width: 130px; }
+
+/* ── Typography Helpers ──────────────────────────── */
+.font-semibold { font-weight: 600; }
+/* .text-small    { font-size: 0.78rem; } */
+.text-small    { font-size: 0.9rem; }
+.text-center   { text-align: center; }
+
+/* ── App Number Badge ────────────────────────────── */
+.app-number-badge {
+    background: #e8f0fe;
+    color: #0070d2;
+    border-radius: 4px;
+    padding: 2px 7px;
+    /* font-size: 0.75rem; */
+    font-size: 0.9rem;
+    /* font-weight: 700; */
+     /* font-weight: 100; */
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+/* ── Inline Inputs ───────────────────────────────── */
+.inline-input {
+    --slds-c-input-radius-border: 4px;
+}
+
+/* ── Toast Alert ─────────────────────────────────── */
+.toast-alert {
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.toast-success {
+    background: #d4edda;
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.toast-error {
+    background: #f8d7da;
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+}
+
+/* ── Empty State ─────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7a8a99;
+}
+
+.empty-icon {
+    color: #b0bec5;
+}
+
+/* ── Spinner Container ───────────────────────────── */
+.spinner-container {
+    position: relative;
+    height: 80px;
+}
+/* ── Pagination Bar ──────────────────────────────── */
+.pagination-bar {
+    align-items: center;
+    padding: 6px 8px;
+    background: #f8f9fb;
+    border: 1px solid #e0e5ee;
+    border-radius: 6px;
+}
+
+.page-size-label {
+    font-size: 0.8rem;
+    color: #4a5568;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.page-size-select {
+    width: 80px;
+}
+
+.page-info {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #16325c;
+    white-space: nowrap;
+    min-width: 90px;
+    text-align: center;
+}
+
+.range-info {
+    font-size: 0.78rem;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+/* Action buttons row in info bar */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}

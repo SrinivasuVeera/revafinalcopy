@@ -1,0 +1,82 @@
+<apex:page name="ContactPDFPage" controller="FeedbackManagementController" renderAs="pdf" applyBodyTag="false" showHeader="false">
+    <html>
+        <head></head>
+        <body style="font-family: Arial, sans-serif; font-size: 12px; margin-top: 15px; margin-bottom: 30px; margin-left: 30px; margin-right: 30px;">
+            <apex:repeat value="{!listFw}" var="fw">
+                <div style="page-break-after: always;">
+                    <!-- Header Table -->
+                    <table style="width: 100%; margin-bottom: 5px; border: none;">
+                        <tr>
+                            <td style="width: 20%; text-align: left; vertical-align: top; border: none;">
+                             <!--   <img src="https://reva-university--revapar--c.sandbox.vf.force.com/resource/1753437639000/revalogoai" alt="reva logo" width="160"/> -->
+                                <img src="https://reva-university--c.vf.force.com/resource/1755161740000/revalogo" alt="reva logo" width="160"/>
+                            </td>
+                            <td style="width: 60%; text-align: center; font-weight: bold; font-size: 16px; line-height: 1.4em; border: none;">
+                                REVA UNIVERSITY, BENGALURU<br/>
+                                <div style="font-size: 14px; line-height: 1.4em; border: none;">
+                                Students Feedback on Faculty Report<br/>  
+                                </div>                      
+                            </td>
+                            <td style="width: 20%; text-align: right; border: none;">
+                                <img src="https://reva-university--c.vf.force.com/resource/1755161658000/naaclogo" alt="naac logo" width="100"/>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <!-- Info Section -->
+                    <div style="margin-top: 0px; margin-bottom: 5px; font-size: 12px;">
+                        <div style="margin-bottom: 3px;"><b>School : </b>{!fw.schoolName}</div>
+                        <div style="margin-bottom: 3px;"><b>Program : </b>{!fw.programName}</div>
+                        <div style="margin-bottom: 3px;"><b>Program Batch : </b>{!fw.programBatch}</div>
+                        <div style="margin-bottom: 3px;"><b>Faculty Name : </b>{!fw.facultyName}</div>
+                        <div style="margin-bottom: 3px;"><b>Course : </b>{!fw.courseName}</div>
+                        <div style="margin-bottom: 3px;"><b>Course Code : </b>{!fw.courseCode}</div>
+                        <div style="margin-bottom: 3px;"><b>Semester : </b>{!fw.semesterName}</div>               
+                        <div style="margin-bottom: 3px;"><b>Section : </b>{!fw.sectionName}</div>
+                    </div>
+        
+                    <!-- Feedback Table -->
+                    <table style="width:100%; margin-top: 10px; border-collapse: collapse;" border="1">
+                        <thead>
+                            <tr style="background-color: #f2f2f2; font-weight: bold;">
+                                <th style="padding: 5px; text-align: center;">SL.NO</th>
+                                <th style="padding: 5px; text-align: center;">PARAMETERS</th>
+                                <th style="padding: 5px; text-align: center;">RATING (5)</th>
+                            </tr>
+                        </thead>    
+                        <tbody>
+                            <apex:repeat value="{!fw.aveList}" var="avg">
+                                <tr>
+                                    <td style="padding: 5px; text-align: center;">{!IF(NOT(ISBLANK(avg.QId__c)), avg.QId__c, '--')}</td>
+                                    <td style="padding: 5px; text-align: left;">{!IF(NOT(ISBLANK(avg.FeedbackQBank__r.Question__c)), avg.FeedbackQBank__r.Question__c, '--')}</td>
+                                    <td style="padding: 5px; text-align: center;">{!IF(NOT(ISBLANK(avg.Feedback_Average__c)), avg.Feedback_Average__c, '--')}
+                                     <!--   <apex:outputText value="{0, number, 0.00}" rendered="{!NOT(ISBLANK(avg.Feedback_Average__c))}">
+                                        <apex:param value="{!avg.Feedback_Average__c}" />
+                                        </apex:outputText>
+                                        <apex:outputText rendered="{!ISBLANK(avg.Feedback_Average__c)}">--</apex:outputText> -->
+                                    </td>                        
+                                </tr>
+                            </apex:repeat>
+        
+                            <tr>
+                                <td colspan="2" style="text-align:right; font-weight: bold; padding: 5px;">Average Rating</td>
+                                <td style="padding: 5px; text-align: center;"><b>{!fw.overallAverage}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+                    <!-- Remarks -->
+                    <div style="margin-top: 20px;">
+                        <b>Director Remarks:</b>
+                        <div style="border: 1px solid black; height: 60px; padding: 5px; margin-top: 5px;">{!fw.feedbackText}</div>
+                    </div>
+        
+                    <!-- Signature -->
+                    <div style="text-align: right; margin-top: 40px; padding-right: 10px;">
+                        <i>Director Signature</i>
+                    </div>
+               </div> 
+         </apex:repeat>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,197 @@
+<template>
+    <div class="header">
+        <div>
+            <template if:true={isCancelButtonVisible}>
+                <lightning-button label="Cancel Leave" class="slds-p-around_medium" onclick={handleBackClick}
+                    variant="brand" ></lightning-button>
+            </template>
+
+            <div class="register-button">
+                <template if:true={visibleScan}>
+                    <lightning-button label="QR Scan   " class="slds-p-around_medium" onclick={handleScan}
+                        variant="brand"></lightning-button>
+                </template>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- <div>
+            <template if:true={showscanner}>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <c-hostel-leave-active-q-r-code  record-id={bookingIdSelected}></c-hostel-leave-active-q-r-code>
+            </div>
+        </template>
+        </div> -->
+
+
+    <!-- Modal structure -->
+    <template if:true={showscanner}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <!-- Modal/Popup Header -->
+                <header class="slds-modal__header">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" class="slds-modal__close"
+                        onclick={closeModal}></lightning-button-icon>
+                    <h2 class="slds-text-heading_medium">QR Code Scanner</h2>
+                </header>
+
+                <!-- Modal/Popup Content -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <c-hostel-leave-active-q-r-code record-id={bookingIdSelected}></c-hostel-leave-active-q-r-code>
+                </div>
+
+                <!-- Modal/Popup Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Close" onclick={closeModal}></lightning-button>
+                </footer>
+
+            </div>
+        </section>
+
+        <!-- Backdrop -->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+
+
+    <div class="modal-container">
+        <lightning-record-edit-form record-id={recordId} object-api-name="REVA_Hostel_Leave_Request__c"
+            onsuccess={handleSuccess} onerror={handleError} onsubmit={handleSubmit}>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Name" class="field-value" onchange={handleChange}>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field data-id="statusField"  field-name="Status__c" value ={currentStatus} class="field-value" disabled>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+               <template if:true={isExtendStatus}>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                padding="horizontal-small">
+                <div class="custom-box">
+                    <lightning-input-field data-id="statusField"  field-name="Leave_Approved_Extension_Status__c" value ={currentExtensionStatus} class="field-value" disabled>
+                    </lightning-input-field>
+                </div>
+            </lightning-layout-item>
+               </template>
+                
+            </lightning-layout>
+
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Reason_For_Leave__c" class="field-value"
+                            onchange={handleChange} disabled={isCancelDiabled}>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Note_to_the_approver__c" class="field-value "
+                            onchange={handleChange} disabled={isCancelDiabled}>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Start_Date_and_Time__c" class="field-value"
+                            onchange={handleChange} disabled>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="End_Date_and_Time__c" class="field-value"
+                            onchange={handleEndDateChange} value ={endDateValue} disabled={isEndDateDisabled}>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Check_Out_Date_and_Time__c" class="field-value"
+                            onchange={handleChange} disabled>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Check_In_Date_and_Time__c" class="field-value"
+                            onchange={handleChange} disabled>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Visiting_address__c" class="field-value"
+                            onchange={handleChange} disabled={isCancelDiabled}>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <lightning-input-field field-name="Total_Leaves_in_Days__c" class="field-value" disabled>
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+            
+
+            <lightning-layout multiple-rows>
+                <template if:true={parentName}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label class="field-label">Parent Name</label>
+                            <p></p>
+                            <div class="field-value">{parentName}</div>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={parentPhoneNumber}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label class="field-label">Parent Phone Number</label>
+                            <p></p>
+                            <div class="field-value">{parentPhoneNumber}</div>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+
+            <div class="button-container">
+                <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Extend/Shorten leave"
+                    if:true={isSaveButtonVisible}>
+                </lightning-button>
+            </div>
+        </lightning-record-edit-form>
+    </div>
+</template>

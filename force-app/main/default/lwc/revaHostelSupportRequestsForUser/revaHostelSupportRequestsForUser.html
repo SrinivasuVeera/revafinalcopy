@@ -1,0 +1,414 @@
+<template>
+    <!-- <lightning-card title="Case Records" icon-name="standard:case"> -->
+    <!-- New Case Form Section -->
+    <div class="header">
+        <strong> REVA Hostel Support Cases</strong>
+        <div>
+            <lightning-button label="New" class="slds-p-around_medium" onclick={handleShowNewCaseForm}
+                variant="brand"></lightning-button>
+        </div>
+    </div>
+
+    <template if:true={showNewCaseForm}>
+        <div class="">
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <strong>REVA Hostel Support Request Details</strong>
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                    <div class="modal-container">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-combobox label="Priority" value={priority} options={priorityOptions}
+                                        required="true" onchange={handlePriorityChange}></lightning-combobox>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-combobox label="Support Category" value={supportCategory} required="true"
+                                        options={supportCategoryOptions}
+                                        onchange={handleSupportCategoryChange}></lightning-combobox>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-combobox label="Hostel Sub Category" value={hostelSubCategory}
+                                        required="true" options={hostelSubCategoryOptions}
+                                        onchange={handleHostelSubCategoryChange}></lightning-combobox>
+                                </div>
+                            </lightning-layout-item>
+
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-textarea label="Description" value={description} required="true"
+                                        onchange={handleDescriptionChange}></lightning-textarea>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-input type="file" label="Upload Document"
+                                        accept=".pdf,.jpg,.jpeg,.png,.gif,.xls,.xlsx" onchange={handleFileChange}
+                                        disabled={fileUploaded}></lightning-input>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <template if:true={fileUploaded}>
+                                        <div class="slds-var-m-top_medium slds-text-align_center">
+                                            <p>File Uploaded: {fileName}</p>
+                                            <lightning-button label="Cancel" onclick={handleCancel}
+                                                variant="brand"></lightning-button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <div class="button-container">
+                            <lightning-button label="Save" onclick={handleSave} variant="brand"></lightning-button>
+                            <lightning-button style=padding-left:10px; label="Close" onclick={handleClose}
+                                variant="brand"></lightning-button>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+
+    <!-- Button to Show New Case Form -->
+    <!-- <template if:false={showNewCaseForm}>
+        <div class="slds-m-top_medium">
+            <lightning-button label="New Case" onclick={handleShowNewCaseForm}></lightning-button>
+        </div>
+    </template> -->
+    <template if:true={cases}>
+        <section>
+            <table class="slds-text-heading_small">
+                <thead>
+                    <tr>
+                        <th> Case Number </th>
+                        <th> Room Number </th>
+                        <th> Support Category </th>
+                        <th> Status </th>
+                        <th> Priority </th>
+                        <th> Hostel Sub Category </th>
+                        <th> Owned by</th>
+                        <th> Created by</th>
+                        <th>Created Date</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={cases} for:item="eachCase">
+                        <tr key={eachCase.Id}>
+                            <td data-cell="Case Number">
+                                <p class="case-number pointer-hover" data-id={eachCase.Id} onclick={showCaseDetail}>
+                                    <strong data-id={eachCase.Id}>{eachCase.CaseNumber}</strong>
+                                </p>
+                            </td>
+                            <td data-cell="Support Category">
+                                <strong>{eachCase.Room_Number__c}</strong>
+                            </td>
+                            <td data-cell="Support Category">
+                                <strong>{eachCase.Hostel_Category__c}</strong>
+                            </td>
+                            <td data-cell="Status">
+                                <strong>{eachCase.Status}</strong>
+                            </td>
+                            <td data-cell="Priority">
+                                <strong>{eachCase.Priority}</strong>
+                            </td>
+                            <td data-cell="Hostel Sub Category">
+                                <strong>{eachCase.Hostel_Sub_Category__c}</strong>
+                            </td>
+                            <td data-cell="Owned By">
+                                <strong>{eachCase.Owner.Name}</strong>
+                            </td>
+                            <td data-cell="Created By">
+                                <strong>{eachCase.CreatedBy.Name}</strong>
+                            </td>
+                            <td data-cell="Created Date">
+                                <!-- <strong>{eachCase.CreatedDate}</strong> -->
+                                <strong class="slds-text-body_regular">
+                                    <lightning-formatted-date-time value={eachCase.CreatedDate} year="numeric"
+                                        day="2-digit" month="long" hour="2-digit" minute="2-digit">
+                                    </lightning-formatted-date-time></strong>
+                            </td>
+
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </section>
+    </template>
+
+    <template if:false={cases}>
+        <p>No case records found.</p>
+    </template>
+    <template if:true={showCaseDetailModal}>
+        <div class="">
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <strong>Hostel Support Request Detail</strong>
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                    <div class="modal-container ">
+                        <lightning-record-edit-form record-id={recordId} object-api-name="Case"
+                            onsubmit={handleUpdateCase}>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+                                        <lightning-input-field field-name="CaseNumber" class="field-value" disabled>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <!-- <div class="custom-box"> -->
+                                    <lightning-input-field disabled="true" field-name="Room_Number__c"
+                                        class="field-value" value={selectedCaseRecord.Room_Number__c}
+                                        onchange={handleHostelBlockChange}>
+                                    </lightning-input-field>
+                                <!-- </div> -->
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <!-- <div class="custom-box"> -->
+                                <lightning-input-field disabled="true" field-name="Case_Contact_Name__c"
+                                    class="field-value" value={selectedCaseRecord.Case_Contact_Name__c}
+                                    onchange={handleHostelBlockChange}>
+                                </lightning-input-field>
+                            <!-- </div> -->
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                        large-device-size="6" padding="horizontal-small">
+                        <!-- <div class="custom-box"> -->
+                            <lightning-input-field disabled="true" field-name="Case_Contact_Mobile__c"
+                                class="field-value" value={selectedCaseRecord.Case_Contact_Mobile__c}
+                                onchange={handleHostelBlockChange}>
+                            </lightning-input-field>
+                        <!-- </div> -->
+                    </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+                                        <lightning-input-field disabled="true" field-name="Hostel_Block__c"
+                                            class="field-value" value={selectedCaseRecord.Hostel_Block__c}
+                                            onchange={handleHostelBlockChange}>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+                                        <lightning-input-field disabled="true" field-name="Priority" class="field-value"
+                                            value={selectedCaseRecord.Priority} onchange={handleUpdatePriorityChange}>>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+
+                                        <lightning-input-field field-name="Status" class="field-value"
+                                            value={selectedCaseRecord.Status} onchange={handleStatusChange}>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+                                        <lightning-input-field disabled="true" field-name="Hostel_Category__c"
+                                            class="field-value" value={selectedCaseRecord.Hostel_Category__c}
+                                            onchange={handleHostelCategoryChange}>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+                                        <lightning-input-field disabled="true" field-name="Hostel_Sub_Category__c"
+                                            class="field-value" value={selectedCaseRecord.Hostel_Sub_Category__c}
+                                            onchange={handleHostelUpdatedSubCategoryChange}>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+                                        <lightning-input-field disabled="true" field-name="Description"
+                                            class="field-value" value={selectedCaseRecord.Description}
+                                            onchange={handleUpdatedDescriptionChange}>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <!--**********************************-->
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box">
+                                        <lightning-input-field disabled="true" field-name="Description"
+                                            value={selectedCaseRecord.Description}
+                                            onchange={handleUpdatedDescriptionChange}>
+                                        </lightning-input-field>
+                                    </div> -->
+                                    <!-- <div class="custom-box"> -->
+                                        <label class="supportcasefield">Support Case Complaints</label>
+                                        <div class="custom-output-field">
+                                            <lightning-output-field field-name="Support_Case_Complaints__c"
+                                                variant="label-hidden" disabled>
+                                            </lightning-output-field>
+                                        </div>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+                                <!--**********************************-->
+
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                           <lightning-input-field field-name="SRN_Number__c" class="field-value"
+                                            value={selectedCaseRecord.SRN_Number__c} onchange={handleRSRNChange} >
+                                        </lightning-input-field>
+
+                                     </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <!-- <div class="custom-box"> -->
+
+                                        <lightning-input-field field-name="Remarks__c" class="field-value"
+                                            value={selectedCaseRecord.Remarks__c} onchange={handleRemarksChange} required>
+                                        </lightning-input-field>
+                                    <!-- </div> -->
+                                </lightning-layout-item>
+
+                                      <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-input type="file" label="Upload Document"
+                                        accept=".pdf,.jpg,.jpeg,.png,.gif,.xls,.xlsx" onchange={handleFileChange}
+                                        disabled={fileUploaded} ></lightning-input>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <template if:true={fileUploaded}>
+                                        <div class="slds-var-m-top_medium slds-text-align_center">
+                                            <p>File Uploaded: {fileName}</p>
+                                            <lightning-button label="Cancel" variant="brand"
+                                                onclick={handleCancel}></lightning-button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+
+                                <!--*********************************************************-->
+                            </lightning-layout>
+                        <div class="slds-m-top_medium slds-text-align_center slds-grid slds-grid_align-center">
+                        <lightning-button type="submit" label="Update Case" variant="brand"></lightning-button>
+                        <lightning-button label="Case Sharing" variant="brand" class="slds-m-left_small"
+                         onclick={handleCaseSharing}></lightning-button>
+                        </div>
+                <!-- sharing case option for case owner -->
+                    <template if:true={isModalOpen}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_medium">Share Case</h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+                <lightning-combobox
+                    name="shareMethod"
+                    label="Choose Sharing Method"
+                    value={selectedOption}
+                    placeholder="Select an option"
+                    options={options}
+                    onchange={handlePicklistChange}>
+                </lightning-combobox>
+
+                <lightning-combobox
+                    name="metadata"
+                    label="Select Name"
+                    value={selectedMetadata}
+                    options={metadataOptions}
+                    onchange={handleMetadataChange}>
+                </lightning-combobox>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                <lightning-button variant="brand" label="Share" class="slds-m-left_small" onclick={shareCase}></lightning-button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+
+                        </lightning-record-edit-form>
+                        <template if:true={selectedCaseAttachmentsVar}>
+    <h3 class="slds-text-heading_small">Attachments</h3>
+    <template for:each={selectedCaseAttachments} for:item="attachment">
+        <div key={attachment.Id} class="slds-m-top_x-small">
+            <a
+                href="javascript:void(0);"
+                onclick={handleAttachmentClick}
+                data-attachment-id={attachment.Id}
+                class="slds-text-link slds-text-color_blue slds-text-decoration_underline"
+            >
+                {attachment.ContentDocument.Title}
+            </a>
+        </div>
+    </template>
+</template>
+
+                        <!--<template if:true={selectedCaseAttachmentsVar}>
+                            <h3 class="slds-text-heading_small">Attachments</h3>
+                            <template for:each={selectedCaseAttachments} for:item="attachment">
+                                <div key={attachment.Id} onclick={handleAttachmentClick}
+                                    data-attachment-id={attachment.Id}>
+                                    <br>
+                                    <p>{attachment.ContentDocument.Title}</p>
+                                </div>
+                            </template>
+                        </template>-->
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+</template>

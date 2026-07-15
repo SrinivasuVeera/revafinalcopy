@@ -1,0 +1,93 @@
+<aura:component controller="ATT_ProfessorDailyView_Ctr" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="selectedDat" type="Date"/>
+    <aura:attribute name="selectedSchedule" type="String"/>
+    <aura:attribute name="scheduleList" type="List"/>
+    <aura:attribute name="todayDate" type="Date"/>
+    <aura:attribute name="showAttCmp" type="boolean" default="false"/>
+    <aura:attribute name="showReadOnly" type="boolean" default="false"/>
+    <aura:attribute name="hideActions" type="boolean" default="true"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <aura:handler name="change" value="{!v.showAttCmp}" action="{!c.refreshView}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    
+    <div style="background-color:white">
+        <div class="slds-box slds-grid" >
+            <div width="25%">
+                <lightning:input type="date" aura:id="field" label="Date" value="{!v.selectedDat}" onchange="{!c.onchangeDate}" max="{!v.todayDate}"/> 
+            </div>
+        </div>
+        <aura:if isTrue ="{!v.scheduleList.length > 0}" >
+            <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+                <thead>
+                    <tr>
+                        <th style="text-align:center;width: 3rem;">Slot</th>
+                        <th style="text-align:center">Time</th>
+                        <th style="text-align:center">Program</th>
+                        <th style="width: 3rem;text-align:center">Sem</th>
+                        <th style="width: 4rem;text-align:center">Section</th>
+                        <th style="text-align:center">Course</th>
+                        <th style="text-align:center">Action</th>
+                    </tr>
+                </thead>            
+                <tbody class="CustomColumnText"> 
+                    <aura:iteration items="{!v.scheduleList}" var="schList" indexVar="i">
+                        <tr>
+                            <td  style="width: 3rem;text-align:center">{!schList.seqNumber}</td>
+                            <td colspan="1" style="text-align:center">{!schList.timeSlot}</td>
+                            <td colspan="1" style="text-align:center">{!schList.programName}</td>
+                            <td colspan="1" style="width: 3rem;text-align:center">{!schList.semNumber}</td>
+                            <td colspan="1" style="width: 4rem;text-align:center"></td>
+                            <td colspan="1" style="text-align:center" class="td-fixed-width">
+                                <div class="slds-cell-wrap">
+                                {!schList.courseName}
+                                </div>
+                            </td>
+                            <td colspan="1" style="text-align:center">
+                                <aura:if isTrue="{!v.hideActions}">
+                                    <aura:if isTrue="{!schList.schstatus == 'Scheduled' || schList.schstatus =='Completed / Attendance Marked'}">
+                                        <lightning:button name="{!schList.schId}" type="button" variant="brand" label="Mark Attendance" onclick="{!c.markAtt}"/>
+                                    </aura:if>
+                                    <aura:if isTrue="{!and(schList.schstatus == 'Locked',schList.attcheckbox == true ) }">
+                                        <lightning:button name="{!schList.schId}" type="button" variant="brand" label="Edit Attendance" onclick="{!c.markAtt}"/>
+                                    </aura:if>
+                                    <aura:if isTrue="{!schList.schstatus == 'Locked'}">
+                                        <lightning:button name="{!schList.schId}" type="button" variant="Success" label="View Attendance" onclick="{!c.completedView}"/>
+                                    </aura:if>
+                                    <aura:if isTrue="{!schList.schstatus == 'Class Not Conducted / Attendance Not Marked'}">
+                                        <lightning:button name="{!schList.schId}" type="button" variant="success" label="Submit for Reopen" onclick="{!c.submitForApproval}"/>
+                                    </aura:if>
+                                    <aura:if isTrue="{!schList.schstatus == 'Reopened'}">
+                                        <lightning:button name="{!schList.schId}" type="button" variant="brand" label="Reopened" onclick="{!c.markAtt}"/>
+                                    </aura:if>                                
+                                    <aura:if isTrue="{!schList.schstatus == 'Cancelled' || schList.schstatus == 'Submitted for Reopen'}">
+                                        {!schList.schstatus}
+                                    </aura:if>  
+                                </aura:if>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+                
+            </table>
+        </aura:if>
+        <aura:if isTrue ="{!v.scheduleList.length == 0}" >
+            No slots to show
+        </aura:if>
+    </div>
+    
+    <aura:if isTrue="{!v.showAttCmp}">
+        <c:ATT_Mark_Attendance_Comp  i_scheduleId="{!v.selectedSchedule}" i_readOnly="{!v.showReadOnly}" i_Close="{!v.showAttCmp}"/>
+    </aura:if>
+	    
+</aura:component>

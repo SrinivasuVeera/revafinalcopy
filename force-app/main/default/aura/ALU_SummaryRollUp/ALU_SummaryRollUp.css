@@ -1,0 +1,14 @@
+.THIS .c-container {
+    border: 1px solid #d8dde6;
+    margin: 3px 0 50px;
+    
+}
+.THIS .custom-box {
+    background-color: #fafafa ;
+    color: #FF8932;
+    padding: 1.5rem;
+    border: 1px solid #d8dde6;
+}
+.THIS .sizeFont{
+        font-size: 13.5pt;
+}

@@ -1,0 +1,657 @@
+<template>
+    <template lwc:if={isSummitTracker}>
+        <lightning-card title="Create Non Academic Summit Tracker Record For Department"
+            class="slds-p-around_medium">
+
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <div class="input-container">
+                             <!-- <lightning-record-picker label="Department" placeholder="Search Department..."
+                                onblur={handleSchoolSelect} object-api-name="Account">
+                            </lightning-record-picker>  -->
+                            <c-util-account-picker
+                                label="Department"
+                                placeholder="Search Department..."
+                                department-type="NON_ACADEMIC"
+                                onrecordchange={handleDepartmentChange}>
+                            </c-util-account-picker>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <label>Summit Tracker Name</label>
+                        <div class="input-container">
+                            <input type="text" placeholder="---Summit Tracker Name ---"
+                            onchange={handleTrackerNameChange} />
+                        </div>                        
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <label>Timeline</label>
+                        <div class="input-container">
+                            <input type="date" placeholder="---Summit Tracker Name ---"
+                                onchange={handleSemesterOneTimelineChange} />
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <!-- <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                    padding="horizontal-small">
+                     <div class="custom-box">
+                        <label>Semester Two Timeline</label>
+                        <div class="input-container">
+                            <input type="date" placeholder="---Summit Tracker Name ---"
+                                onchange={handleSemesterTwoTimelineChange} />
+                        </div>
+                    </div> 
+                </lightning-layout-item> -->
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="1"
+                    padding="horizontal-small">
+                    <div class="custom-box">
+                        <label>Year</label>
+                        <div class="input-container">
+                            <input type="number" placeholder="Eg: 2024" onchange={handleBatchChange} />
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                    >
+                     <div class="custom-box" style="margin-left:5.45rem; margin-top:1.05rem"> 
+                        <lightning-button label="Create" onclick={handleCreateSmtTracker}
+                            variant="brand"></lightning-button>
+                    </div>
+                    <!-- onclick={handleCreateSmtTracker} handleCreateSmtTrackerNA -->
+                </lightning-layout-item>
+                <!-- <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="2"
+                    padding="horizontal-small">
+                    <div class="custom-box" style="margin-top:1.45rem">
+                        <lightning-button label="Create" onclick={handleCreateSmtTracker}
+                            variant="brand"></lightning-button>
+                    </div>
+                </lightning-layout-item> -->
+            </lightning-layout>
+        </lightning-card>
+    </template>
+    <template lwc:if={showUnAvailabilityOfSummitTracker}>
+        <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+            <p class="slds-text-heading_large slds-text-color_error">No Existing Summit Tracker Found Please Create One
+            </p>
+
+        </div>
+    </template>
+    <template lwc:if={showExistingSummitTrackerRecords}>
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">EXISTING SUMMIT TRACKERS - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <th> Summit Tracker</th>
+                            <th> Batch </th>
+                            <th> Percentage Completed</th>
+                            <th> View Section</th>
+                            <!-- <th> Update Section</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={summitTrackers} for:item="summitTracker">
+                            <tr key={summitTracker.Id}>
+                                <td data-cell="Summit Tracker">
+                                    <strong>{summitTracker.Name}</strong>
+                                </td>
+                                <td data-cell="Batch">
+                                    <strong>{summitTracker.smt_Year__c}</strong>
+                                </td>
+                                <td data-cell="Percentage Completed">
+                                    <lightning-badge label={summitTracker.weightageAchieved}
+                                        style={summitTracker.badgeStyle}></lightning-badge>
+                                </td>
+                                <td data-cell="Summit Section">
+                                    <lightning-button-icon icon-name="utility:preview" variant="brand"
+                                        data-id={summitTracker.Id} onclick={handleGetSections} alternative-text="">
+                                    </lightning-button-icon>
+                                </td>
+                                <!-- onclick={handleGetSections} -->
+                                <!-- <td data-cell="Summit Section">
+                                    <lightning-button-icon icon-name="action:edit" variant="brand"
+                                        data-id={summitTracker.Id} onclick={handleGetSections} alternative-text="">
+                                    </lightning-button-icon>
+                                </td> -->
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </section>
+        </lightning-card>
+    </template>
+    <template lwc:if={isSummitSectionCreation}>
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">SUMMIT SECTIONS 1.1 - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <th> S.No</th>
+                            <th> Section Name </th>
+                            <th> Weightage (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={summitSections} for:item="summitSection">
+                            <tr key={summitSection.id}>
+                                <td data-cell="S.No">
+                                    <strong>{summitSection.id}</strong>
+                                </td>
+                                <td data-cell="Section Name">
+                                    <lightning-input type="text" value={summitSection.sectionName} class="section-input"
+                                        data-field-name="sectionName" data-id={summitSection.id} readonly
+                                        onchange={handleSectionValueChange}></lightning-input>
+                                </td>
+                                <td data-cell="Weightage (%)">
+                                    <lightning-input type="text" value={summitSection.weightage} class="section-input"
+                                        data-field-name="weightage" data-id={summitSection.id}
+                                        onchange={handleSectionValueChange}></lightning-input>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <lightning-button label="Create Sections" onclick={handleCreateSections} variant="brand"
+                    style="float: right;margin-top: 15px;margin-right: 5px;"></lightning-button>
+            </section>
+        </lightning-card>
+    </template>
+
+    <template lwc:if={showSummitSectionCreatedRecords}>
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">SUMMIT SECTIONS - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <th> Section Name </th>
+                            <th> Weightage (%)</th>
+                            <th> Create Particulars </th>
+                            <th> Update Particulars </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={summitSectionRecords} for:item="summitSection">
+                            <tr key={summitSection.Id}>
+                                <td data-cell="Section Name">
+                                    <strong>{summitSection.Name}</strong>
+                                </td>
+                                <td data-cell="Weightage (%)">
+                                    <strong>{summitSection.smt_Weightage__c}</strong>
+                                </td>
+                                <td>
+                                    <lightning-button-icon icon-name="utility:new" variant="brand"
+                                        class="slds-m-right_x-small"
+                                        disabled={summitSection.isSummitParticularCreateDisabled}
+                                        data-section-name={summitSection.Name} data-id={summitSection.Id}
+                                        onclick={handleNAGetParticulars} alternative-text="Create Particular">
+                                    </lightning-button-icon>
+                                </td>
+                                <!-- onclick={handleGetParticulars}  handleNAGetParticulars-->
+                                <td>
+                                    <lightning-button-icon icon-name="action:edit" variant="brand"
+                                        disabled={summitSection.isSummitParticularUpdateDisabled}
+                                        data-section-name={summitSection.Name} data-id={summitSection.Id}
+                                        onclick={handleUpdateParticulars} alternative-text="Update Particular">
+                                    </lightning-button-icon>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </section>
+        </lightning-card>
+    </template>
+    <template lwc:if={showParticulars}>
+        <c-smt_-na_-create_-summit_-particulars summit-section-id={selectedSectionId} onclickback={handleClickBackFromChild}
+            key-count={keyCount} button-label={buttonLabel} semester-one-timeline={semesterOneTimeline}
+            semester-two-timeline={semesterTwoTimeline} school-name={accountName}
+            summit-section-label={selectedSectionName}></c-smt_-na_-create_-summit_-particulars>
+    </template>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+                            <!------------------------ NEW IMPLEMENTATION --------------------------->
+
+                            <!------------- For creating Sections ---------------------->
+    <template if:true={isNACreated}>     
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">SUMMIT SECTIONS 1.2 - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <th>Sr. No</th>
+                            <th>Section Name</th>
+                            <th>Weightage</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={sections} for:item="section">
+                            <tr key={section.id}>
+                                <td data-cell="S.No">
+                                    <strong>{section.srNo}</strong>
+                                </td>
+                                <td data-cell="Section Name">
+                                    <lightning-input
+                                        type="text"
+                                        value={section.name}
+                                        data-id={section.id}
+                                        data-field="name"
+                                        class="section-input"
+                                        onchange={handleChange}
+                                        required>
+                                    </lightning-input>
+                                </td>
+                                <td data-cell="Weightage (%)">
+                                    <lightning-input
+                                        type="number"
+                                        value={section.weightage}
+                                        class="section-input"
+                                        data-id={section.id}
+                                        data-field="weightage"
+                                        onchange={handleChange}
+                                        min="0"
+                                        max="100"
+                                        required>
+                                    </lightning-input>
+                                </td>
+                                <td data-cell="Action">
+                                    <lightning-button-icon
+                                        icon-name="action:delete"
+                                        variant="brand"
+                                        data-id={section.id}
+                                        onclick={deleteRow}
+                                        style="float: top;padding-top: 30px;">
+                                    </lightning-button-icon>                                    
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <lightning-button label="Create Sections" onclick={createSection} variant="brand"
+                    style="float: right;margin-top: 15px;margin-right: 10px;"></lightning-button>
+                <lightning-button label="Add Section" variant="brand" onclick={addSection} 
+                    style="float: right;margin-top: 15px;margin-right: 5px;">
+                </lightning-button>
+            </section>
+        </lightning-card>
+    </template>
+    
+    <!-- <template lwc:if={NA_showExistingSummitTrackerRecords}>
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">EXISTING SUMMIT TRACKERS 1 - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <th> Summit Tracker</th>
+                            <th> Batch </th>
+                            <th> Percentage Completed</th>
+                            <th> View Section</th>
+                            <th> Update Section</th>
+                        </tr>
+                    </thead>
+                    <tbody>                        
+                            <tr >
+                                <td data-cell="Summit Tracker">
+                                    <strong>{summitTrackerName}</strong>
+                                </td>
+                                <td data-cell="Batch">
+                                    <strong>{summitTrackerBatch}</strong>
+                                </td>
+                                <td data-cell="Percentage Completed">
+                                    <lightning-badge label={weightageAchievedDummy}
+                                        style={badgeStyleDummy}></lightning-badge>
+                                </td>
+                                <td data-cell="Summit Section">
+                                    <lightning-button-icon icon-name="utility:preview" variant="brand"
+                                        onclick={handleView} alternative-text="">
+                                    </lightning-button-icon>
+                                </td>
+                                <td data-cell="Summit Section">
+                                    <lightning-button-icon icon-name="action:edit" variant="brand"
+                                       alternative-text="">
+                                    </lightning-button-icon>
+                                </td>                                
+                            </tr>
+                    </tbody>
+                </table>
+            </section>
+        </lightning-card>
+    </template> -->
+
+    <!-- <template if:true={showViewTable}>
+        <lightning-card title="Saved Summit Sections">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Section Name</th>
+                        <th>Weightage (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={savedSections} for:item="sec">
+                        <tr key={sec.srNo}>
+                            <td>{sec.srNo}</td>
+                            <td>{sec.name}</td>
+                            <td>{sec.weightage}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </lightning-card>
+    </template> -->
+
+    <template lwc:if={showViewTable}>
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">SUMMIT SECTIONS 123 - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <!-- <th> S.No</th> -->
+                            <th> Section Name </th>
+                            <th> Weightage (%)</th>
+                            <th> Create Particulars </th>
+                            <th> Update Particulars </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={savedSections} for:item="summitSection">
+                            <tr key={summitSection.id}>
+                                <!-- <td data-cell="S.No">
+                                    <strong>{summitSection.srNo}</strong>
+                                </td> -->
+                                <td data-cell="Section Name">
+                                    <lightning-input type="text" value={summitSection.sectionName} class="section-input"
+                                        data-field-name="sectionName" data-id={summitSection.id} readonly
+                                        ></lightning-input>
+                                </td>
+                                <!-- onchange={handleSectionValueChange} -->
+                                <td data-cell="Weightage (%)">
+                                    <lightning-input type="text" value={summitSection.weightage} class="section-input" readonly
+                                        data-field-name="weightage" data-id={summitSection.id}
+                                        ></lightning-input>
+                                </td>
+                                <!-- onchange={handleSectionValueChange} -->
+                                <td>
+                                    <lightning-button-icon icon-name="utility:new" variant="brand"
+                                        class="slds-m-right_x-small"                                        
+                                        data-section-name={summitSection.sectionName} data-id={summitSection.id}
+                                        alternative-text="Create Particular" onclick={handleGetParticulars}>
+                                    </lightning-button-icon>
+                                </td>
+                                <!-- onclick={handleGetParticulars}  handleNAGetParticulars-->
+                                <td>
+                                    <lightning-button-icon icon-name="action:edit" variant="brand"                                        
+                                        data-section-name={summitSection.sectionName} data-id={summitSection.id}
+                                        alternative-text="Update Particular" onclick={viewParticulars}>
+                                    </lightning-button-icon>
+                                </td>                                
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>                
+            </section>
+        </lightning-card>
+    </template>
+
+    <template if:true={isNAParticularCreated}>
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">SUMMIT SECTIONS 1.3 - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <th>Particular Name</th>
+                            <th>Timeline</th>
+                            <th>Target</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={particulars} for:item="row">
+                            <tr key={row.id}>                          
+                                <td data-cell="Particular Name">
+                                    <lightning-input
+                                        type="text"
+                                        value={row.name}
+                                        data-id={row.id}
+                                        data-field="name"
+                                        class="section-input"
+                                        onchange={handleChange1}
+                                        required>
+                                    </lightning-input>
+                                </td>                                
+                                <td data-cell="Timeline">
+                                    <lightning-input
+                                        type="date"                                        
+                                        class="section-input"
+                                        value={row.timeline}
+                                        data-id={row.id}
+                                        data-field="timeline"
+                                        onchange={handleChange1}                                       
+                                        >
+                                    </lightning-input>
+                                </td>
+                                <td data-cell="Target">
+                                    <lightning-input
+                                        type="number"
+                                        value={row.target}
+                                        data-id={row.id}
+                                        data-field="target"
+                                        class="section-input"                                        
+                                        onchange={handleChange1}>
+                                    </lightning-input>
+                                </td>
+                               
+                                <td data-cell="Action">
+                                    <lightning-button-icon
+                                        icon-name="action:delete"
+                                        variant="brand"
+                                        data-id={row.id}
+                                        onclick={removeRow}
+                                        style="float: top;padding-top: 30px;">
+                                    </lightning-button-icon>                                    
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <lightning-button label="Create Particulars" onclick={createParticulars} variant="brand"
+                    style="float: right;margin-top: 15px;margin-right: 10px;"></lightning-button>
+                <lightning-button label="Add Particulars" variant="brand" onclick={addRow} 
+                    style="float: right;margin-top: 15px;margin-right: 5px;">
+                </lightning-button>
+            </section>
+        </lightning-card>                    
+    </template> 
+
+    <template if:true={NAsmt_particular}>
+        <lightning-card>
+            <h4 class="smt-particular-heading"> SUMMIT PARTICULARS OF
+               <!-- SUMMIT PARTICULARS OF "{summitSectionLabel}" | SCHOOL : {schoolName} -->
+            </h4>
+            <section>
+            <table class="slds-text-body_small">
+               <thead>
+                  <tr>
+                     <th>S.No</th>
+                     <th>Particular</th>
+                     <th>Timeline</th>          
+                     <th>Target</th>
+                     <!-- <th>Target Text</th> -->
+                     <th></th>
+                  </tr>
+               </thead>
+               <tbody>
+                 
+                     <template
+                        for:each={summitParticulars}
+                        for:item="summitParticular"
+                     >
+                        <tr key={summitParticular.id}>
+                           <td data-cell="S.No">
+                              <strong>{summitParticular.id}</strong>
+                           </td>
+                           <td data-cell="Particular" class="particular-name">
+                              <lightning-input
+                                 type="text"
+                                 value={summitParticular.summitParticularName}
+                                 data-id={summitParticular.id}
+                                 data-label="summitParticularName"
+                                 class="section-input"
+                                 onchange={handleParticularChange}
+                                 disabled
+                              ></lightning-input>
+                           </td>                     
+                           <td data-cell="Timeline">
+                              <lightning-input
+                                 type="date"
+                                 value={summitParticular.timeline} 
+                                 data-id={summitParticular.id}
+                                 data-label="timeline"
+                                 class="section-input"
+                                 onchange={handleParticularChange}
+                                 readonly
+                              ></lightning-input>
+                           </td>               
+                           <td data-cell="Target">
+                              <lightning-input
+                                 type="number"
+                                 value={summitParticular.target}
+                                 data-id={summitParticular.id}
+                                 data-label="target"
+                                 class="section-input"
+                                 onchange={handleParticularChange}
+                                 disabled
+                              ></lightning-input>
+                           </td>
+                           
+                           <td data-cell="Enter Month data">
+                              <div class="row-btn">
+                              <lightning-button 
+                                 data-id={summitParticular.summitParticularId} 
+                                 data-label="targetText"
+                                 class="section-input" 
+                                 label="Enter Month Wise" 
+                                 onclick={monthModel}
+                                 variant="brand"
+                                 disabled={isEnterMonthlyButtonDisabled}>
+                              </lightning-button>
+                              </div>
+                           </td>
+                        </tr>    
+                     </template>                  
+               </tbody>
+            </table> 
+            <div class="button-container">
+                     <lightning-button
+                        label="Back"
+                        onclick={handleBackClick}
+                        variant="brand"
+                     ></lightning-button>
+                     <lightning-button
+                        label={buttonLabel}
+                        onclick={handleCreateOrUpdateParticulars}
+                        data-label={buttonLabel}
+                        variant="brand" 
+                        if:true={isUpdateParticularsButtonVisible}                 
+                     ></lightning-button>
+            </div>    
+            </section>
+         </lightning-card>
+
+    </template>
+
+    <template if:true={showSavedTablePartcular}>
+        <lightning-card>
+            <h4 class="smt-section-heading slds-text-title_caps">SUMMIT SECTIONS 1.4 - {accountName}</h4>
+            <section>
+                <table class="slds-text-body_small">
+                    <thead>
+                        <tr>
+                            <th>Particular Name</th>
+                            <th>Timeline</th>
+                            <th>Target</th>
+                            <th>Save</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={savedParticulars} for:item="item">
+                            <tr key={item.name}>                                
+                                <td data-cell="Particular Name">
+                                    <lightning-input
+                                        type="text"
+                                        value={item.name}
+                                        data-id={item.id}
+                                        data-field="name"
+                                        class="section-input">
+                                    </lightning-input>
+                                </td>
+                                <td data-cell="Timeline">
+                                    <lightning-input
+                                       type="date"                                       
+                                       value={item.timeline}
+                                       data-id={item.id}
+                                       data-label="timeline"
+                                       class="section-input"                                       
+                                       disabled
+                                    ></lightning-input>
+                                 </td>
+                                <!-- <td><strong>{item.timeline}</strong></td> -->
+                                <!-- <td><strong>{item.target}</strong></td> -->
+                                <td data-cell="Target">
+                                    <lightning-input
+                                       type="text"                                       
+                                       value={item.target}
+                                       data-id={item.id}
+                                       data-label="target"
+                                       class="section-input"                                       
+                                       disabled
+                                    ></lightning-input>
+                                 </td>
+                                <td data-cell="Action">
+                                    <lightning-button-icon
+                                        icon-name="utility:save"
+                                        variant="brand"
+                                        alternative-text="Save"
+                                        data-id={item.id}                                       
+                                        style="float: top;padding-top: 30px;">
+                                    </lightning-button-icon>                                    
+                                </td>
+                                <td data-cell="Action">
+                                    <lightning-button label="Enter Month Wise" variant="brand"
+                                        data-id={item.id}                                       
+                                        style="float: top;padding-top: 30px;">
+                                    </lightning-button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+             </section>   
+            </div>
+        </lightning-card>
+    </template>
+    
+</template>

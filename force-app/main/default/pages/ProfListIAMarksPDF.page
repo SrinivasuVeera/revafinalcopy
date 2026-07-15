@@ -1,0 +1,73 @@
+<apex:page controller="ASM_IamProfListView" renderAs="pdf" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sidebar="false">
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .header h1 {
+                    font-size: 16px;
+                    margin: 0;
+                }
+                .header p {
+                    margin: 5px 0;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 8px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f2f2f2;
+                    font-weight: bold;
+                }
+                .text-center {
+                    text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>IA Marks Report</h1>
+                <p>Course ID: {!courseName}</p>
+                <p>Course Name: {!courseDisplay}</p>                
+                <p>Section: {!sectionName}</p>
+                <p>IA Type: IA1 and IA2</p>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl. No.</th>
+                        <th>SRN Number</th>
+                        <th>Name</th>
+                        <th>IA1</th>
+                        <th>IA2</th>
+                        <th class="text-center">Total (IA1 + IA2)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!studentMarks}" var="student">
+                        <tr>
+                            <td>{!student.serialNumber}</td>
+                            <td>{!student.srnNumber}</td>
+                            <td>{!student.studentName}</td>
+                            <td>{!student.ia1Marks}</td>
+                            <td>{!student.ia2Marks}</td>
+                            <td class="text-center">{!student.totalMarks}</td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </body>
+    </html>
+</apex:page>

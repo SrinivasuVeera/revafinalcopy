@@ -1,0 +1,769 @@
+<aura:component Controller="MSTR_DefineProfessorCourseV1_Ctrl"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute name="MapSchoolName" type="Map" />
+    <aura:attribute name="MapProgramName" type="Map" />
+    <aura:attribute name="MapProgramPlanName" type="Map" />
+    <aura:attribute name="MapTermName" type="Map" />
+    <aura:attribute name="lstHardCore" type="List" />
+    <aura:attribute name="lstHcIntegrated" type="List" />
+    <aura:attribute name="lstMandatory" type="List" />
+    <aura:attribute name="lstOpenElective" type="List" />
+    <aura:attribute name="lstProfElective" type="List" />
+    <aura:attribute name="lstPractical" type="List" />
+    <aura:attribute name="MapPreference" type="Map" />
+    <aura:attribute name="TheoryPreferences" type="Map" />
+    <aura:attribute name="PracticalPreferences" type="Map" />
+    <aura:attribute name="List_CourseMain" type="List" />
+
+    <aura:attribute name="dulstHardCore" type="List" />
+    <aura:attribute name="dulstOpenElective" type="List" />
+    <aura:attribute name="dulstProfElective" type="List" />
+    <aura:attribute name="dulstPractical" type="List" />
+    <aura:attribute name="dulstHcIntegrated" type="List" />
+    <aura:attribute name="dulstMandatory" type="List" />
+
+    <aura:attribute name="SelectedSchoolId" type="string" />
+    <aura:attribute name="LoginuserAccount" type="string" />
+    <aura:attribute name="SelectedProgramId" type="string" />
+    <aura:attribute name="SelectedProgramPlanId" type="string" />
+    <aura:attribute name="SelectedTermId" type="string" />
+    <aura:attribute name="showCourseOffTable" type="boolean" default="false" />
+    <aura:attribute name="isSaveButtonDisabled" type="boolean" default="false" />
+    <aura:attribute name="showProfSchool" type="boolean" />
+    <aura:attribute name="showCourseAcross" type="boolean" />
+    <aura:attribute name="StrCourseOffCategory" type="list" />
+    <aura:attribute name="HCourse" type="boolean" default="true" />
+    <aura:attribute name="HICourse" type="boolean" default="true" />
+    <aura:attribute name="PracTermwork" type="boolean" default="true" />
+    <aura:attribute name="ProfEle" type="boolean" default="true" />
+    <aura:attribute name="OpenEle" type="boolean" default="true" />
+    <aura:attribute name="ManCourse" type="boolean" default="true" />
+    <aura:attribute name="DisplayCategory" type="string" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false" />
+    <aura:attribute name="ProfPreference" type="boolean" default="false" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:attribute name="profExistingPreference" type="list" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-theme_default" style="background-color: #d9e4f4a8;">
+        <div class="slds-box slds-theme_default slds-m-bottom_medium"
+            style="border-radius: 8px; background-color: #d9e4f4a8; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); padding: 1rem;">
+            <div class="slds-box slds-theme_default slds-m-bottom_medium"
+                style="border-radius: 8px; background-color: #ffffff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); padding: 0rem;">
+                <p class="slds-text-heading_small slds-m-vertical_medium slds-align_absolute-center" style="font-weight: bold; text-transform: uppercase; color: white ;font-size: x-large;background-color: #ea7e08; margin-top: 0px;
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+                    border-radius: 10px;">
+                    Preference Collection Form from Across all Current Preference Allowed Semeters
+                </p>
+
+                <!-- Notes Box -->
+                <div style=" border-radius: 0.5rem; color: black;">
+
+                    <!-- Notes Heading -->
+                    <div style="display: flex; align-items: center; border-radius: 0.5rem; background-color: #10548f;">
+                        <span
+                            style="font-size: 1.5rem;  padding: 0.4rem 0.6rem; border-radius: 0.5rem; margin-right: 0.75rem;">
+                            📝
+                        </span>
+                        <p style="font-weight: bold; color:white ; font-size: 1.25rem; margin: 0;">
+                            Important Notes:
+                        </p>
+                    </div>
+
+                    <!-- Notes List -->
+                    <ul class="preference-list"
+                        style="list-style-type: none; padding-left: 1rem; margin-top: 1rem; font-size: 0.85rem;">
+
+                        <li>
+                            👉 <strong>Theory Preferences:</strong> You can select <strong>6 preferences</strong> for
+                            theory-based courses from all active semesters across schools where preferences are enabled
+                            by the Vertical Head.
+                        </li>
+
+                        <li>
+                            👉 <strong>Practical Preferences:</strong> You can select <strong>4 preferences</strong> for
+                            Practical/Term Work courses from all active semesters across schools where preferences are
+                            enabled by the Vertical Head.
+                        </li>
+
+
+                        <li>
+                            👉 <strong>Maintain Order:</strong> Preferences must be selected sequentially (Preference 1,
+                            2,
+                            3...).
+                        </li>
+                        👉 <strong>Preference 1</strong> has limited slots for individual courses. If slots are not
+                        available, your can choose Preference 2.
+
+                        <li>
+                            👉 <strong>Separate Preference Tracks:</strong> Theory and Practical course preferences are
+                            managed independently.
+                        </li>
+
+                        <li>
+                            👉 <strong>No Duplicates Allowed:</strong> Same Course ID cannot be repeated across
+                            semesters or
+                            schools.
+                        </li>
+
+                        <li>
+                            👉 <strong>Saving Preferences:</strong> After selecting, click "Save Preferences" — your
+                            entries
+                            will be listed below.
+                        </li>
+
+                        <li>
+                            👉 <strong>Adding More Preferences:</strong> Select additional Programs/Batches/Semesters
+                            and
+                            click save again.
+                        </li>
+
+                        <li>
+                            👉 <strong>Review Before Freezing:</strong> All saved preferences across semesters will
+                            appear
+                            in the table for review.
+                        </li>
+
+                        <li>
+                            👉 <strong>Freezing Preferences:</strong> Once you click <strong>"Freeze
+                                Preferences"</strong>, you will no longer be able to submit or change preferences from
+                            Preference Allowed semesters.
+                        </li>
+                        <li>
+                            👉 <strong>Mandatory course Restriction:</strong> Only One Mandatory Course Preference Allow
+                            across
+                            semesters,If Prefrence Selected preference 1 or 2 or 3 , there is no restrictions for 4 or 5
+                            or 6.
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+
+
+            <div class="demo-only demo-only--sizing ">
+                <div class="slds-box slds-theme_default slds-m-bottom_medium"
+                    style="border-radius: 8px; background-color: #c7cfdca8; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); padding: 1rem;">
+
+                    <div class="slds-grid slds-wrap slds-gutters_medium">
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <aura:if isTrue="{!v.showProfSchool}">
+                                <lightning:select label="School" name="AccSchoolname" value="{!v.SelectedSchoolId}"
+                                    onchange="{!c.changeSchool}" required="true">
+                                    <option value="">--None--</option>
+                                    <aura:iteration items="{!v.MapSchoolName}" var="s">
+                                        <option value="{!s.key}"> {!s.value}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                <aura:set attribute="else">
+                                    <lightning:select label="School" name="AccSchoolname" value="{!v.SelectedSchoolId}"
+                                        disabled="true" required="true">
+                                        <aura:iteration items="{!v.MapSchoolName}" var="s">
+                                            <option value="{!s.key}"> {!s.value}</option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning:select label="Program" name="AccProgramname" value="{!v.SelectedProgramId}"
+                                onchange="{!c.changeProgram}" required="true">
+                                <option value="">--None--</option>
+                                <aura:iteration items="{!v.MapProgramName}" var="s">
+                                    <option value="{!s.key}"> {!s.value}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+
+                        <!-- Row 2: Program Batch & Semester -->
+                        <div class="slds-col slds-size_1-of-2 slds-m-top_medium">
+                            <lightning:select label="Program Batch" name="AccProgramPlanname"
+                                value="{!v.SelectedProgramPlanId}" onchange="{!c.changeProgramPlan}" required="true">
+                                <option value="">--None--</option>
+                                <aura:iteration items="{!v.MapProgramPlanName}" var="s">
+                                    <option value="{!s.key}"> {!s.value}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2 slds-m-top_medium">
+                            <lightning:select label="Semester" name="AccTerm" value="{!v.SelectedTermId}"
+                                onchange="{!c.changeTerm}" required="true">
+                                <option value="">--None--</option>
+                                <aura:iteration items="{!v.MapTermName}" var="s">
+                                    <option value="{!s.key}"> {!s.value}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+
+                    <div class="slds-box slds-size_4-of-4"
+                        style=" border-radius: 8px; background-color: #c7cfdca8; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); padding: 1rem;">
+                        <aura:if isTrue="{!not(empty(v.SelectedTermId))}">
+                            <aura:if isTrue="{!not(empty(v.List_CourseMain))}">
+                                <!-- <div class="slds-box slds-theme_warning slds-theme_info slds-m-bottom_medium">
+                            <p><strong>Note:</strong></p>
+                            <ul style="list-style-type:disc; padding-left: 20px;">
+                                <li>You can select a maximum of <strong>6 preferences</strong> across all <strong>Theory Courses</strong> (Hardcore, Hardcore Integrated , Professional, and Mandatory Courses).</li>
+                                 <li>You can select a maximum of <strong>4 preferences</strong> from <strong>Practical Courses</strong> (Practical / Term Work).</li>
+                                <li>You need to choose preferences in order, like <strong>Preference 1</strong>, <strong>Preference 2</strong>, and so on.</li>
+                                <li>Preference orders are considered separately for <strong>theory</strong> and <strong>practical</strong> courses.</li>
+                            </ul>
+                        </div> -->
+                                <div class="slds-clearfix" style="margin-bottom: 1rem;">
+                                    <div class="slds-float_right">
+                                        <aura:if isTrue="{!not(empty(v.List_CourseMain))}">
+                                            <lightning:button variant="brand" label="Save Selected Preferences"
+                                                onclick="{!c.SaveCourseOffering}"
+                                                disabled="{!v.isSaveButtonDisabled}" />
+                                            <!--<lightning:button variant="brand" label="Save and Confirm" onclick="{!c.SaveConfrimAction}" disabled="{!v.ProfPreference}" /> -->
+                                            <lightning:button variant="neutral" label="Cancel"
+                                                onclick="{!c.closeAction}" />
+                                        </aura:if>
+                                    </div>
+                                </div>
+
+                                <aura:if isTrue="{!v.isModalOpen}">
+                                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+                                        aria-modal="true" aria-describedby="modal-content-id-1"
+                                        class="slds-modal slds-fade-in-open">
+                                        <div class="slds-modal__container">
+                                            <header class="slds-modal__header">
+                                                <lightning:buttonIcon iconName="utility:close"
+                                                    onclick="{!c.closeModel }" alternativeText="close"
+                                                    variant="bare-inverse" class="slds-modal__close" />
+                                                <h2 id="modal-heading-01"
+                                                    class="slds-text-heading_medium slds-hyphenate">
+                                                    Save
+                                                    and Confirm?</h2>
+                                            </header>
+                                            <div class="slds-modal__content slds-p-around_medium"
+                                                id="modal-content-id-1">
+                                                <p>Are You Sure Want To Save and Confirm..?</p>
+                                            </div>
+                                            <footer class="slds-modal__footer">
+                                                <lightning:button variant="neutral" label="Cancel" title="Cancel"
+                                                    onclick="{!c.closeModel }" />
+                                                <lightning:button variant="brand" label="Confirm" title="Confirm"
+                                                    onclick="{!c.submitDetails}" />
+                                            </footer>
+                                        </div>
+                                    </section>
+                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                </aura:if>
+
+                                <!-- All Tabs (the second div from your original structure) -->
+                                <div>
+                                    <lightning:tabset variant="vertical">
+                                        <lightning:tab label="Hardcore Courses">
+                                            <aura:if isTrue="{!not(empty(v.lstHardCore))}">
+                                                <table
+                                                    class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped">
+                                                    <thead>
+                                                        <tr class="slds-text-heading--label">
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sequence
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course Id
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sub-Type
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Credits
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Choose Preference
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                No.of 	Times Course Handled
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <aura:iteration items="{!v.lstHardCore}" var="hCore"
+                                                            indexVar="index">
+                                                            <tr>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.Sequence__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.hed__Course__r.Name}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.Course_ID__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.hed__Course__r.HardCore_Sub_Type__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.Credits__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:select name="{!'lstHardCore__' + index}"
+                                                                        label="" value="{!hCore.Preference__c}"
+                                                                        disabled="{!or(v.HCourse,v.ProfPreference)}"
+                                                                        onchange="{!c.changePreference}">
+                                                                        <option value="">--None--</option>
+                                                                        <aura:iteration items="{!v.TheoryPreferences}"
+                                                                            var="val">
+                                                                            <option value="{!val.key}"> {!val.value}
+                                                                            </option>
+                                                                        </aura:iteration>
+                                                                    </lightning:select>
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:input type="number" 
+                                                                                     label="Times Handled" 
+                                                                                     variant="label-hidden"
+                                                                                     value="{!hCore.Number_of_Times_Course_Handled__c}" 
+                                                                                     min="0" 
+                                                                                     required="{!not(empty(hCore.Preference__c))}"
+                                                                                     disabled="{!v.ProfPreference}"/>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                </table>
+                                            </aura:if>
+                                        </lightning:tab>
+                                        <lightning:tab label="Hardcore Integrated Courses">
+                                            <aura:if isTrue="{!not(empty(v.lstHcIntegrated))}">
+                                                <table
+                                                    class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped">
+                                                    <thead>
+                                                        <tr class="slds-text-heading--label">
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sequence
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course Id
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sub-Type
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Credits
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Choose Preference
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                No.of Times Course Handled
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <aura:iteration items="{!v.lstHcIntegrated}" var="hCore"
+                                                            indexVar="index">
+                                                            <tr class="slds-hint-parent">
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.Sequence__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.hed__Course__r.Name}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.Course_ID__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.hed__Course__r.HardCore_Sub_Type__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!hCore.Credits__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:select
+                                                                        name="{!'lstHcIntegrated__' + index}" label=""
+                                                                        value="{!hCore.Preference__c}"
+                                                                        disabled="{!or(v.HICourse,v.ProfPreference)}"
+                                                                        onchange="{!c.changePreference}">
+                                                                        <option value="">--None--</option>
+                                                                        <aura:iteration items="{!v.TheoryPreferences}"
+                                                                            var="val">
+                                                                            <option value="{!val.key}"> {!val.value}
+                                                                            </option>
+                                                                        </aura:iteration>
+                                                                    </lightning:select>
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:input type="number" 
+                                                                                     label="Times Handled" 
+                                                                                     variant="label-hidden"
+                                                                                     value="{!hCore.Number_of_Times_Course_Handled__c}" 
+                                                                                     min="0" 
+                                                                                     required="{!not(empty(hCore.Preference__c))}"
+                                                                                     disabled="{!v.ProfPreference}"/>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                </table>
+                                            </aura:if>
+                                        </lightning:tab>
+                                        <lightning:tab label="Practical / Term Work">
+                                            <aura:if isTrue="{!not(empty(v.lstPractical))}">
+                                                <table
+                                                    class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped">
+                                                    <thead>
+                                                        <tr class="slds-text-heading--label">
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sequence
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course Id
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sub-Type
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Credits
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Choose Preference
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                No.of Times Course Handled
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <aura:iteration items="{!v.lstPractical}" var="Pract"
+                                                            indexVar="index">
+                                                            <tr class="slds-hint-parent">
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Pract.Sequence__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Pract.hed__Course__r.Name}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Pract.Course_ID__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Pract.hed__Course__r.HardCore_Sub_Type__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Pract.Credits__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:select name="{!'lstPractical__' + index}"
+                                                                        label="" value="{!Pract.Preference__c}"
+                                                                        disabled="{!or(v.PracTermwork,v.ProfPreference)}"
+                                                                        onchange="{!c.changePreference}">
+                                                                        <option value="">--None--</option>
+                                                                        <aura:iteration
+                                                                            items="{!v.PracticalPreferences}" var="val">
+                                                                            <option value="{!val.key}"> {!val.value}
+                                                                            </option>
+                                                                        </aura:iteration>
+                                                                    </lightning:select>
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:input type="number" 
+                                                                                     label="Times Handled" 
+                                                                                     variant="label-hidden"
+                                                                                     value="{!Pract.Number_of_Times_Course_Handled__c}" 
+                                                                                     min="0" 
+                                                                                     required="{!not(empty(Pract.Preference__c))}"
+                                                                                     disabled="{!v.ProfPreference}"/>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                </table>
+                                            </aura:if>
+                                        </lightning:tab>
+
+                                        <lightning:tab label="Professional Electives">
+                                            <aura:if isTrue="{!not(empty(v.lstProfElective))}">
+                                                <table
+                                                    class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped">
+                                                    <thead>
+                                                        <tr class="slds-text-heading--label">
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sequence
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course Id
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sub-Type
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Credits
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Choose Preference
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                No.of Times Course Handled
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <aura:iteration items="{!v.lstProfElective}" var="pro"
+                                                            indexVar="index">
+                                                            <tr class="slds-hint-parent">
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!pro.Sequence__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!pro.hed__Course__r.Name}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!pro.Course_ID__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!pro.hed__Course__r.HardCore_Sub_Type__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <!-- <aura:if
+                                                                    isTrue="{!pro.Parent_Course_Offering__c == null}"> -->
+                                                                    {!pro.Credits__c}
+                                                                    <!-- </aura:if> -->
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <aura:if
+                                                                        isTrue="{!pro.Parent_Course_Offering__c == null}">
+                                                                    </aura:if>
+                                                                    <aura:if
+                                                                        isTrue="{!pro.Parent_Course_Offering__c != null}">
+                                                                        <lightning:select
+                                                                            name="{!'lstProfElective__' + index}"
+                                                                            label="" value="{!pro.Preference__c}"
+                                                                            disabled="{!or(v.ProfEle,v.ProfPreference)}"
+                                                                            onchange="{!c.changePreference}">
+                                                                            <option value="">--None--</option>
+                                                                            <aura:iteration
+                                                                                items="{!v.TheoryPreferences}"
+                                                                                var="val">
+                                                                                <option value="{!val.key}"> {!val.value}
+                                                                                </option>
+                                                                            </aura:iteration>
+                                                                        </lightning:select>
+                                                                    </aura:if>
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:input type="number" 
+                                                                                     label="Times Handled" 
+                                                                                     variant="label-hidden"
+                                                                                     value="{!pro.Number_of_Times_Course_Handled__c}" 
+                                                                                     min="0" 
+                                                                                     required="{!not(empty(pro.Preference__c))}"
+                                                                                     disabled="{!v.ProfPreference}"/>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                </table>
+                                            </aura:if>
+                                        </lightning:tab>
+                                        <!-- <lightning:tab label="Open Electives">
+                                        <aura:if isTrue="{!not(empty(v.lstOpenElective))}">
+                                            <table
+                                                class="slds-table slds-tablebordered slds-tablecell-buffer slds-tablestriped">
+                                                <thead>
+                                                    <tr class="slds-text-headinglabel">
+                                                        <th class="slds-is-resizable" scope="col">
+                                                            Sequence
+                                                        </th>
+                                                        <th class="slds-is-resizable" scope="col">
+                                                            Course
+                                                        </th>
+                                                        <th class="slds-is-resizable" scope="col">
+                                                            Course Id
+                                                        </th>
+                                                        <th class="slds-is-resizable" scope="col">
+                                                            Sub-Type
+                                                        </th>
+                                                        <th class="slds-is-resizable" scope="col">
+                                                            Credits
+                                                        </th>
+                                                        <th class="slds-is-resizable" scope="col">
+                                                            Choose Preference
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <aura:iteration items="{!v.lstOpenElective}" var="open"
+                                                        indexVar="index">
+                                                        <tr class="slds-hint-parent">
+                                                            <td class="slds-is-resizable" scope="col">
+                                                                {!open.Sequence__c}
+                                                            </td>
+                                                            <td class="slds-is-resizable" scope="col">
+                                                                {!open.hed__Course__r.Name}
+                                                            </td>
+                                                            <td class="slds-is-resizable" scope="col">
+                                                                {!open.Course_ID__c}
+                                                            </td>
+                                                            <td class="slds-is-resizable" scope="col">
+                                                                {!open.hed__Course__r.HardCore_Sub_Type__c}
+                                                            </td>
+                                                            <td class="slds-is-resizable" scope="col">
+                                                                <aura:if
+                                                                    isTrue="{!open.Parent_Course_Offering__c == null}">
+                                                                    {!open.Credits__c}
+                                                                </aura:if>
+                                                            </td>
+                                                            <td class="slds-is-resizable" scope="col">
+                                                                <aura:if
+                                                                    isTrue="{!open.Parent_Course_Offering__c == null}">
+                                                                </aura:if>
+                                                                <aura:if
+                                                                    isTrue="{!open.Parent_Course_Offering__c != null}">
+                                                                    <lightning:select
+                                                                        name="{!'lstOpenElective__' + index}" label=""
+                                                                        value="{!open.Preference__c}"
+                                                                        disabled="{!or(v.OpenEle,v.ProfPreference)}"
+                                                                        onchange="{!c.changePreference}">
+                                                                        <option value="">None</option>
+                                                                        <aura:iteration items="{!v.TheoryPreferences}"
+                                                                            var="val">
+                                                                            <option value="{!val.key}"> {!val.value}
+                                                                            </option>
+                                                                        </aura:iteration>
+                                                                    </lightning:select>
+                                                                </aura:if>
+                                                            </td>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </tbody>
+                                            </table>
+                                        </aura:if>
+                                    </lightning:tab> -->
+                                        <lightning:tab label="Mandatory Courses">
+                                            <aura:if isTrue="{!not(empty(v.lstMandatory))}">
+                                                <table
+                                                    class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped">
+                                                    <thead>
+                                                        <tr class="slds-text-heading--label">
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sequence
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Course Id
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Sub-Type
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Credits
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                Choose Preference
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                No.of Times Course Handled
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <aura:iteration items="{!v.lstMandatory}" var="Mandtory"
+                                                            indexVar="index">
+                                                            <tr class="slds-hint-parent">
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Mandtory.Sequence__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Mandtory.hed__Course__r.Name}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Mandtory.Course_ID__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Mandtory.hed__Course__r.HardCore_Sub_Type__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!Mandtory.Credits__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:select value="{!Mandtory.Preference__c}"
+                                                                        name="{!'lstMandatory__' + index}" label=""
+                                                                        disabled="{!or(v.ManCourse,v.ProfPreference)}"
+                                                                        onchange="{!c.changePreference}">
+                                                                        <option value="">--None--</option>
+                                                                        <aura:iteration items="{!v.TheoryPreferences}"
+                                                                            var="val">
+                                                                            <option value="{!val.key}"> {!val.value}
+                                                                            </option>
+                                                                        </aura:iteration>
+                                                                    </lightning:select>
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    <lightning:input type="number" 
+                                                                                     label="Times Handled" 
+                                                                                     variant="label-hidden"
+                                                                                     value="{!Mandtory.Number_of_Times_Course_Handled__c}" 
+                                                                                     min="0" 
+                                                                                     required="{!not(empty(Mandtory.Preference__c))}"
+                                                                                     disabled="{!v.ProfPreference}"/>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                </table>
+                                            </aura:if>
+                                        </lightning:tab>
+                                    </lightning:tabset>
+                                </div>
+
+                                <aura:set attribute="else">
+                                    <div class="no-data-message">
+                                        <p>You currently have no courses available for preference selection</p>
+                                    </div>
+                                </aura:set>
+
+                            </aura:if>
+                            <aura:set attribute="else">
+                                <div class="no-data-message2">
+                                    <p>Please select a <strong>Semester</strong> to view the Preference Collection Form
+                                        here.</p>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="border-radius: 20px ;margin: 25px;">
+            <c:getProfessorExistingPreferences oncoursedata="{!c.handleExistingPreferences}" />
+        </div>
+
+    </div>
+</aura:component>

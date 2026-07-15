@@ -1,0 +1,22 @@
+/* Make modal wider and taller */
+.custom-modal-size .slds-modal__container {
+    max-width: 90vw !important;
+    width: 90vw !important;
+    /* height: 80vh !important; */
+}
+
+/* Make modal body scrollable if needed */
+.custom-modal-size .slds-modal__content {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+.section-control {
+    font-weight: bold;
+}
+.slds-card {
+    width: 75%;
+    position: absolute;
+}
+.nocourse {
+    color :red;
+}

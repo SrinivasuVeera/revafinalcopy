@@ -1,0 +1,75 @@
+<template>
+    <lightning-button label="Create Announcement" onclick={handleOpenModal} variant="brand"></lightning-button>
+    
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Create Announcement</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+
+                    <lightning-input label="Announcement Title" value={announcementTitle} onchange={handleTitleChange}></lightning-input>
+                
+                    <lightning-textarea label="Announcement" value={bodyMessage} onchange={handleBodyChange} maxlength="6000"></lightning-textarea>
+
+                    <lightning-file-upload
+                        label="Upload Attachment (optional)"
+                        name="fileUploader"
+                        accept=".pdf,.doc,.docx,.png,.jpg,.mp4,.mov,.avi,.mkv,.wmv"
+                        record-id={recordId}
+                        onuploadfinished={handleUploadFinished}>
+                    </lightning-file-upload>
+
+                    <template if:true={fileUploaded}>
+                        <div class="slds-m-top_x-small slds-text-color_success">
+                            <lightning-icon icon-name="utility:check" alternative-text="Uploaded" size="x-small" variant="success" class="slds-m-right_xx-small"></lightning-icon>
+                            File uploaded successfully
+                        </div>
+                    </template>
+
+                    <lightning-input type="datetime" label="Display Start Time" value={startDateTime} onchange={handleStartDateTimeChange}></lightning-input>
+                    <lightning-input type="datetime" label="Display Close Time" value={endDateTime} onchange={handleEndDateTimeChange}></lightning-input>
+          
+                    <div class="slds-form-element slds-m-bottom_small">
+                        <label class="slds-form-element__label">Filter Blocks</label>
+                        <div class="slds-form-element__control">
+                            <lightning-layout horizontal-align="start">
+                                <lightning-layout-item class="slds-p-right_small">
+                                    <lightning-input type="checkbox" label="All" value="All" checked={isAllChecked} onchange={handleSingleCheckboxChange}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-p-right_small">
+                                    <lightning-input type="checkbox" label="Boys" value="Boys" checked={isBoysChecked} onchange={handleSingleCheckboxChange}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item>
+                                    <lightning-input type="checkbox" label="Girls" value="Girls" checked={isGirlsChecked} onchange={handleSingleCheckboxChange}></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+
+                    <lightning-layout-item size="12">
+                        <lightning-dual-listbox
+                            name="blocks"
+                            label="Select Blocks"
+                            source-label="Available Blocks"
+                            selected-label="Selected Blocks"
+                            field-level-help="Select one or more blocks to send notification"
+                            options={blockOptions}
+                            value={selectedBlocks}
+                            onchange={handleBlockChange}>
+                        </lightning-dual-listbox>
+                    </lightning-layout-item>
+
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button variant="brand" label="Send Notification" onclick={handleSendNotification}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

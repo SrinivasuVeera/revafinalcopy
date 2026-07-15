@@ -1,0 +1,111 @@
+.custom-box label{
+    color: black;
+    font-weight: 500;
+}
+.evidence{
+    position: relative;
+}
+.evidence a{
+    position: absolute;
+    color: blue;
+    cursor: pointer;
+    left: 50%;
+}
+.achieved lightning-input, .evidence lightning-input{
+    font-weight: 600;
+}
+.slds-modal__container{
+    min-width: 90vw !important;    
+}
+.input-container input {
+    padding: 5px;
+    border: 1px solid black;
+    width: 100%;
+    min-height: 2rem;
+    margin-top: 4px;
+    font-weight: 500;
+    
+}
+.section-input{
+    font-weight: 500;
+}
+
+
+section{
+    border: 2px solid black;
+    width: fit-content;
+    margin: auto;
+    padding: 1rem;
+    overflow: auto;
+}
+
+table {
+    border-collapse: collapse;
+    overflow: auto;
+    width: 100%;
+    border-spacing: 0;
+    background-color: white;
+}
+
+
+table, th, td {
+    /* border-collapse: collapse; */
+    padding: 15px;
+    text-align: left;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: grey;
+   /*  cursor: pointer; */
+    text-transform:uppercase;
+    color: white;
+}
+
+
+.smt-heading{
+    font-weight: 700;
+    font-size: 16px;
+    margin-block: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+} 
+
+@media (max-width:500px){
+    table {
+    font-size: 12px;
+}
+}
+
+@media (max-width: 650px) {
+
+    td{
+        display: grid;
+        grid-template-columns: 21ch auto;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;   
+    }   
+
+    td:first-child{
+        padding-top: 2rem;
+    }
+
+    td:last-child{
+        padding-bottom: 2rem;
+    }
+    th{
+        display: none;
+    }
+    td::before{
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+    }
+  
+}

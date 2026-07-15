@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>       
+       <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <propertyType extends="Sobject" name="T" label="SObject Type"/>
+            <property name="incomingData" type="{T[]}" label="Data For Data Table" role="inputOnly"/>
+            <property name="fileName" type="String" label="File Name"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

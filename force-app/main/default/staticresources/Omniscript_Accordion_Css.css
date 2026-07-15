@@ -1,0 +1,8 @@
+.slds-scope .slds-accordion__summary-action {
+    background-color: #eeeeee;
+}
+
+.slds-input-has-icon_right .slds-input{
+    padding-left: 10px;
+    margin-left: 5px;
+}

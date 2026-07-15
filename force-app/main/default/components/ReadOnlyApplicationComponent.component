@@ -1,0 +1,122 @@
+<apex:component controller="ReadOnlyApplicationController">
+    <apex:pageBlock title="Application Information">
+        <apex:pageBlockSection columns="2" rendered="{!cetAdmissionMode != 'UQ'}">
+            <apex:repeat value="{!$ObjectType.hed__Application__c.FieldSets.Non_CET_Application_info}" var="f">
+                <apex:outputField value="{!application[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" rendered="{!cetAdmissionMode == 'UQ'}">
+            <apex:repeat value="{!$ObjectType.hed__Application__c.FieldSets.Application_Info}" var="f">
+                <apex:outputField value="{!application[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Applicant Information">
+        <apex:pageBlockSection columns="2" title="Personal Information">
+            <apex:repeat value="{!$ObjectType.Contact.FieldSets.Personal_Info}" var="f">
+                <apex:outputField value="{!applicant[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="Passport Information" rendered="{!passportNumber != null}">
+            <apex:repeat value="{!$ObjectType.Contact.FieldSets.Passport_Info}" var="f">
+                <apex:outputField value="{!applicant[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="CET Information" rendered="{!cetAdmissionMode != 'UQ'}">
+            <apex:repeat value="{!$ObjectType.Contact.FieldSets.CET_Info}" var="f">
+                <apex:outputField value="{!applicant[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Parent & Guardian Information">
+        <apex:pageBlockSection columns="2" title="Father Information" rendered="{!father != null}">
+            <apex:repeat value="{!$ObjectType.Contact.FieldSets.Parent_Details}" var="f">
+                <apex:outputField value="{!father[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="Mother Information" rendered="{!mother != null}">
+            <apex:repeat value="{!$ObjectType.Contact.FieldSets.Parent_Details}" var="f">
+                <apex:outputField value="{!mother[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="Guardian Information" rendered="{!guardian != null}">
+            <apex:repeat value="{!$ObjectType.Contact.FieldSets.Parent_Details}" var="f">
+                <apex:outputField value="{!guardian[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Address Information">
+        <apex:pageBlockSection columns="2" title="Permanent Address" rendered="{!permanentAddress != null}">
+            <apex:repeat value="{!$ObjectType.hed__Address__c.FieldSets.Address_Info}" var="f">
+                <apex:outputField value="{!permanentAddress[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="Mailing Address" rendered="{!mailingAddress != null}">
+            <apex:repeat value="{!$ObjectType.hed__Address__c.FieldSets.Address_Info}" var="f">
+                <apex:outputField value="{!mailingAddress[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <!--Start -->
+    <apex:pageBlock title="Entrance Exam Details">
+    <apex:pageBlockSection columns="1" rendered="{!NOT(ISNULL(entranceExams))}">
+        <apex:variable var="index" value="{!0}"/>  <!-- Counter Variable -->
+        <apex:repeat value="{!entranceExams}" var="exam">
+            <apex:outputPanel layout="block" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+                <apex:outputPanel layout="block" style="font-weight:bold; font-size:14px; margin-bottom:5px;">
+                    Entrance Exam {!index + 1}
+                </apex:outputPanel>
+                <apex:pageBlockSection columns="2">
+                    <apex:repeat value="{!$ObjectType.Entrance_Exam__c.FieldSets.Entrance_Exam_Info}" var="e">
+                        <apex:outputField value="{!exam[e]}" />
+                    </apex:repeat>
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            <apex:variable var="index" value="{!index + 1}"/>  <!-- Increment Counter -->
+        </apex:repeat>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+
+    
+    
+    <!--End -->
+    
+    <apex:pageBlock title="Education History Information">
+        <apex:pageBlockSection columns="2" title="10th Board / Equivalent" rendered="{!tenth != null}">
+            <apex:repeat value="{!$ObjectType.hed__Education_History__c.FieldSets.Education_History_10th}" var="f">
+                <apex:outputField value="{!tenth[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="12th Board / Equivalent" rendered="{!twelfth != null}">
+            <apex:repeat value="{!$ObjectType.hed__Education_History__c.FieldSets.Education_History_12th}" var="f">
+                <apex:outputField value="{!twelfth[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="Under Graduate Degree" rendered="{!ug != null}">
+            <apex:repeat value="{!$ObjectType.hed__Education_History__c.FieldSets.Education_History_UG}" var="f">
+                <apex:outputField value="{!ug[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" title="Post Graduate Degree" rendered="{!pg != null}">
+            <apex:repeat value="{!$ObjectType.hed__Education_History__c.FieldSets.Education_History_PG}" var="f">
+                <apex:outputField value="{!pg[f]}" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="1" title="Declaration">
+            <div style=" margin-bottom:15px;">
+                <img src="{!$Resource.Check_Box}" width="12px" /> I declare that, I have clearly read, understood and accepted the rules and regulations of the University. I am fully
+                aware that my admission and candidature for the award of Degree is and will be strictly governed by the guidelines
+                of REVA University and the guidelines/rules and regulations of UGC, New Delhi.
+            </div>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Document Checklist">
+        <apex:pageBlockSection columns="2" title="Document Checklist Information" rendered="{!cetAdmissionMode != 'UQ'}">
+            <apex:repeat value="{!$ObjectType.hed__Application__c.FieldSets.Document_Checklist_Info}" var="f">
+                <apex:outputField value="{!application[f]}" style="color:red" />
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:component>

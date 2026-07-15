@@ -1,0 +1,185 @@
+<template>
+    <div  style="background-color: #EDEDED;">
+    <template if:true={Spinner}>
+        <div class="slds-spinner_container">
+            <div class="slds-spinner--brand slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+    <template if:true={resultDataList}>
+        <div class="slds-form slds-box" style="border-color: transparent;" role="list">
+            <div class="slds-form__row">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                        <label class="slds-form-element__label" for="sem">Sem:</label>
+                        <div class="slds-form-element__control">{semName}</div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                        <label class="slds-form-element__label" for="year">Year:</label>
+                        <div class="slds-form-element__control">{summaryRec.Examination_Month_Year__c}</div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                    <label class="slds-form-element__label" for="detail">Detail Result?</label>
+                    <div class="slds-form-element__control">
+                        <lightning-input type="toggle" checked={showDetailView} label-hidden message-toggle-active="" message-toggle-inactive="" onchange={toggleDetail}></lightning-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-box" style="border-color: transparent;">
+            <template if:true={showDetailView}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-max-medium-table_stacked-horizontal" aria-label="Example table of Opportunities with vertical borders" >
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Course"><b>Course</b></div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Course Type"><b>Course Type</b></div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Internal Marks"><b>Internal Marks</b></div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="External Marks"><b>External Marks</b></div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total"><b>Total</b></div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={resultDataList} for:item="res">
+                            <tr key={res.Id} class="slds-hint-parent">
+                                <td data-label="Course">
+                                    <div class="slds-truncate" title={res.Course__r.Name}>{res.Course__r.Name}<br/>{res.Course__r.hed__Course_ID__c}</div>
+                                </td>
+                                <td data-label="Course Type">
+                                    <div class="slds-truncate" title={res.Course__r.Course_Type_Logisys__c}>
+                                        {res.Course__r.Course_Type_Logisys__c} 
+                                    </div>
+                                </td>
+                                <td data-label="Internal Marks">
+                                    <div class="slds-truncate" title={res.Secured_Internal_Marks__c}>
+                                        {res.Secured_Internal_Marks__c}
+                                    </div>
+                                </td>
+                                <td data-label="External Marks">
+                                    <div class="slds-truncate" title={res.Secured_External_Marks__c}>
+                                        {res.Secured_External_Marks__c} 
+                                    </div>
+                                </td>
+                                <td data-label="Total">
+                                    <div class="slds-truncate" title={res.Total_Secured_Marks_Course__c}>
+                                        {res.Total_Secured_Marks_Course__c} 
+                                    </div>
+                                </td>
+                                <!-- Add other columns as needed -->
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <!-- Add other details below the table as needed -->
+            </template>
+            <template if:false={showDetailView}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-max-medium-table_stacked-horizontal" aria-label="Detail Result Table" >
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Course"><b>Course</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Max. Marks"><b>Max. Marks</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Secured Marks"><b>Secured Marks</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="No. of Credits"><b>No. of Credits</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Grade Points"><b>Grade Points</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Credit Points"><b>Credit Points</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Grade"><b>Grade</b></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Pass"><b>Pass</b></div>
+                            </th>
+                            <!-- Add other headers as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={resultDataList} for:item="res">
+                            <tr key={res.Id} class="slds-hint-parent">
+                                <td data-label="Course">
+                                    <div class="slds-truncate" title={res.Course__r.Name}>{res.Course__r.Name}<br/>{res.Course__r.hed__Course_ID__c}</div>
+                                </td>
+                                <td data-label="No. of Credits">
+                                    <div class="slds-truncate" title={res.Maximum_Marks_Course_Level__c}>{res.Course__r.Total_Maximum_Marks_IA_External__c}</div>
+                                </td>
+                                <td data-label="Max. Secured Marks">
+                                    <div class="slds-truncate" title={res.Total_Secured_Marks_Course__c}>
+                                        {res.Total_Secured_Marks_Course__c}
+                                    </div>
+                                </td>
+                                <td data-label="No. of Credits">
+                                    <div class="slds-truncate" title={res.No_of_Credits__c}>
+                                        {res.No_of_Credits__c} 
+                                    </div>
+                                </td>
+                                <td data-label="Grade Points">
+                                    <div class="slds-truncate" title={res.Grade_Points__c}>
+                                        {res.Grade_Points__c} 
+                                    </div>
+                                </td>
+                                <td data-label="Credit Points">
+                                    <div class="slds-truncate" title={res.Credit_Points__c}>
+                                        {res.Credit_Points__c} 
+                                    </div>
+                                </td>
+                                <td data-label="Grade">
+                                    <div class="slds-truncate" title={res.Grade__c}>
+                                        {res.Grade__c} 
+                                    </div>
+                                </td>
+                                <td data-label="Pass">
+                                    <div class="slds-truncate" title={res.hed__Result__c}>
+                                        {res.hed__Result__c} 
+                                    </div>
+                                </td>
+                                <!-- Add other columns as needed -->
+                            </tr>
+                        </template>
+                    </tbody>
+                </table><br/>
+                <div>
+                    <div>
+                        Passing Criteria : {summaryRec.Passing_Criteria__c}
+                    </div><br/>
+                    <div class="slds-p-left_x-large">
+                            SGPA : {summaryRec.SGPA__c}<br><br>
+                            CGPA : {summaryRec.CGPA__c}
+                    </div><br/>
+                    <div>
+                        Note : {summaryRec.Remarks__c}
+                    </div>
+                </div>
+                <!-- Render summary view here -->
+            </template>
+        </div>
+    </template>
+    <template if:false={resultDataList}>
+        No data found..
+    </template>
+</div>
+</template>

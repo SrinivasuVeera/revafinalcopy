@@ -1,0 +1,99 @@
+<apex:page renderAs="pdf" controller="BulkHallTicketExtension" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" showHeader="false">
+    <head>
+        <style type="text/css" media="print">
+            @page { size: A4; margin: 0.5in; }
+            .table-header { background-color: grey; color: black; }
+            .reva-logo { height: 100px; text-align: center; }
+            .student-section { position: relative; overflow: hidden; }
+            .watermark { position: absolute; top: 25%; left: 20%; width: 500px; opacity: 0.1; z-index: -1; }
+            .break-after { page-break-after: always; }
+        </style>
+    </head>
+    <apex:repeat value="{!students}" var="studentWrapper">
+        <div class="student-section">
+            <div style="width:100%; overflow:auto;">
+                <div style="width:65%; float:left; text-align:left;">
+                    <b>{!assessmentType}</b><br/>
+                    <b>{!evenorooddsem} Sem: {!SemYear} - {!SemNextYear}</b><br/>
+                    <b>Start Date: {!StartDate}</b>
+                    <span style="margin-left:35px;"><b>End Date: {!EndDate}</b></span>
+                </div>
+                <div style="width:35%; float:left; text-align:right;">
+                    <img width="255" height="90" src="{!$Resource.REVA_LOGO}" style="display:block;"/>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            <br/><br/>
+            <div style="clear: both;"></div>
+            <div style="background-color: #4d4f52; text-align: center; padding: 1px;">
+                <h2 style="margin: 0; color: white;">HALL TICKET</h2>
+            </div>
+            <br/>
+            <div class="watermark">
+                <apex:image url="{!URLFOR($Resource.Reva_Watermark)}" height="500px"/>
+            </div>
+            <div style="width:62%; float: left">
+                <table border="1" border-collapse="collapse" cellpadding="2" width="100%" margin="25px">
+                    <tr><td style="width:20%"><b>Student Name</b></td><td style="width:60%; font-size:14px; font-weight:bold">{!studentWrapper.student.Name}</td></tr>
+                    <tr><td style="width:20%"><b>SRN</b></td><td style="width:60%; font-size:14px; font-weight:bold">{!studentWrapper.student.SRN_Number__c}</td></tr>
+                    <tr><td style="width:20%"><b>School</b></td><td style="width:60%">{!studentWrapper.student.School_Portal__c}</td></tr>
+                    <tr><td style="width:20%"><b>Program</b></td><td style="width:60%">{!studentWrapper.student.Program_Name__c}</td></tr>
+                    <tr><td style="width:20%"><b>Semester</b></td><td style="width:60%">{!studentWrapper.student.Active_Semester__r.Name}</td></tr>
+                </table>
+            </div>
+            <div style="width:1%; float:left">&nbsp;</div >            
+            <div style="width:19%; float:left; text-align:center;">
+                <apex:image url="{!studentWrapper.passportPhotoURL}" width="134" height="134" rendered="{!studentWrapper.passportPhotoURL != null}"/>
+            </div>            
+            <div style="width:16%; float:left;">
+                <apex:image id="QrImage" url="{!studentWrapper.QrData}" width="130" height="130"/>                
+            </div>
+            <br/><br/>
+            <div style="clear: both;"></div><br/>
+            <table border="1" border-collapse="collapse" cellpadding="6" width="100%" margin="25px">
+                <tr>
+                    <th style="background-color: #d4d4d9; width:5%">Sl.No.</th>
+                    <th style="background-color: #d4d4d9; width:20%">Course Name</th>
+                    <th style="background-color: #d4d4d9; width:10%">Course Code</th>
+                    <th style="background-color: #d4d4d9; width:5%">Sem</th>
+                    <th style="background-color: #d4d4d9; width:10%">Date</th>
+                    <th style="background-color: #d4d4d9; width:12%">Start Time</th>
+                    <th style="background-color: #d4d4d9; width:10%">End Time</th>
+                    <th style="background-color: #d4d4d9; width:20%">Invigilator Sign</th>
+                </tr>
+                <apex:variable var="rowNum" value="{!1}"/>
+                <apex:repeat value="{!studentWrapper.matchedLineItems}" var="lineItem">
+                    <tr>
+                        <td style="text-align:center">{!rowNum}</td>
+                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                        <td style="padding:1px; font-size:14px; text-align:center">{!lineItem.Course__r.Name}</td>
+                        <td style="padding:1px; font-size:14px; text-align:center">{!lineItem.Course__r.hed__Course_ID__c}</td>
+                        <td style="padding:1px; font-size:14px; text-align:center">{!SemesterTerm}</td>
+                        <td style="padding:1px; font-size:14px; text-align:center">{!studentWrapper.LineItemWithDate[lineItem.Id]}</td>
+                        <td style="padding:1px; font-size:14px; text-align:center">{!studentWrapper.StartTime[lineItem.Id]}</td>
+                        <td style="padding:1px; font-size:14px; text-align:center">{!studentWrapper.EndTime[lineItem.Id]}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+            <br/>
+            <table border="1" width="100%">
+                <tr><td style="border:1px; padding:4px"><b>Instructions</b></td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">1. Bring your Hall Ticket and ID card without fail. Entry to the Examination Hall will not be permitted without the Hall Ticket.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">2. Mobile phones, smartwatches or any other electronic devices as well as any form of written material are strictly prohibited.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">3. Fill the details on the answer sheet carefully. Follow the instructions provided in the question paper.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">4. Use black or blue ballpoint pen for written exam. Pencils can be used for graphs and diagrams.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">5. The exam will start and end as per the scheduled time mentioned in the hall ticket.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">6. No entry for the students arriving after 15 mins of the start of the exam.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">7. Leave your bags and personal belongings outside the examination hall.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">8. Maintain silence in the examination hall. Any form of communication during the exam is strictly prohibited; such indiscipline will be treated as malpractice.</td></tr>
+                <tr><td style="border:1px; padding:4px; font-size:13px;">9. Please bring your own calculators. (Only non-scientific calculators are allowed)</td></tr>
+            </table>
+            <br/><br/><br/><br/>
+            <div style="width:25%; float:right"><hr/></div>
+            <div style="clear: both;"></div>
+            <div style="width:25%; float:right"><p><center>Student Signature</center></p></div>
+        </div>
+        <div class="break-after"></div>
+    </apex:repeat>
+</apex:page>

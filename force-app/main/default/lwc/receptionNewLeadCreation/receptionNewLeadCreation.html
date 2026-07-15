@@ -1,0 +1,153 @@
+<template>
+    <div class="slds-box slds-theme_default slds-p-around_none custom-modal-container">
+        
+        <header class="slds-page-header slds-shrink-none">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="standard:lead" size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1 class="slds-page-header__title">New Lead</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <template if:true={emailExists}>
+            <div class="slds-p-around_large slds-text-align_center">
+                <div class="slds-illustration slds-illustration_small">
+                    <div class="slds-text-longform">
+                        <h3 class="slds-text-heading_medium slds-text-color_success">Registration Completed Already</h3>
+                        <p class="slds-text-body_regular">We found an existing record with this email. Please proceed to the portal or complete your payment.</p>
+                    </div>
+                </div>
+                <lightning-button variant="brand" label="List View" onclick={PaymentPage} class="slds-m-top_medium"></lightning-button>
+            </div>
+        </template>
+
+        <template if:false={emailExists}>           
+            <div class="slds-scrollable_y slds-p-around_medium body-content">
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input label="First Name" value={firstName} onchange={handleFirstNameChange} required disabled={isEmailVerified}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input label="Last Name" value={lastName} onchange={handleLastNameChange} required disabled={isEmailVerified}></lightning-input>
+                    </div>
+                </div>
+
+                <!-- EMAIL ROW -->
+                <div class="slds-grid slds-gutters slds-m-bottom_small slds-grid_vertical-align-end">
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning-input label="Email" type="email" value={email} onchange={handleEmailChange} required disabled={isEmailVerified}></lightning-input>
+                    </div>
+                    <template if:false={showEmailOTP}>
+        <div class="slds-col slds-size_2-of-12">
+            <lightning-button 
+                label="Verify Email" 
+                variant="neutral" 
+                onclick={sendEmailOtp} 
+                disabled={isVerifyEmailDisabled} 
+                class="slds-size_full">
+            </lightning-button>
+        </div>
+    </template>
+                    
+                    <template if:true={showEmailOTP}>
+                        <template if:false={isEmailVerified}>
+                            <div class="slds-col slds-size_1-of-12">                                
+                                <lightning-button label="Edit Email" variant="destructive-text" onclick={handleEditEmail} class="slds-size_full"></lightning-button>
+                            </div>
+                            <div class="slds-col slds-size_2-of-12">
+                                <lightning-input label="Email OTP" value={emailOtp} onchange={handleEmailOtpChange}></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_3-of-12">
+                                <lightning-button label="Verify OTP" variant="brand" onclick={verifyEmailOtp} class="slds-size_full"></lightning-button>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">
+                                <lightning-button label="Resend OTP" onclick={handleResendEmailOtp} class="slds-size_full"></lightning-button>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+
+                <template if:true={isEmailVerified}>
+                    <div class="slds-text-color_success slds-m-bottom_small slds-p-left_xx-small">✓ Email Verified</div>
+                </template>
+
+                <!-- MOBILE ROW -->
+                <div class="slds-grid slds-gutters slds-m-bottom_small slds-grid_vertical-align-end">
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-combobox label="Country Code" value={phoneCode} options={phoneCodeOptions} onchange={handlePhoneCodeChange} required disabled={isVerified}></lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12">
+                        <lightning-input type="tel" label="Mobile Number" max-length="10" value={mobileNumber} onchange={handleMobileChange} required disabled={isVerified} data-id="mobile"></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-button label="Send OTP" variant="neutral" onclick={sendOtp} disabled={isSendOtpDisabled} if:false={isVerified}></lightning-button>
+                    </div>
+                    
+                    <template if:true={showMobileOtp}>
+                        <template if:false={isVerified}>
+                            <div class="slds-col slds-size_1-of-12">
+                                <lightning-input label="Mobile OTP" value={otp} onchange={handleOtpChange}></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_2-of-12">
+                                <lightning-button label="Verify OTP" variant="brand" onclick={verifyOtp} class="slds-size_full"></lightning-button>
+                            </div>
+                            <div class="slds-col slds-size_2-of-12">
+                        <lightning-button label="Resend OTP" onclick={handleResendOtp} class="slds-size_full"></lightning-button>
+                    </div>
+                        </template>
+                    </template>
+                </div>
+
+                <!-- OTHER DETAILS (Always show labels, but fields depend on verification) -->
+                <div class="slds-m-bottom_small">
+                    <lightning-combobox label="Category" value={category} options={categoryOptions} onchange={handleCategoryChange} required></lightning-combobox>
+                </div>
+                <div class="two-col"  style="position: relative;">
+                <template if:true={showStatePicklist}>
+                <lightning-combobox label="State" value={state} options={stateOptions} onchange={handleStateChange} disabled={disableState}  dropdown-alignment="auto" required></lightning-combobox>
+                </template>
+                </div>
+                    <div class="two-col"  style="position: relative;">
+                    <template if:true={showCountryPicklist}>
+                    <lightning-combobox label="Country" value={country} options={countryOptions} onchange={handleCountryChange} disabled={disableCountry}  dropdown-alignment="auto" required></lightning-combobox>
+                </template>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small" style="position: relative;">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-combobox label="School" value={selectedSchool} options={schools} onchange={onSchoolChange} required dropdown-alignment="auto"></lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-combobox label="Program" value={selectedProgram} options={programs} onchange={onProgramChange} required dropdown-alignment="auto"></lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="slds-m-bottom_small">
+                    <lightning-combobox label="Lead Source" value={source} options={sourceOptions} onchange={handleSourceChange} required></lightning-combobox>
+                </div>
+
+                <div class="slds-m-top_medium">
+                    <lightning-input type="checkbox" label="I confirm that the applicant has provided consent for REVA to contact them for updates and notifications." checked={declarationChecked} onchange={handleDeclarationChange} required></lightning-input>
+                </div>
+            </div>
+
+            <!-- FIXED FOOTER -->
+            <!-- Update the Footer Button -->
+<footer class="slds-modal__footer slds-shrink-none">
+    <lightning-button 
+        variant="brand" 
+        label={submitLabel} 
+        onclick={recsubmitApplication} 
+        disabled={isSubmitDisabled}>
+    </lightning-button>
+</footer>
+        </template>
+    </div>
+</template>

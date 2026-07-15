@@ -1,0 +1,20 @@
+.slds-modal__container {
+  max-width: 35rem;
+  
+}
+
+.backgroundCol {
+  border: 1px solid #F07F07;
+  background-color: #F07F07;
+  color: #fff;
+  border-radius: 6px;
+  text-align: center;
+  padding: 0.6rem;
+  font-weight: 600;
+}
+
+.button-footer {
+    display: flex;
+    justify-content: center;   /* center alignment */
+    gap: 4rem;                 /* space between buttons */
+}

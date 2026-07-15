@@ -1,0 +1,204 @@
+<!-- revaEventHallBooking.html -->
+<template>
+
+   <template if:true={showCancellation}>
+        <c-reva-event-hall-booking-cancellation
+        onnewbooking={handleNewBooking}>
+    </c-reva-event-hall-booking-cancellation>
+    </template>
+       
+     
+    <template if:true={showBooking}>
+       
+        
+        
+        
+  <lightning-card title="">
+    <lightning-spinner if:true={isLoading} alternative-text="Loading..."></lightning-spinner>
+
+    <div class="slds-card__header-title slds-m-bottom_small slds-m-left_small slds-m-right_small slds-box slds-box_x-small backgroundCol">
+      Event Hall Booking form
+    </div>
+
+    <lightning-layout multiple-rows>
+      <!-- Start Date -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-input type="date" name="startdate" class="startdate" label="Start Date" value={selectedStartDate} onchange={handleChange} required></lightning-input>
+      </lightning-layout-item>
+
+      <!-- Facility Type -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="facilityType" class="facilitytype" label="Facility Type" value={selectedFacilityType} options={facilityLabTypeOptions} onchange={handleChange} disabled={isDisabled} required></lightning-combobox>
+      </lightning-layout-item>
+
+      <!-- Start Time -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="startTime" class="startTime" label="Start Time" value={selectedStartTime} options={filteredStartTimeSlots} onchange={handleChange} required></lightning-combobox>
+      </lightning-layout-item>
+
+      <!-- Building name -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="buildingNameName" class="buildingNameName" value={selectedBuildingName} label="Building Name" options={facilityBuildingNameOptions} onchange={handleChange} required disabled={isDisabled}></lightning-combobox>
+      </lightning-layout-item>
+
+      <!-- End Date -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-input type="date" name="enddate" class="enddate" label="End Date" value={selectedEndDate} onchange={handleChange} required></lightning-input>
+      </lightning-layout-item>
+
+      <!-- Floor Number -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="floorNumber" class="floorNumber" label="Floor Number" value={selectedRoomName} options={facilityFloorOptions} onchange={handleChange} required disabled={isDisabled}></lightning-combobox>
+      </lightning-layout-item>
+
+      <!-- End Time -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="endTime" class="endTime" label="End Time" value={selectedEndTime} options={filteredEndTimeSlots} onchange={handleChange} required></lightning-combobox>
+      </lightning-layout-item>
+
+      <!-- Room No -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="roomNum" class="RoomNum" label="Room No" value={selectedRoomNum} options={facilityRoomNumOptions} onchange={handleChange} required disabled={isDisabled}></lightning-combobox>
+      </lightning-layout-item>
+
+      <!-- Capacity -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <template if:false={isCapacity}>
+          <lightning-input type="text" name="capacity" class="capacity" label="Capacity" onchange={handleChange} disabled required></lightning-input>
+        </template>
+        <template if:true={isCapacity}>
+          <lightning-input type="text" name="capacity" class="capacity" label="Capacity" value={capacity} placeholder={computedPlaceholder} onchange={handleChange} disabled required></lightning-input>
+        </template>
+      </lightning-layout-item>
+
+      <!-- Facility -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="facilityName" class="facilityName" label="Facility" value={selectedFacilityName} options={facilityNameOptions} onchange={handleChange} required disabled={isDisabled}></lightning-combobox>
+      </lightning-layout-item>
+
+      <!-- Reason -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-input type="text" name="Reason" class="Reason" label="Reason for booking" value={bookingReason} onchange={handleChange} required></lightning-input>
+      </lightning-layout-item>
+
+      <!-- Amenities -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-combobox name="additionalFacility" class="additionalFacility" label="Amenities available in the room required for the Event" value={additionalFacility} onchange={handleChange} options={additionalAmenitiesOptions} required disabled={isDisabled}></lightning-combobox>
+
+        <template if:true={selectedValues}>
+          <div class="selected-item-container">
+            <template for:each={selectedValues} for:item="value">
+              <div key={value}>
+                <lightning-badge label={value} icon-name="utility:close" onclick={handleRemove} class="badge" data-value={value} icon-position="end"></lightning-badge>
+              </div>
+            </template>
+          </div>
+        </template>
+      </lightning-layout-item>
+
+      <!-- Description -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-textarea name="description" class="description" label="Description" value={descriptions} onchange={handleChange}></lightning-textarea>
+      </lightning-layout-item>
+
+      <!-- Attendees -->
+      <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6" padding="horizontal-small">
+        <lightning-input type="text" name="Attendees" class="Attendees" label="Number of attendees" value={numberOfAttendees} onchange={handleChange} required 
+        message-when-range-underflow="The number of attendees must be at least 1."></lightning-input>
+      </lightning-layout-item>
+
+    </lightning-layout>
+  </lightning-card>
+
+  <div class="slds-m-around_medium"></div>
+
+  <lightning-card>
+    <div class="slds-card__header-title slds-m-bottom_small slds-m-left_small slds-m-right_small slds-box slds-box_x-small backgroundCol">
+      Additional Amenities
+    </div>
+
+    <div class="slds-p-around_x-small">
+      <lightning-layout>
+        <lightning-layout-item size="6"><div class="slds-text-title_bold">Additional Amenities</div></lightning-layout-item>
+        <lightning-layout-item size="3"><div class="slds-text-title_bold">Quantity</div></lightning-layout-item>
+        <lightning-layout-item size="1"><div class="slds-text-title_bold">Action</div></lightning-layout-item>
+      </lightning-layout>
+
+      <template for:each={rows} for:item="row" for:index="index">
+        <lightning-layout key={row.id} class="slds-m-top_small">
+          <lightning-layout-item size="6" padding="horizontal-small">
+            <lightning-combobox name="additionalFacility2" class="additionalFacility2" placeholder="Additional Amenities" value={row.additionalFacility2} onchange={handleChange} options={additionalAmenitiesOptions2} data-id={row.id}></lightning-combobox>
+          </lightning-layout-item>
+
+          <lightning-layout-item size="3" padding="horizontal-small">
+            <lightning-input type="number" name="quantity" class="quantity" placeholder="Quantity" value={row.quantity} onchange={handleChange} data-id={row.id}></lightning-input>
+          </lightning-layout-item>
+
+          <lightning-layout-item size="1" padding="horizontal-small" style="padding-top:19px">
+            <lightning-button-icon icon-name="utility:delete" alternative-text="Delete" variant="destructive" data-index={index} onclick={deleteRow}></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:add" alternative-text="Add Row" variant="brand" onclick={addRow}></lightning-button-icon>
+          </lightning-layout-item>
+        </lightning-layout>
+      </template>
+    </div>
+     
+       <!--<lightning-layout-item style="width:100%; display:flex; justify-content:center; align-items:center; margin:30px; float:right;">
+      
+      <button class="cancelButton" onclick={handleCancelClick}>Cancel</button>
+      <button class="saveButton" onclick={handleSave} disabled={isLoading}>Save</button>
+      
+    </lightning-layout-item>-->
+    <lightning-layout-item style="width:100%; display:flex; justify-content:center; align-items:center;gap:10px; margin:30px 0;">
+      <lightning-button label="Back" variant="neutral" onclick={handleBack}></lightning-button>
+      <lightning-button label="Cancel" variant="outline-brand" onclick={handleCancelClick}> </lightning-button>
+      <lightning-button label="Save" variant="brand" onclick={handleSave} disabled={isLoading}></lightning-button>
+    </lightning-layout-item>
+  </lightning-card>
+
+  <!-- Conflict Modal -->
+<template if:true={showConflictModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_medium">Event Hall Already Booked </h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+
+                <template if:true={hasConflicts}>
+                    <template for:each={existingBookings} for:item="b">
+                        <div key={b.recordId} class="slds-box slds-m-bottom_small conflict-box">
+                          <div class="conflict-details">
+                            <p><strong>Facility:</strong> {b.facilityName}</p>
+                            <p><strong>Date:</strong> {b.startDate} - {b.endDate}</p>
+                            <p><strong>Start Time:</strong> {b.startTime}</p>
+                            <p><strong>End Time:</strong> {b.endTime}</p>
+                            <p><strong>Booked By:</strong> {b.requesterName}</p>
+                            <p><strong>Mobile Number:</strong> {b.requesterPhone}</p>
+                           </div>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:false={hasConflicts}>
+                    <div>No conflicts found.</div>
+                </template>
+
+            </div>
+
+            <footer class="slds-modal__footer">
+                <lightning-button variant="neutral" label="Select Other Facility"
+                    onclick={handleSelectOther}></lightning-button>
+
+                <lightning-button variant="brand" label="Close"
+                    onclick={closeConflictModal}></lightning-button>
+            </footer>
+
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+
+</template>

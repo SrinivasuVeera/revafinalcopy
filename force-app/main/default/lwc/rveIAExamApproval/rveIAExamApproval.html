@@ -1,0 +1,111 @@
+<!-- contactList.html -->
+<template>
+
+    <div class="slds-m-bottom_medium">
+        <lightning-button class="custom-button" label="Download Ineligible Data" variant="brand"
+            onclick={handleDownloadClick}></lightning-button>
+        <c-rve-eligible-student-data-download lwc:ref="downloadModal"></c-rve-eligible-student-data-download>
+    </div>
+
+
+
+    <template if:false={exist_examinationNotification}>
+
+
+
+        <lightning-card title="Ineligible Students for IA/SEE">
+            <template if:true={ifContacts}>
+                <div class="slds-m-around_medium">
+                    <lightning-input type="search" label="Search from Contact"
+                        onchange={handleSearch}></lightning-input>
+                </div>
+            </template>
+            <template if:true={ifContacts}>
+                <lightning-card title="Contact List">
+                    <div class="slds-m-around_medium">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <lightning-input type="checkbox" onchange={selectAllCheckboxChange}
+                                            checked={selectAllChecked}></lightning-input>
+                                    </th>
+                                    <th>Name</th>
+                                    <th>SRN Number</th>
+                                    <th>Program Batch</th>
+                                    <th>Total Average Attendance</th>
+                                    <th>Total Pending Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={contacts} for:item="contact">
+                                    <tr key={contact.Id}>
+                                        <td>
+                                            <lightning-input type="checkbox" onchange={handleCheckboxChange}
+                                                data-id={contact.Id} checked={contact.checked}></lightning-input>
+                                        </td>
+                                        <td>{contact.Name}</td>
+                                        <td>{contact.SRN_Number__c}</td>
+                                        <td>{contact.Program_Batch_Name}</td>
+                                        <td>{contact.TotalAverageAttendance}</td>
+                                        <td>{contact.TotalPendingAmount}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <div class="slds-m-top_medium">
+                            <lightning-button label="Next" onclick={handleNext} variant="brand"
+                                disabled={isNextButtonDisabled}></lightning-button>
+                        </div>
+                    </div>
+                </lightning-card>
+            </template>
+            <template if:true={showSelectedContacts}>
+                <lightning-card title="Selected Contacts">
+                    <div class="slds-m-around_medium">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th>SRN Number</th>
+                                    <th>Name</th>
+                                    <th>Program Batch</th>
+                                    <th>Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={selectedContacts} for:item="contact">
+                                    <tr key={contact.Id}>
+                                        <td>{contact.SRN_Number__c}</td>
+                                        <td>{contact.Name}</td>
+                                        <td>{contact.Program_Batch_Name}</td>
+                                        <td>
+                                            <lightning-input type="text" value={contact.Comment}
+                                                onchange={handleCommentChange} data-id={contact.Id}></lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+
+                        <div class="slds-m-top_medium">
+                            <lightning-button class="slds-m-right_small" label="Previous" variant="brand"
+                                onclick={handlePrevious}></lightning-button>
+                            <lightning-button label="Save" onclick={handleSave} variant="brand"
+                                disabled={afterSave}></lightning-button>
+                        </div>
+
+                    </div>
+                </lightning-card>
+            </template>
+        </lightning-card>
+    </template>
+    <template if:true={exist_examinationNotification}>
+        <lightning-card title="IA/SEE Exam Approval">
+            <b>You have no Ineligible Students for IA/SEE OR list will load in 3 days prior to IA Exam date till exam
+                End
+                date.</b>
+        </lightning-card>
+    </template>
+    <br></br>
+
+</template>

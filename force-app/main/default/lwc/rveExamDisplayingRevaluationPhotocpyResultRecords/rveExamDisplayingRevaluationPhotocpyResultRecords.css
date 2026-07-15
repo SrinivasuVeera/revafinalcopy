@@ -1,0 +1,5 @@
+.wrap-text {
+    white-space: normal;
+    word-break: break-word;
+    max-width: 200px; /* Adjust as needed */
+}

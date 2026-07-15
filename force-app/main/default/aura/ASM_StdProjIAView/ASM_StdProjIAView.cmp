@@ -1,0 +1,96 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute type="List" name="iaMarks" default="[]"/>
+    
+    <div class="slds-box slds-scrollable">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" style="width:100%">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-cell-wrap" scope="col" >
+                        <div class="slds-truncate" title="Course Name">Course Name</div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col" style="size:5px;">
+                        <div class="slds-truncate" title="Selection of Topic">
+                            Selection of Topic <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Selection_of_Topic_Max_marks__c}
+                        </div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="Analysis &amp; Synthesis" style="word-wrap:break-word;">
+                            Analysis &amp; Synthesis <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Analysis_and_Synthesis_Max_Marks__c}
+                        </div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="Literature Survey" style="word-wrap:break-word;">
+                            Literature Survey <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Literature_Survey_Max_Marks__c}
+                        </div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="Ethical Attitude" style="word-wrap:break-word;">
+                            Ethical Attitude <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Ethical_Attitude_Max_Marks__c}
+                        </div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="Independent Learning" style="word-wrap:break-word;">
+                            Independent Learning <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Independent_Learning_Max_Marks__c}
+                        </div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="Oral Presentation" style="word-wrap:break-word;">
+                            Oral Presentation <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Oral_Presentation_Max_Marks__c}
+                        </div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="Report Writing" style="word-wrap:break-word;">
+                            Report Writing <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Report_Writing_Max_Marks__c}
+                        </div>
+                    </th>
+                    <th class="slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="Continuous Learning" style="word-wrap:break-word;">
+                            Continuous Learning <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Continuous_Learning_Max_Marks__c}
+                        </div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Total">Total <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Maximum_Internal_Marks__c}</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.iaMarks}" var="iam">
+                    <tr class="slds-hint-parent">
+                        <td data-label="Course">
+                            <div class="slds-truncate" title="{!iam.Course_Offering__r.hed__Course__r.Name}">{!iam.Course_Offering__r.hed__Course__r.Name}</div>
+                        </td>
+                        <td data-label="Selection of Topic">
+                            <div class="slds-truncate" title="{!iam.Selection_of_Topic_Secured_Marks__c}">{!iam.Selection_of_Topic_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Analysis &amp; Synthesis">
+                            <div class="slds-truncate" title="{!iam.Analysis_and_Synthesis_Secured_Marks__c}">{!iam.Analysis_and_Synthesis_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Literature Survey">
+                            <div class="slds-truncate" title="{!iam.Literature_Survey_Secured_Marks__c}">{!iam.Literature_Survey_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Ethical Attitude">
+                            <div class="slds-truncate" title="{!iam.Ethical_Attitude_Secured_Marks__c}">{!iam.Ethical_Attitude_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Independent Learning">
+                            <div class="slds-truncate" title="{!iam.Independent_Learning_Secured_Marks__c}">{!iam.Independent_Learning_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Oral Presentation">
+                            <div class="slds-truncate" title="{!iam.Oral_Presentation_Secured_Marks__c}">{!iam.Oral_Presentation_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Report Writing">
+                            <div class="slds-truncate" title="{!iam.Report_Writing_Secured_Marks__c}">{!iam.Report_Writing_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Continuous Learning">
+                            <div class="slds-truncate" title="{!iam.Continuous_Learning_Secured_Marks__c}">{!iam.Continuous_Learning_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Total">
+                            <div class="slds-truncate">
+                                {!iam.Selection_of_Topic_Secured_Marks__c+iam.Analysis_and_Synthesis_Secured_Marks__c+iam.Literature_Survey_Secured_Marks__c+iam.Ethical_Attitude_Secured_Marks__c+iam.Independent_Learning_Secured_Marks__c+iam.Oral_Presentation_Secured_Marks__c+iam.Report_Writing_Secured_Marks__c+iam.Continuous_Learning_Secured_Marks__c}
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

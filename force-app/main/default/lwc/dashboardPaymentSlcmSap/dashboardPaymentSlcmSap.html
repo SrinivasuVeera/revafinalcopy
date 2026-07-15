@@ -1,0 +1,273 @@
+<template>
+    <div>
+        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+            <div class="slds-col slds-size_1-of-1">
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                              <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                <span>Online Collection for Financial Year</span>
+                              <!-- </a> -->
+                            </h2>
+                          </div>
+                        </header>
+                      </div>
+                      <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - ₹{currentFySAP}<br>SLCM - ₹{formattedCurrentFySLCM}</div>
+                      </div>               
+                </article>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters_small slds-wrap slds-var-p-around_xx-small">
+            <div class="slds-col slds-size_1-of-2">          
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                              <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                <span>Online Collection for Today</span>
+                              <!-- </a> -->
+                            </h2>
+                          </div>
+                        </header>
+                      </div>
+                      <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - {todaySAP}<br>SLCM - {todaySLCM}</div>
+                      </div>               
+                </article>
+    
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                              <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                <span>Online Collection for Yesterday</span>
+                              <!-- </a> -->
+                            </h2>
+                          </div>
+                        </header>
+                      </div>
+                      <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - {yesterdaySAP}<br>SLCM - {yesterdaySLCM}</div>
+                      </div>               
+                </article>
+            </div>
+        </div>   
+        <div class="slds-grid slds-gutters_small slds-wrap slds-var-p-around_xx-small" >
+            <div class="slds-col slds-size_1-of-3">
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                              <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                <span>Online Collection for Last Week</span>
+                              <!-- </a> -->
+                            </h2>
+                          </div>
+                        </header>
+                      </div>
+                      <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - {lastWeekSAP}<br>SLCM - {lastWeekSLCM}</div>
+                      </div>               
+                </article>
+            </div>
+            <div class="slds-col slds-size_1-of-3">
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                              <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                <span>Online Collection for Current Week</span>
+                              <!-- </a> -->
+                            </h2>
+                          </div>
+                        </header>
+                      </div>
+                      <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - {currentWeekSAP}<br>SLCM - {currentWeekSLCM}</div> 
+                      </div>               
+                </article>        
+            </div>
+            <div class="slds-col slds-size_1-of-3">
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                              <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                <span>Online Collection for Last Seven Days</span>
+                              <!-- </a> -->
+                            </h2>
+                          </div>
+                        </header>
+                      </div>
+                      <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - {lastSevenDaysSAP}<br>SLCM - {lastSevenDaysSLCM}</div>  
+                      </div>               
+                </article> 
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters_small slds-wrap slds-var-p-around_xx-small">
+            <div class="slds-col slds-size_1-of-2">            
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                          <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-media__body">
+                                <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                                  <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                    <span>Online Collection for Last Month</span>
+                                  <!-- </a> -->
+                                </h2>
+                              </div>
+                            </header>
+                    </div>
+                    <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - {lastMonthSAP}<br>SLCM - {lastMonthSLCM}</div>   
+                    </div>               
+                </article>             
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <article class="slds-card" style="background:#002147;">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title" style="color:white;font-size: 20px;">
+                              <!-- <a href="#" class="slds-card__header-link slds-truncate" title="Accounts"> -->
+                                <span>Online Collection for Current Month</span>
+                              <!-- </a> -->
+                            </h2>
+                          </div>
+                        </header>
+                      </div>
+                      <div class="slds-card__body slds-card__body_inner slds-align_absolute-center slds-var-p-around_large" style="color:white;font-size: 40px;">
+                        <div> SAP - {currentMonthSAP}<br>SLCM - {currentMonthSLCM}</div>
+                      </div>               
+                </article>             
+            </div>        
+        </div> 
+    
+        <div class="slds-var-p-around_x-small">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-var-p-left_medium slds-var-p-right_medium" aria-label="Example table of Opportunities with vertical borders">
+            <thead>
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Month">Month</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="SAP Amount Collection">SAP Collection</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="SLCM Amount Collection">SLCM Collection</div>
+                </th>       
+            </tr>
+            </thead>
+            <tbody>
+                <!-- <template for:each={monthsSAP} for:item="record">
+                    <tr key={record.Period}>            
+                        <td data-label="Period">
+                            <div class="slds-truncate" title="Month">{record.Period}</div>
+                        </td>
+                        <td data-label="Collection SAP">
+                            <div class="slds-truncate" title="Amount_SAP">{record.Amount}</div>
+                        </td>
+                        <td data-label="Collection SLCM">
+                            <div class="slds-truncate" title="Amount_SLCM">0</div>
+                        </td>          
+                    </tr>
+                </template> -->
+                <template for:each={arrayOfObjects} for:item="record">
+                    <tr key={record.Period}>            
+                        <td data-label="Period">
+                            <div class="slds-truncate" title="Month">{record.month}</div>
+                        </td>
+                        <td data-label="Collection SAP">
+                            <div class="slds-truncate" title="Amount_SAP">₹{record.sap}</div>
+                        </td>
+                        <td data-label="Collection SLCM">
+                            <div class="slds-truncate" title="Amount_SLCM">₹{record.slcm}</div>
+                        </td>          
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        </div>
+    
+        <!-- <lightning-card title="SAP Dashboard Data" icon-name="standard:dashboard">
+            <template if:true={error}>
+                <div class="slds-text-color_error">
+                    Error: {error}
+                </div>
+            </template>
+            <template if:true={data}>
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Period">Period</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Amount">Amount</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="From Date">From Date</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="To Date">To Date</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={resultSAP} for:item="record">
+                            <tr key={record.Period}>
+                                <td>
+                                    <div class="slds-truncate" title={record.Period}>{record.Period}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title={record.Amount}>{record.Amount}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title={record.FromDate}>{record.FromDate}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title={record.ToDate}>{record.ToDate}</div>
+                                </td>
+                            </tr>
+                        </template>                 
+                    </tbody>
+                </table>               
+            </template>
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+        </lightning-card> -->
+    </div>        
+        
+            <!-- <lightning-card title="Online Fee Payments Monthly SLCM Statics" icon-name="custom:custom14">
+                <div class="slds-m-around_medium">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="slds-text-title_bold">
+                                <th scope="col">Month</th>
+                                <th scope="col">Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={monthStats} for:item="stat">
+                                <tr key={stat.month}>
+                                    <td>{stat.month}</td>
+                                    <td>${stat.amount}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </lightning-card>       -->
+</template>

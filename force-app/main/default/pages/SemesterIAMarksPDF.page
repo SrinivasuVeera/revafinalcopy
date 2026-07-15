@@ -1,0 +1,109 @@
+<apex:page controller="rveExaminationVerticalHeadFreezeClass" renderAs="pdf" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false">
+    <html>
+        <head>
+            <style>
+                @page {
+                    size: A4 landscape;
+                    margin: 0.2cm;
+                }
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .header h1 {
+                    font-size: 16px;
+                    margin: 0;
+                }
+                .header p {
+                    margin: 5px 0;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                    table-layout: fixed; /* Ensure predictable column widths */
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 3px;
+                    text-align: left;
+                    font-size: 11px;
+                }
+                th {
+                    background-color: #f2f2f2;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                th.sl-no {
+                    width: 55px; /* Based on content */
+                }
+                th.srn-number {
+                    width: 75px; /* Based on content */
+                }
+                th.student-name {
+                    width: 90px; /* Based on content */
+                }
+                th.course-header {
+                    width: 20px;
+                    height: 80px;
+                    font-size: 8px;
+                    vertical-align: bottom;
+                    line-height: 10px;
+                }
+                .course-header-char {
+                    display: block;
+                    text-align: center;
+                }
+                .text-center {
+                    text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <apex:outputPanel rendered="{!students.size > 0}">
+                <div class="header">
+                    <h1>IA Marks Report</h1>
+                    <p>Semester: {!semesterName}</p>
+                    <p>IA Type: IA1 and IA2</p>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sl-no">Sl. No.</th>
+                            <th class="srn-number">SRN Number</th>
+                            <th class="student-name">Name</th>
+                            <apex:repeat value="{!courseCodes}" var="courseCode">
+                                <th class="course-header">
+                                    <apex:repeat value="{!courseCodeToCharacters[courseCode]}" var="char">
+                                        <span class="course-header-char">
+                                            <apex:outputText value="{!char}"/>
+                                        </span>
+                                    </apex:repeat>
+                                </th>
+                            </apex:repeat>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!students}" var="student">
+                            <tr>
+                                <td><apex:outputText value="{!student.index}"/></td>
+                                <td><apex:outputText value="{!student.srnNumber}"/></td>
+                                <td><apex:outputText value="{!student.studentName}"/></td>
+                                <apex:repeat value="{!courseCodes}" var="courseCode">
+                                    <td class="text-center">
+                                        <apex:outputText value="{!student.courseCodeToTotalMarks[courseCode]}"/>
+                                    </td>
+                                </apex:repeat>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputPanel>
+        </body>
+    </html>
+</apex:page>

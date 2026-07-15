@@ -1,0 +1,108 @@
+<template>
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                        icon-class="slds-button_icon-inverse" onclick={handleDialogClose}></lightning-button-icon>
+                    <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                        <div class="slds-p-around_medium lgc-bg">
+                            Select Scholarship Details
+                            <lightning-helptext content="Scholarship is only applicable for University Fee and Tuition Fee"></lightning-helptext>
+                        </div>
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                    <div class="slds-var-m-bottom_small">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col slds-size_3-of-12 slds-text-title_bold">
+                                <lightning-input type="text" label="School" value={selectedSchool}
+                                    readonly></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12 slds-text-title_bold">
+                                <lightning-input type="text" label="Program" value={program}
+                                readonly></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-12 slds-text-title_bold">
+                                <lightning-input type="text" label="Program Type" value={programType}
+                                readonly></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_2-of-12 slds-text-title_bold">
+                                <lightning-input type="text" label="Type" value={type}
+                                readonly></lightning-input>
+                            </div>
+                            <template if:true={programTypePg}>
+                                <div class="slds-col slds-size_1-of-12 slds-text-title_bold">
+                                    <lightning-input type="text" label="12th Marks" value={twelfthMarks}
+                                    readonly></lightning-input>
+                                </div>
+                            </template>
+                            <template if:false={programTypePg}>
+                                <div class="slds-col slds-size_1-of-12 slds-text-title_bold">
+                                    <lightning-input type="text" label="UG Marks" value={ugMarks}
+                                    readonly></lightning-input>
+                                </div>
+                            </template>
+                        </div>
+                        <lightning-layout horizontal-align="center" multiple-rows>
+                            <lightning-layout-item padding="around-small" size="5">
+                                <lightning-combobox name="Category" label="Select Category" variant="label-hidden"
+                                    options={category} value={selectedCategory} placeholder="Select a Category" onchange={onCategoryChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="5">
+                                <lightning-combobox name="Sub Category" label="Select Sub Category"
+                                    variant="label-hidden" options={Sub_Category} value={selectedSubCategory} placeholder="Select Sub Category"
+                                    onchange={onsubCategoryChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                         <template if:true={isOthersCategory}>
+                                <lightning-layout horizontal-align="center" multiple-rows>
+                                    <lightning-layout-item padding="around-small" size="5">
+                                        <lightning-combobox name="Other Category" label="Select Category" variant="label-hidden"
+                                            options={category} value={selectedCategoryother} placeholder="Select a Category" onchange={onCategoryChangeOther} >
+                                        </lightning-combobox>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item padding="around-small" size="5">
+                                        <lightning-combobox name="Other Sub Category" label="Select Sub Category"
+                                            variant="label-hidden" options={Sub_CategoryOther} value={selectedSubCategoryother} placeholder="Select Sub Category"
+                                            onchange={onsubCategoryChangeOther} >
+                                        </lightning-combobox>
+                                    </lightning-layout-item>
+                                    
+                                </lightning-layout>
+                            </template>
+                            <div if:true={errorMessage} style="font-size: medium; text-align: center;" class="slds-text-color_error">{errorMessage}</div>
+                            <div>
+                                  <lightning-datatable data={records} columns={columns} key-field="Id"
+                                      max-row-selection=1 
+                                      oncellchange={handleCellChange}
+                                      onrowselection={handleRowSelection}
+                                      selected-rows={selectedRows}
+                                      suppress-bottom-bar>
+                                  </lightning-datatable>
+                              </div>
+                       
+                    </div>
+                   
+                    <lightning-modal-footer>
+                        <div >
+                            <lightning-button variant="brand" label="Save" title="Save" 
+                                onclick={handleClickSave}
+                                disabled={saveDisabled}
+                                class="slds-var-m-left_x-small">
+                            </lightning-button>
+                            <lightning-button variant="brand" label="Close" title="Close" onclick={handleClickClose}
+                                class="slds-var-m-left_x-small">
+                            </lightning-button>
+                        </div>
+                    </lightning-modal-footer>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

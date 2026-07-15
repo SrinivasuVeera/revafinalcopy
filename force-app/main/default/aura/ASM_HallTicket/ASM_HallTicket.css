@@ -1,0 +1,183 @@
+.THIS .slds-tabs_scoped__item{
+    position: relative !important;
+    margin-bottom: calc(-1 * var(--lwc-borderWidthThin,1px))!important;
+    background-color: #fef1e8 !important;
+}
+.THIS .attendance-heading {
+    display: flex;
+    background-color: var(--reva-component-heading-background-color);
+    color: black;
+    border: 0px;
+    font-size: 15px;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.THIS .Heading{
+    background-color: grey;
+    border-radius: 10px;
+    height: 40px;
+    color: white;
+    margin: 2px;     
+        }
+.THIS .slds-tabs_scoped__nav {
+    display: flex;
+    align-items: flex-start;
+    /* background-color:#E9E9E9 !important; */
+    border:0px solid white !important;
+    }
+.THIS .slds-tabs_scoped__content {
+    background-color: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundAlt,rgb(255, 255, 255)));
+    border:0px solid white !important;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--lwc-borderRadiusMedium,0.25rem);
+    border-bottom-left-radius: var(--lwc-borderRadiusMedium,0.25rem);
+    padding: 7px 1px 5px 0px!important;
+    background-color: transparent;
+}
+
+.THIS .slds-tabs_scoped__link {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    cursor: pointer;
+    height: var(--lwc-lineHeightTab,2.5rem);
+    line-height: var(--lwc-lineHeightTab,2.5rem);
+    padding: 0 var(--lwc-spacingMedium,1rem);
+    color: var(--slds-g-color-neutral-base-30, var(--lwc-colorTextActionLabel,rgba(0, 0, 0, 0.86)));
+    border-top: 0px;
+    border-bottom: 0px;
+    border-image: initial;
+    border-left: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-right: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-radius: 0px;
+    color: black;
+    font-size:15px;
+    font-weight: 600;                             
+}
+.THIS .slds-tabs--scoped__link {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    cursor: pointer;
+    height: var(--lwc-lineHeightTab,2.5rem);
+    line-height: var(--lwc-lineHeightTab,2.5rem);
+    padding: 0 var(--lwc-spacingMedium,1rem);
+    color: var(--slds-g-color-neutral-base-30, var(--lwc-colorTextActionLabel,rgba(0, 0, 0, 0.86)));
+    border-top: 0px;
+    border-bottom: 0px;
+    border-image: initial;
+    border-left: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-right: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-radius: 0px;
+    color: black;
+    font-size:15px;
+    font-weight: 600;                            
+}
+
+.THIS .slds-is-active .slds-tabs_scoped__link{
+    background-color:#f57f26 !important;
+    color:white !important;
+    font-weight:600 !important;
+    text-decoration: none !important;
+}
+
+.THIS .slds-tabs_scoped__item{
+    position: relative !important;
+    margin-bottom: calc(-1 * var(--lwc-borderWidthThin,1px))!important;
+    background-color: #fef1e8 !important;
+}
+.THIS.slds-table--bordered,
+.THIS.slds-table_bordered {
+    border-collapse: separate !important;
+    border-top: white !important;
+    border-bottom:white !important;
+    border: 2px solid white !important;
+    }
+    
+    .THIS .slds-table {
+        font-size: inherit !important;
+        background-color: #c7c7c7 !important;
+    }
+    
+    .THIS.slds-table--bordered tbody td, 
+    .THIS.slds-table--bordered tbody th {
+        /* border-top: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgba(5, 5, 5, 0.83))); */
+        border-top: 4px solid white !important;
+    }
+    
+    .THIS .backColor{
+        background-color: #f57f26;
+        border:1px solid white;
+     }
+
+     /* New CSS modified by keval*/
+
+    .THIS.survey-name,
+    .THIS.course-table,
+    .THIS.fee-table {
+        table-layout: fixed;
+    }
+
+    .THIS.survey-name thead th,
+    .THIS.course-table thead th,
+    .THIS.fee-table thead th{
+        text-align: center !important;
+        background-color: var(--reva-table-heading-background-color);
+        color: white;
+        padding: 8px !important;
+        font-size: 13px;
+        white-space: normal;
+        word-wrap: break-word;
+
+    }
+
+    .THIS.survey-name tbody tr:focus,
+    .THIS.course-table tbody tr:focus,
+    .THIS.fee-table tbody tr:focus {
+        background: var(--reva-table-row-background-color) !important;
+
+    }
+
+    .THIS.survey-name tbody tr:hover,
+    .THIS.course-table tbody tr:hover,
+    .THIS.fee-table tbody tr:hover {
+        background: var(--reva-table-row-background-color) !important;
+
+    }
+
+    .THIS.survey-name tbody td,
+    .THIS.course-table tbody td,
+    .THIS.fee-table tbody td {
+        text-align: center !important;
+        color: black;
+        background: var(--reva-table-row-background-color) !important;
+        padding: 8px !important;
+        font-size: 13px;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+@media only screen and (max-width:767px) {
+
+    .THIS.survey-name thead th,
+    .THIS.course-table thead th,
+    .THIS.fee-table thead th{
+        padding: 5px !important;
+        font-size: 11px;
+    }
+
+    .THIS.survey-name tbody td,
+    .THIS.course-table tbody td,
+    .THIS.fee-table tbody td {
+        padding: 5px !important;
+        font-size: 12px;
+    }
+
+}

@@ -1,0 +1,105 @@
+.image-container {
+    text-align: center;
+}
+
+.thumbnail {
+    cursor: pointer;
+    max-width: 100px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.thumbnail:hover {
+    border-color: #666;
+}
+
+.image-preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 80vh; /* Limits the height of the image preview to 80% of the viewport height */
+    overflow: auto; /* Adds scrollbars if the image is too large */
+}
+
+.full-image {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+}
+
+.slds-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.center{
+    align-items: center;
+}
+
+.my-profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--reva-brand-color);
+    border-radius: 0.625rem;
+    padding: 0.3125rem;
+}
+
+.my-profile-content {
+    display: flex;
+    width: 100%;
+    padding: 0.625rem;
+    margin-bottom: 0.1875rem;
+    background: var(--reva-table-row-background-color);
+}
+
+.label {
+    font-weight: bold;
+    margin-right: 0.75rem;
+    min-width: 10rem;
+}
+
+.value {
+    flex-grow: 1;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.my-profile-header {
+    display: flex;
+    justify-content: space-between;
+    background: var(--reva-table-heading-background-color);
+    border-top-left-radius: 0.625rem;
+    border-top-right-radius: 0.625rem;
+    padding: 0.9375rem 0.625rem;
+    margin-bottom: 0.1875rem;
+    color: white;
+}
+
+.my-profile-header>span {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.my-profile-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 15px;
+}
+
+@media only screen and (max-width:47.9375rem) {
+    .my-profile-content {
+        flex-direction: column;
+    }
+
+    .my-profile-header>span {
+        font-size: 14px;
+    }
+
+    .my-profile-body {
+        font-size: 13px;
+    }
+}

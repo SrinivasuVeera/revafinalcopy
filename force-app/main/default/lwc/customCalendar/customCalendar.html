@@ -1,0 +1,54 @@
+<!-- timeSlotComponent.html -->
+<template>
+    <template if:true={showParentComponent}>
+        <div class="slds-m-top_x-small">
+            <lightning-card title="Time Slots">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12"
+                    style="padding-right: 10px;">
+                    <div class="slds-m-around_medium">
+                        <lightning-input type="date" label="Select Date" value={selectedDate}
+                            onchange={handleDateChange} required min={minDate}></lightning-input>
+
+                        <div class="slds-m-top_x-small">
+                            <lightning-button label="Submit" variant="neutral" onclick={handleButtonClick}
+                                disabled={isSubmitButtonDisabled}></lightning-button>
+                            <!--<lightning-button label="Submit2" variant="neutral" onclick={redirectButton} ></lightning-button>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12"
+                    style="padding-right: 10px;">
+                    <template if:true={hideSlot}>
+                    <template if:true={timeSlots}>
+                        <!-- Row 1 -->
+
+
+                        <lightning-layout multiple-rows>
+                            <template for:each={timeSlots} for:item="timeSlot">
+                                <lightning-layout-item key={timeSlot} size="12" small-device-size="6"
+                                    medium-device-size="6" large-device-size="6" padding="horizontal-small">
+                                    <div>
+                                        <input class='custom-input-container' type="text" onclick={handleTileClick}
+                                            data-timeslot={timeSlot.hourKey} value={timeSlot.hourKey}
+                                            disabled={timeSlot.disabled} readonly></input>
+                                    </div>
+                                </lightning-layout-item>
+                            </template>
+                            
+                        </lightning-layout>
+
+                    </template>
+                    </template>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+    <div>
+        <template if:true={showRewaBookEvent}>
+            <c-rewa-book-event select-date={selectedDate} select-time-slot={selectedTimeSlot} select-year={year}
+                select-month={month} select-day={day} select-starthours={starthours} select-startminutes={startminutes}
+                select-endhours={endhours} select-endminutes={endminutes} select-contact={selectContact}
+                selected-appointment-type={selectedAppointmentType}></c-rewa-book-event>
+        </template>
+    </div>
+</template>

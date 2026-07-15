@@ -1,0 +1,357 @@
+@font-face {
+    font-family: 'NunitoSans';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/NunitoSans/NunitoSans_10pt-Regular.ttf') format('TrueType');
+}
+    *{
+    font-family: 'NunitoSans', 'RobotoSlab', 'Roboto', 'Dosis', Helvetica !important;
+}
+
+.field-value label{
+    color: var(--reva-brand-color) !important;
+    font-weight: 600 !important;
+}
+tr{
+    border-top: 4px solid white;
+    font-size: 0.8rem;
+}
+
+
+section{
+    overflow: auto;
+}
+table {
+    border-collapse: collapse;
+    overflow: auto;
+    width: 100%;
+    border-spacing: 0;
+    background-color: white;
+}
+
+.pointer-hover{
+    cursor: pointer;
+}
+table, th, td {
+    /* border-collapse: collapse; */
+    padding: 1rem;
+    text-align: left;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: var(--reva-table-heading-background-color);
+   /*  cursor: pointer; */
+    text-transform:uppercase;
+    color: white;
+}
+
+tbody tr{
+    background-color: var(--reva-table-row-background-color) !important;
+}
+
+.custom-box{
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    margin-top: 15px;
+}
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header:first-child{
+    margin-left: 1rem;
+}
+
+.header:last-child{
+    margin-right: 1rem;
+}
+.modal-container{
+        padding: 1.5rem;
+    background-color: #f7f7f7;
+    max-height: 70vh;
+    overflow: auto;
+}
+
+.case-number{
+    color: var(--reva-brand-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+.button-container{
+    margin-top: 18px;
+    text-align: center;
+}
+@media (max-width: 650px) {
+
+    td{
+        display: grid;
+        grid-template-columns: 16ch auto;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;
+    }   
+
+    td:first-child{
+        padding-top: 2rem;
+    }
+
+    td:last-child{
+        padding-bottom: 2rem;
+    }
+    th{
+        display: none;
+    }
+    td::before{
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+    }
+
+    .header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+  
+}
+
+@media (max-width:500px){
+    .modal-container{
+    padding: 0.5rem;
+    background-color: #f7f7f7;
+    max-height: 70vh;
+    overflow: auto;
+}
+    table {
+    font-size: 12px;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.custom-box{
+    font-weight: bold !important;
+    font-size: 12.8px !important;
+}
+
+}
+
+
+/*.custom-box {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    margin-top: 15px;
+}*/
+
+
+.supportcasefield {
+    color: var(--reva-brand-color) !important;
+    font-weight: 600 !important;
+    margin-top: 5px !important;
+    margin-bottom: -5px !important;
+}
+
+
+.custom-output-field {
+    display: block;
+    font-size: 1rem;
+    color: #333;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    background-color: #f3f3f3;
+}
+
+
+/* myComponent.css */
+.custom-dual-listbox .slds-dueling-list__column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 200px; /* Minimum width to ensure readability */
+    max-width: 100%; /* Allow to expand based on available space */
+    margin: 0 5px; /* Add some spacing between columns */
+}
+
+.custom-dual-listbox .slds-dueling-list__options {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%; /* Allow options to use full width */
+    min-width: 250px; /* Adjust as necessary */
+}
+
+/***************************************************************************/
+/* myComponent.css */
+/*.custom-box {
+    overflow-x: auto; 
+    max-width: 100%; 
+}
+
+.dual-listbox-container {
+    display: flex; 
+    flex-direction: row;
+    max-width: 100%; 
+}
+
+.custom-dual-listbox {
+    min-width: 400px; 
+    max-width: 100%; 
+}
+
+.slds-dueling-list__options {
+    width: 100%; 
+}
+
+.slds-dueling-list__column {
+    flex: 1; 
+    min-width: 200px; 
+}
+
+.slds-dueling-list__option,
+.slds-dueling-list__item {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}*/
+
+
+/*
+.custom-box {
+    width: 100%; 
+    max-width: 100%; 
+}
+
+
+.dual-listbox-container {
+    display: flex; 
+    flex-direction: row;
+    width: 100%; 
+    max-width: 100%; 
+}
+
+
+.custom-dual-listbox {
+    width: 100%; 
+    max-width: 100%; 
+    box-sizing: border-box;
+    min-width: 400px; 
+}
+
+
+.slds-dueling-list__column {
+    flex: 1; 
+    width: 100%; 
+    min-width: 300px; 
+    max-width: 100%; 
+}
+
+
+.slds-dueling-list__option {
+    white-space: normal; 
+    overflow: visible; 
+    text-overflow: clip; 
+    padding-right: 1rem; 
+}
+
+
+.slds-dueling-list__selected {
+    display: flex; 
+    flex-direction: column; 
+    overflow-y: auto; 
+    max-height: 300px; 
+}
+
+
+@media (max-width: 767px) {
+    .custom-dual-listbox {
+        width: 100%; 
+    }
+    
+    .slds-dueling-list__column {
+        min-width: 200px; 
+        width: 100%; 
+    }
+    
+    .slds-dueling-list__option {
+        padding-right: 0.5rem; 
+    }
+}*/
+/********************************************************/
+/* Container for ensuring width management */
+.custom-box {
+    width: 100%; 
+    max-width: 100%; 
+}
+
+/* Flex container to manage layout */
+.dual-listbox-container {
+    display: flex; 
+    flex-direction: row;
+    width: 100%; 
+    max-width: 100%; 
+}
+
+/* Custom styles for the dual listbox */
+.custom-dual-listbox {
+    width: 100%; 
+    max-width: 100%; 
+    min-width: 420px; /* Adjusted minimum width */
+}
+
+/* Ensure listbox columns are flexible and handle long text */
+.slds-dueling-list__column {
+    flex: 1; 
+    width: 100%; 
+    min-width: 320px; 
+    max-width: 100%; 
+}
+
+/* Handle long text in options */
+.slds-dueling-list__option {
+    white-space: nowrap; /* Default behavior for desktop */
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    padding-right: 1rem; 
+}
+
+/* Additional styling for improved view of selected items */
+.slds-dueling-list__selected {
+    display: flex; 
+    flex-direction: column; 
+    overflow-y: auto; 
+    max-height: 300px; 
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767px) {
+    .custom-dual-listbox {
+        width: 100%; 
+        min-width: 100%; 
+    }
+    
+    .slds-dueling-list__column {
+        min-width: 100%; /* Full width for mobile */
+        width: 100%; 
+    }
+    
+    .slds-dueling-list__option {
+        white-space: normal; /* Allow text to wrap */
+        overflow: visible; 
+        text-overflow: clip; 
+        word-wrap: break-word; /* Break long words */
+        padding-right: 0.75rem; /* Slightly adjusted padding for mobile */
+        /* Ensure text wraps to fit within the mobile view */
+        display: block; /* Ensure each option takes a new line */
+    }
+
+    .slds-dueling-list__selected {
+        max-height: unset; /* Remove max-height restriction on mobile */
+        overflow-y: auto; /* Enable vertical scroll if needed */
+    }
+}

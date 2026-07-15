@@ -1,0 +1,32 @@
+/* Upward dropdown positioning */
+.dropdown-up {
+    bottom: 100% !important;
+    top: auto !important;
+    margin-bottom: 4px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.18);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Chevron animation */
+.chevron-icon {
+    transition: transform 0.2s ease;
+}
+
+.chevron-open {
+    transform: rotate(180deg);
+}
+
+/* Selected item highlight */
+.slds-listbox__option[aria-selected="true"],
+.slds-listbox__option_plain[aria-selected="true"] {
+    background-color: #f3f3f3;
+}
+
+.check-icon {
+    --slds-c-icon-color-foreground-default: #c30010;
+}
+
+/* Inherit border-radius from parent */
+.slds-combobox__form-element {
+    cursor: pointer;
+}

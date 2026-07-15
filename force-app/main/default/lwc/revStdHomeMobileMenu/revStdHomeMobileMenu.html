@@ -1,0 +1,14 @@
+<template>
+    <div class="side-menu-wrapper">
+        <template for:each={menuItems} for:item="navItem">
+            <div key={navItem.Id} class="side-menu-btn-icons-container" data-value={navItem.Target}
+                title={navItem.Label} onclick={handleButtonClick}>
+
+                <div class="side-menu-btn-icons">
+                    <img src={navItem.imageUrl} alt={navItem.Label} />
+                </div>
+                <span>{navItem.Label}</span>
+            </div>
+        </template>
+    </div>
+</template>

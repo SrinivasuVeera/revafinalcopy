@@ -1,0 +1,52 @@
+<template>
+    <lightning-card title="Available Facilities" icon-name="custom:custom14">
+        <template lwc:if={isAlreadyBooked}>
+            <div class="slds-m-around_large slds-text-align_right">
+                <lightning-button label="De-Allocate" variant="brand" onclick={deAllocateFacility}></lightning-button>
+            </div>
+            <div class="slds-p-around_medium">
+            <lightning-datatable key-field="Id" data={alreadyBookedFacility} columns={columnsToDeAllocate}
+                min-column-width="80" hide-checkbox-column="true" class="slds-p-top_medium ">
+            </lightning-datatable>
+            </div>
+        </template>
+        <template lwc:else>
+            <template lwc:if={facilities}>
+                <div class="slds-p-around_medium">
+
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" small-device-size="8" medium-device-size="8"
+                            large-device-size="8" padding="horizontal-small">
+                            <div class="slds-m-bottom_large">
+                                <lightning-input type="search" label="Search Facility" onchange={handleSearch}
+                                    placeholder="Search by Facility Name"></lightning-input>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="4" medium-device-size="4"
+                            large-device-size="4" padding="horizontal-small">
+                            <div class="slds-m-bottom_large">
+                                <div class="slds-m-top_medium slds-text-align_right">
+                                    <lightning-button label="Allocate" onclick={handleAllocate}
+                                        variant="brand"></lightning-button>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+
+                    <lightning-datatable key-field="Id" data={filteredFacilities} columns={columnsToAllocate}
+                        max-row-selection="1" selected-rows={selectedRows} onrowselection={handleRowSelection}
+                        min-column-width="80" class="slds-p-top_medium">
+                    </lightning-datatable>
+
+                </div>
+            </template>
+            <template lwc:else>
+                <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+                    <p class="slds-text-heading_small slds-text-color_error">No Facilities Available For This Course
+                        Schedule Time Slot</p>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

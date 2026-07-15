@@ -1,0 +1,208 @@
+<apex:page controller="TransportCancellationPrintController"
+           renderAs="{!IF($CurrentPage.parameters.testMode='true','','pdf')}"
+           showHeader="false"
+           sidebar="false"
+           applyHtmlTag="false"
+           applyBodyTag="false">
+
+<html>
+<head>
+<style>
+@page { size:A4; margin:15mm; }
+
+* { font-family: Arial, sans-serif; font-size:12px; }
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:8px;
+}
+
+th, td {
+    border:1px solid #000;
+    padding:5px;
+}
+
+td.label {
+    width:25%;
+    font-weight:bold;
+    background:#f7f7f7;
+}
+
+.sectionBar {
+    background:#f7931e;
+    color:white;
+    font-weight:bold;
+    padding:6px 10px;
+    display:inline-block;
+    font-size:14px;
+    margin:12px 0 6px;
+}
+
+.titleBox { text-align:center; }
+
+.uniTitle {
+    font-size:20px;
+    color:#f7931e;
+    font-weight:bold;
+}
+
+.formTitle {
+    font-size:18px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<table style="border:none;">
+<tr style="height:120px;">
+
+<td style="border:none; width:25%;">
+    <apex:outputPanel rendered="{!NOT(ISBLANK(logoURL))}">
+        <apex:image url="{!logoURL}" width="150" height="70"/>
+    </apex:outputPanel>
+</td>
+
+<td class="titleBox" style="border:none; width:50%;">
+    <div class="uniTitle">REVA UNIVERSITY</div>
+    <div class="formTitle">TRANSPORT CANCELLATION FORM</div>
+    <div>
+        Student Name: {!student.Name}
+    </div>
+    <div>
+        Transport Request Id: {!transport.Name}
+    </div>
+</td>
+
+<td style="border:none; width:25%;"></td>
+
+</tr>
+</table>
+
+<!-- STUDENT DETAILS -->
+<div class="sectionBar">Student Details</div>
+<table>
+<tr>
+<td class="label">Student Name</td>
+<td>{!student.Name}</td>
+<td class="label">SRN Number</td>
+<td>{!student.SRN_Number__c}</td>
+</tr>
+
+<tr>
+<td class="label">Application Number</td>
+<td>{!student.Application_Number__c}</td>
+<td class="label">Mobile</td>
+<td>{!student.MobilePhone}</td>
+</tr>
+
+<tr>
+<td class="label">Email</td>
+<td>{!student.Email}</td>
+<td class="label">Personal Email</td>
+<td>{!student.Personal_Email__c}</td>
+</tr>
+
+<tr>
+<td class="label">School Name</td>
+<td>{!student.School_Name__c}</td>
+<td class="label">Program Batch</td>
+<td>{!student.Program_Batch__r.Name}</td>
+</tr>
+</table>
+
+<!-- TRANSPORT REGISTRATION -->
+<div class="sectionBar">Transport Registration Details</div>
+<table>
+<tr>
+<td class="label">Request Number</td>
+<td>{!transportReg.Name}</td>
+<td class="label">Route Number</td>
+<td>{!transportReg.Route_Master__r.Name}</td>
+</tr>
+
+<tr>
+<td class="label">Pickup Point</td>
+<td>{!transportReg.Route_Pick_Up_Point__r.Name}</td>
+<td class="label">Start Date</td>
+<td>
+    <apex:outputText value="{0,date,dd/MM/yyyy}">
+        <apex:param value="{!transportReg.Start_Date__c}" />
+    </apex:outputText>
+</td>
+</tr>
+
+<tr>
+<td class="label">Status</td>
+<td>{!transportReg.rtr_Status__c}</td>
+<td class="label">Amount Paid</td>
+<td>{!transportReg.Amount_Paid__c}</td>
+</tr>
+
+<tr>
+<td class="label">Payment Date</td>
+<td>
+    <apex:outputText value="{0,date,dd/MM/yyyy}">
+        <apex:param value="{!payment.Transaction_Date_Time__c}" />
+    </apex:outputText>
+</td>
+<td class="label">Payment Status</td>
+<td>{!payment.Line_Item_Payment_Status__c}</td>
+</tr>
+</table>
+
+<!-- CANCELLATION DETAILS -->
+<div class="sectionBar">Transport Cancellation Details</div>
+<table>
+<tr>
+<td class="label">Amount To be Refunded</td>
+<td>{!transport.Amount_to_be_Refunded__c}</td>
+<td class="label">Request Date</td>
+<td>
+    <apex:outputText value="{0,date,dd/MM/yyyy}">
+        <apex:param value="{!transport.Cancellation_Date__c}" />
+    </apex:outputText>
+</td>
+</tr>
+</table>
+
+<!-- APPROVAL HISTORY -->
+<div class="sectionBar">Approval History</div>
+<table>
+<tr>
+<th>Status</th>
+<th>Role</th>
+<th>Approved By</th>
+<th>Date</th>
+</tr>
+
+<apex:repeat value="{!approvalWrappers}" var="step">
+<tr>
+<td>{!step.status}</td>
+<td>{!step.role}</td>
+<td>{!step.approvedBy}</td>
+<td>
+<apex:outputText value="{0,date,dd/MM/yyyy}">
+<apex:param value="{!step.approvedDate}" />
+</apex:outputText>
+</td>
+</tr>
+</apex:repeat>
+
+</table>
+
+<!-- SIGNATURE ->
+<table style="border:none; margin-top:80px;">
+<tr>
+<td style="border:none;">Signature of Student</td>
+<td style="border:none;">Transport Admin</td>
+<td style="border:none;">Finance Approval</td>
+</tr>
+</table>-->
+
+</body>
+</html>
+</apex:page>

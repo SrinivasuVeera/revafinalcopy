@@ -1,0 +1,202 @@
+<aura:component controller="ATT_Mark_Attendance" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    
+    <aura:attribute name="i_scheduleId" type="String" default=""/>
+    <aura:attribute name="i_readOnly" type="Boolean" default="false"/>
+    <aura:attribute name="i_Close" type="Boolean"/>
+    <aura:attribute name="disableSave" type="Boolean" default="false"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="objCos" type="sobject"/>
+    
+    <aura:attribute name="mainTitle" type="String"/>
+    <aura:attribute name="subTitle" type="String"/>
+    <aura:attribute name="existingSubject" type="String" />
+    <aura:attribute name="plannedTopic" type="String"/>
+    <aura:attribute name="actualTopic" type="String"/>
+    <aura:attribute name="techingMethod" type="String"/>
+    <aura:attribute name="lstAttachment" type="list"/>
+    <aura:attribute name="selectAll" type="boolean" default="false"/>
+    <aura:attribute name="filetype" type="List" default="['.pdf','.jpg','.png','.jpeg']" />
+    <aura:attribute name="fileName" type="String" default="No File Selected.." />
+    <aura:attribute name="courseCompleted" type="String"/>
+    <aura:attribute name="courseNotCompleted" type="String"/>
+    <aura:attribute name="sectionOne" type="boolean" default="true"/>
+    <aura:attribute name="attadanceTaken" type="String"/>
+    <aura:attribute name="lstStudent" type="list"/>
+    <aura:attribute name="selectAllStudent" type="boolean" default="false"/>
+    <aura:attribute name="allStudentsBlocked" type="Boolean" default="false"/> //added by chaithanya
+    
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'Yes', 'value': 'Yes'},
+                                                        {'label': 'No', 'value': 'No'}
+                                                        ]"/>
+    <aura:attribute name="teachingOptions" type="List" default="[
+                                                                {'label': 'Chalk &amp; Talk', 'value': 'Chalk &amp; Talk'},
+                                                                {'label': 'ICT', 'value': 'ICT'}
+                                                                ]"/>
+    
+    
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="demo-only demo-only_viewport">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{!c.closeAction}"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">  
+                        {!v.mainTitle}<br/>
+                        {!v.objCos.hed__Course_Offering__r.Name}
+                    </h2>                        
+                </header>
+                <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">                    
+                    <div class="slds-grid slds-wrap">
+                        <aura:if isTrue="{!v.sectionOne}">
+                            <div class="slds-col slds-size_2-of-7 slds-p-around_small" >                
+                                <lightning:input  type="date" name="input1" label="Date" value="{!v.objCos.Date__c}" disabled="true"/>
+                                <lightning:input type="time" name="input2" label="Start Time" value="{!v.objCos.hed__Start_Time__c}" disabled="true"/>
+                                <lightning:input type="time" name="input3" label="End Time" value="{!v.objCos.hed__End_Time__c}" disabled="true"/>
+                                <lightning:input name="input4" label="Planned Topic" value="{!v.plannedTopic}" disabled="true"/>
+                                <lightning:input name="input4" label="Actual Topic" value="{!v.actualTopic}" disabled="true"/>
+                            </div>
+                            <div class="slds-col slds-size_5-of-7 slds-p-around_small">
+                                <table >
+                                    <tr>
+                                        <td>
+                                            <lightning:radioGroup name="radioButdtonGroup"
+                                                                  label="Teaching Method"
+                                                                  options="{! v.teachingOptions }"
+                                                                  value="{! v.techingMethod }"
+                                                                  type="button" disabled="{!v.i_readOnly || v.objCos.Status__c == 'Completed / Attendance Marked' || v.objCos.Status__c == 'Locked'}"/> 
+                                            
+                                        </td>
+                                        <td colspan="3">
+                                            
+                                            <aura:if isTrue="{!v.existingSubject != '' &amp;&amp; v.existingSubject != undefined}">
+                                                <lightning:radioGroup name="radionGroup"
+                                                                      label="Would you like to replicate this attendance from same course today?"
+                                                                      options="{! v.options }"
+                                                                      value="{! v.attadanceTaken }"
+                                                                      type="button"                                                                     
+                                                                      disabled="{!v.i_readOnly || v.objCos.Status__c == 'Completed / Attendance Marked' || v.objCos.Status__c == 'Locked'}"/>
+                                            </aura:if>
+                                            
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <lightning:radioGroup name="radidoButtonGroup"
+                                                                  label="Course Plan Completed"
+                                                                  options="{! v.options }"
+                                                                  value="{! v.courseCompleted }"
+                                                                  type="button" disabled="{!v.i_readOnly || v.objCos.Status__c == 'Completed / Attendance Marked' || v.objCos.Status__c == 'Locked'}"/>
+                                        </td>
+                                        <td>
+                                            <aura:if isTrue="{!v.courseCompleted == 'No'}"> 
+                                                <lightning:textarea  type="string" name="input7" disabled="{!v.i_readOnly || v.objCos.Status__c == 'Completed / Attendance Marked' || v.objCos.Status__c == 'Locked'}"  label="Reason for not completing the Course Plan" value="{!v.courseNotCompleted}" />
+                                            </aura:if>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <table class="slds-table slds-table--bordered slds-table--striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"><span class="slds-truncate">
+
+                                                </span>
+                                            </th>
+                                            <th scope="col"><span class="slds-truncate">Documents (Select to Share with Students)</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.lstAttachment}" var="att">
+                                            <tr>
+                                                <td>
+                                                    <lightning:input type="checkbox" name="options" disabled="{!v.i_readOnly || v.objCos.Status__c == 'Completed / Attendance Marked' || v.objCos.Status__c == 'Locked'}" id="checkbox-unique-id-81" checked="{!att.checkBox}"/>                     
+                                                </td>
+                                                <td>{!att.AttachName}</td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>  
+                                <lightning:fileUpload label="Upload File"
+                                                      name="fileUploader" multiple="false" aura:id="fuploader"
+                                                      accept="{!v.filetype}" recordId="{!v.recordId}"
+                                                      onuploadfinished="{!c.handleUploadFile}" disabled="{!v.i_readOnly || v.objCos.Status__c == 'Completed / Attendance Marked' || v.objCos.Status__c == 'Locked'}"/>
+                                <div style="color:red;">{!v.fileName}</div>                                
+                                <br/>
+                            </div>         
+                        </aura:if> 
+                        <aura:if isTrue="{!!v.sectionOne}">
+                            
+                            <table class="slds-table slds-table--bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><span class="slds-truncate">
+                                            <lightning:input type="checkbox" aura:id="allCheck1" Checked="{!v.selectAllStudent}" onchange="{!c.onChangeCheckBox1}"/>
+                                            </span>
+                                        </th>
+                                        <th scope="col"><span class="slds-truncate">SL No</span></th>
+                                        <th scope="col"><span class="slds-truncate">SRN No</span></th>
+                                        <th scope="col"><span class="slds-truncate">Name</span></th>
+                                        <th scope="col"><span class="slds-truncate">Proxy Reason</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.lstStudent}" var="stu">
+                                        <tr style="{!stu.attendanceBlocked ? 'background-color:#D3D3D3;' : stu.proxyReason != '' &amp;&amp; stu.proxyReason != undefined ?  'background-color:#FCC66F;' : stu.checkBox ? '' : 'background-color:red'}">
+                                            <td>
+                                                <lightning:input type="checkbox" disabled="{!or(v.i_readOnly, stu.attendanceBlocked)}" name="options" id="checkbox-unique-id-81" checked="{!stu.checkBox}" title="{!stu.attendanceBlocked ? 'Attendance blocked for this student' : ''}"/>                     
+                                            </td>
+                                            <td>{!stu.slNo}</td>
+                                            <td>{!stu.srnNo}</td>
+                                            <td>{!stu.Name}</td>
+                                            <td>{!stu.proxyReason}</td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </aura:if>    
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeAction}" />
+                    <aura:if isTrue="{!v.sectionOne}">  
+                        <lightning:button variant="brand" label="Next" onclick="{!c.onNext}" />
+                        <aura:set attribute="else">
+                            <lightning:button variant="brand" label="Save" onclick="{!c.onSave}" disabled="{!v.i_readOnly || v.disableSave}" />
+                        </aura:set>
+                    </aura:if>
+                </footer>
+            </div>
+            
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>  
+</aura:component>

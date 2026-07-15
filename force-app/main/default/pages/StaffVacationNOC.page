@@ -1,0 +1,115 @@
+<apex:page controller="StaffVacationNOCController" renderAs="pdf">
+    <apex:form >	
+        <div style="text-align:center;">
+            <apex:image url="{!$Resource.REVA_LOGO}" width="200" height="100" />
+            <h2>RUKMINI KNOWLEDGE PARK,</h2>
+            <h3>Kattigenahalli Yelahanka, Bangalore 560064</h3>
+        </div>
+        <table style="width:100%; border-collapse: collapse; border: 0.5px solid black;">
+            <tr style="text-align: center;">
+                <td colspan="2" style="border: 0.5px solid black;"><h3>Hostel Staff Application - Teaching/Non-Teaching</h3></td>
+            </tr>
+            <tr>
+                <td style="border-left: 0.5px solid black;">Staff Name: {!Con.Name}</td>
+                <td style="border: 0.5px solid black;">Employee Id: {!Con.Employee_Number__c}</td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black; ">Department: {!Con.Department}</td>
+                <td style="border: 0.5px solid black; ">Designation: {!Con.Designation__c}</td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">Joining Date:&nbsp;<apex:outputText value="{0,date,dd/MM/yyyy}"><apex:param value="{!Con.Date_of_Joining__c}" /></apex:outputText></td>
+                <td style="border: 0.5px solid black;">Gender: {!Con.hed__Gender__c}</td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">Mobile Number: {!Con.MobilePhone}</td>
+                <td style="border: 0.5px solid black;">Aadhar Number: {!Con.Aadhar_Card_Number__c}</td>
+            </tr>
+            <tr> 
+                <td style="border: 0.5px solid black; ">Official Email: {!Con.hed__WorkEmail__c}</td>
+                <td style="border: 0.5px solid black; ">Blood Group: {!Con.Blood_Group__c}</td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">Personal Email: {!Con.Email}</td>
+                <td style="border: 0.5px solid black; ">Emergency Contact: {!Con.Emergency_Contact_Number__c}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border: 0.5px solid black; height: 50px;vertical-align: top;">Address: {!Con.OtherStreet}</td>
+            </tr>                    
+            <tr>
+                <td colspan="2" style="vertical-align: bottom; border: 0.5px solid black;">
+                    <div style="width: 40%;display: inline-block;">
+                        State: {!Con.OtherState} </div>
+                    <div style="width: 30%;display: inline-block;">
+                        City: {!Con.OtherCity}
+                    </div>
+                    <div style="width:20%;display: inline-block;">
+                        Pin Code: {!Con.OtherPostalCode}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="height: 81px;vertical-align: bottom; border: 0.5px solid black; width: 100%">
+                    <div style="width:25%;display: inline-block;">
+                        Applicant Sign
+                    </div>
+                    <div style="width: 25%;display: inline-block;">
+                        School-Director Sign
+                    </div>
+                    <div style="width: 28%;display: inline-block;">
+                        Warden/Supervisor Sign
+                    </div>
+                    <div style="width:20%;display: inline-block;">
+                        Director/Admin Sign
+                    </div>
+                </td>
+            </tr>   
+            <tr >
+                <td colspan="2" style=" border-left: 0.5px solid black; border-right: 0.5px solid black; border-top: 0.5px solid black; "><h4 style="text-align: center; vertical-align: top;">
+                    Note: I have read the Rules and Regulations of Hostel and will abide by the same</h4></td>
+            </tr> 
+            
+            <tr>
+                <td colspan="2" style=" border-left: 0.5px solid black; border-right: 0.5px solid black; border-bottom: 0.5px solid black; "><h4 style="text-align: center; vertical-align: bottom;">For Office Use Only:</h4></td>
+            </tr>
+            <!--   <tr>
+<td style="border: 0.5px solid black;">Block:</td>
+<td style="border: 0.5px solid black;">{!staffQuarterRequests.Type__c}/></td>
+
+<td colspan="3" style="border: 0.5px solid black;">Room No:</td>
+<td style="border: 0.5px solid black;">{!staffQuarterRequests.Type__c}</td>
+</tr>  -->
+            <tr>
+               <!-- <td colspan="2" style="border: 0.5px solid black; vertical-align: top;">Quarters Type: {!staffQuarterRequests.Type__c}</td> -->
+            </tr>  
+            <tr>
+                <!--  <td style="border: 0.5px solid black;">Reported Date:</td>
+<td style="border: 0.5px solid black;">{!staffQuarterRequests.Type__c}/></td>-->
+                <td style="border: 0.5px solid black;">Reported Date:&nbsp;<apex:outputText value="{0,date,dd/MM/yyyy}">
+                    <apex:param value="{!staffQuarterRequests.Staff_Quarters_Joining_Date__c}" />
+                    </apex:outputText> </td>
+                <!--  <td colspan="3" style="border: 0.5px solid black;">Vacating Date: </td>{!staffQuarterRequests.Vacation_Date__c}-->
+                <td style="border: 0.5px solid black;">Vacating Date:&nbsp;<apex:outputText value="{0,date,dd/MM/yyyy}">
+                    <apex:param value="{!staffQuarterRequests.Vacation_Date__c}" />
+                    </apex:outputText> </td>
+            </tr>
+            <tr>
+                <td colspan="2" style=" height: 50px;vertical-align: top; border: 0.5px solid black;">Maintenance/Damages (if any):</td>
+                <!--    <td style="border: 0.5px solid black;">{!staffQuarterRequests.Type__c}/></td>-->
+            </tr>
+            <tr>
+                <td colspan="2" style="height: 81px; vertical-align: bottom; border: 0.5px solid black;">
+                    <div style="width: 40%;display: inline-block;">
+                        Applicant Sign
+                    </div>
+                    <div style="width: 33%;display: inline-block;">
+                        Warden/Supervisor Sign
+                    </div>
+                    <div style="width:20%;display: inline-block;">
+                        Director/Admin Sign
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </apex:form>
+</apex:page>

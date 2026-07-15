@@ -1,0 +1,888 @@
+<template>
+    <lightning-card>
+        <div class="card-container">
+            <template if:true={spinner}>
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner_large slds-spinner_brand slds-is-relative" role="status">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </template>
+            <div class="first-section">
+                <template if:false={OpenTermPopup}>
+                    <div class="slds-page-header" style="background-color: #F07F07;;
+                            text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    padding: 1rem;
+                    border-radius: 20px;
+                    text-transform: uppercase;
+                    margin: 15px;">
+                        <div class="slds-page-header__row">
+                            <div class="slds-page-header__col-title slds-align_absolute-center">
+                                <div class="slds-media slds-media_center">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="action:change_owner" size="x-small"
+                                            alternative-text="Professor Allocation"
+                                            title="Professor Allocation"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <div class="slds-page-header__name">
+                                            <div class="slds-page-header__name-title">
+                                                <h2 class="page-header">
+                                                    <span title="Professor Allocation">
+                                                        Professor allocation for the Program Batch<br />
+                                                        {programPlanName} of Semester {termName}
+                                                    </span>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <template if:true={isAllocationInSection}>
+                        <div class="slds-m-bottom_medium slds-text-align_center slds-text-color_success"
+                            style="font-size: 1.1rem; font-weight: bold;">
+                            SECTION/BATCH/GROUP LEVEL ALLOCATION
+                        </div>
+                    </template>
+                    <template if:false={isAllocationInSection}>
+                        <div class="slds-m-bottom_medium slds-text-align_center slds-text-color_success"
+                            style="font-size: 1.1rem; font-weight: bold;">
+                            SEMESTER LEVEL ALLOCATION
+                        </div>
+                    </template>
+                    <div class="accordion-container reva-theme">
+                        <lightning-accordion active-section-name="A">
+
+                            <!-- Hardcore Course -->
+                            <lightning-accordion-section name="A" label="Hardcore Course">
+                                <div class="custom-box hardcore">
+                                    <table
+                                        class="slds-table slds-no-row-hover slds-table_bordered  slds-table_cell-buffer slds-row custom-table">
+                                        <thead class="reva-table-heading">
+                                            <tr class="slds-text-title_caps">
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Sequence</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Courses</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">
+                                                        Course Connection Created?
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={listHardCore} for:item="hc" for:index="index">
+                                                <tr key={hc.courseId} class="reva-table-row">
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">{hc.count}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <a href="javascript:void(0);" data-index={index}
+                                                                data-category="Hardcore Course" class="reva-link"
+                                                                onclick={handleHardcoreCourseClick}>{hc.courseName}</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <lightning-input type="checkbox"
+                                                                checked={hc.isCourseOfferingConfirmed} disabled>
+                                                            </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <!-- Hardcore Integrated Course -->
+                            <lightning-accordion-section name="B" label="Hardcore Integrated Course">
+                                <div class="custom-box integrated">
+                                    <table
+                                        class="slds-table slds-no-row-hover slds-table_bordered  slds-table_cell-buffer slds-row custom-table">
+                                        <thead class="reva-table-heading">
+                                            <tr class="slds-text-title_caps">
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Sequence</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Courses</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">
+                                                        Course Connection Created?
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={listHcIntegrated} for:item="hc" for:index="index">
+                                                <tr key={hc.courseId} class="reva-table-row">
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">{hc.count}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <a href="javascript:void(0);" data-index={index}
+                                                                data-category="Hardcore Integrated Course"
+                                                                class="reva-link"
+                                                                onclick={handleHardInteCourseClick}>{hc.courseName}</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <lightning-input type="checkbox"
+                                                                checked={hc.isCourseOfferingConfirmed} disabled>
+                                                            </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <!-- Practical / Term Work -->
+                            <lightning-accordion-section name="C" label="Practical/Term Work">
+                                <div class="custom-box practical">
+                                    <table
+                                        class="slds-table slds-no-row-hover slds-table_bordered  slds-table_cell-buffer slds-row custom-table">
+                                        <thead class="reva-table-heading">
+                                            <tr class="slds-text-title_caps">
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Sequence</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Courses</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">
+                                                        Course Connection Created?
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={listPractical} for:item="hc" for:index="index">
+                                                <tr key={hc.courseId} class="reva-table-row">
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">{hc.count}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <a href="javascript:void(0);" data-index={index}
+                                                                data-category="Practical/Term Work" class="reva-link"
+                                                                onclick={handlePracticalCourseClick}>{hc.courseName}</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <lightning-input type="checkbox"
+                                                                checked={hc.isCourseOfferingConfirmed} disabled>
+                                                            </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <!-- Professional Elective -->
+                            <lightning-accordion-section name="E" label="Professional Elective">
+                                <div class="custom-box elective">
+                                    <table
+                                        class="slds-table slds-no-row-hover slds-table_bordered  slds-table_cell-buffer slds-row custom-table">
+                                        <thead class="reva-table-heading">
+                                            <tr class="slds-text-title_caps">
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Courses</div>
+                                                </th>
+                                                <th></th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">
+                                                        Course Connection Created?
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={displayRows} for:item="parent">
+                                                <tr key={parent.parentId} class="slds-theme_shade">
+                                                    <td colspan={colSpanCount} class="reva-table-row">
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <strong>{parent.parentName}</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <template for:each={parent.lstCourses} for:item="course"
+                                                    for:index="index">
+                                                    <tr key={course.courseId} class="reva-table-row">
+                                                        <td>
+                                                            <div class="slds-truncate slds-text-align_center">
+                                                                <template if:false={course.isConfirmed}>
+                                                                    <a href="javascript:void(0);" data-index={index}
+                                                                        data-id={course.courseId}
+                                                                        data-category="Professional Elective"
+                                                                        class="reva-link"
+                                                                        onclick={handleProEleCourseClick}>{course.courseName}</a>
+                                                                </template>
+                                                                <template
+                                                                    if:true={course.isConfirmed}>{course.courseName}</template>
+                                                            </div>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+                                                            <div class="slds-truncate slds-text-align_center">
+                                                                <lightning-input type="checkbox"
+                                                                    checked={course.isCourseOfferingConfirmed} disabled>
+                                                                </lightning-input>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-accordion-section>
+
+                            <!-- Mandatory Course -->
+                            <lightning-accordion-section name="F" label="Mandatory Course">
+                                <div class="custom-box mandatory">
+                                    <table
+                                        class="slds-table slds-no-row-hover slds-table_bordered  slds-table_cell-buffer slds-row custom-table">
+                                        <thead class="reva-table-heading">
+                                            <tr class="slds-text-title_caps">
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Sequence</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">Courses</div>
+                                                </th>
+                                                <th>
+                                                    <div class="slds-truncate slds-text-align_center">
+                                                        Course Connection Created?
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={listMandatory} for:item="hc" for:index="index">
+                                                <tr key={hc.courseId} class="reva-table-row">
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">{hc.count}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <a href="javascript:void(0);" data-index={index}
+                                                                data-category="Mandatory Course" class="reva-link"
+                                                                onclick={handleMandatoryCourseClick}>{hc.courseName}</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="slds-truncate slds-text-align_center">
+                                                            <lightning-input type="checkbox"
+                                                                checked={hc.isCourseOfferingConfirmed} disabled>
+                                                            </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                    </div>
+
+                </template>
+            </div>
+            <template if:false={isAllocationAllow}>
+                <div class="sticky-footer">
+                    <lightning-button class="slds-m-left_x-small" variant="brand"
+                        label="Approve Allocation for Sections" onclick={handleApproveAllocation}
+                        disabled={isAllocationAllow}></lightning-button>
+                </div>
+            </template>
+
+        </div>
+
+        <template if:true={OpenTermPopup}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container modal-container">
+
+                    <!-- Header -->
+                    <header class="slds-modal__header" style="color:white; text-align:center;">
+                        <lightning-button-icon icon-name="utility:close" onclick={handleClosePopup}
+                            alternative-text="close" variant="bare-inverse" class="slds-modal__close">
+                        </lightning-button-icon>
+
+                    </header>
+
+                    <!-- Body -->
+                    <div class="slds-modal__content slds-p-around_medium custom-modal-body" id="modal-content-id-1">
+                        <div class=" header-title">
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                                {courseName}
+                            </h2>
+                        </div>
+                        <template if:true={isAllocationInSection}>
+                            <div class="slds-m-bottom_medium slds-text-align_center slds-text-color_success"
+                                style="font-size: 1.1rem; font-weight: bold; padding-top: 15px;">
+                                SECTION/BATCH/GROUP LEVEL ALLOCATION
+                            </div>
+                        </template>
+                        <template if:false={isAllocationInSection}>
+                            <div class="slds-m-bottom_medium slds-text-align_center slds-text-color_success"
+                                style="font-size: 1.1rem; font-weight: bold; padding-top: 15px;">
+                                SEMESTER LEVEL ALLOCATION
+                            </div>
+                        </template>
+
+                        <!-- ===================== Theory Professors ===================== -->
+                        <template if:true={listProfessorsTheory}>
+                            <lightning-tabset>
+                                <template for:each={listProfessorsTheory} for:item="pref">
+                                    <lightning-tab key={pref.preferenceLabel} label={pref.preferenceLabel}>
+
+                                        <table
+                                            class="slds-table slds-no-row-hover slds-table_bordered  slds-table_cell-buffer custom-table">
+                                            <thead>
+                                                <tr class="table-header">
+
+                                                    <template if:false={pref.isAutoAllocation}>
+                                                        <th>Professor Name</th>
+                                                    </template>
+                                                    <template if:true={pref.isAutoAllocation}>
+                                                        <th class="slds-text-align_center">Professor Name</th>
+                                                        <th class="slds-text-align_center">Preference No</th>
+                                                        <th class="slds-text-align_center">Designation</th>
+                                                        <th class="slds-text-align_center">Course Connection</th>
+
+                                                    </template>
+                                                    <th class="slds-text-align_center">Is Primary Professor</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={pref.sectionAssignments} for:item="sec">
+
+                                                    <!-- Section Row -->
+                                                    <tr key={sec.sectionId} class="section-row">
+                                                        <td colspan="5" class="slds-text-align_center section-heading"
+                                                            style="font-weight: bold;
+                                                        text-transform: uppercase;
+                                                        font-size: medium;
+                                                        color: #F07F07;">
+                                                            {sec.sectionName}
+                                                        </td>
+                                                    </tr>
+
+                                                   
+                                                    <!-- Professors -->
+                                                   <template for:each={sec.professors} for:item="prof" for:index="profIndex">
+                                                       <tr key={prof.key}>
+
+                                                      <td class="slds-text-align_center" style="padding:10px;">
+
+                                                      <div class="slds-grid slds-gutters slds-align_absolute-center">
+
+                                                     <!-- Record Picker -->
+                                                     <div class="slds-col slds-size_9-of-12">
+
+                                                      <template if:true={pref.isAutoAllocation}>
+                                                             <lightning-record-picker
+                                                              data-id={prof.key}
+                                                              data-prof-index={profIndex}
+                                                              label="Choose a Professor"
+                                                              placeholder="Search professor..."
+                                                              object-api-name="Contact"
+                                                              value={prof.professorId}
+                                                               options={pref.availableProfessors}
+                                                               filter={contactFilter}
+                                                               onchange={handleRecordChange}
+                                                               size="xx-small"
+                                                               display-info={displayInfo}
+                                                               matching-info={matchingInfo}
+                                                               icon-name="standard:contact"
+                                                               variant="label-hidden">
+                                                            </lightning-record-picker>
+                                                        </template>
+
+                                                     <template if:false={pref.isAutoAllocation}>
+                                                      <lightning-record-picker
+                                                             data-id={prof.key}
+                                                             data-prof-index={profIndex}
+                                                             label="Choose a Professor"
+                                                             placeholder="Search professor..."
+                                                             object-api-name="Contact"
+                                                             value={prof.professorId}
+                                                             options={pref.availableProfessors}
+                                                             filter={contactFilter}
+                                                             onchange={handleRecordChange}
+                                                             size="xx-small"
+                                                             display-info={displayInfo}
+                                                             matching-info={matchingInfo}
+                                                             icon-name="standard:contact"
+                                                             variant="label-hidden">
+                                                            </lightning-record-picker>
+                                                              </template>
+
+                                                        </div>
+
+                                                        <!-- Select Button -->
+                                                       <div class="slds-col slds-size_3-of-12">
+                                                       <template if:true={prof.isProfessorIdEmpty}>
+                                                       <lightning-button
+                                                          label="Select"
+                                                          variant="brand"
+                                                          data-id={prof.key}
+                                                          data-profindex={profIndex}
+                                                          onclick={openPreferencePopup}>
+                                                       </lightning-button>
+                                                          </template>
+                                                          </div>
+                                                          </div>
+                                                     </td>
+
+                                              <template if:true={pref.isAutoAllocation}>
+                                                 <td class="slds-text-align_center">
+                                                  {prof.prefrence}
+                                                 </td>
+
+                                              <td class="slds-text-align_center">
+                                               {prof.designation}
+                                              </td>
+
+                                            <td class="slds-text-align_center">
+                                             <lightning-input
+                                              type="checkbox"
+                                              checked={prof.professorAssigned}
+                                              disabled>
+                                             </lightning-input>
+                                            </td>
+                                            </template>
+
+                                            <td class="slds-text-align_center">
+                                            <lightning-input
+                                                 type="checkbox"
+                                                 checked={prof.isPrimary}
+                                                 data-id={prof.key}
+                                                 data-index={profIndex}
+                                                  onchange={handlePrimaryChange}
+                                                 disabled={prof.isProfessorIdEmpty}>
+                                               </lightning-input>
+                                                  </td>
+
+                                                  </tr>
+                                                   </template>
+                                                </template>
+
+                                            </tbody>
+                                        </table>
+                                    </lightning-tab>
+                                </template>
+                            </lightning-tabset>
+                        </template>
+                        <!-- ===================== Practical Professors ===================== -->
+                        <template if:true={listProfessorsPrcticals}>
+                            <lightning-tabset>
+                                <template for:each={listProfessorsPrcticals} for:item="pref">
+                                    <lightning-tab key={pref.preferenceLabel} label={pref.preferenceLabel}>
+                                        <table
+                                            class="tblColPad slds-no-row-hover slds-table slds-table_bordered  slds-table_cell-buffer slds-row custom-table slds-table_col-bordered"
+                                            border="1" cellpadding="5" cellspacing="5"
+                                            style="border-collapse: collapse;background-color: #f3f6f4;">
+                                            <thead>
+                                                <tr class="table-header">
+                                                    <th class="slds-text-align_center">Section</th>
+                                                    <th class="slds-text-align_center">Batch</th>
+                                                    <th class="slds-text-align_center">Professor Name</th>
+
+                                                    <template if:true={pref.isAutoAllocation}>
+                                                        <th class="slds-text-align_center">Preference No</th>
+                                                        <th class="slds-text-align_center">Designation</th>
+                                                        <th class="slds-text-align_center">Course Connection</th>
+                                                    </template>
+                                                    <th class="slds-text-align_center">Is Primary Professor</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={pref.sections} for:item="sec">
+                                                    <template for:each={sec.batches} for:item="batch">
+                                                        <template for:each={batch.professors} for:item="prof"
+                                                            for:index="profIndex">
+                                                            <tr key={prof.key}>
+                                                                <!-- Section -->
+                                                                <template if:true={prof.showSection}>
+                                                                    <td rowspan={sec.rowspan}
+                                                                        class="slds-text-align_center section-heading">
+                                                                        {sec.sectionName}
+                                                                    </td>
+                                                                </template>
+                                                                <td if:false={prof.showSection} class="hidden-cell">
+                                                                </td>
+
+
+                                                                <!-- Batch -->
+                                                                <template if:true={prof.showBatch}>
+                                                                    <td rowspan={batch.professors.length}
+                                                                        class="slds-text-align_center batch-heading">
+                                                                        {batch.batchNumber}
+                                                                    </td>
+
+                                                                </template>
+                                                                <td if:false={prof.showBatch} class="hidden-cell"></td>
+
+
+                                                                <!-- Professor Details ->
+                                                                <td class="slds-text-align_center"
+                                                                    style="padding: 10px;">
+                                                                    <lightning-record-picker data-id={prof.key}
+                                                                        data-prof-index={profIndex}
+                                                                        label="Choose a Professor"
+                                                                        placeholder="Search professor..."
+                                                                        object-api-name="Contact"
+                                                                        value={prof.professorId}
+                                                                        options={pref.availableProfessors}
+                                                                        filter={contactFilter}
+                                                                        onchange={handleRecordChange} size="small"
+                                                                        display-info={displayInfo}
+                                                                        matching-info={matchingInfo}
+                                                                        icon-name="standard:contact"
+                                                                        variant="label-hidden">
+                                                                    </lightning-record-picker>
+                                                                </td>-->
+
+                                                                <td class="slds-text-align_center" style="padding:10px;">
+
+                                                                <div class="slds-grid slds-gutters slds-align_absolute-center">
+
+                                                                 <!-- Record Picker -->
+                                                                 <div class="slds-col slds-size_9-of-12">
+
+                                                                 <lightning-record-picker
+                                                                  data-id={prof.key}
+                                                                  data-prof-index={profIndex}
+                                                                  label="Choose a Professor"
+                                                                  placeholder="Search professor..."
+                                                                  object-api-name="Contact"
+                                                                  value={prof.professorId}
+                                                                  options={pref.availableProfessors}
+                                                                  filter={contactFilter}
+                                                                  onchange={handleRecordChange}
+                                                                  size="small"
+                                                                  display-info={displayInfo}
+                                                                  matching-info={matchingInfo}
+                                                                  icon-name="standard:contact"
+                                                                  variant="label-hidden">
+                                                               </lightning-record-picker>
+
+                                                                </div>
+                                                                <!-- Select Button -->
+                                                                 <div class="slds-col slds-size_3-of-12">
+                                                                     <template if:true={prof.isProfessorIdEmpty}>
+                                                                     <lightning-button
+                                                                       label="Select"
+                                                                       variant="brand"
+                                                                       data-id={prof.key}
+                                                                       data-profindex={profIndex}
+                                                                       onclick={openPreferencePopup}>
+                                                                      </lightning-button>
+                                                                    </template>
+                                                                        </div>
+                                                                  </div>
+
+                                                                 </td>
+                                                                 <template if:true={pref.isAutoAllocation}>
+                                                                    <td class="slds-text-align_center">{prof.prefrence}
+                                                                    </td>
+                                                                    <td class="slds-text-align_center">
+                                                                        {prof.designation}</td>
+                                                                    <td class="slds-text-align_center">
+                                                                        <lightning-input type="checkbox"
+                                                                            checked={prof.professorAssigned} disabled>
+                                                                        </lightning-input>
+                                                                    </td>
+
+                                                                </template>
+                                                                <td class="slds-text-align_center">
+                                                                    <lightning-input type="checkbox"
+                                                                        checked={prof.isPrimary} data-id={prof.key}
+                                                                        data-index={profIndex}
+                                                                        onchange={handlePrimaryChange}
+                                                                        disabled={prof.isProfessorIdEmpty}>
+                                                                    </lightning-input>
+                                                                </td>
+                                                            </tr>
+                                                        </template>
+                                                    </template>
+                                                </template>
+                                            </tbody>
+                                        </table>
+
+                                    </lightning-tab>
+                                </template>
+                            </lightning-tabset>
+                        </template>
+                        <!-- ===================== Group Professors ===================== -->
+                        <template if:true={listProfessorsGroup}>
+                            <lightning-tabset>
+                                <template for:each={listProfessorsGroup} for:item="pref">
+                                    <lightning-tab key={pref.preferenceLabel} label={pref.preferenceLabel}>
+
+                                        <table
+                                            class="slds-table slds-no-row-hover slds-table_bordered  slds-table_cell-buffer slds-row custom-table">
+                                            <thead>
+                                                <tr class="table-header">
+
+                                                    <template if:false={pref.isAutoAllocation}>
+                                                        <th>Professor Name</th>
+                                                        <th class="slds-text-align_center">Is Primary Professor</th>
+                                                    </template>
+                                                    <template if:true={pref.isAutoAllocation}>
+                                                        <th class="slds-text-align_center">Professor Name</th>
+                                                        <th class="slds-text-align_center">Preference No</th>
+                                                        <th class="slds-text-align_center">Designation</th>
+                                                        <th class="slds-text-align_center">Course Connection</th>
+                                                        <th class="slds-text-align_center">Is Primary Professor</th>
+                                                    </template>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={pref.sectionAssignments} for:item="grp">
+
+                                                    <!-- Group Row -->
+                                                    <tr key={grp.groupId} class="group-row">
+                                                        <td colspan="5" class="slds-text-align_center group-heading "
+                                                            style="font-weight: bold;
+                                                        text-transform: uppercase;
+                                                        font-size: medium;
+                                                        color:#F07F07;">
+                                                            {grp.groupName}
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Professors -->
+                                                    <template for:each={grp.professors} for:item="prof"
+                                                        for:index="profIndex">
+                                                        <tr key={prof.key}>
+                                                           <!-- <td class="slds-text-align_center" style="padding: 10px;">
+                                                                <template if:true={pref.isAutoAllocation}>
+                                                                    <lightning-record-picker data-id={prof.key}
+                                                                        data-prof-index={profIndex}
+                                                                        label="Choose a Professor"
+                                                                        placeholder="Search professor..."
+                                                                        object-api-name="Contact"
+                                                                        value={prof.professorId}
+                                                                        options={pref.availableProfessors}
+                                                                        filter={contactFilter}
+                                                                        onchange={handleRecordChange} size="xx-small"
+                                                                        display-info={displayInfo}
+                                                                        matching-info={matchingInfo}
+                                                                        icon-name="standard:contact"
+                                                                        variant="label-hidden">
+                                                                    </lightning-record-picker>
+                                                                </template>
+                                                                <template if:false={pref.isAutoAllocation}>
+                                                                    <div class="record-picker " style="width: 70%;">
+                                                                        <lightning-record-picker data-id={prof.key}
+                                                                            data-prof-index={profIndex}
+                                                                            label="Choose a Professor"
+                                                                            placeholder="Search professor..."
+                                                                            object-api-name="Contact"
+                                                                            value={prof.professorId}
+                                                                            options={pref.availableProfessors}
+                                                                            filter={contactFilter}
+                                                                            onchange={handleRecordChange}
+                                                                            size="xx-small" display-info={displayInfo}
+                                                                            matching-info={matchingInfo}
+                                                                            icon-name="standard:contact"
+                                                                            variant="label-hidden">
+                                                                        </lightning-record-picker>
+                                                                    </div>
+                                                                </template>
+
+
+                                                            </td>-->
+                                                         <td class="slds-text-align_center" style="padding:10px;">
+
+                                                       <div class="slds-grid slds-gutters slds-align_absolute-center">
+
+                                                        <!-- Record Picker -->
+                                                       <div class="slds-col slds-size_9-of-12">
+
+                                                      <template if:true={pref.isAutoAllocation}>
+                                                       <lightning-record-picker
+                                                          data-id={prof.key}
+                                                          data-prof-index={profIndex}
+                                                           label="Choose a Professor"
+                                                           placeholder="Search professor..."
+                                                           object-api-name="Contact"
+                                                           value={prof.professorId}
+                                                           options={pref.availableProfessors}
+                                                           filter={contactFilter}
+                                                           onchange={handleRecordChange}
+                                                           size="xx-small"
+                                                           display-info={displayInfo}
+                                                           matching-info={matchingInfo}
+                                                           icon-name="standard:contact"
+                                                           variant="label-hidden">
+                                                        </lightning-record-picker>
+                                                       </template>
+
+                                               <template if:false={pref.isAutoAllocation}>
+                                                 <lightning-record-picker
+                                                     data-id={prof.key}
+                                                     data-prof-index={profIndex}
+                                                     label="Choose a Professor"
+                                                     placeholder="Search professor..."
+                                                     object-api-name="Contact"
+                                                     value={prof.professorId}
+                                                     options={pref.availableProfessors}
+                                                     filter={contactFilter}
+                                                     onchange={handleRecordChange}
+                                                     size="xx-small"
+                                                     display-info={displayInfo}
+                                                     matching-info={matchingInfo}
+                                                     icon-name="standard:contact"
+                                                      variant="label-hidden">
+                                                   </lightning-record-picker>
+                                                 </template>
+
+                                                    </div>
+                                                        <!-- Select Button -->
+                                                   <div class="slds-col slds-size_3-of-12">
+
+                                                  <template if:true={prof.isProfessorIdEmpty}>
+                                                    <lightning-button
+                                                         label="Select"
+                                                         variant="brand"
+                                                         data-id={prof.key}
+                                                         data-profindex={profIndex}
+                                                         onclick={openPreferencePopup}>
+                                                     </lightning-button>
+                                                   </template>
+                                                      </div>
+                                                          </div>
+                                                             </td>
+
+                                                            <template if:true={pref.isAutoAllocation}>
+                                                                <td class="slds-text-align_center">{prof.prefrence}</td>
+                                                                <td class="slds-text-align_center">{prof.designation}
+                                                                </td>
+                                                                <td class="slds-text-align_center">
+                                                                    <lightning-input type="checkbox"
+                                                                        checked={prof.professorAssigned} disabled>
+                                                                    </lightning-input>
+                                                                </td>
+
+                                                            </template>
+                                                            <td class="slds-text-align_center">
+                                                                <lightning-input type="checkbox"
+                                                                    checked={prof.isPrimary} data-id={prof.key}
+                                                                    data-index={profIndex}
+                                                                    onchange={handlePrimaryChange}
+                                                                    disabled={prof.isProfessorIdEmpty}>
+                                                                </lightning-input>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </lightning-tab>
+                                </template>
+                            </lightning-tabset>
+                        </template>
+                    </div>
+        <template if:true={showPreferencePopup}>
+
+    <section role="dialog"
+             tabindex="-1"
+             class="slds-modal slds-fade-in-open">
+
+        <div class="slds-modal__container">
+
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_medium">
+                    Select Professor
+                </h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Preference</th>
+                            <th>Professor</th>
+                            <th>No. of Times Course Handled</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <template for:each={preferenceProfessors} for:item="prof">
+
+                            <tr key={prof.professorId}>
+                                <td>
+                                    <lightning-input
+                                        type="radio"
+                                        name="prefProf"
+                                        value={prof.professorId}
+                                        onchange={handlePreferenceSelect}>
+                                    </lightning-input>
+                                </td>
+                                <td>{prof.preference}</td>
+                                <td>{prof.professorName}</td>
+                                <td>{prof.numberOfTimesCourseHandled}</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <lightning-button label="Submit" variant="brand" onclick={handlePreferenceSubmit}></lightning-button>
+                <lightning-button label="Cancel" class="slds-m-left_small" onclick={closePreferencePopup}></lightning-button>
+            </footer>
+        </div>
+    </section>
+
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>
+
+                    <!-- Footer -->
+                    <footer class="slds-modal__footer" style="background:#f9fafb; border-top:1px solid #ddd;">
+                        <lightning-button variant="brand" label="Save Allocation" onclick={handleSave}
+                            disabled={isSaveDisable}></lightning-button>
+                        <lightning-button class="slds-m-left_x-small" variant="neutral" label="Cancel"
+                            onclick={handleClosePopup}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </template>
+    </lightning-card>
+
+</template>

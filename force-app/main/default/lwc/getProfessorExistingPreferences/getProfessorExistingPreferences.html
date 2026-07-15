@@ -1,0 +1,206 @@
+<template>
+    <lightning-card>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <div class="slds-box slds-theme_default slds-text-align_center"
+            style="background-color: #ea7e08; border-radius: 12px; padding: 1rem;">
+            <h2 class="slds-text-heading_medium"
+                style="color: white; font-weight: bold; text-transform: uppercase;">
+                Your Selected Preferences from Current "Preference Allowed" Semesters
+            </h2>
+        </div>
+
+        <div class="slds-box" style="background-color: #c7cfdca8; border-radius: 10px; padding: 1rem;">
+            <lightning-layout multiple-rows>              
+                              
+                <!-- Row 1: Button aligned to right -->
+                <lightning-layout-item class="slds-size_1-of-1 slds-text-align_right">
+                    <lightning-button label="Freeze/Confirm Preferences" variant="brand"
+                        onclick={handleFreeze} disabled={isDisableFreeze} class="slds-m-right_small">
+                    </lightning-button>
+                    <template if:false={isEditMode}>
+                        <lightning-button
+                            label="Edit Preferences"
+                            variant="brand"
+                            onclick={handleEdit}
+                            disabled={isDisableFreeze}
+                            class="slds-m-right_small">
+                        </lightning-button>
+                    </template>
+
+                    <template if:true={isEditMode}>
+                        <lightning-button
+                            label="Save"
+                            variant="brand"
+                            onclick={handleSavePreferences}
+                            class="slds-m-right_small">
+                        </lightning-button>
+
+                        <lightning-button
+                            label="Cancel"
+                            variant="neutral"
+                            onclick={handleCancel}
+                            class="slds-m-right_small">
+                        </lightning-button>
+                    </template>
+                    <template if:true={showPreferenceError}>
+                        <lightning-button-icon icon-name="utility:info" alternative-text="Help"
+                            title="This button will be enabled once all errors shown on the screen are resolved."
+                            class="slds-m-left_x-small">
+                        </lightning-button-icon>
+                    </template>
+                </lightning-layout-item>
+
+                <!-- Row 2: Error messages centered -->
+                <template if:true={showPreferenceError}>
+                    <lightning-layout-item class="slds-size_1-of-1 slds-text-align_center slds-m-top_small">
+                        <div class="slds-text-color_error slds-text-heading_small">
+                            <p>Ensure preference order is continuous — like Preference 1, 2, 3... Don’t skip any number.</p>
+                        </div>
+                        <div class="slds-text-color_error slds-m-top_x-small blinking">
+                            <template if:true={theoryErrorMessage}>
+                                <p>{theoryErrorMessage}</p>
+                            </template>
+                            <template if:true={practicalErrorMessage}>
+                                <p>{practicalErrorMessage}</p>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+
+            </lightning-layout>
+        </div>
+
+        <div class="slds-scrollable_x slds-box slds-theme_default slds-m-bottom_medium">
+            <table
+                class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_col-bordered slds-table_compact slds-table--striped">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <!--<th>School Name</th>-->
+                        <th>Offered By School</th>
+                        <!--<th>Program Batch</th>-->
+                        <th>Semester</th>
+                        <th>Course</th>
+                        <th>Course ID</th>
+                        <th>Category</th>
+                        <th>Subtype</th>
+                        <th>Preference</th>
+                        <th>Freezed</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!-- Theory Section -->
+                    <tr>
+                        <td colspan="15" class="section-header">Theory</td>
+                    </tr>
+                    <template if:true={hasTheoryCourses}>
+                        <template for:each={theoryCourses} for:item="row">
+                            <tr key={row.id} class="compact-row">
+                                <!--<td class="slds-truncate slds-p-vertical_xx-small">{row.schoolName}</td>-->
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.OfferedByschool}</td>
+                                <!--<td class="slds-truncate slds-p-vertical_xx-small">{row.programBatch}</td>-->
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.semester}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.courseName}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.courseId}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.category}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.subtype}</td>
+                                <td class="slds-p-vertical_xx-small">
+                                    <template if:true={isEditMode}>
+                                        <lightning-combobox
+                                            value={row.preference}
+                                            options={preferenceOptions}
+                                            data-id={row.recordId}
+                                            onchange={handlePreferenceChange}
+                                            disabled={row.isPreferenceOne}>
+                                        </lightning-combobox>
+                                    </template>
+
+                                    <template if:false={isEditMode}>
+                                        {row.preference}
+                                    </template>
+                                </td>
+                                <td class="slds-p-vertical_xx-small">{row.freezed}</td>
+                            </tr>
+                        </template>
+                    </template>
+                    <template if:false={hasTheoryCourses}>
+                        <tr>
+                            <td colspan="15" class="slds-text-align_center slds-text-color_weak">
+                                No Theory course preferences saved, or preferences are already frozen by the Vertical Head for subject allotment.
+                            </td>
+                        </tr>
+                    </template>
+
+                    <!-- Practical Section -->
+                    <tr>
+                        <td colspan="15" class="section-header">Practical / Project</td>
+                    </tr>
+                    <template if:true={hasPracticalCourses}>
+                        <template for:each={practicalCourses} for:item="row">
+                            <tr key={row.id} class="compact-row">
+                                <!--<td class="slds-truncate slds-p-vertical_xx-small">{row.schoolName}</td>-->
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.OfferedByschool}</td>
+                                <!--<td class="slds-truncate slds-p-vertical_xx-small">{row.programBatch}</td>-->
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.semester}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.courseName}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.courseId}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.category}</td>
+                                <td class="slds-truncate slds-p-vertical_xx-small">{row.subtype}</td>
+                                <td class="slds-p-vertical_xx-small">
+                                    <template if:true={isEditMode}>
+                                        <lightning-combobox
+                                            value={row.preference}
+                                            options={preferenceOptions}
+                                            data-id={row.recordId}
+                                            onchange={handlePreferenceChange}
+                                            disabled={row.isPreferenceOne}>
+                                        </lightning-combobox>
+                                    </template>
+
+                                    <template if:false={isEditMode}>
+                                        {row.preference}
+                                    </template>
+                                </td>
+                                <td class="slds-p-vertical_xx-small">{row.freezed}</td>
+                            </tr>
+                        </template>
+                    </template>
+                    <template if:false={hasPracticalCourses}>
+                        <tr>
+                            <td colspan="15" class="slds-text-align_center slds-text-color_weak">
+                                No Practical/Project course preferences saved, or preferences are already frozen by the Vertical Head for allotment.
+                            </td>
+                        </tr>
+                    </template>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Confirm Modal -->
+        <template if:true={showConfirmModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-modal__title">Confirm Action</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        Are you sure you want to Freeze/Confirm your preferences?
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleNo}></lightning-button>
+                        <lightning-button variant="brand" label="Confirm" onclick={handleYes}
+                            class="slds-m-left_small"></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </lightning-card>
+</template>

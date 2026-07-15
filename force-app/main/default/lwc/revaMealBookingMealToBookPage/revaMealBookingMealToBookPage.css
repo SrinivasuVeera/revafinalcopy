@@ -1,0 +1,428 @@
+.title-container {
+    display: flex;
+    justify-content: flex-end;
+    background-color: rgb(198, 190, 190);
+
+}
+
+
+@font-face {
+    font-family: 'Glacial Indifference';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/GlacialIndifferenceFont/GlacialIndifference-Regular.otf') format('TrueType');
+}
+
+.title1, .main-heading ,.meal-heading ,.title p ,.timer-container,h4,.bookbtn-container,.btn-container {
+    font-family: 'Glacial Indifference' !important; /* Removed specific font-face URL */
+}
+
+@font-face {
+    font-family: 'Jakatha Plus';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/Jakartha Plus/PlusJakartaSans-Regular.ttf') format('TrueType');
+}
+
+p,li {
+    font-family: 'Jakatha Plus' !important; /* Removed specific font-face URL */
+}
+
+.title1 {
+    font-weight: bold;
+    font-size: 35px;
+    text-align: right;
+    margin-right: 30px;
+}
+.missed-meal {
+    font-weight: bold;  
+    color: red; 
+    font-size: 24px;
+}
+
+.main-heading {
+    font-size: 63px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.meal-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 70px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.left-section {
+    /* padding-right: 62px; */
+
+}
+
+.meal-heading {
+    color: #f5f0f0;
+    font-size: 35px;
+    font-weight: bold;
+    /* padding: 20px; */
+    text-align: center;
+    border-radius: 12px;
+    background-color: #F07F07;
+    /* margin-top: 24px; */
+    font-family: 'Glacial Indifference' !important;
+}
+
+.right-section {
+    background-color: white;
+}
+
+.detailes {
+    position: relative;
+    flex: 1;
+    padding-left: 5px;
+    /* padding-top: 100px; */
+    /* width: 160px; */
+    /* border-left: 4px solid; */
+    border-right: 4px solid #e7dfdf;
+    border-bottom: 4px solid #e7dfdf;
+    background-color: white;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.colcontener {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 2px;
+    flex-direction: row;
+}
+
+
+.userdetailes {
+    background-color: #F07F07;
+    border-radius: 20px;
+    height: 300px;
+    padding-top: 50%;
+    width: 98%;
+    /* padding-left: 6px; */
+    /* font-size: 12px; */
+    /* text-align: center; */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: stretch;
+    flex-direction: row;
+}
+
+.slds-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.mealData {
+    text-align: left;
+    padding-top: 10px;
+    font-size: 9px;
+}
+
+.title {
+    font-size: x-large;
+    text-align: left;
+    /* margin-top: 1px; */
+    font-weight: bold;
+    /* padding-right: 34px; */
+    /* font-style: revert; */
+    font-variant: all-petite-caps;
+    
+
+}
+
+img {
+    aspect-ratio: 1 / 1;
+    display: block;
+    border-radius: 50%;
+    position: relative;
+    /* left: 8px; */
+  
+    /* height: 27%; */
+    top: 50px;
+    width: 83%;
+    /* margin-left: -10px; */
+    /* margin-right: -10px; */;
+}
+
+.card .date {
+    margin-top: 5px;
+}
+
+.card .header p {
+    color: white;
+    text-decoration: none;
+    font-size: calc(var(--font-size) * 0.8);
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.card .qr-text {
+    display: flex;
+    justify-content: space-between;
+    text-decoration: underline;
+    color: #F07F07;
+    font-weight: 600;
+    font-size: calc(var(--font-size) * 0.8);
+}
+
+.card .header {
+    padding-block: 18px;
+    padding-inline: 10px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    background-color: #F07F07;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.meal-info-container {
+    Display: flex;
+    justify-content: space-between;
+    background-color: #e8e8de;
+    padding: 5px;
+    border-radius: 18px;
+    margin-top: 89px;
+    padding-top: 27px;
+    padding-bottom: 30px;
+    gap: 2px;
+}
+
+.meal-section {
+    text-align: center;
+}
+
+.booked-meal h4 {
+    color: black;
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    padding-bottom: 10px;
+
+}
+
+.cancellation-policy h4 {
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    padding-bottom: 10px;
+
+}
+
+.feedback-submission h4 {
+    color: #F07F07;
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    padding-bottom: 10px;
+
+}
+
+.black-text {
+    color: black;
+    font-weight: bold;
+}
+
+.orange-text {
+    color: #F07F07;
+    font-weight: bold;
+}
+
+.light-black-text {
+    color: #555;
+}
+
+.selectmeal button.slds-button {
+
+    background-color: #3bcf56;
+    border-radius: inherit;
+
+}
+
+.btn-container {
+    padding-top: 20px;
+    font-size: 12px;
+}
+.button-color {
+    background-color: #F07F07 !important;
+}
+
+
+.icon-left {
+    margin-right: 5px;
+}
+
+.label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+.menuitem-ul{
+    list-style: circle;
+    /* padding-left: 20px; */
+    color: white;
+    margin-left: 10px;
+}
+.item-scrol {
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+.item-scrol li::before {
+    content: '';    
+    display: inline-block; 
+    width: 8px;
+    height: 8px;
+    background-color: white; /* Circle color */
+    border-radius: 50%;        /* Ensures it's a circle */
+    margin-right: 8px;         /* Spacing between circle and text */
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .title1 {
+        margin-right: 0px;
+        text-align: center;
+        font-size: 35px;
+
+    }
+    .feedback-submission h4{
+    color: #F07F07;
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    padding-bottom: 10px;
+     /* padding-left: 30px; */
+    }
+
+    .main-heading {
+        font-size: large;
+        font-weight: bold;
+        text-align: center;
+        /* margin-top: 20px; */
+    }
+
+    .missed-meal {
+        font-weight: bold;  
+        color: red; 
+        font-size: 24px;
+    }
+
+    .left-section {
+        padding-right: 0px;
+    }
+    
+
+    .meal-heading {
+        color: #f5f2f3;
+        font-size: 23px;
+        font-weight: bold;
+        /* padding: 12px; */
+        text-align: center;
+        border-radius: 12px;
+        background-color: #F07F07;
+        margin-top: 20px;
+        padding: 0px;
+        font-family: 'Glacial Indifference' !important;
+    }
+    .selectmeal-item {
+        padding: 0px;
+    }
+
+    .meal-info-container {
+        margin-top: 10px;
+        padding-top: 0px;
+        padding-bottom: 32px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .left-item {
+        padding:  0px;
+    }
+
+    .nomenu-list {
+        font-size: 2rem;
+        font-weight: bold;
+        background-color: #e2dfe0;
+        color: #F07F07;
+        padding-left: 8px;
+    }
+
+    .mealData {
+        text-align: left;
+        padding-top: 10px;
+        font-size: 8px;
+    }
+
+    .selectmealbtn {
+        background-color: #baafaf;
+        color: black;
+        /* size: 38px; */
+        font-size: 12px;
+        --sds-c-button-brand-color-background-hover:  #e67e00;
+    }
+    .userdetailes{
+        background-color: #F07F07;
+        border-radius: 20px;
+        height: 300px;
+        padding-top: 45%;
+        width: 98%;
+        /* padding-left: 6px; */
+        /* font-size: 12px; */
+        /* text-align: center; */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-content: stretch;
+        flex-direction: row;
+    }
+}
+
+.nomenu-list {
+    font-size: 2rem;
+    font-weight: bold;
+
+    background-color: #e2dfe0;
+    color: #F07F07;
+}
+
+.default-meal {
+    background-color: #f3f3f3;
+    color: black;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.selected-meal {
+    background-color: green;
+    color: white;
+    border: 1px solid darkgreen;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.selectmealbtn {
+    background-color: #baafaf;
+    color: black;
+    /* border-radius: inherit; */
+    
+}
+  
+.selectmealbtn:hover {
+    background-color:#F07F07;
+   
+}

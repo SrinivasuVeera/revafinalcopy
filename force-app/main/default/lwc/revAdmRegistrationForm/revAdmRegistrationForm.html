@@ -1,0 +1,93 @@
+<!--
+    ## Author
+    ! Owais Amin Ahanger
+     Usage
+    Experience Builder >> Admission Portal >> Registration Page
+-->
+<template>
+
+    <div class="registration-from-wrapper">
+        <div class="registration-info-section">
+            <div class="text-section">
+                <div class="heading">REVA Registration Process</div>
+                <div class="content">
+                    The student life at REVA is colourful, vibrant, and packed with activities to make the campus days
+                    memorable. With rich
+                    biodiversity, study lawns, and open-air theatre to enrich your learning experience, a student’s
+                    journey at REVA is
+                    unique in every way. The University’s comprehensive facilities offer you plenty to do, see, explore
+                    and experience while
+                    pursuing your studies.
+                </div>
+            </div>
+            <div class="image-section">
+                <div class="registration-icon">
+                    <img src={registrationProcessImageUrl} alt="Registration Process">
+                </div>
+            </div>
+        </div>
+        <div class="registration-from-section">
+            <div class="status-content-tracker-wrapper">
+                <div class="status-content-tracker">
+                    <div class="status-icons">
+                        <img src={registerYourSelfIconUrl} alt="Register yourself">
+                    </div>
+                    <div class="status-icons-text">Register Yourself</div>
+                </div>
+
+                <div class="status-content-tracker">
+                    <div class="status-icons">
+                        <img src={verifyEmailOrSmsIconUrl} alt="OTP Verification">
+                    </div>
+                    <div class="status-icons-text ">OTP Verification</div>
+                </div>
+                <div class="status-content-tracker">
+                    <div class="status-icons-fee">
+                        <img src={payApplicationFeeIconUrl} alt="Pay Application Fee">
+                    </div>
+                    <div class="status-icons-text ">Pay Application Fee</div>
+                </div>
+
+                <div class="status-content-tracker">
+                    <div class="status-icons">
+                        <img src={resetPasswordIconUrl} alt="Reset The Applicant Portal">
+                    </div>
+                    <div class="status-icons-text">Reset Password</div>
+                </div>
+
+                <div class="status-content-tracker">
+                    <div class="status-icons">
+                        <img src={fillApplicationFormIconUrl} alt="Fill The Application Form">
+                    </div>
+                    <div class="status-icons-text">Fill Application Form</div>
+                </div>
+                <div class="status-content-tracker">
+                    <div class="status-icons">
+                        <img src={awaitCallIconUrl} alt="Await Call from Admission Counsellor">
+                    </div>
+                    <div class="status-icons-text ">Await Call From Admission Counsellor</div>
+                </div>
+
+            </div>
+            <div class="status-number-tracker-wrapper">
+                <div class="status-number-tracker">
+                    <template for:each={statusItems} for:item="item">
+                        <div key={item.number} class="status-element">
+                            <div class={item.class}>
+                                {item.number}
+                            </div>
+                            <!-- Render the line for all items except the last one -->
+                            <template lwc:if={item.showLine}>
+                                <div class="status-line"></div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="component-section-wrapper">
+                <c-registration-form-container onsendcallcount={handleCallCount}
+                    prop-year={admissionYear}></c-registration-form-container>
+            </div>
+        </div>
+    </div>
+</template>

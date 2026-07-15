@@ -1,0 +1,266 @@
+<aura:component controller="ASM_IamProfListView" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+        <aura:html tag="style">
+            .slds-template_default {
+            padding: 0rem;
+            }
+            .compact-button {
+            padding: 0.25rem 0.5rem; /* Reduce padding */
+            font-size: 0.75rem; /* Smaller font size */
+            line-height: 1.5; /* Adjust line height for better fit */
+        }
+        </aura:html>
+        <aura:attribute name="selectedIAtype" type="String" default="IA1"/>
+        <aura:attribute name="isAllowed" type="boolean" default="false"/>
+        <aura:attribute name="errorMessage" type="String" default=""/>
+        <aura:attribute name="courseList" type="List"/>
+    	<aura:attribute name="todayDate" type="Date" access="private" />
+                
+        <aura:attribute name="isSelected" type="boolean" default="false"/>
+        <aura:attribute name="selectedConId" type="String" default=""/>
+        <aura:attribute name="selectedCrsType" type="String" default=""/>
+        
+        <aura:attribute name="Spinner" type="boolean" default="false"/>
+        <aura:attribute name="isFreezed" type="boolean" default="false"/>
+        <aura:attribute name="freezeProfessor" type="boolean" default="false"/>
+        <aura:attribute name="isIA2" type="boolean" default="false"/>
+        <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+        <aura:attribute name="isMarkFreeze" type="boolean" default="false"/>
+        <aura:attribute name="selectedCourseId" type="String" />
+        <aura:attribute name="isReadOnly" type="Boolean" default="false"/>
+        <aura:attribute name="iaType" type="String"/>
+        <aura:attribute name="studentMarksList" type="List" default="[]"/>
+        <aura:attribute name="showStudentTable" type="Boolean" default="false"/>        
+    
+        <!-- Handlers -->
+        <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+        
+        <aura:handler name="ASM_RefreshProfView" event="c:ASM_RefreshProfView" action="{!c.handleRefEvent}"/>
+        
+        <aura:if isTrue="{!v.Spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        
+        <div class="slds-theme_default">
+            <aura:if isTrue="{!!v.isSelected}">
+                <div class="slds-form slds-box" role="list">
+                    <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                            <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                                <label class="slds-form-element__label" for="single-form-element-id-02">IA Type:</label>
+                                <div class="slds-form-element__control">
+                                    <lightning:select value="{!v.selectedIAtype}" onchange="{!c.doInit}">
+                                        <option value="IA1">IA1</option>
+                                        <option value="IA2">IA2</option>
+                                    </lightning:select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-form__item" role="listitem">
+                        </div>
+                        <div class="slds-form__item" role="listitem">
+                        </div>
+                        <div class="slds-form__item" role="listitem">
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.isAllowed}">
+                <aura:if isTrue="{!not(empty(v.courseList)) &amp;&amp; !v.isSelected}">
+                    <table class="slds-table slds-table--bordered slds-max-medium-table--stacked" style="overflow: visible;" width="100%">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;}">Course name</th>
+                                <!--<th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:20%;}">School</th>-->
+                              <!--  <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;}">Program Batch</th> -->
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;}">Semester</th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;}">Section/Batch/Group</th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%; text-align: center;}">Last Date - Marks Entry</th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%; text-align: center;}">Last Date - Freeze</th>                                
+                                <!--<th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">Status</th>-->
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%; text-align: center;}">Action</th>
+                                <aura:if isTrue="{!v.isIA2}"> 
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">Status</th>
+                                </aura:if>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.courseList}" var="crs" indexVar="crsIndex">
+                                <tr>
+                                    <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        {!crs.hed__Course_Offering__r.hed__Course__r.Name}
+                                    </td>
+                                    <!--<td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        {!crs.School__c}
+                                    </td>-->
+                                 <!--   <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;word-wrap: break-word;}">
+                                        {!crs.Program__c}
+                                    </td> -->
+                                    <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        {!crs.Semester_Name__c}
+                                    </td>
+                                    <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        {!crs.Section_Batch_Group__c}
+                                    </td>
+                                    <td data-label="Course" style="overflow-x: visible; overflow-wrap: normal; overflow-y: visible; text-align: center;">
+                                        {!crs.IA2_Result_Date__c_Formatted}
+                                    </td>
+                                    <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible; text-align: center;}">
+                                        {!crs.IA_Allowed_End_Date__c}
+                                    </td>                                   
+                                    <!--<td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        Status field
+                                    </td>-->
+                                    <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible; text-align: center;">                                    
+                                    <aura:if isTrue="{!crs.IA_Marks_Entry_Status__c == 'Open'}">
+                                        <lightning:button label="Enter IA Marks" onclick="{!c.selectCon}" name="{!crsIndex}" variant="base" class="compact-button enter-ia-btn"/>
+                                        <aura:set attribute="else">                                            
+                                            <aura:if isTrue="{!crs.IA_Marks_Entry_Status__c == 'Locked' &amp;&amp; !crs.facultycheck}">
+                                                <lightning:button label="Edit IA Marks" onclick="{!c.selectCon}" name="{!crsIndex}" variant="base" class="compact-button edit-ia-btn"/>
+                                                <aura:set attribute="else">
+                                                    <aura:if isTrue="{!crs.IA_Marks_Entry_Status__c == 'Locked' &amp;&amp; crs.facultycheck}">
+                                                        <lightning:button label="View IA Marks" onclick="{!c.selectCon}" name="{!crsIndex}" variant="base" class="compact-button view-ia-btn"/>
+                                                        <aura:set attribute="else">
+                                                            Contact Exam Vertical Head
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:set>
+                                    </aura:if>
+                                </td>
+                                    <aura:if isTrue="{!v.isIA2}">
+                                    <aura:if isTrue="{!!crs.facultycheck}">
+                                        <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                            <lightning:button name="{!crs.Id}" label="Freeze" onclick="{!c.openModal}" variant="base"
+                                                disabled="{!and(crs.IA_Marks_Entry_Status__c == 'Not Entered', v.todayDate > crs.IA_Allowed_End_Date_Comparable)}"/>
+                                        </td>
+                                        <aura:set attribute="else">
+                                            <td data-label="Course" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                <lightning:button name="{!crs.Id}" label="Download IA Marks" onclick="{!c.downloadAsPDF}" variant="brand" class="compact-button"/>
+                                            </td>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!!v.isSelected}">
+                            No Data..
+                        </aura:if>
+                    </aura:set>
+                    
+                </aura:if>
+                
+                <aura:if isTrue="{!v.isModalOpen}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModal}"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-modal__title">Freeze IA Marks</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Sl. No.">Sl. No.</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="SRN Number">SRN Number</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Name">Name</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="IA1">IA1</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="IA2">IA2</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Total (IA1 + IA2)">Total (IA1 + IA2)</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.studentMarksList}" var="student">
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Sl. No.">
+                                                <div class="slds-truncate">{!student.slNo}</div>
+                                            </td>
+                                            <td data-label="SRN Number">
+                                                <div class="slds-truncate">{!student.srnNumber}</div>
+                                            </td>
+                                            <td data-label="Name">
+                                                <div class="slds-truncate">{!student.studentName}</div>
+                                            </td>
+                                            <td data-label="IA1">
+                                                <div class="slds-truncate">{!student.ia1Marks}</div>
+                                            </td>
+                                            <td data-label="IA2">
+                                                <div class="slds-truncate">{!student.ia2Marks}</div>
+                                            </td>
+                                            <td data-label="Total (IA1 + IA2)">
+                                                <div class="slds-truncate" style="text-align: center;">{!student.totalMarks}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <p class="slds-p-bottom_small" style="white-space: normal; text-align: left;"><b>Are you sure you want to Freeze Editing of IA Marks? Please ensure all IA marks have been verified with the orange books before proceeding. Once frozen, IA marks cannot be edited.
+                            </b>
+                        </p><br/>
+                        <lightning:button variant="brand"
+                                          label="Yes"
+                                          title="Yes"
+                                          onclick="{!c.callFreezingService}"/>
+                        <lightning:button variant="Neutral"
+                                          label="No"
+                                          title="No"
+                                          onclick="{!c.closeModal}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>                
+                <aura:if isTrue="{!v.isSelected}">
+                    <aura:if isTrue="{!v.selectedCrsType == 'Theory'}">
+                        <c:ASM_TheoryIAMarksEntry profCrsConId="{!v.selectedConId}" iaType="{!v.selectedIAtype}" isReadOnly="{!v.isReadOnly}"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.selectedCrsType == 'Project'}">
+                        <c:ASM_ProjIAMarksEntry profCrsConId="{!v.selectedConId}" iaType="{!v.selectedIAtype}" isReadOnly="{!v.isReadOnly}"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.selectedCrsType == 'Practical'}">
+                        <c:ASM_LabIAMarksEntry profCrsConId="{!v.selectedConId}" iaType="{!v.selectedIAtype}" isReadOnly="{!v.isReadOnly}"/>
+                    </aura:if>
+                    <!--<center><br/>
+                        <lightning:button label="Back to List" onclick="{!c.goBack}"/>
+                    </center>-->
+                </aura:if>
+                <aura:set attribute="else">
+                    <br/>
+                    <div style="color:red;">{!v.errorMessage}</div>
+                    <br/><br/><br/>
+                </aura:set>
+            </aura:if>
+        </div>
+    </aura:component>

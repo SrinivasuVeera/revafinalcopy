@@ -1,0 +1,35 @@
+.header-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 12px 24px 20px 24px;
+}
+
+.reva-logo {
+    width: 13.625rem;
+    width: 13.625rem;
+    position: relative;
+    top: 40px;
+    left: 40px;
+}
+
+@media only screen and (max-width: 700px) {
+    .reva-logo {
+        width: 15rem;
+    }
+    .reva-logo {
+        width: 13.625rem;
+        width: 13.625rem;
+        position: relative;
+        top: 70px;
+        left: 0px;
+    }
+    .header-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 12px 24px 20px 24px;
+        justify-content: center ;
+    }
+    
+    
+}

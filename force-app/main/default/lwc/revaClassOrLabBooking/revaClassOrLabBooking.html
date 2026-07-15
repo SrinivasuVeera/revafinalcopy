@@ -1,0 +1,186 @@
+<template>
+    <template if:false={isBookCrossDept}>
+    <lightning-card title="Same Department Classroom/Lab Booking">
+        <div class="slds-p-horizontal_medium">
+            <template for:each={rows} for:item="row" for:index="index">
+                <div key={row.id}>
+                    <lightning-layout multiple-rows>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                            large-device-size="3" padding="horizontal-small">
+                            <div class="custom-box">
+                                <!--<lightning-combobox label="School"  options={schoolOptions}
+                                    onchange={handleSchoolChange} data-index={index} ></lightning-combobox>-->
+                                    <lightning-input label="School"  value={departmentName} disabled ></lightning-input>
+                                    
+                            </div>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                            large-device-size="3" padding="horizontal-small">
+                            <div class="custom-box">
+                                <lightning-combobox label="Semester"  options={semesters}
+                                    onchange={handleSemesterSelection} data-index={index}></lightning-combobox>
+                                    
+                            </div>
+                        </lightning-layout-item>
+                        
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                            large-device-size="4" padding="horizontal-small">
+                            <div class="custom-box">
+                                <lightning-input type="search" label="Facility" onchange={handleFacilitySearch}
+                                    data-index={index}></lightning-input>
+                                    
+                                <template lwc:if={row.selectedFacilities.length}>
+                                    <div class="slds-m-top_x-small selected-item-container" style="display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; text-align: right;">
+                                        <template for:each={row.selectedFacilities} for:item="facility">
+                                            <lightning-badge key={facility.id} label={facility.Display_Name__c}
+                                                icon-name="utility:close" onclick={handleFacilityRemove} class="badge"
+                                                data-index={index} icon-position="end"
+                                                data-id={facility.Id}></lightning-badge>
+                                        </template>
+                                    </div>
+                                </template>
+                                
+                                <p class="facility-helptext">{row.facilityHelpText}</p>
+                                <div class="slds-p-top_small slds-text-align_center" style="display: flex;flex-direction: column;justify-content: flex-start;align-items: start; text-align: start;">
+                                    <template lwc:if={row.filteredFacilities}>
+                                        <template for:each={row.filteredFacilities} for:item="value">
+                                            <div key={value} class="slds-p-bottom_xxx-small">
+                                                <lightning-button label={value.Display_Name__c} variant="base"
+                                                    data-id={value.Id} data-index={index}
+                                                    onclick={handleFacilitySelection}></lightning-button>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="1" small-device-size="1" medium-device-size="1"
+                            large-device-size="1" padding="horizontal-small">
+                            <div class="delete-btn">
+                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                    variant="destructive" onclick={deleteRow}
+                                    data-index={index} class="button-icon"></lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:add" alternative-text="Add Row"
+                                    variant="destructive" onclick={addRow}
+                                    data-index={index}></lightning-button-icon>
+                            </div>
+                        </lightning-layout-item>
+                       
+                    </lightning-layout>
+                    <!-- <div class="line"></div> -->
+                </div>
+            </template>
+        </div>
+        <!-- <div class="book-slots-btn">
+            <lightning-button label="Book Facilities" variant="brand" onclick={handleBookFacilities}></lightning-button>
+        </div> -->
+        <div style='display:flex;justify-content:end;align-items:center'>
+        <div class="book-slots-btn">
+            <lightning-button label="Book Facilities" variant="brand" onclick={handleBookFacilities}></lightning-button>
+        </div>
+        <div class="book-slots-btn">
+            <lightning-button label="Book Cross Department" variant="brand" onclick={handleBookCrossDept}></lightning-button>
+        </div>
+      </div>
+
+    </lightning-card>
+    </template>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+
+<template if:true={isBookCrossDept}>
+    <lightning-card title="Different Department Classroom/Lab Booking">
+        <div class="slds-p-horizontal_medium">
+            <template for:each={rows} for:item="row" for:index="index">
+                <div key={row.id}>
+                    <lightning-layout multiple-rows>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                            large-device-size="3" padding="horizontal-small">
+                            <div class="custom-box">
+                                <!--<lightning-combobox label="School"  options={schoolOptions}
+                                    onchange={handleSchoolChange} data-index={index} ></lightning-combobox> -->
+                                    <lightning-input label="School"  value={departmentName} disabled ></lightning-input>
+                                    
+                            </div>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                            large-device-size="3" padding="horizontal-small">
+                            <div class="custom-box">
+                                <lightning-combobox label="Semester"  options={semesters}
+                                    onchange={handleSemesterSelection} data-index={index}></lightning-combobox>
+                                    
+                            </div>
+                        </lightning-layout-item>
+                        
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                            large-device-size="4" padding="horizontal-small">
+                            <div class="custom-box">
+                                <lightning-input type="search" label="Facility" onchange={handleFacilitySearch}
+                                    data-index={index}></lightning-input>
+                                    
+                                <template lwc:if={row.selectedFacilities.length}>
+                                    <div class="slds-m-top_x-small selected-item-container" style="display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; text-align: right;">
+                                        <template for:each={row.selectedFacilities} for:item="facility">
+                                            <lightning-badge key={facility.id} label={facility.Display_Name__c}
+                                                icon-name="utility:close" onclick={handleFacilityRemove} class="badge"
+                                                data-index={index} icon-position="end"
+                                                data-id={facility.Id}></lightning-badge>
+                                        </template>
+                                    </div>
+                                </template>
+                                
+                                <p class="facility-helptext">{row.facilityHelpText}</p>
+                                <div class="slds-p-top_small slds-text-align_center" style="display: flex;flex-direction: column;justify-content: flex-start;align-items: start; text-align: start;">
+                                    <template lwc:if={row.filteredFacilities}>
+                                        <template for:each={row.filteredFacilities} for:item="value">
+                                            <div key={value} class="slds-p-bottom_xxx-small">
+                                                <lightning-button label={value.Display_Name__c} variant="base"
+                                                    data-id={value.Id} data-index={index}
+                                                    onclick={handleFacilitySelection}></lightning-button>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="1" small-device-size="1" medium-device-size="1"
+                            large-device-size="1" padding="horizontal-small">
+                            <div class="delete-btn">
+                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                    variant="destructive" onclick={deleteRow}
+                                    data-index={index} class="button-icon"></lightning-button-icon>
+                                    <lightning-button-icon icon-name="utility:add" alternative-text="Add Row"
+                                    variant="destructive" onclick={addRow}
+                                    data-index={index}></lightning-button-icon>
+                            </div>
+                        </lightning-layout-item>
+                       
+                    </lightning-layout>
+                    <!-- <div class="line"></div> -->
+                </div>
+            </template>
+        </div>
+        <!-- <div class="book-slots-btn">
+            <lightning-button label="Book Facilities" variant="brand" onclick={handleBookFacilities}></lightning-button>
+        </div> -->
+        <div style='display:flex;justify-content:end;align-items:center'>
+        <div class="book-slots-btn">
+            <lightning-button label="Book Facilities" variant="brand" onclick={handleBookFacilities}></lightning-button>
+        </div>
+        <div class="book-slots-btn">
+            <lightning-button label="Book Same Department" variant="brand" onclick={handleBookSameDept}></lightning-button>
+        </div>
+      </div>
+    </lightning-card>
+</template>
+</template>

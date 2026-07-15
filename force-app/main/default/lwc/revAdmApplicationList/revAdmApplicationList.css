@@ -1,0 +1,41 @@
+.application-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.heading-label {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.list-view-content {
+    background: var(--reva-admission-portal-component-bgcolor);
+}
+
+.applications-table {
+    table-layout: fixed;
+}
+
+.applications-table thead th,
+.applications-table tbody td {
+    white-space: normal;
+    word-wrap: break-word;
+    padding: 8px;
+    border-bottom: 1px solid var(--lwc-colorBorderInput, rgb(0, 103, 154));
+    text-align: left;
+
+}
+
+.applications-table thead th:first-of-type,
+.applications-table tbody td:first-of-type {
+    padding-left: 0;
+}
+
+@media only screen and (max-width:767px) {
+
+    .applications-table thead th,
+    .applications-table tbody td {
+        padding: 5px;
+    }
+}

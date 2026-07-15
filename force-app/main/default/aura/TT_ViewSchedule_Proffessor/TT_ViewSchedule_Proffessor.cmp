@@ -1,0 +1,65 @@
+<aura:component controller="TT_ViewSchedule_ProfCls" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:appHostable" access="global" >
+    <aura:attribute name="selectedDat" type="Date"/>
+    <aura:attribute name="selectedSchedule" type="String"/>
+    <aura:attribute name="scheduleList" type="List"/>
+    <aura:attribute name="showAttCmp" type="boolean" default="false"/>
+    <aura:attribute name="showReadOnly" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <aura:handler name="change" value="{!v.showAttCmp}" action="{!c.refreshView}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div style="background-color:white">
+        <aura:if isTrue ="{!v.scheduleList.length > 0}" >
+            <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+                <thead>
+                    <tr>
+                        <th style="text-align:center;width: 3rem;">Slot</th>
+                        <th style="text-align:center;width: 6rem;">Time</th>
+                        <th style="text-align:center">Program</th>
+                        <th style="width: 5rem;text-align:center">Semester</th>
+                        <th style="text-align:center">Section</th>
+                        <th style="text-align:center">Batch/Group</th>
+                        <th style="text-align:center">Course</th>
+                    </tr>
+                </thead>            
+                <tbody class="CustomColumnText"> 
+                    <aura:iteration items="{!v.scheduleList}" var="dayWise">
+                        <tr >
+                        	<td colspan="7" style="text-align:center;background-color:orange;"><b>{!dayWise.sDay}</b></td>
+                        </tr>
+                        <aura:iteration items="{!dayWise.schWrp}" var="schList" indexVar="i">                            
+                            <tr>                                
+                                <td  style="width: 3rem;text-align:center">{!schList.slotNum}</td>
+                                <td colspan="1" style="text-align:center">{!schList.timeSlot}</td>
+                                <td colspan="1" style="text-align:center">{!schList.programName}</td>
+                                <td colspan="1" style="width: 3rem;text-align:center">{!schList.semNumber}</td>
+                                <td colspan="1" style="width: 4rem;text-align:center">{!schList.secName}</td>
+                                <th style="width: 4rem;text-align:center">{!schList.groupName}</th>
+                                <td colspan="1" style="text-align:center" class="td-fixed-width">
+                                    <div class="slds-cell-wrap">
+                                        {!schList.courseName}
+                                    </div>
+                                </td>                            
+                            </tr>
+                        </aura:iteration>
+                    </aura:iteration>
+                </tbody>
+                
+            </table>
+        </aura:if>
+        <aura:if isTrue ="{!v.scheduleList.length == 0}" >
+            No slots to show
+        </aura:if>
+    </div>
+    
+</aura:component>

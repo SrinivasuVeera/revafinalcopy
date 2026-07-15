@@ -1,0 +1,74 @@
+.slds-modal__container{
+    min-width: 90vw !important;    
+}
+section{
+    border: 2px solid black;
+    width: fit-content;
+    margin: auto;
+    padding: 1rem;
+    overflow: auto;
+}
+
+table {
+    border-collapse: collapse;
+    overflow: auto;
+    width: 100%;
+    border-spacing: 0;
+    background-color: white;
+}
+
+
+table, th, td {
+    /* border-collapse: collapse; */
+    padding: 20px;
+    text-align: center;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: grey;
+   /*  cursor: pointer; */
+    text-transform:uppercase;
+    color: white;
+}
+
+.smt-heading{
+    font-weight: 700;
+    font-size: 16px;
+    margin-block: 10px;
+    text-align: center;
+}
+
+
+@media (max-width:500px){
+    table {
+    font-size: 12px;
+}
+}
+
+@media (max-width: 650px) {
+
+    td{
+        display: grid;
+        grid-template-columns: 21ch auto;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;   
+    }   
+
+    td:first-child{
+        padding-top: 2rem;
+    }
+
+    td:last-child{
+        padding-bottom: 2rem;
+    }
+    th{
+        display: none;
+    }
+    td::before{
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+    }
+  
+}

@@ -1,0 +1,254 @@
+<template>
+    <div class="guest-house-booking-wrapper" style="border-radius:15px; border-style: solid;border-color:orange;padding:15px;">
+
+        <div class="header">
+            <strong>REVA Guest House Booking Form</strong>
+        </div>
+        <p class="header1">
+            Enjoy a comfortable and relaxing stay at our guest house, your home away from home
+        </p>
+        <hr style="width:70%;text-align:center;background-color:orange;margin:0px !important;margin-left: 15% !important;">
+        <br/>
+        <lightning-layout multiple-rows="true">
+            <!-- Column 1 -->
+            <lightning-layout-item size="12">
+                <div class="slds-box">
+
+                    <lightning-combobox label="Guest Type" value={guestType} options={GuestTypeOptions}
+                        onchange={handleGuestTypeChange} class="slds-form-element__label custom-box " data-id="input-cstm"
+                        required></lightning-combobox>
+
+
+                    <lightning-input type="tel" label="Guest Phone Number" value={phoneNumber} placeholder="0123456789"
+                        onchange={handlePhoneNumber} class="slds-form-element__label" pattern="[0-9]{10}" maxlength="10" minlength="10" required ></lightning-input>
+
+                    <template if:true={isCitizen}>
+                        <lightning-combobox label="Citizenship" value={citizenshipName} placeholder="Select Citizenship"
+                            options={citizenshipOptions} onchange={handleCitizenshipChange}
+                            class="slds-form-element__label" required></lightning-combobox>
+
+
+                        <!-- Address -->
+                        <lightning-input label="Address" type="textarea" value={address} onchange={handleAddress}
+                            class="slds-form-element__label" required></lightning-input>
+                    </template>
+
+                    
+                    <template if:false={showStudentStaffField}>
+                        <lightning-input label="Private" type="CheckBox" value={PrivateVisit}
+                            onchange={handlePrivateChange} onclick={handlePurposeOfVisitClick}
+                            disabled={isPrivateDisabled} class="slds-form-element__label"></lightning-input>
+
+                        <lightning-input label="Official" type="CheckBox" value={PersonalVisit}
+                            onchange={handlePersonalChange} onclick={handlePurposeOfVisitClick}
+                            disabled={isPersonalDisabled} class="slds-form-element__label"></lightning-input>
+                    </template>
+                    <!-- Purpose of Visit -->
+                    <lightning-input label="Purpose of Visit" type="text" value={purposeOfVisit}
+                        onchange={handlePurposeOfVisitChange} onclick={handlePurposeOfVisitClick}
+                        class="slds-form-element__label" required="true"></lightning-input>
+
+                    <template if:true={showCheckboxes}>
+                        <lightning-checkbox-group options={purposeTypeOptions} value={selectedPurposeTypes}
+                            onchange={handlePurposeTypeChange} required></lightning-checkbox-group>
+                    </template>
+                </div>
+            </lightning-layout-item>
+
+
+            <!-- Column 2 -->
+            <lightning-layout-item size="12">
+                <div class="slds-box">
+
+
+                    <template if:false={isGuestHouseManager}>
+                        <template if:true={showStudentStaffField}>
+                            <lightning-input label="Name of the Applicant - Student / Staff" type="text"
+                                value={userName} disabled class="slds-form-element__label" required></lightning-input>
+                        </template>
+                    </template>
+
+                    <template if:true={isGuestHouseManager}>
+                        <template if:true={showStudentStaffField}>
+                            <lightning-input label="Name of the Applicant - Student / Staff" type="search"
+                                value={searchKey} onchange={handleSearchChange} class="slds-form-element__label">
+                            </lightning-input>
+                            <ul class="slds-box slds-p-around_small" if:true={contacts}>
+                                <template for:each={contacts} for:item="contact">
+                                    <li key={contact.Id} class="slds-box slds-box_x-small slds-p-around_small">
+                                        <a href="javascript:void(0);" onclick={handleContactSelect} data-id={contact.Id}
+                                            data-name={contact.Name} data-phone={contact.MobilePhone}
+                                            data-srnno={contact.SRN_Number__c} class="custom-link">
+                                            {contact.Name} -
+                                            {contact.Email}-{contact.MobilePhone}-{contact.SRN_Number__c}
+                                            <!-- - {contact.MobilePhone} -->
+                                        </a>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                    </template>
+
+
+                    <template if:true={showDeptSchoolField}>
+                        <lightning-combobox name="schoolPicklist" label="Name of Dept/School"
+                            placeholder="Name of Dept/School" options={schoolOptions} onchange={handledeptName}
+                            class="slds-form-element__label" required>
+                        </lightning-combobox>
+
+                    </template>
+
+                
+                    <lightning-input type="Email" label="Guest Email" value={email} onchange={handleEmail}
+                        class="slds-form-element__label" placeholder="username@example.com" required></lightning-input>
+
+                    <template if:true={nonIndian}>
+                        <lightning-input type="text" label="Passport Number" value={passportNumber}
+                            onchange={handlepassportNumber} class="slds-form-element__label" required></lightning-input>
+                        <lightning-input type="text" label="Visa Number" value={visaNumber} onchange={handlepvisaNumber}
+                            class="slds-form-element__label" required></lightning-input>
+                        <lightning-input label="Visa Expiry Date" type="date" value={visaDate}
+                            onchange={handleVisaDateChange} class="slds-form-element__label" required></lightning-input>
+
+                    </template>
+
+
+                    <template if:true={showDescription}>
+                        <lightning-input label="Guest Description" class="slds-form-element__label" type="text"
+                            value={GuestDescription} onchange={handleGuestDescription} required></lightning-input>
+                    </template>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+       
+        <lightning-layout class="slds-box">
+            
+            <lightning-layout-item size="12">
+                <!-- coordinator details -->
+                <template if:false={showStudentStaffField}>
+                    
+                        <lightning-input label="Co Ordinator Name" type="search" value={searchcon}
+                        onchange={handleSearchcontact} class="slds-form-element__label"  disabled ={isCoOrdinatorDisabled} required>
+                    </lightning-input>
+                    
+                   
+                    <ul class="slds-box slds-p-around_small" if:true={contacts}>
+                        <template for:each={contacts} for:item="contact">
+                            <li key={contact.Id} class="slds-box slds-box_x-small slds-p-around_small">
+                                <a href="javascript:void(0);" onclick={handlecoordinatorSelect} data-id={contact.Id}
+                                    data-name={contact.Name} data-phone={contact.MobilePhone}
+                                    data-srnno={contact.Email} class="custom-link">
+                                    {contact.Name} - {contact.Email}
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+
+                    <lightning-input type="checkbox" label="Can't find the Co Ordinator?" checked={showManualEntry}
+                        onchange={handleCheckboxChange}>
+                    </lightning-input>
+
+                    <template if:true={showManualEntry}>
+                        <lightning-input label="Co Ordinator Name" class="slds-form-element__label" type="text"
+                            onchange={handlecoOrdinatorNameChange} value={coOrdinatorName} required></lightning-input>
+                    </template>
+                </template>
+                  <template if:false={showStudentStaffField}>
+                    <lightning-input label="Co Ordinator Mobile Number" class="slds-form-element__label" type="tel" placeholder="0123456789"
+                        value={coOrdinatorMobile} onchange={handleCoOrdinatorMobile} pattern="[0-9]{10}" maxlength="10" minlength="10" required></lightning-input>
+
+                         <lightning-input label="Co Ordinator Email" class="slds-form-element__label" type="Email"
+                        value={coOrdinatorEmail} onchange={handlecoOrdinatorEmail} placeholder="username@example.com" required></lightning-input>
+                </template>
+                
+           
+            </lightning-layout-item>
+         
+       </lightning-layout>
+        <br/>
+        <lightning-layout class="slds-box">
+            <lightning-layout-item size="12">
+                <!-- No. of guest -->
+                <lightning-input label="No of Guests" type="number" value={noOfGuests} onchange={handlenoOfGuests}
+                        class="slds-form-element__label" required></lightning-input>
+
+                <lightning-combobox label="Room Type" options={roomOptions} onchange={handleRoomTypeChange}
+                        value={roomType} class="slds-form-element__label" required></lightning-combobox>
+
+              <lightning-combobox label="No of Rooms" options={roomsTypeOptions} onchange={handleRoomsChange}
+                value={roomsNumber} class="slds-form-element__label" required></lightning-combobox>
+
+            <!-- Sharing Type -->
+                <lightning-combobox label="Sharing Type" options={shareTypeOptions}
+                onchange={handleSharingTypeChange} value={sharingType} class="slds-form-element__label"
+                required></lightning-combobox>
+            </lightning-layout-item>
+       </lightning-layout>
+       <br/>
+        <hr style="width:100%;text-align:center;background-color:orange;margin:0px !important;margin-left:5px !important;margin-right:5px !important;">
+       <br/>
+    <lightning-layout>
+            <lightning-layout-item size="6">
+                <!-- Start Date Time -->
+                <lightning-input label="Arrival Details" data-id="arrivalDate" type="datetime" value={startDate} class="slds-p-around_small"
+                onchange={handleStartDateChange} required></lightning-input>
+            </lightning-layout-item>
+          
+            <lightning-layout-item size="6">
+                 <!-- End Date Time -->
+            <lightning-input label="Departure Details" data-id="DeptDate" type="datetime" value={endDate} class="slds-p-around_small"
+            onchange={handleEndDateChange} required> </lightning-input>
+            </lightning-layout-item>
+    </lightning-layout>
+        <br/>
+        <hr style="width:100%;text-align:center;background-color:orange;margin:0px !important;margin-left:5px !important;margin-right:5px !important;">
+        <br/>
+         
+        <lightning-layout-item size="12">
+            <div class="slds-box">
+                <!-- Dynamic Guest Info Fields -->
+                <template for:each={guestList} for:item="guest">
+                    <div key={guest.id} class="slds-grid slds-gutters slds-wrap slds-form-element__label">
+                        <lightning-input class="slds-col slds-size_12-of-12" label="Guest Name" type="text"
+                            value={guest.guestname} data-id={guest.id} onchange={handleGuestNameChange}
+                            required></lightning-input>
+                        <lightning-input class="slds-col slds-size_6-of-12" label="Age" type="number" value={guest.age}
+                            data-id={guest.id} onchange={handleGuestAgeChange} required></lightning-input>
+                        <lightning-combobox class="slds-col slds-size_6-of-12" label="Gender" value={guest.gender}
+                            data-id={guest.id} options={genderOptions} onchange={handleGuestGenderChange}
+                            required></lightning-combobox>
+                        <div class="slds-col slds-size_12-of-12 slds-grid slds-grid_align-end">
+                            <lightning-button-icon icon-name="utility:delete" alternative-text="Remove"
+                                onclick={removeGuest} data-id={guest.id}></lightning-button-icon>
+                            <lightning-button-icon icon-name="utility:add" alternative-text="Add" onclick={addGuest}
+                                class="slds-m-left_small"></lightning-button-icon>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </lightning-layout-item>
+
+        <!-- Id Proof -->
+        <lightning-layout-item size="6">
+            <div class="slds-box">
+                <lightning-input label="Id Proof" class="slds-form-element__label" type="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.gif,.xls,.xlsx" onchange={handleFileChange} disabled={fileUploaded}
+                    required></lightning-input>
+                <template if:true={fileUploaded}>
+                    <p>File Uploaded: {fileName}</p>
+                    <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                </template>
+            </div>
+        </lightning-layout-item>
+
+        <!-- Save and Close Buttons -->
+        <lightning-layout-item size="9">
+            <div class="slds-grid slds-wrap slds-p-around_small">
+                <lightning-button label="Submit" variant="brand" onclick={handleSave}
+                    disabled={disableSaveButton}></lightning-button>
+                <lightning-button style=padding-left:10px; label="Cancel" variant="brand"
+                    onclick={handleClose}></lightning-button>
+            </div>
+        </lightning-layout-item>
+    </div>
+</template>

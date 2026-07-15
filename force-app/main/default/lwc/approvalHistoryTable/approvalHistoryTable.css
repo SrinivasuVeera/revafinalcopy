@@ -1,0 +1,102 @@
+*{
+    font-family: "NunitoSans", "RobotoSlab", "Roboto", "Dosis", Helvetica, sans-serif !important; /* Removed specific font-face URL */
+}
+
+tr {
+    border-top: 4px solid white;
+    font-size: 0.8rem; /* Set the base font size for table rows */
+}
+
+section {
+    overflow: auto; /* Enable scrolling for overflowing content */
+}
+
+table {
+    border-collapse: collapse; /* Collapse table borders */
+    width: 100%; /* Set table width to fill the parent */
+    background-color: white; /* Set background color for the table */
+}
+
+.pointer-hover {
+    cursor: pointer; /* Show pointer cursor on hover */
+}
+
+table,
+th,
+td {
+    padding: 1rem; /* Set padding for table cells */
+    text-align: left; /* Align text to the left */
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color:  #e07217; /* Background color for table header */
+    text-transform: uppercase; /* Transform text to uppercase */
+    color:white; /* Text color for header */
+}
+
+tbody tr {
+    background-color: #EDEDED; /* Set background color for table rows */
+}
+
+@media (max-width: 650px) {
+    td {
+        /*background-color: #EDEDED;*/
+        display: grid; /* Display table data as grid for small screens */
+        grid-template-columns: 13ch auto; /* Define column layout */
+        gap: 0.5rem; /* Space between grid items */
+        padding: 0.5rem 1rem; /* Adjust padding for small screens */
+    }
+
+    td:first-child {
+        padding-top: 2rem; /* Additional padding for the first cell */
+    }
+
+    td:last-child {
+        padding-bottom: 2rem; /* Additional padding for the last cell */
+    }
+    
+    th {
+        display: none; /* Hide header on small screens */
+    }
+
+    td {
+        display: flex; /* Display table data as flex for alignment */
+        align-items: center; /* Center align items */
+    }
+
+    td::before {
+        content: attr(data-cell) " : "; /* Label for each cell */
+        font-weight: 700; /* Bold text for labels */
+        min-width: 150px; /* Minimum width for labels */
+        text-align: right; /* Right align labels */
+        margin-right: 8px; /* Space between label and content */
+    }
+}
+
+@media (max-width: 500px) {
+    table {
+        font-size: 12px; /* Adjust font size for small screens */
+    }
+    .table-text {
+        font-size: 13px; /* Set font size for the text */
+    }
+}
+
+@media (max-width: 300px) {
+    .table-text {
+        font-size: 11px; /* Further reduce font size for very small screens */
+    }
+}
+
+h4 {
+    padding-inline: 15px; /* Horizontal padding for heading */
+    width: fit-content; /* Adjust width to fit content */
+    background: var(--reva-brand-color); /* Background color for heading */
+    font-weight: 600; /* Font weight for heading */
+    font-size: 1rem; /* Font size for heading */
+    padding-block: 5px; /* Vertical padding for heading */
+    color: white; /* Text color for heading */
+    margin-block: 10px; /* Margin for heading */
+}

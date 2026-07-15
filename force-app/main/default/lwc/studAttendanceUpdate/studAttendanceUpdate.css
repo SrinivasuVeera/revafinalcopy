@@ -1,0 +1,46 @@
+.custom-card {
+    max-width: 800px; /* Set your desired width */
+    margin: 0 auto;   /* Center the card */
+}
+.header-text{
+    font-size: medium;
+    font-weight: bold;
+}
+.slds-spinner {
+    margin: 20px auto;
+    text-align: center;
+}
+.slds-modal__container {
+    width: 30rem;
+}
+
+.slds-modal__header {
+    background-color: #f3f3f3;
+}
+
+.slds-modal__content {
+    background-color: #ffffff;
+    padding: 1rem;
+}
+
+.slds-modal__footer {
+    background-color: #f3f3f3;
+}
+
+.button-container {
+    text-align: right;    
+    padding-bottom: 20px;
+    padding-right: 40px;
+}
+
+.container11 {
+    height: 100vh; /* full viewport height */
+    display: flex;
+    justify-content: center; /* horizontal center */
+    align-items: center;     /* vertical center */
+}
+
+img{
+    max-width: 80%; /* Optional: limit image width */
+    max-height: 80%; /* Optional: limit image height */
+}

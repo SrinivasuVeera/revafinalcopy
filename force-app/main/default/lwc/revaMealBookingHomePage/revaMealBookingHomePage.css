@@ -1,0 +1,69 @@
+@font-face {
+    font-family: 'Glacial Indifference';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/GlacialIndifferenceFont/GlacialIndifference-Regular.otf') format('TrueType');
+}
+
+.tabs {
+    /* margin-top: 1rem;  */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.2rem;
+    /* margin-bottom: 1rem; */
+    justify-content: center;
+}
+
+.tab {
+    font-weight: 750;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    flex: 1;
+    background-color: #fef3ea;
+    min-height: 2rem;
+    padding: 0.5rem;
+    font-size: 20px;
+    text-align: center;
+    font-family: 'Glacial Indifference' !important;
+}
+
+.tab:first-child {
+    color: white;
+    background-color: #F07F07;
+}
+
+.child-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* min-height: 100vh;  */
+    overflow: hidden;
+    /* Prevents scrolling */
+}
+
+lightning-card {
+    width: 100%;
+    /* max-width: 1200px; */
+    /* padding: 0.5rem; */
+}
+
+.btn-container {
+    padding-top: 10px;
+    padding-left: 10px;
+    
+}
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+    .tab {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .tab {
+        flex: 1;
+        font-size: 20px;
+    }
+}

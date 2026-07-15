@@ -1,0 +1,209 @@
+<aura:component controller="ASM_StudentResultView" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+    </aura:html>
+    <aura:attribute type="List" name="resultDataList"/>
+    <aura:attribute type="hed__Term_Grade__c" name="summaryRec" default="{'sobjectType':'hed__Term_Grade__c'}"/>
+    <aura:attribute type="String" name="summaryId" default=""/>
+    <aura:attribute type="String" name="semName" default=""/>
+    <aura:attribute name="showDetailView" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div>
+        <aura:if isTrue="{!not(empty(v.resultDataList))}">
+            <div class="slds-form slds-box" role="list">
+            <div class="slds-form__row">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                        <label class="slds-form-element__label" for="single-form-element-id-02">Sem:</label>
+                        <div class="slds-form-element__control">
+                            {!v.semName}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                        <label class="slds-form-element__label" for="single-form-element-id-02">Year:</label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__control">
+                                {!v.summaryRec.Examination_Month_Year__c}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                    <label class="slds-form-element__label" for="single-form-element-id-02">Detail Result?</label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__control">
+                                <lightning:input type="toggle" variant="label-hidden" name="input2" checked="{!v.showDetailView}" messageToggleActive="" messageToggleInactive=""/>
+                            </div>
+                        </div>
+                </div>
+                
+            </div>
+        </div>
+            <div class="slds-box">
+                <aura:if isTrue="{!!v.showDetailView}">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Course"><b>Course</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Max. Marks"><b>Max. Marks</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Secured Marks"><b>Secured Marks</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="No. of Credits"><b>No. of Credits</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Grade Points"><b>Grade Points</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Credit Points"><b>Credit Points</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Grade"><b>Grade</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Pass"><b>Pass</b></div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.resultDataList}" var="res">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="Course">
+                                        <div class="slds-truncate" title="{!res.Course__r.Name}">
+                                            {!res.Course__r.Name}<br/>{!res.Course__r.hed__Course_ID__c}
+                                        </div>
+                                    </td>
+                                    <td data-label="Max. Marks">
+                                        <div class="slds-truncate" title="{!res.Maximum_Marks_Course_Level__c}">
+                                            {!res.Course__r.Total_Maximum_Marks_IA_External__c} 
+                                        </div>
+                                    </td>
+                                    <td data-label="Max. Secured Marks">
+                                        <div class="slds-truncate" title="{!res.Total_Secured_Marks_Course__c}">
+                                            {!res.Total_Secured_Marks_Course__c}
+                                        </div>
+                                    </td>
+                                    <td data-label="No. of Credits">
+                                        <div class="slds-truncate" title="{!res.No_of_Credits__c}">
+                                            {!res.No_of_Credits__c} 
+                                        </div>
+                                    </td>
+                                    <td data-label="Grade Points">
+                                        <div class="slds-truncate" title="{!res.Grade_Points__c}">
+                                            {!res.Grade_Points__c} 
+                                        </div>
+                                    </td>
+                                    <td data-label="Credit Points">
+                                        <div class="slds-truncate" title="{!res.Credit_Points__c}">
+                                            {!res.Credit_Points__c} 
+                                        </div>
+                                    </td>
+                                    <td data-label="Grade">
+                                        <div class="slds-truncate" title="{!res.Grade__c}">
+                                            {!res.Grade__c} 
+                                        </div>
+                                    </td>
+                                    <td data-label="Pass">
+                                        <div class="slds-truncate" title="{!res.hed__Result__c}">
+                                            {!res.hed__Result__c} 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table><br/>
+                    <div>
+                    	<div>
+                        	Passing Criteria : {!v.summaryRec.Passing_Criteria__c}
+                        </div><br/>
+                        <div class="slds-p-left_x-large">
+                                SGPA : {!v.summaryRec.SGPA__c}<br/>
+                                CGPA : {!v.summaryRec.CGPA__c}
+                        </div><br/>
+                        <div>
+                        	Note : {!v.summaryRec.Remarks__c}
+                        </div>
+                    </div>
+                    <aura:set attribute="else">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Course"><b>Course</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Course Type"><b>Course Type</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Internal Marks"><b>Internal Marks</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="External Marks"><b>External Marks</b></div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Total"><b>Total</b></div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.resultDataList}" var="res">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="Course">
+                                        <div class="slds-truncate" title="{!res.Course__r.Name}">
+                                            {!res.Course__r.Name}<br/>{!res.Course__r.hed__Course_ID__c}
+                                        </div>
+                                    </td>
+                                    <td data-label="Course Type">
+                                        <div class="slds-truncate" title="{!res.Course__r.Course_Type_Logisys__c}">
+                                            {!res.Course__r.Course_Type_Logisys__c} 
+                                        </div>
+                                    </td>
+                                    <td data-label="Internal Marks">
+                                        <div class="slds-truncate" title="{!res.Secured_Internal_Marks__c}">
+                                            {!res.Secured_Internal_Marks__c}
+                                        </div>
+                                    </td>
+                                    <td data-label="External Marks">
+                                        <div class="slds-truncate" title="{!res.Secured_External_Marks__c}">
+                                            {!res.Secured_External_Marks__c} 
+                                        </div>
+                                    </td>
+                                    <td data-label="Total">
+                                        <div class="slds-truncate" title="{!res.Total_Secured_Marks_Course__c}">
+                                            {!res.Total_Secured_Marks_Course__c} 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    </aura:set>
+                </aura:if>
+            </div>
+            <aura:set attribute="else">
+                No data found..
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

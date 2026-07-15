@@ -1,0 +1,32 @@
+<template>
+    <div class="container">
+    <h2 class="slds-text-heading_medium">Feedback</h2>
+        <div class="emoji-widget">
+            <div class="emoji" onclick={handleEmojiClick} data-emoji="😡" title="Disappointing :(">😡</div>
+            <div class="emoji" onclick={handleEmojiClick} data-emoji="😞" title="Bland :|">😞</div>
+            <div class="emoji" onclick={handleEmojiClick} data-emoji="😐" title="Okay :\">😐</div>
+            <div class="emoji" onclick={handleEmojiClick} data-emoji="😊" title="Tasty :)">😊</div>
+            <div class="emoji" onclick={handleEmojiClick} data-emoji="🤩" title="Delicious!">🤩</div>
+        </div>
+
+        <strong class="header-text">{headerText}</strong>
+        <div class="textarea">
+            <textarea
+                class="description"
+                placeholder=" Describe your experience.."
+                onchange={handleDescriptionChange}
+            ></textarea>
+        </div>
+        <div class="btn">
+            <lightning-button label="SUBMIT" onclick={handleSubmit} variant="brand"></lightning-button>
+        </div>
+    </div>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height: 50%; margin: auto"></div>
+        </div>
+    </template>
+</template>

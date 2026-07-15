@@ -1,0 +1,19 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,flexipage:availableForAllPageTypes" access="global">
+    <aura:attribute name="isValidPage" type="Boolean" default="true" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-modal__content slds-p-around_medium" style="min-height: 150px;">
+        <aura:if isTrue="{!v.isValidPage}">            
+            <lightning:flow aura:id="flowData" onstatuschange="{!c.handleStatusChange}" />
+            
+            <aura:set attribute="else">                
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning:icon iconName="utility:warning" variant="warning" size="large" />
+                    <h2 class="slds-text-heading_medium slds-m-top_medium">Invalid Page</h2>
+                    <p class="slds-m-top_small">This export tool can only be used while viewing a <b>Report</b>.</p>
+                    <lightning:button label="Close" onclick="{!c.closeModal}" variant="brand" class="slds-m-top_medium" />
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

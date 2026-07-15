@@ -1,0 +1,314 @@
+<aura:component controller="PushDemandsToSAP_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+        
+    </aura:html>
+    <aura:attribute name="yearOptions" type="List"/>
+    <aura:attribute name="progmEnrollmentLst" type="List"/>
+    <aura:attribute type="hed__Program_Plan__c" name="objProgPlan"/>
+    <aura:attribute name="isSelectAll" type="boolean" default="false"/>
+    <aura:attribute name="confStudSRNLst" type="List"/>
+    <aura:attribute name="studentType" type="string" />	
+    <aura:attribute name="feeYearVar" type="string" />
+    <aura:attribute name="showProgressBar" type="boolean" default="false"/>
+    <aura:attribute name="processedcount" type="integer"/>
+    <aura:attribute name="totalcount" type="integer"/>
+    <aura:attribute name="progress" type="Integer" default="0"/>
+    <aura:attribute name="BatchJobId" type="string" />	
+    <aura:attribute name="showConfirmationDialog" type="Boolean" default="false" />
+    <aura:attribute name="showConfirmationModal" type="Boolean" default="false" />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="totalamountToBePushed" type="decimal" default="0"/>
+    <aura:attribute name="totalamountPushedSAP" type="decimal" default="0"/>
+    <aura:attribute name="selectedAmount" type="decimal" default="0"/>
+    <aura:attribute name="selectedTab" type="String" default="tab1"/>
+    <aura:attribute name="disableSelection" type="Boolean" default="false" access="global" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <!--Progress Bar-->
+    
+    <aura:if isTrue="{!v.showProgressBar == true}">
+        <br/><br/><br/>
+        <div class="slds-modal__content slds-p-around--medium">
+            <center><b>Tracking Push to SAP</b></center>
+            <div>
+                Processing {!v.processedcount} of {!v.totalcount}
+                 <lightning:progressBar value="{!v.progress}" size="large" variant="circular"/>
+                <div class="slds-grid slds-align_absolute-center">
+                    <lightning:progressBar value="{!v.progress}" size="large" variant="circular"/>
+                    
+                   <!-- <lightning:spinner alternativeText="Processing..." size="large"/>-->
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <!--Progress Bar-->
+    <!--Headding Part -->
+    <aura:if isTrue="{!v.showProgressBar == false}">
+        
+        <div class="slds-card">
+            <div class="slds-page-header">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning:icon size="x-small" iconName="standard:user" alternativeText="Students Enrolled for the Program Batch" title="Students Enrolled for the Program Batch"/>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span size="x-small" class="slds-page-header__title slds-truncate slds-text-title_caps" title="Students Enrolled for the Program Batch">Students Enrolled for the Program Batch<br/>{!v.objProgPlan.Name}</span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            
+            <!--Picklist values -->
+            <div class="slds-form">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col"> 
+                        <div class="slds-form-element__control">
+                            <lightning:combobox aura:id="studTypeOptId" variant = "label-hidden" name="yearOptions" label="Year"  placeholder="Select Year"
+                                                value="{!v.studentType}" options="{!v.yearOptions}" disabled="{!v.disableSelection}" onchange="{!c.getEnrollmentDetails}"/>
+                            <span id="errorStudType" style="color:rgb(194, 57, 52);display:none;">Complete this field.</span>
+                        </div> 
+                    </div>
+                    <div class="slds-col">                     
+                        <aura:if isTrue="{!not(empty(v.progmEnrollmentLst))}">
+                            <span>   </span>
+                        </aura:if>
+                        <aura:if isTrue="{!and(v.selectedTab == 'tab1' , v.studentType != undefined)}">
+                            <span style="background-color:;font-weight:bold;"> Total Amount To Be Pushed : {!v.totalamountToBePushed} </span> <br/>
+                            <span style="background-color:;font-weight:bold;"> Selected Amount : {!v.selectedAmount} </span>
+                        </aura:if>
+                        <aura:if isTrue="{!v.selectedTab == 'tab2'}">
+                            <span style="background-color:;font-weight:bold;">Total Amount Pushed to SAP : {!v.totalamountPushedSAP} </span>
+                        </aura:if>
+                    </div>
+                </div> 
+            </div>
+            <br/>
+            <aura:if isTrue="{!or(not(empty(v.progmEnrollmentLst)),not(empty(v.confStudSRNLst)))}">
+                <div class="slds-box">
+                    <lightning:tabset onselect="{!c.handleTabChange}"> 
+                        <lightning:tab label="To be Pushed" id="tab1" aura:id="tab1">
+                            <div class="slds-table--header-fixed_container" style="height:450px;">
+                                <div class="slds-scrollable_y" style="height:100%;">
+                                    <table class="slds-table slds-table--bordered slds-max-medium-table--stacked slds-table--header-fixed" style="overflow: visible;" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:5%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Sl.No </b> </div>   
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small">
+                                                        <ui:inputCheckbox value="{!v.isSelectAll}" change="{!c.handleSelectAllContact}" aura:id="selectAll"/>
+                                                    </div>
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:30%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Student Name </b></div>
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> SRN Number </b></div>
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Student Status </b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> University Fee</b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:25%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Tuition Fee </b></div>
+                                                </th>
+                                            </tr>
+                                        </thead>  
+                                        <tbody>
+                                            <aura:iteration items="{!v.progmEnrollmentLst}" var="obj" indexVar="index">
+                                                <tr>
+                                                    <td data-label="Sl. No" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!index + 1}
+                                                        </div>
+                                                    </td>
+                                                    <td style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <label class="slds-checkbox slds-m-left_xxx-small" style="margin: -8px;;">
+                                                            <ui:inputCheckbox aura:id="checkContact" value="{!obj.Push_Check_Box__c}" change="{!c.handleSelectTobePushed}" />
+                                                            <span class="slds-checkbox--faux" />
+                                                            <span class="slds-form-element__label"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td data-label="Student Name" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.hed__Contact__r.Name}
+                                                        </div>
+                                                    </td>  
+                                                    <td data-label="SRN Number" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">		
+                                                            {!obj.SRN_Number__c}
+                                                        </div>						
+                                                    </td>		
+                                                    <td data-label="Program Enrollment Status" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">	
+                                                            {!obj.Student_Status__c}
+                                                        </div>							
+                                                    </td>
+                                                    <td data-label="Program Enrollment Status1" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;" >
+                                                        <div class="slds-col">	
+                                                            <ui:outputRichText value="{!obj.Dummy_1__c}"/>
+                                                           <!-- <lightning:formattedRichText value="{!obj.Dummy_1__c}"/>-->
+                                                        </div>							
+                                                    </td>
+                                                    <td data-label="Program Enrollment Status2" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;" >
+                                                        <div class="slds-col">
+                                                           <ui:outputRichText value="{!obj.Dummy_2__c}"/>
+                                                            <!-- <lightning:formattedRichText value="{!obj.Dummy_2__c}"/>-->
+                                                        </div>							
+                                                    </td>
+                                                     
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>  
+                                    </table>
+                                </div>
+                            </div>
+                        </lightning:tab>
+                        <lightning:tab label="Pushed Successfully(Read Only)" id="tab2" aura:id="tab2">
+                            
+                            <div class="slds-table--header-fixed_container" style="height:450px;">
+                                <div class="slds-scrollable_y" style="height:100%;">
+                                    <table class="slds-table slds-table--bordered slds-max-medium-table--stacked slds-table--header-fixed" style="overflow: visible;" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Sl.No </b> </div>   
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:30%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Student Name </b></div>
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> SRN Number </b></div>
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Student Status </b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> University Fee</b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Tuitions Fee </b></div>
+                                                </th>                                         
+                                            </tr>
+                                        </thead>       
+                                        <tbody>
+                                            <aura:iteration items="{!v.confStudSRNLst}" var="obj" indexVar="index">
+                                                <tr>
+                                                    <td data-label="Sl. No" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!index + 1}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Student Name" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.hed__Contact__r.Name}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Student Type" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.SRN_Number__c}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Student Status" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">	
+                                                            {!obj.Student_Status__c}
+                                                        </div>							
+                                                    </td>
+                                                    <td data-label="Program Enrollment Status1" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;" >
+                                                        <div class="slds-col">	
+                                                            
+                                                            {!obj.Dummy_1__c}
+                                                        </div>							
+                                                    </td>
+                                                    <td data-label="Program Enrollment Status2" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;" >
+                                                        <div class="slds-col">
+                                                            
+                                                            {!obj.Dummy_2__c}
+                                                        </div>							
+                                                    </td>
+                                                     
+                                                    
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>  
+                                    </table>
+                                </div> 
+                            </div>
+                            
+                        </lightning:tab>
+                    </lightning:tabset>
+                </div>
+                
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!not(empty(v.studentType))}">
+                        No Records to Push
+                    </aura:if>
+                </aura:set>
+                
+                
+            </aura:if>
+            <!-- Side tab -->
+            
+            
+        </div>
+        <aura:if isTrue="{!v.showConfirmationModal}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirmation</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <center><b>  Are you sure you want to push?</b></center>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="No" onclick="{!c.hideConfirmationDialog}" />
+                        <lightning:button variant="brand" label="Yes" onclick="{!c.pushToSAP}" />
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+        
+    </aura:if>
+    <aura:if isTrue="{!or(not(empty(v.progmEnrollmentLst)),not(empty(v.confStudSRNLst)))}">
+        
+        <footer class="slds-modal__footer">
+            <lightning:button variant="neutral" label="Cancel" onclick="{!c.cancelQuick}" />
+            <aura:if isTrue="{!not(empty(v.progmEnrollmentLst))}">
+                <lightning:button class="slds-button slds-button_brand" disabled="{!v.disableSelection}" onclick="{!c.showConfirmationModal}">Push to SAP</lightning:button>
+            </aura:if>
+     
+        </footer>
+    </aura:if>
+    
+</aura:component>

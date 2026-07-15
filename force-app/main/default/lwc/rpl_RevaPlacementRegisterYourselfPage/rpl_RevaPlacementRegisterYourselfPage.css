@@ -1,0 +1,61 @@
+.reva-brand-button .slds-button_brand{
+    background-color: green !important;
+    background: var( --reva-brand-color) !important;
+
+}
+
+.maincontainer{
+    border: solid;
+    border-color: var( --reva-brand-color);
+    border-radius: 10px;
+    padding:10px;
+    border-width: 2px;
+    width: 100%;
+}
+
+
+
+h1,h3{
+     color: var( --reva-brand-color);
+    font-weight: bolder;
+    font-size: small;    
+    padding-bottom: 10px;
+    padding-top: 10px ;
+}
+    
+.slds-checkbox_faux{
+    border-color: var( --reva-brand-color);
+}
+.checkbox_faux{
+    color:var( --reva-brand-color);
+    font-weight: bold;
+}
+.horizontalLine{
+    margin-top: revert-layer;
+    border-color: var( --reva-brand-color)
+}
+.button_02{
+    float: inline-end;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.slds-form-element__control {
+    clear: left;
+    position: relative;
+    padding-right: 10px;
+}
+
+.custom-box label{
+    color: black;
+    font-weight: 700;
+}
+
+.input-container input{
+    padding: 5px;
+    border: 1px solid black;
+    width: 100%;
+    min-height: 2rem;
+   
+    font-weight: 800;
+    background-color: #ededed;
+}

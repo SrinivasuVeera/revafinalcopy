@@ -1,0 +1,162 @@
+<template>
+     <lightning-card title="Student Search">
+        <div class="slds-m-around_medium">
+            <lightning-input type="search" label="Search" onchange={handleSearch}></lightning-input>
+            <lightning-combobox
+                if:true={showDropdown}
+                label="Select Student"
+                options={filteredStudents}
+                onchange={handleSelection}>
+            </lightning-combobox>
+        </div>
+    </lightning-card>
+    <template if:true={showErrorMsg}>
+        <div class="slds-text-title_caps errorMsg">
+            <h1>No Pending Details Found.</h1>
+        </div>
+    </template>
+    <div class="row slds-box slds-scrollable">
+        <!-- show Pending Survey Table  -->
+        <template if:true={showPendingSurveyTable}>
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <td class="row-heading" scope="col" colspan="100%">
+                            Pending Survey
+                        </td>
+                    </tr>
+                    <tr class="slds-line-height_reset">
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Survey Name">Survey Name</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={lstSurveyPending}>
+                        <template for:each={lstSurveyPending} for:item="item">
+                            <tr key={item.SurveyName} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate">{item.SurveyName}</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+
+        <!-- show Attendance Table  -->
+        <template if:true={showAttendanceTable}>
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <td class="row-heading" scope="col" colspan="100%">
+                            Attendance
+                        </td>
+                    </tr>
+                    <tr class="slds-line-height_reset">
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Sl. No">Course</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Registration No.">Total Classes</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Payment Type">Total Attended Classes</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Application No">Class Attended %</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={lst_Attendance}>
+                        <template for:each={lst_Attendance} for:item="item">
+                            <tr key={item.CourseName} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate">{item.CourseName}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Total_Classes}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Attended_Classes}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.TotalPercentAttend}</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+
+        <!-- show Student Fee Table -->
+        <template if:true={showStudentFeeTable}>
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <td class="row-heading" scope="col" colspan="100%">
+                            Pending Fee Payments
+                        </td>
+                    </tr>
+                    <tr class="slds-line-height_reset">
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Fee Type">Fee Type</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Registration No.">Due Date</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Payment Type">Pending Amount</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={lst_StudentFee}>
+                        <template for:each={lst_StudentFee} for:item="item">
+                            <tr key={item.FeeName} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate">{item.FeeName}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.DueDate}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.PendingAmount}</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <lightning-button 
+            class="slds-float_right"
+            label="Approve Request" 
+            variant="brand" 
+            onclick={handleApproveRequest}
+            disabled={isApproveDisabled}>
+        </lightning-button>
+    </div>
+    <template if:true={showPopup}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <h2 class="slds-modal__title">Approve Request</h2>
+                    <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={closePopup}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close"></lightning-icon>
+                    </button>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-textarea label="Comments" name="comments" onchange={handleCommentsChange}></lightning-textarea>
+                        <div class="slds-m-top_medium">
+                            <lightning-button type="submit" label="Approve" variant="brand" onclick={handleSuccess}></lightning-button>
+                        </div>
+                </div>
+            </div>
+        </section>
+        <!-- <div class="slds-backdrop slds-backdrop_open"></div> -->
+    </template>
+</template>

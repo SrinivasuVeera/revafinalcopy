@@ -1,0 +1,288 @@
+<template>
+    <lightning-card title="REVA Meal Booking"></lightning-card>
+    <template lwc:if={showBanner}>
+        <c-banner-messages warning={strBannerMessage}></c-banner-messages>
+        <br />
+        <template lwc:if={isNonteachingOrProfessor}>
+            <lightning-button label="Pay Now" onclick={handlePenaltyFee} variant="brand"
+                data-type="Normal"></lightning-button>
+        </template>
+
+    </template>
+
+    <div class="spacing"></div>
+    <template if:false={showBanner}>
+        <template lwc:if={timerRunning}>
+            <div class="note-container" style="padding-left:15px">
+                <strong>Click on tiles to select meal</strong>
+            </div>
+            <div class="timer-container" style="padding-left:15px">
+                <strong>Meal Booking Ends in: {timeRemaining}</strong>
+            </div>
+            <div class="timer-container" style="padding-left:15px">
+                <!-- <strong>Missed Meal Count : {missedMealCount}</strong> -->
+                <strong style="font-weight: bold;  color: red;">
+                    Missed Meal Count: {missedMealCount}
+                </strong>
+            </div>
+        </template>
+
+        <lightning-card title="Note:-" class="card-note">
+            <h2 class="iconSpace"><img src={tickIcon} class="tick-icon1" /> - Booked Meal</h2>
+            <h2 class="iconSpace"><img src={cancelIcon} class="cancel-icon1" /> - Cancel Meal (To be cancelled before 6
+                hours of Meal start time) </h2>
+            <h2 class="iconSpace"><img src={feedbackIcon} class="fb-icon1" /> - Feedback (To be given within 24 hours of
+                Meal end time)</h2>
+        </lightning-card>
+    </template>
+
+
+
+    <template lwc:if={showMealsSection}>
+        <lightning-card title="Meals to Book">
+            <div class="cards-container">
+                <template lwc:if={mealsToBook} for:each={mealsToBook} for:item="meal" for:index="index">
+                    <div class="card" key={meal.Id} data-meal-id={meal.Id} onclick={handleSelectMeals}>
+                        <div class="header">
+                            <p>{meal.Type__c}</p>
+                            <div class="header-icons">
+                                <img lwc:if={meal.isSelected} src={tickIcon} class="tick-icon" />
+                            </div>
+                        </div>
+                        <div title="Date" class="date">
+                            <img src={calendarIcon} />
+                            <lightning-formatted-date-time value={meal.Date__c} time-zone="UTC">
+                            </lightning-formatted-date-time>
+                        </div>
+                        <div title="Time" class="time">
+                            <img src={timeIcon} />
+                            <h5>
+                                <lightning-formatted-date-time value={meal.Start_Time__c} hour="2-digit"
+                                    minute="2-digit" time-zone=UTC></lightning-formatted-date-time>
+                                &nbsp; - &nbsp;
+                                <!-- <lightning-formatted-date-time value={meal.End_Time__c} hour="2-digit" minute="2-digit"
+                                    time-zone=UTC></lightning-formatted-date-time>  -->
+                                <lightning-formatted-date-time value={meal.Display_End_Time__c} hour="2-digit"
+                                    minute="2-digit" time-zone=UTC></lightning-formatted-date-time>
+                            </h5>
+                        </div>
+                        <div class="meal-status" title="Meal Status">
+                            <img src={mealIcon} />
+                            <h5>Not Booked</h5>
+                        </div>
+                        <div class="qr-text">
+                            <a onclick={showMessMenus} data-booked-meal-id={meal.Id}>Menu Items 🍲 </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="slds-grid slds-grid_vertical">
+                <template lwc:if={showMealsSection}>
+                    <template if:false={isAfterNinePM}>
+                        <div class="book-meal-btn slds-m-bottom_small">
+                            <lightning-button label="Book Meal" onclick={bookNormalMeals} variant="brand"
+                                data-type="Normal" disabled={disableBookMeal}></lightning-button>
+                        </div>
+                    </template>
+                </template>
+
+            </div>
+
+        </lightning-card>
+
+        <lightning-card title="Booked Meals">
+            <div class="cards-container">
+                <template lwc:if={bookedMeals} for:each={bookedMeals} for:item="menu" for:index="index">
+                    <div class="card" key={menu.Id}>
+                        <div class="header">
+                            <p>{menu.Reva_Mess_Menu__r.Type__c}</p>
+                            <div class="header-icons">
+                                <template if:true={menu.isFeedbackAllowed}>
+                                    <img src={feedbackIcon} title="Feedback" class="fb-icon" onclick={handleFeedback}
+                                        data-meal-id={menu.Id} />
+                                </template>
+                                <!-- <img src={feedbackIcon} class="fb-icon" onclick={handleFeedback} data-meal-id={menu.Id} /> -->
+                                <!-- <img src={cancelIcon} class="cancel-icon" onclick={handleCancel} data-meal-id={menu.Id}   /> -->
+                                <template if:true={menu.isMealBooked}>
+                                    <img src={cancelIcon} class="cancel-icon" title="Cancel" onclick={handleCancel}
+                                        data-meal-id={menu.Id} />
+                                </template>
+                                <img src={tickIcon} title="Booked" class="tick-icon" />
+                            </div>
+                        </div>
+                        <div title="Date" class="date">
+                            <img src={calendarIcon} />
+                            <lightning-formatted-date-time value={menu.Reva_Mess_Menu__r.Date__c} time-zone="UTC">
+                            </lightning-formatted-date-time>
+                        </div>
+                        <div title="Time" class="time">
+                            <img src={timeIcon} />
+                            <h5>
+                                <lightning-formatted-date-time value={menu.Reva_Mess_Menu__r.Start_Time__c}
+                                    hour="2-digit" minute="2-digit" time-zone=UTC></lightning-formatted-date-time>
+                                &nbsp; - &nbsp;
+                                <!-- <lightning-formatted-date-time value={menu.Reva_Mess_Menu__r.End_Time__c} hour="2-digit"
+                                    minute="2-digit" time-zone=UTC></lightning-formatted-date-time> -->
+                                <lightning-formatted-date-time value={menu.Reva_Mess_Menu__r.Display_End_Time__c}
+                                    hour="2-digit" minute="2-digit" time-zone=UTC></lightning-formatted-date-time>
+                            </h5>
+                        </div>
+                        <div class="meal-status" title="Meal Status">
+                            <img src={mealIcon} />
+                            <h5>{menu.Reva_Meal_Booking_Status__c}</h5>
+                        </div>
+                        <div class="qr-text">
+                            <!-- <a onclick={handleShowQRCode} data-meal-id={menu.Id} class={menu.qrCodeClass}>QR code</a> -->
+                            <template if:true={menu.isMealBooked}>
+                                <a onclick={handleShowQRCode} data-meal-id={menu.Id} class={menu.qrCodeClass}>QR
+                                    code</a>
+                            </template>
+
+                            <a onclick={showMessMenus} data-booked-meal-id={menu.Id}>Menu Items 🍲 </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </lightning-card>
+
+        <template lwc:if={showFeedback}>
+            <div class="">
+                <div class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={handleModalClose}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                    size="small">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </div>
+                        <div class="slds-modal__content slds-p-around_medium modal-container">
+
+                            <c-reva-already-booked-meal onfeedbacksave={handleFeedbackSave}
+                                booked-meal-id={bookedMealId}></c-reva-already-booked-meal>
+                        </div>
+                        <footer class="slds-modal__footer"></footer>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
+
+        <template lwc:if={showMessMenuItems}>
+            <div class="">
+                <div class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={handleModalClose}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                    size="small">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </div>
+
+
+
+
+                        <div class="slds-modal__content slds-p-around_medium modal-container">
+                            <h2 class="slds-text-heading_medium slds-text-align_center">Menu Items</h2>
+                            <template lwc:if={isMessMenuItemsAvailable}>
+                                <section>
+                                    <div
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-no-row-hover slds-table-subject">
+                                        <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">
+                                                    <th>
+                                                        Sl.No
+                                                    </th>
+                                                    <th>
+                                                        Item
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={messMenuItems} for:item="menu">
+                                                    <tr key={menu.Id}>
+                                                        <td style="padding-left:15px" data-cell="Sl.No">
+                                                            <div title={menu.itemNo}>{menu.itemNo}
+                                                            </div>
+                                                        </td>
+                                                        <td data-cell="Item">
+                                                            <div title={menu.name}>{menu.name}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </section>
+                            </template>
+                            <template lwc:else>
+                                <div
+                                    class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+                                    <p class="slds-text-heading_large slds-text-color_error">No Menu Found</p>
+                                </div>
+                            </template>
+                        </div>
+
+
+                        <footer class="slds-modal__footer"></footer>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
+
+        <template if:true={isSpinner}>
+            <div class="slds-is-relative">
+                <section class="slds-modal slds-fade-in-open">
+                    <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height: 50%; margin: auto"></div>
+            </div>
+        </template>
+
+
+        <template if:true={showQRModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <lightning-button-icon class="slds-modal__close" size="large" variant="bare-inverse"
+                        icon-name="utility:close" alternative-text="Close Modal"
+                        onclick={closeQRCodeModal}></lightning-button-icon>
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">QR Code</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c-active-q-r-code record-id={bookingIdSelected}></c-active-q-r-code>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                            onclick={closeQRCodeModal}>Cancel</button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+    </template>
+
+    <!-- <div class="back-button-container">
+        <lightning-button label="Back" variant="brand" class="back-button" onclick={handleBackButtonClick}>
+        </lightning-button>
+    </div> -->
+
+    <div if:true={showBackButton} class="back-button-container">
+        <lightning-button label="Back" variant="brand" class="back-button" onclick={handleBackButtonClick}>
+        </lightning-button>
+    </div>
+
+
+
+</template>

@@ -1,0 +1,301 @@
+.booked-meals-title,.meal-title,.qr-button,.cancel-button{
+    font-family: 'Glacial Indifference' !important; /* Removed specific font-face URL */
+}
+@font-face {
+    font-family: 'Glacial Indifference';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/GlacialIndifferenceFont/GlacialIndifference-Regular.otf') format('TrueType');
+}
+
+@font-face {
+    font-family: 'Jakatha Plus';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/Jakartha Plus/PlusJakartaSans-Regular.ttf') format('TrueType');
+}
+
+.date,
+.time,
+.meal-status,li {
+    font-family: 'Jakatha Plus' !important; /* Removed specific font-face URL */
+}
+/* Title Section */
+.title-container {
+    background-color: rgb(198, 190, 190);
+    padding: 10px;
+    text-align: center;
+    color: black;
+    font-size: 38px;
+    font-weight: bold;
+}
+
+.slds-grid {
+    display: flex;
+    flex-wrap: wrap;
+    /* flex-direction: row; */
+    align-content: space-between;
+    justify-content: space-evenly;
+}
+
+.nomenu-list {
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: #e2dfe0;
+    color: #F07F07;
+    padding-left: 8px;
+}
+
+.booked-meals-title {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: right;
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .booked-meals-title {
+        text-align: center;
+        font-size: 35px;
+    }
+}
+
+.meal-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+
+}
+
+
+
+.meal-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    left: 6px;
+    top: 30px;
+}
+
+.booked-meals-container {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.meal-title {
+    font-size: 25px;
+    /* font-weight: bold; */
+    margin-bottom: 5px;
+    text-align: right;
+    padding-right: 40px;
+    font-variant: all-petite-caps;
+    color: #F07F07;
+    font-weight: bold;
+}
+
+.underline {
+    height: 3px;
+    background: #0d0d0d;
+    /* margin: 5px auto; */
+    margin-left: 50px;
+    margin-right: 40px;
+
+}
+
+.meal-data {
+    margin: 10px 0;
+    font-size: 14px;
+}
+.meal-data img {
+    margin-right: 0.6rem;
+    width: 25px; /* Adjust as needed */
+    height: 20px; /* Adjust as needed */
+}
+
+.menu-list {
+    background-color: #F07F07;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    height: 270px;
+    color: #faf6f8; 
+}
+.item-scrol {
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    margin-left: 10px;
+}
+
+.item-scrol li::before {
+    content: '';    
+    display: inline-block; 
+    width: 8px;
+    height: 8px;
+    background-color: white; /* Circle color */
+    border-radius: 50%;        /* Ensures it's a circle */
+    margin-right: 8px;         /* Spacing between circle and text */
+}
+
+    .menu-list ul {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: space-around;
+        justify-content: space-evenly;
+        font-size: 1.1rem;
+        font-size: 16px;
+        list-style: circle;
+    }
+    
+
+.cancel-button {
+    color: white;
+    background-color: #fa0404;
+}
+
+.qr-button {
+    color: white;
+    background-color: dimgray;
+}
+
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding-bottom: 20px;
+    /* padding-left: 30px; */
+}
+
+.date img,
+.time img,
+.meal-status img {
+    height: var(--img-size);
+    aspect-ratio: 1/1;
+
+}
+
+.meal-boxconatinar {
+    padding-bottom: 10px;
+}
+
+:host {
+    --font-size: 16px;
+    --img-size: 22px;
+    --card-max-height: 30px;
+}
+
+/* Responsive Grid */
+@media screen and (max-width: 768px) {
+    .slds-small-size_1-of-2 {
+        max-width: 50%;
+        /* Force 2 tiles per row */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .slds-small-size_1-of-2 {
+        max-width: 50%;
+        /* 1 tile per row on very small screens */
+    }
+
+    .meal-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+
+    }
+
+    .meal-title {
+        /* font-size: 21px; */
+        margin-bottom: 5px;
+        font-variant: all-petite-caps;
+        color: #F07F07;
+        font-weight: bold;
+
+    }
+
+    .underline {
+        height: 3px;
+        background: #0d0d0d;
+        margin-left: 36px;
+        margin-right: 36px;
+    }
+
+    .meal-boxconatinar {
+        padding-left: 5px;
+        padding-bottom: 10px;
+    }
+
+    .btn-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-bottom: 20px;
+        /* padding-left: 30px; */
+    }
+
+    .meal-card {
+
+        background: white;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        width: 96%;
+        padding-left: 26px;
+    }
+
+    .mainCardItem {
+        padding-left: 0px;
+        padding-right: opx;
+    }
+
+    .meal-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        left: 6px;
+        top: 33px;
+    }
+}
+
+/* Adjust Meal Data and Menu List Position */
+.meal-data,
+.menu-list {
+    margin-left: 30px;
+    margin-right: 10px;
+    /* width: 76%; */
+
+}
+
+/* Responsive Adjustment */
+@media screen and (max-width: 768px) {
+
+    .meal-data,
+    .menu-list {
+        font-size: larger;
+        width: auto;
+
+    }
+
+    .booked-meals-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    .meal-data,
+    .menu-list {
+        margin-left: 5px;
+        width: auto;
+    }
+}

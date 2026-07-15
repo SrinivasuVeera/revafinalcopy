@@ -1,0 +1,224 @@
+<template>
+
+
+    <!--
+    <lightning-card title="Quarter Details" icon-name="custom:custom24">
+        <template lwc:if={dataAvl}>
+            <template lwc:if={revaQuarterRequests}>
+                <lightning-layout class="slds-p-horizontal_small" multiple-rows>
+                    <lightning-layout-item size="6" style="width:100%">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6">
+                                <lightning-input
+                                    class="roomInput"
+                                    type="text"
+                                    variant="standard"
+                                    name="Staff Quarters Request Name"
+                                    label="Staff Quarters Request Name"
+                                    value={revaQuarterRequests.Name}
+                                    read-only="true"
+                                >
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <template if:true={revaQuarterRequests.Staff_Quarters_Room__c} > 
+                             <lightning-layout-item size="6">
+                                <lightning-input class="roomInput" type="text" variant="standard" name="Name" label="Room No." value={revaQuarterRequests.Staff_Quarters_Room__r.Name} read-only="true"></lightning-input>
+                            </lightning-layout-item>
+                           </template>
+                            <lightning-layout-item size="6">
+                                <lightning-input class="roomInput" type="text" variant="standard" name="Status" label="Status" value={revaQuarterRequests.Status__c} read-only="true"></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6">
+                                <lightning-input class="roomInput" type="text" variant="standard" name="Type" label="Room Type" value={revaQuarterRequests.Type__c} read-only="true"></lightning-input>
+                            </lightning-layout-item>
+                           
+                            <lightning-layout-item size="6">
+                                <lightning-input class="roomInput" type="text" variant="standard" name="Joining Date" label="Joining Date" value={revaQuarterRequests.Staff_Quarters_Joining_Date__c} read-only="true"></lightning-input>
+                            </lightning-layout-item>
+
+                           
+                           
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <template if:true={revaQuarterRequestStatus}>
+                    <c-non-teaching-staff-vacate-request request-id={revaQuarterRequestId}></c-non-teaching-staff-vacate-request>
+                </template>
+            </template>
+            <template lwc:else>
+                <c-banner-messages warning="No Booked Quarters Found"></c-banner-messages>
+            </template>
+        </template>
+    </lightning-card>
+-->
+    <!--Added by rajashekar for new ui-->
+    <template lwc:if={dataAvl}>
+        <lightning-spinner lwc:if={boolSpinner} alternative-text="Loading" size="large"></lightning-spinner>
+
+        <template lwc:if={revaQuarterRequests}>
+            <div class="page-buttons">
+                <h4>DETAILS</h4>
+                <lightning-layout horizontal-align="end" class="button-container">
+                   
+                    <lightning-layout-item>
+                        <template if:true={isApplyAgain}>
+                            <lightning-button label="Re-Join" class="slds-p-around_medium" onclick={handleApply} variant="brand"></lightning-button>
+                        </template>
+                    </lightning-layout-item>
+                    <lightning-layout-item>
+                        <template if:true={isRejected}>
+                            <lightning-button label="Re-Apply" class="slds-p-around_medium" onclick={handleReApply} variant="brand"></lightning-button>
+                        </template>
+                    </lightning-layout-item>
+                    <lightning-layout-item>
+                        <template if:true={isApprovedHistory}>
+                            <lightning-button label="View  Approval History" class="slds-p-around_medium" onclick={handleApprovalHistory} variant="brand"></lightning-button>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+            <div class="third-page">
+                <p>You already have an existing quarter request. Below are the details</p>
+                <div class="details-table">
+
+                    <lightning-layout multiple-rows>
+                        <!--Row1-->
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>Name</strong>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>{revaQuarterRequests.Name}</strong>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <!-- Row 2 -->
+                    <template if:true={revaQuarterRequests.Staff_Quarters_Room__c}>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>Room No.</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{revaQuarterRequests.Staff_Quarters_Room__r.Name}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                    <!-- Row 3 -->
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>Status</strong>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>{revaQuarterRequests.Status__c}</strong>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <!-- Row 4 -->
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>Room Type</strong>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>{revaQuarterRequests.Type__c} </strong>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <!-- Row 5 -->
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>Joining Date</strong>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                            large-device-size="6" padding="horizontal-small">
+                            <div class="custom-box">
+                                <strong>{formattedJoiningDate} </strong>
+                            </div>
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+                    <!-- Row 6 -->
+                    <template if:true={revaQuarterRequests.Vacation_Date__c}>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>Vacating Date</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{formattedVacatedDate}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                    <br /><br />
+                    <template if:true={revaQuarterRequestStatus}>
+                        <c-non-teaching-staff-vacate-request
+                            request-id={revaQuarterRequestId}></c-non-teaching-staff-vacate-request>
+                    </template>
+                    <template if:true={isreApply}>
+                        <c-reva-staff-quarters-rejected-re-apply request-id={revaQuarterRequestId} is-re-apply-form-open={isreApplyform} onclosepopup ={closeReapplyPopUp}></c-reva-staff-quarters-rejected-re-apply>
+                    </template>
+
+                </div>
+            </div>
+        </template>
+    </template>
+    <template if:true={isApprovalModelOpen}> 
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <!-- Modal Header -->
+                <div class="slds-modal__header">
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={handleCloseModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Approval History</h2>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <c-approval-history-table
+                        record-id={revaQuarterRequests.Id}></c-approval-history-table>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="slds-modal__footer">
+                    <lightning-button label="Cancel"
+                        onclick={handleCloseModal}></lightning-button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

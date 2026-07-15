@@ -1,0 +1,38 @@
+<template>
+    <lightning-card title="Case Satisfaction Survey" if:true={showSurvey}>
+        <div class="slds-p-around_medium">
+            <template if:true={noQuestions}>
+                <p class="slds-text-color_error">No survey questions are available at this time.</p>
+            </template>
+            <template if:false={noQuestions}>
+                <template for:each={questions} for:item="question">
+                    <div key={question.id} class="slds-m-bottom_medium">
+                        <p>
+                            {question.questionText}                            
+                        </p>
+                        <div class="slds-m-top_small">
+                            <template for:each={stars} for:item="star">
+                                <span key={star} class="star" data-value={star} data-question-id={question.id} onclick={handleRating}>
+                                    ★
+                                </span>
+                            </template>
+                        </div>
+                        <lightning-textarea
+                            label="Feedback"
+                            data-question-id={question.id}
+                            value={question.feedback}
+                            onchange={handleFeedbackChange}
+                            class="slds-m-top_small"                
+                        ></lightning-textarea>                        
+                    </div>
+                </template>
+                <lightning-button
+                    label="Submit Survey"
+                    variant="brand"
+                    onclick={handleSubmit}
+                    class="slds-m-top_small"
+                ></lightning-button>
+            </template>
+        </div>
+    </lightning-card>
+</template>

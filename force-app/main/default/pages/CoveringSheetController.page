@@ -1,0 +1,358 @@
+<apex:page controller="CoveringSheetController"
+           renderAs="pdf"
+           showHeader="false"
+           sidebar="false"
+           standardStylesheets="false"
+           applyBodyTag="false">
+
+<html>
+
+<head>
+
+<style>
+
+@page{
+    size:A4;
+    margin:12mm;
+}
+
+body{
+    font-family:Arial;
+    font-size:16px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+td,th{
+    border:1px solid black;
+    padding:4px;
+    vertical-align:middle;
+}
+
+.noBorder td{
+    border:none !important;
+}
+
+.heading{
+    text-align:center;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.leftcol{
+    width:35%;
+    font-weight:bold;
+}
+
+.center{
+    text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<table class="noBorder">
+
+<tr>
+
+<td style="width:25%;">
+
+<apex:image value="{!URLFOR($Resource.REVA_LOGO)}"
+            width="190"
+            height="75"/>
+   </td>
+   </tr>
+    <td style="width:55%;text-align:center;font-size:25px;font-weight:bold;font-family:Arial;">
+      Admissions for the Academic Year 2026 – 27
+    </td>
+
+</table>
+<br/>
+    <!-- APPLICATION NUMBER & DATE -->
+
+<table class="noBorder" style="width:100%;">
+  <tr>
+   <td style="width:60%;border:none;"></td>
+
+    <td style="width:15%;border:none;text-align:right;font-weight:bold;">
+     Application Number :
+    </td>
+     <td style="width:30%;height:40px;border:1px solid black;text-align:center;
+              vertical-align:middle;font-size:20px;font-weight:bold;letter-spacing:1px;">
+     {!con.Application_Number__c}
+     </td>
+   </tr>
+
+  <tr>
+  <td style="border:none;"></td>
+   <td style="border:none;text-align:right;font-weight:bold;">
+   Date :
+   </td>
+
+  <td style="border:1px solid black;text-align:center;">
+   {!formattedDate}
+  </td>
+
+</tr>
+
+</table>
+
+<br/>
+
+<!-- ADMISSION DETAILS -->
+
+<table class="noBorder">
+  <tr>
+<td style="border:none;white-space:nowrap;">
+
+<b>Admission Type :</b>
+
+{!con.Admission_Mode__c}
+
+<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<span style="
+display:inline-block;
+width:12px;
+height:12px;
+border:1px solid black;
+vertical-align:middle;">
+</span>
+
+&nbsp;RISE -->
+
+</td>
+</tr>
+    
+
+<tr>
+
+<td style="border:none;">
+
+<b>State :</b>
+<!--{!con.State__c}-->
+{!displayState}
+
+</td>
+
+<td style="border:none;"></td>
+
+</tr>
+
+</table> <br/>
+
+    <!-- MAIN DETAILS TABLE -->
+
+<table style="width:100%;border-collapse:collapse;">
+
+<tr>
+    <th style="width:35%;border:1px solid black;">Particulars</th>
+    <th style="width:65%;border:1px solid black;">Details</th>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">Name of the Student</td>
+    <td style="border:1px solid black;">{!con.Name}</td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">Mobile Number</td>
+    <td style="border:1px solid black;">{!con.MobilePhone}</td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">Email ID</td>
+    <td style="border:1px solid black;">{!con.Email}</td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">Program with Branch</td>
+    <td style="border:1px solid black;">{!con.Program_Batch__r.Name}</td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">
+        Aggregate % <br/>(Grade in PUC / 12th / Degree)
+    </td>
+    <td style="border:1px solid black;">
+       <!-- {!education.Percentage__c}% -->
+        {!displayPercentage}
+    </td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">
+        Board / University <br/>(PUC / 12th / Degree)
+    </td>
+    <td style="border:1px solid black;">
+       <!-- {!education.Board__c}-->
+        {!displayBoard}
+    </td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">
+        Fee as per Fee Structure
+    </td>
+    <td style="border:1px solid black;">
+        ₹ {!feeStructure}
+    </td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">
+        Scholarship Applicable (If any)
+    </td>
+    <td style="border:1px solid black;">
+        {!scholarshipDisplay}
+    </td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">
+        Fee Waiver (If any)
+    </td>
+    <td style="border:1px solid black;">
+        {!feeWaiverDisplay}
+    </td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">
+        Provisional Admission Fee/ <br/> (Seat Blocking Amount)
+    </td>
+    <td style="border:1px solid black;">
+         ₹ {!pafDisplay}
+    </td>
+</tr>
+
+<tr>
+    <td style="border:1px solid black;font-weight:bold">
+        Referral (Name / Code)
+    </td>
+    <td style="border:1px solid black;">
+        {!con.Referral_Type__c}
+        <apex:outputPanel rendered="{!NOT(ISBLANK(con.Referrer_Name__c))}">
+            - {!con.Referrer_Name__c}
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!NOT(ISBLANK(con.Referral_Code__c))}">
+            - {!con.Referral_Code__c}
+        </apex:outputPanel>
+    </td>
+</tr>
+
+<!-- FINALIZED FEE -->
+
+<tr>
+    <td rowspan="3"
+        style="border:1px solid black;font-weight:bold;vertical-align:top;">
+        Finalized Fee
+    </td>
+
+    <td style="padding:0px;border:1px solid black;">
+
+        <table style="width:100%;border-collapse:collapse;">
+
+            <tr>
+                <td style="border:1px solid black;width:50%;">
+                    1st Year -
+                    {!IF(firstYearFee=null,'N/A',firstYearFee)}
+                </td>
+
+                <td style="border:1px solid black;width:50%;">
+                    2nd Year -
+                    {!IF(secondYearFee=null,'N/A',secondYearFee)}
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid black;">
+                    3rd Year -
+                    {!IF(thirdYearFee=null,'N/A',thirdYearFee)}
+                </td>
+
+                <td style="border:1px solid black;">
+                    4th Year -
+                    {!IF(fourthYearFee=null,'N/A',fourthYearFee)}
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid black;">
+                    5th Year -
+                    {!IF(fifthYearFee=null,'N/A',fifthYearFee)}
+                </td>
+
+                <td style="border:1px solid black;">
+                    &nbsp;
+                </td>
+            </tr>
+
+        </table>
+
+    </td>
+</tr>
+
+</table>
+
+<br/>
+
+<!--<div class="center">-->
+<div style="width:100%;text-align:center;font-size:14px;font-weight:bold;margin-top:10px;">
+<b>
+    Note: Please read this document carefully before signing
+</b>
+
+</div>
+
+    <!-- SIGNATURE BOXES -->
+
+<table style="width:100%;margin-top:20px;border-collapse:collapse;">
+
+<tr>
+
+<td style="height:70px;width:25%;border:1px solid black;"></td>
+
+<td style="width:25%;border:1px solid black;"></td>
+
+<td style="width:25%;border:1px solid black;"></td>
+
+<td style="width:25%;border:1px solid black;"></td>
+
+</tr>
+
+<tr>
+
+<td style="border:none;text-align:center;font-size:14px;font-weight:bold;">
+Signature of the Candidate
+</td>
+
+<td style="border:none;text-align:center;font-size:14px;font-weight:bold;">
+Signature of the Parent / Guardian
+</td>
+
+<td style="border:none;text-align:center;font-size:14px;font-weight:bold;">
+Signature of the Admissions Counsellor/Officer
+</td>
+
+<td style="border:none;text-align:center;font-size:14px;font-weight:bold;">
+Signature of the Director Admissions
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>
+
+</apex:page>

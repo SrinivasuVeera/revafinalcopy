@@ -1,0 +1,151 @@
+.timetable-grid {
+    padding: 0.5rem;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.timetable-grid table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.timetable-grid th {
+    background-color: #f3f6f9;
+    font-weight: 600;
+    padding: 0.5rem;
+    border: 1px solid #d8dde6;
+    white-space: nowrap;
+}
+
+.timetable-grid td {
+    padding: 0.5rem;
+    border: 1px solid #d8dde6;
+    min-width: 100px;
+    vertical-align: middle;
+}
+
+.timetable-grid tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.timetable-grid strong {
+    color: #16325c;
+}
+
+lightning-card {
+    margin-bottom: 1rem;
+}
+
+lightning-datatable {
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.course-cell {
+    background-color: #e7edee;
+}
+
+/* Break Cell Background */
+.break-cell {
+    background-color: #f7c9c9 !important;
+    /* Light red */
+}
+
+/* Free Slot Cell Background */
+.free-slot-cell {
+    background-color: #d5ead6 !important;
+    /* Light blue */
+}
+
+.empty-cell {
+    background: #fafafa;
+}
+
+
+/* Save Button Styling */
+lightning-button {
+    margin-top: 1rem;
+    display: block;
+}
+
+.course-name {
+    color: #1B5E20;
+    /* Deep green */
+    font-weight: 600;
+}
+
+.faculty-name {
+    color: #1565C0;
+    /* Strong blue */
+
+}
+
+.facility-name {
+    color: #E65100;
+    /* Burnt orange */
+}
+
+.break-text {
+
+    /* Light orange */
+    color: rgb(242, 9, 9);
+    font-weight: bold;
+    font-variant: uppercase;
+
+    /* Dark orange */
+}
+
+.free-slot-text {
+    color: #0920f2;
+    font-weight: bold;
+    font-variant: uppercase;
+}
+
+/* ===== Entire timetable background ===== */
+.timetable-table {
+    background-color: #fdfcf8;
+    /* light cream background */
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Header styling ===== */
+.timetable-table thead {
+    background-color: #f4f6f9;
+    /* subtle gray header */
+    color: #2e2e2e;
+    font-weight: 600;
+}
+
+/* ===== Table cell styling ===== */
+.timetable-table td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #e7edee;
+
+}
+
+.timetable-table th {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #504c4c;
+    color: white;
+
+
+}
+
+.myTable table>thead .slds-cell-fixed.slds-has-button-menu,
+.myTable table>thead .slds-cell-fixed.slds-has-button-menu:hover {
+    background: rgb(215, 159, 87);
+}

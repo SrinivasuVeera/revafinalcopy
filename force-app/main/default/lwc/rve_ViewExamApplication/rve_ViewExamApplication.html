@@ -1,0 +1,205 @@
+<template>
+    <template if:true={boolShowSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <div class="header">
+        <img alt="Reva logo" src={REVA_LOGO} width="250px"/><br/>                
+        <center style="font-size:15px">Rukmini Knowledge Park, Kattigenahalli Yelahanka, Bengaluru - 560064</center>               
+    </div>
+    <div class="container printable_div">
+        <div class="heading">
+            <div class="slds-align_absolute-center" style="font-weight:700;font-size:16px;color:orange;">EXAM APPLICATION FORM</div> 
+            <div class="slds-align_absolute-center" style="font-weight:600;font-size:12px">{examApplicationHeader}</div> 
+        </div>
+        <div class="content slds-scrollable">
+            <table style="width: 100%" class="slds-table slds-table_cell-buffer slds-table_header-hidden slds-no-row-hover">
+                <tr>
+                   <td width="50%" style="padding-left: 30px;">
+                <table style="width: 100%" class="slds-table slds-table_cell-buffer slds-table_header-hidden slds-no-row-hover" aria-label="Student Details">
+                    <tbody>
+                        <tr class="slds-hint-parent">
+                            <td style="width: 30%"><div class="slds-truncate"><b>Application No.</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td style="width: 70%"><div class="slds-truncate">{examApplication.Rve_Application_Number__c}</div></td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><div class="slds-truncate"><b>Registration No.</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td colspan="2"><div class="slds-truncate">{examApplication.Rve_Registration_Number__c}</div></td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><div class="slds-truncate"><b> Student's Name</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td colspan="2"><div class="slds-truncate">{studentData.Name}</div></td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><div class="slds-truncate"><b>Category</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td colspan="2"><div class="slds-truncate">{studentData.Select_Category__c}</div></td>
+                        </tr>
+                        </tbody>
+                            </table>
+                   </td>
+                   <td width="50%" valign="top" align="right">
+                       <table style="width: 100%" class="slds-table slds-table_cell-buffer slds-table_header-hidden slds-no-row-hover" aria-label="Student Details Right">
+                           <tbody>
+                        <tr class="slds-hint-parent">
+                            <td><div class="slds-truncate"><b>Father's Name</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td colspan="2"><div class="slds-truncate">{studentData.Father_Name__c}</div></td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><div class="slds-truncate"><b>Mother's Name</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td colspan="2"><div class="slds-truncate">{studentData.Mother_Name1__c}</div></td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><div class="slds-truncate"><b>Course</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td colspan="2"><div class="slds-truncate">{studentData.Course__c}</div></td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><div class="slds-truncate"><b>College / Dept.</b></div></td>
+                            <td><div class="slds-truncate">:</div></td>
+                            <td colspan="2"><div class="slds-truncate">{studentData.School_Name__c}</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+                    <!-- <td width="30%" height="80%" align="right" style="margin-top: 20px;">
+                        <table width="100%" cellpadding="2">
+                            <tr>
+                                <td align="right" width="120px" height="180px">
+                                    <div class="heading profile-pic">
+                                        <img alt="Profile Photo" class="profile-pic" src={studentData.File_Passport_Size_Photo__c} width="120px" height="180px"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td> -->
+                </tr>
+            </table>
+        </div>
+        <div class="tables slds-scrollable">
+            <div class="">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table-subject slds-no-row-hover" aria-label="Subjects Appearing">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col" colspan="5" style="background-color:grey; color:white;">
+                                <div class="slds-truncate" title="Opportunity Name">Subjects Appearing</div>
+                            </th>
+                        </tr>
+                        <tr class="slds-line-height_reset" style="background-color:grey; color:white;">
+                          <th class="" scope="col">
+                            <div class="slds-truncate" title="Sl. No">Sl. No</div>
+                          </th>
+                          <th class="" scope="col">
+                            <div class="slds-truncate" title="Sem">Sem</div>
+                          </th>
+                          <th class="" scope="col">
+                            <div class="slds-truncate" title="Course Code">Course Code</div>
+                          </th>
+                          <th class="" scope="col">
+                            <div class="slds-truncate" title="Subject Title">Subject Title</div>
+                          </th>
+                          <th class="" scope="col">
+                            <div class="slds-truncate" title="QP Code">QP Code</div>
+                          </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template if:true={examApplicationLineItems}>
+                            <template for:each={examApplicationLineItems} for:item="item">
+                                <tr key={item.SN} class="slds-hint-parent">
+                                    <td>
+                                        <div class="slds-truncate" title="Sl. No">{item.SN}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="Sem">{item.Rve_Semester__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="Course Code">{item.Course_Code__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="Subject Title">{item.Rve_Subject__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="QP Code">{item.Rve_QP_Code__c}</div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+            <div class="">
+                <table style="width: 100%;" class="slds-table slds-table_cell-buffer slds-table_bordered slds-table-subject slds-no-row-hover" aria-label="Subjects Appearing">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col" colspan="5" style="background-color:grey; color:white;">
+                                <div class="slds-truncate" title="Opportunity Name">Payment Details</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Total Fee</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{StudentFeePayment.Amount__c}/-</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">Payment Date</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{StudentFeePayment.Payment_Date__c}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Payment Type</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{StudentFeePayment.Mode_of_Payment__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">Payment Status</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{StudentFeePayment.Line_Item_Payment_Status__c}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">Transaction id</div>
+                            </td>
+                            <td colspan="3">
+                                <div class="slds-truncate">{StudentFeePayment.SF_Transaction_ID__c}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <table style="width: 100%" class="slds-table slds-table_cell-buffer slds-table_header-hidden slds-no-row-hover">
+            <tr>
+                <td style="width: 33%; padding-left: 50px; padding-bottom: 20px">Date: </td>
+                <!-- <td style="width: 33%;text-align: center;"> -->
+                    <!-- <button class="slds-button slds-button_brand" onclick={printForm} disabled={isPrintDisabled}>Download</button> -->
+                    <!-- <button class="slds-button slds-button_brand" onclick={back} >Back</button> -->
+                <!-- </td> -->
+                <td style="width: 33%;text-align:right; padding-right: 50px; padding-bottom: 20px">Signature of the Student</td>
+            </tr>
+        </table>
+
+        <div class="slds-clearfix">
+                        <div class="slds-float_right">
+                    <lightning-button variant="Neutral" label="Back" title="Back" onclick={back} style="margin-right: 20px;"></lightning-button>
+                   <!-- <lightning-button class="button" variant="brand" label="Download" title="Download" onclick={printForm} disabled={isPrintDisabled} style="margin-right: 50px;"></lightning-button>-->
+                        </div>
+                    </div>
+    </div>
+</template>

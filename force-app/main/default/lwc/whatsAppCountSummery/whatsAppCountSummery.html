@@ -1,0 +1,101 @@
+<template>    
+    <!-- <lightning-card title="WhatsApp Message Sent Summary"> -->
+    <div class="top_margin">
+        <div class="slds-table_custom_width_container">        
+            <div class="slds-p-around_medium">
+                <div class="font_black">
+                    <b>WhatsApp Message Triggerd on : </b>
+                    <b>{formattedDate}</b><br><br>
+                </div>
+                
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Opportunity Name">Particulars</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Number of WhatsApp Trigger">Number of WhatsApp Trigger</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Converted Numbers">Converted Numbers</div>
+                                    </th>                        
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="slds-hint-parent">
+                                <th data-label="Opportunity Name" scope="row">
+                                    <div class="slds-truncate" title="Opportunity Name">
+                                        Application Fee Not Paid
+                                    </div>
+                                </th>
+                                <td data-label="triggered numbers">
+                                    <div class="slds-truncate" title="">{batch1_count}</div>
+                                </td>
+                                <td data-label="Converted Numbers">
+                                    <div class="slds-truncate" title="">{feePaidCount}</div>
+                                </td>                        
+                            </tr>
+
+                            <tr class="slds-hint-parent">
+                                <th data-label="Opportunity Name" scope="row">
+                                    <div class="slds-truncate" title="">
+                                        Application Started
+                                    </div>
+                                </th>
+                                <td data-label="triggered numbers">
+                                    <div class="slds-truncate" title="">{batch2_count}</div>
+                                </td>
+                                <td data-label="Converted Numbers">
+                                    <div class="slds-truncate" title="">{countStartedToOther}</div>
+                                </td>                        
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <th data-label="Opportunity Name" scope="row">
+                                    <div class="slds-truncate" title="">
+                                        Application Incomplete
+                                    </div>
+                                </th>
+                                <td data-label="triggered numbers">
+                                    <div class="slds-truncate" title="">{batch3_count}</div>
+                                </td>
+                                <td data-label="converted numbers">
+                                    <div class="slds-truncate" title="">{countIncompleteToOther}</div>
+                                </td>      
+                            </tr>  
+                            <tr class="slds-hint-parent">
+                                <th data-label="Opportunity Name" scope="row">
+                                    <div class="slds-truncate" title="">
+                                        PAF Pending
+                                    </div>
+                                </th>
+                                <td data-label="triggered numbers">
+                                    <div class="slds-truncate" title="">{batchPAFPendingCount}</div>
+                                </td>
+                                <td data-label="converted numbers">
+                                    <div class="slds-truncate" title="">{getPAFpaidCountData}</div>
+                                </td>      
+                            </tr>           
+                        </tbody>
+                </table>
+                <div class="font_black">
+                    <br>   
+                    <label><b>Total Triggered Contact Count : </b></label>
+                    <label><b>{totalCounts}</b></label> 
+                </div>
+                    <!-- Spinner overlay -->
+                <template if:true={isLoading}>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                        <div class="slds-spinner_container">
+                            <div role="status" class="slds-spinner slds-spinner_large slds-spinner_brand">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                </template>
+            </div>   
+        </div>
+    </div>   
+    <!-- </lightning-card> -->
+</template>

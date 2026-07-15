@@ -1,0 +1,103 @@
+<template>
+    <lightning-card title="Photocopy & Revaluation Result Records">
+        <template if:true={resultDataList}>
+            <!-- Horizontal Scroll Wrapper -->
+            <div class="slds-scrollable_x" style="max-width: 100%; overflow-x: auto;">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"
+                    aria-label="Result Table">
+                    <thead>
+                        <tr>
+                            <th><b>Course</b></th>
+                            <th><b>Max Marks</b></th>
+                            <th><b>Secured Marks</b></th>
+                            <th><b>Result</b></th>
+                            <th><b>Student Name</b></th>
+                            <th><b>SRN</b></th>
+                            <th><b>Course Code</b></th>
+                            <th><b>Program Batch</b></th>
+                            <th><b>Semester</b></th>
+                            <th><b>Applied for Photocopy</b></th>
+                            <th><b>Applied for Revaluation</b></th>
+                            <th><b>Action</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={resultDataList} for:item="res">
+                            <tr key={res.resultId}>
+                                <td class="wrap-text">{res.courseName}<br />{res.courseId}</td>
+                                <td>{res.maxMarks}</td>
+                                <td>{res.securedMarks}</td>
+                                <td>{res.result}</td>
+                                <td>{res.studentName}</td>
+                                <td>{res.srnNumber}</td>
+                                <td>{res.courseCode}</td>
+                                <td class="wrap-text">{res.programBatch}</td>
+                                <td>{res.semester}</td>
+                                <td>{res.appliedForPhotocopyText}</td>
+                                <td>{res.appliedForRevaluationText}</td>
+                                <td>
+                                    <!-- <template if:true={res.showUpload}>
+                                        <lightning-button label="Upload" variant="brand" onclick={openUploadModal}
+                                            data-id={res.resultId}></lightning-button>
+                                    </template> -->
+
+                                    <template if:true={res.showUpload}>
+                                        <lightning-button label="Upload" variant="brand" onclick={openUploadModal}
+                                            data-id={res.resultId}></lightning-button>
+                                    </template>
+                                    <template if:true={res.showRemove}>
+                                        <div>
+                                            <p>File already uploaded</p>
+                                            <lightning-button label="Remove" variant="destructive"
+                                                icon-name="utility:delete" onclick={handleRemoveFile}
+                                                data-id={res.resultId}></lightning-button>
+                                        </div>
+                                    </template>
+
+
+
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <!-- Modal for Upload -->
+        <template if:true={showModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading"
+                class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button_icon" title="Close"
+                            onclick={handleCloseModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close"
+                                size="small"></lightning-icon>
+                        </button>
+                        <h2 id="modal-heading" class="slds-modal__title slds-hyphenate">Upload Photocopy</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input type="file" label="Select File" onchange={handleFileChange}></lightning-input>
+                        <template if:true={uploadedFileName}>
+                            <p class="slds-text-body_regular slds-m-top_small">
+                                Selected file: <strong>{uploadedFileName}</strong>
+                            </p>
+                        </template>
+                        <lightning-button variant="brand" label="Upload" onclick={handleUpload} class="upload-button"
+                            disabled={isUploadDisabled}></lightning-button>
+
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={handleCloseModal}>Close</button>
+                    </footer>
+
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>

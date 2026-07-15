@@ -1,0 +1,40 @@
+<template>
+    <template if:true={isShowModal}>
+    <lightning-card title="Invigilator Assignment" icon-name='standard:people'>
+        <div class="slds-m-around_medium">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Date</th>
+                        <th>Shift</th>
+                        <th>Time</th>
+                        <th>Professor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={roomAssignments} for:item="room" for:index="index">
+                        <tr key={room.Id}>
+                            <td class="slds-truncate" data-label="Room Number">{room.Room_Number__c}</td>
+                            <td class="slds-truncate" data-label="Date">{room.Date}</td>
+                            <td class="slds-truncate" data-label="Shift">{room.Shift}</td>
+                            <td class="slds-truncate" data-label="Time">{room.Time}</td>
+                            <td class="" data-label="Professor" style="position: relative;" required='true'>
+                                <c-rve_-custom-look-up index-value={index} onprofessorid={handleProfessorChange}></c-rve_-custom-look-up>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        <div class="slds-card__footer slds-grid slds-grid_align-end">
+            <div class="slds-col">
+                <lightning-button label="Cancel" onclick={hideModalBox}></lightning-button>
+            </div>
+            <div class="slds-col" style="margin-left: auto;">
+                <lightning-button label="Assign Invigilator" onclick={assignInvigilator} disabled={validationVal}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+    </template>
+</template>

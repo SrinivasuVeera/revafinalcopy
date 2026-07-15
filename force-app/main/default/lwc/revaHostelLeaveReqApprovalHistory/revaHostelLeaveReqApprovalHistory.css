@@ -1,0 +1,111 @@
+@font-face {
+    font-family: "NunitoSans";
+    src: url("/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/NunitoSans/NunitoSans_10pt-Regular.ttf")
+        format("TrueType");
+}
+* {
+    font-family: "NunitoSans", "RobotoSlab", "Roboto", "Dosis", Helvetica !important;
+}
+
+tr {
+    border-top: 4px solid white;
+    font-size: 0.8rem;
+}
+
+section {
+    overflow: auto;
+}
+table {
+    border-collapse: collapse;
+    overflow: auto;
+    width: 100%;
+    border-spacing: 0;
+    background-color: white;
+}
+
+.pointer-hover {
+    cursor: pointer;
+}
+table,
+th,
+td {
+    /* border-collapse: collapse; */
+    padding: 1rem;
+    text-align: left;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: var(--reva-table-heading-background-color);
+    /*  cursor: pointer; */
+    text-transform: uppercase;
+    color: white;
+}
+
+tbody tr {
+    background-color: var(--reva-table-row-background-color) !important;
+}
+
+@media (max-width: 650px) {
+    td {
+        display: grid;
+        grid-template-columns: 13ch auto;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    td:first-child {
+        padding-top: 2rem;
+    }
+
+    td:last-child {
+        padding-bottom: 2rem;
+    }
+    th {
+        display: none;
+    }
+    /* td::before {
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+    } */
+
+    td {
+        display: flex;
+        align-items: center;
+    }
+     
+    td::before {
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+        min-width: 150px; /* Adjust width to align colons */
+        text-align: right;
+        margin-right: 8px;
+    }
+}
+
+@media (max-width: 500px) {
+    table {
+        font-size: 12px;
+    }
+    .table-text {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 300px) {
+    .table-text {
+        font-size: 11px;
+    }
+}
+
+h4 {
+    padding-inline: 15px;
+    width: fit-content;
+    background: var(--reva-brand-color);
+    font-weight: 600;
+    font-size: 1rem;
+    padding-block: 5px;
+    color: white;
+    margin-block: 10px;
+}

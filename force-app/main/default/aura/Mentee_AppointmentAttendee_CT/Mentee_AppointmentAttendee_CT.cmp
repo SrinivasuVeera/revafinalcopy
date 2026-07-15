@@ -1,0 +1,54 @@
+<aura:component controller="MM_FetchCaseTeamMembers" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutheader" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>  
+    <aura:attribute name="MapUser" type="map"/>
+    <aura:attribute name="objectName" type="string" default="sfal__AppointmentAttendee__c"/>
+    <aura:attribute name="appointment" type="sobject"/>
+    <aura:attribute name="SelUserId" type="string"/>
+    <aura:attribute name="UserId" type="string"/>
+    <aura:attribute name="selcheckbox" type="boolean"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-theme_default">
+        <center>
+            <lightning:card title="Send Invite For Mentee">
+                <lightning:layout >
+                    <lightning:layoutItem size="12" padding="around-small">
+                        <div class="slds-form_horizontal">
+                            
+                            <lightning:select label="Select Mentee" name="Attendee" value="{!v.SelUserId}" onchange="{!c.changeUser}" required="true">  
+                                <option value="">--None--</option>
+                                <aura:iteration items="{!v.MapUser}" var="s" indexVar="key">
+                                    <option  value="{!s.key}"> {!s.value}</option>
+                                </aura:iteration>
+                            </lightning:select>                    
+                        </div>
+                    </lightning:layoutItem>                     
+                </lightning:layout>
+                <lightning:layout >
+                    <lightning:layoutItem size="4" >
+                        <span style="color:#ff0000">*</span>Send Meeting Invite
+                    </lightning:layoutItem>
+                     <lightning:layoutItem size="2" >
+                        <lightning:input type="checkbox" aura:id="checkid" value="{!v.selcheckbox}" onchange="{!c.onCheck}"/>
+                    </lightning:layoutItem>
+                </lightning:layout><br/>               
+                <center>
+                    <aura:if isTrue="{!v.selcheckbox ==true}">
+                        <lightning:button variant="brand" label="Save" onclick="{!c.onsave}"/>
+                    </aura:if>
+                    <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closeModel}"/>
+                </center> 
+            </lightning:card>
+        </center>
+    </div>
+</aura:component>

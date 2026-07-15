@@ -1,0 +1,344 @@
+<template>
+    <template if:false={underMaintanance}>
+    <div class="survey-wrapper">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        </template>
+        <template if:true={isLoading1}>
+            <lightning-spinner alternative-text="Loading Data..." size="medium"></lightning-spinner>
+        </template>
+        <div if:true={visibleFeedbackCategory}>        
+            <div class="survey-heading">
+                <b>Feedback</b>
+            </div>
+            <lightning-tabset selectedtabid="feedbackoncurriculam" class="tab-active" variant="scoped">
+                <lightning-tab label="Feedback on Curriculum" id="FeedbackONCurriculam">
+                    <div class="slds-grid slds-grid_vertical padd">
+                        <div class="slds-col firstColumn">
+                            <span class="curriText">Write Feedback on Curriculum</span>
+                        </div>
+                        <div class="slds-col">
+                            <div class="instHead">Instructions :</div>
+                            1. Please answer all the questions<br />
+                            2. Survey can be only submitted once<br />
+                            3. Click on proceed to take the Feedback
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-clearfix">
+                                <div class="slds-float_right">
+                                    <lightning-button variant="brand" class="slds-button backColor"
+                                        label="Proceed" onclick={enableCurriculumFeedback}></lightning-button> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-tab>
+
+                <lightning-tab label="Feedback on Infrastructure" id="FeedbackONMentor">
+                    <div class="slds-grid slds-grid_vertical padd">
+                        <div class="slds-col firstColumn">                            
+                            <span class="curriText">Write Feedback on Infrastructure</span>
+                        </div>
+                        <div class="slds-col">
+                            <div class="instHead">Instructions :</div>
+                            1. Please answer all the questions<br />
+                            2. Feedback can be only submitted once<br />
+                            3. Click on proceed to take the Feedback
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-clearfix">
+                                <div class="slds-float_right">                                    
+                                    <!-- <lightning-button variant="brand" class="slds-button backColor" label="Proceed"></lightning-button>  -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-tab>
+            </lightning-tabset>
+          
+        </div>
+        <!-- <div if:true={visibleCourseData}>            
+            <div class="fees-payments-heading">
+                <b>{feedBackHeader}</b>
+            </div>
+            <div class="title">
+                
+                <div class="title-info">Course Details:&nbsp;&nbsp;{programBatchName} </div>
+                <div class="title-info">
+                    <b>Section: &nbsp;&nbsp;{SectionName}</b>&nbsp;&nbsp;
+                    <b>Semester: &nbsp;&nbsp;{SemesterNo}</b>
+                </div>
+            </div>                        
+            <table class="slds-table slds-table--bordered aca-table" style="overflow: visible;" width="100%">                
+                <thead>                   
+                    <tr class="slds-line-height_reset">        
+                        <th scope="col" class="course-connection">COURSE CC</th>                    
+                        <th scope="col" class="course-code">COURSE CODE</th>                
+                        <th scope="col" class="course-subject">SUBJECT</th>      
+                        <th scope="col">FACULTY</th> 
+                        <th scope="col" class="feedback-on-course">FEEDBACK ON COURSE</th>
+                        <th scope="col" class="feedback-on-faculty">FEEDBACK ON FACULTY</th>               
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={courseData} for:item="item">
+                        <tr key={item.courseCode}>
+                            <td>{item.coffid}</td> 
+                            <td>{item.courseCode}</td>                    
+                            <td>{item.subject}</td>
+                            <td>{item.professor}</td>
+                            <td>
+                                <template if:true={item.feedbackCourseStatus}>
+                                    <span class="slds-text-color_success slds-text-title_bold">✔️</span>
+                                </template>
+                                <template if:false={item.feedbackCourseStatus}>
+                                    <lightning-button variant="base" label="Click here" title="Feedback on course" onclick={handleClickSubject} data-subject={item.subject} data-ccid={item.ccid} data-coid={item.coffid} class="slds-m-left_x-small"></lightning-button>
+                                </template>                                
+                            </td>
+                            <td>
+                                <template if:true={item.feedbackFacultyStatus}>                                    
+                                    <span class="slds-text-color_success slds-text-title_bold">✔️</span>
+                                </template>
+                                <template if:false={item.feedbackFacultyStatus}>                                   
+                                    <lightning-button variant="base" label="Click here" title="Feedback on faculty" onclick={handleClickFaculty} data-ccid={item.ccid} data-coid={item.coffid} data-faculty={item.professor} class="slds-m-left_x-small"></lightning-button> 
+                                </template>
+                            </td>                                
+                        </tr>
+                    </template>
+                </tbody>
+            </table>             
+            <div if:true={displayMessage}>
+                <div class="slds-text-color_error slds-text-heading_medium">Note :&nbsp;&nbsp;{errorMessage} </div>
+            </div>
+            <div class="line slds-m-top_large slds-m-bottom_large"></div>           
+                    <div class="button-container">
+                        <button class="slds-button slds-button_brand" onclick={handleBackButtonCourseDisplay}>Back</button>  
+                    </div>        
+        </div> -->
+        
+            <div if:true={visibleCourseData} class="fees-payments-wrapper">
+              
+              <div class="fees-payments-heading">
+                <b>{feedBackHeader}</b>
+              </div>
+          
+              
+              <div class="title">
+                <div class="title-info">Course Details:&nbsp;&nbsp;{programBatchName}</div>
+                <div class="title-info">
+                  <b>Section:&nbsp;&nbsp;{SectionName}</b>&nbsp;&nbsp;
+                  <b>Semester:&nbsp;&nbsp;{SemesterNo}</b>
+                </div>
+              </div>
+          
+              
+              <div class="table-scroll-wrapper desktop-view">
+                <table class="slds-table slds-table--bordered aca-table" style="overflow: visible;">
+                  <thead>
+                    <tr class="slds-line-height_reset">
+                      <!-- <th scope="col" class="course-connection">COURSE CC</th> -->
+                      <th scope="col" class="course-code">COURSE CODE</th>
+                      <th scope="col" class="course-subject">SUBJECT</th>
+                      <th scope="col">FACULTY</th>
+                      <th scope="col" class="feedback-on-course">FEEDBACK ON COURSE</th>
+                      <th scope="col" class="feedback-on-faculty">FEEDBACK ON FACULTY</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template for:each={courseData} for:item="item">
+                      <tr key={item.courseCode}>
+                        <!-- <td>{item.coffid}</td> -->
+                        <td>{item.courseCode}</td>
+                        <td>{item.subject}</td>
+                        <td>{item.professor}</td>
+                        <td>
+                          <template if:true={item.feedbackCourseStatus}>
+                            <span class="slds-text-color_success slds-text-title_bold">✔️</span>
+                          </template>
+                          <template if:false={item.feedbackCourseStatus}>
+                            <lightning-button
+                              variant="base"
+                              label="Click here"
+                              title="Feedback on course"
+                              onclick={handleClickSubject}
+                              data-subject={item.subject}
+                              data-ccid={item.ccid}
+                              data-coid={item.coffid}
+                              class="slds-m-left_x-small"
+                            ></lightning-button>
+                          </template>
+                        </td>
+                        <td>
+                          <template if:true={item.feedbackFacultyStatus}>
+                            <span class="slds-text-color_success slds-text-title_bold">✔️</span>
+                          </template>
+                          <template if:false={item.feedbackFacultyStatus}>
+                            <lightning-button
+                              variant="base"
+                              label="Click here"
+                              title="Feedback on faculty"
+                              onclick={handleClickFaculty}
+                              data-ccid={item.ccid}
+                              data-coid={item.coffid}
+                              data-secid={item.sectionid}
+                              data-faculty={item.professor}
+                              class="slds-m-left_x-small"
+                            ></lightning-button>
+                          </template>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mobile-view">
+                <template for:each={courseData} for:item="item">
+                  <div key={item.courseCode} class="course-card">
+                    <div class="course-card-header">
+                      <span class="course-code">{item.courseCode}</span> — <b>{item.subject}</b>
+                    </div>
+                    <div class="course-card-body">
+                      <p><b>Course CC:</b> {item.coffid}</p>
+                      <p><b>Faculty:</b> {item.professor}</p>
+                      <div class="feedback-buttons">
+                        <div>
+                          <b>Course Feedback : </b>
+                          <template if:true={item.feedbackCourseStatus}>
+                            <span class="slds-text-color_success">✔️ Submitted</span>
+                          </template>
+                          <template if:false={item.feedbackCourseStatus}>
+                            <lightning-button
+                              variant="base"
+                              label="Give Feedback"
+                              title="Feedback on course"
+                              onclick={handleClickSubject}
+                              data-subject={item.subject}
+                              data-ccid={item.ccid}
+                              data-coid={item.coffid}
+                              class="slds-m-top_x-small"
+                            ></lightning-button>
+                          </template>
+                        </div>
+                        <div class="slds-m-top_small">
+                          <b>Faculty Feedback : </b>
+                          <template if:true={item.feedbackFacultyStatus}>
+                            <span class="slds-text-color_success">✔️ Submitted</span>
+                          </template>
+                          <template if:false={item.feedbackFacultyStatus}>
+                            <lightning-button
+                              variant="base"
+                              label="Give Feedback"
+                              title="Feedback on faculty"
+                              onclick={handleClickFaculty}
+                              data-ccid={item.ccid}
+                              data-coid={item.coffid}
+                              data-secid={item.sectionid}
+                              data-faculty={item.professor}
+                              class="slds-m-top_x-small"
+                            ></lightning-button>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+          
+              
+              <template if:true={displayMessage}>
+                <div class="slds-text-color_error slds-text-heading_medium note-message">
+                  Note:&nbsp;&nbsp;{errorMessage}
+                </div>
+              </template>
+          
+              <div class="line slds-m-top_large slds-m-bottom_large"></div>
+          
+              
+              <div class="button-container">
+                <button class="slds-button slds-button_brand" onclick={handleBackButtonCourseDisplay}>
+                  Back
+                </button>
+              </div>
+            </div>
+         
+          
+        <template if:true={visibleQuestions}>            
+            <div class="sub-header"> 
+                <b>{selectedOption}</b>
+            </div>
+            <div if:false={displayMessage}>           
+                <div class="questions-container">                
+                    <template for:each={questionsWithStars} for:item="question" for:index="index">
+                            <div key={question.id} class="question-block">
+                                <p>{question.text}</p>
+                                <div class="stars">
+                                    <template for:each={question.stars} for:item="star">
+                                        <span
+                                            key={star.value}
+                                            class={star.class}
+                                            data-index={index}
+                                            data-star={star.value}
+                                            onclick={handleStarClick}
+                                            >
+                                            ★
+                                        </span>
+                                    </template>
+                                </div>
+                            </div>
+                    </template>     
+                    <p>Remarks</p>
+                    <div class="text-area-container">
+                      <textarea 
+                          class="custom-textarea" 
+                          maxlength="80"
+                          value={remarks}
+                          oninput={handleTextAreaInput}>
+                      </textarea>
+                      <div class="char-count">{remainingChars}/{totalChar}</div>
+                      <div if:true={showRemarksError}>
+                        <div class="slds-text-color_error slds-text-body_small slds-text-align_left slds-p-vertical_small">Please enter remarks </div>
+                      </div>                      
+                    </div>            
+                </div> 
+                <div class="line slds-m-bottom_x-large"></div>
+                <div class="button-container">
+                        <button class="slds-button slds-button_brand slds-m-right_x-large" onclick={handleSubmit}>Submit</button>
+                        <button class="slds-button slds-button_brand" onclick={handleBackButton}>Back</button>    
+                </div>
+            </div>     
+            <div if:true={displayMessage}>
+                <div class="slds-text-color_error slds-text-heading_medium slds-text-align_center slds-p-vertical_x-large">Note :&nbsp;&nbsp;{errorMessage} </div>
+                <div class="button-container">
+                    <button class="slds-button slds-button_brand" onclick={handleBackButton}>Back</button>  
+                </div>
+            </div>  
+            <!-- <template if:true={submitted}>
+                    <div class="result-container">
+                    <h3>Ratings submitted:</h3>
+                    <template for:each={questionsWithRatings} for:item="question">
+                        <p key={question.id}>
+                            {question.id} = {question.templateId} = {question.text} — {question.rating} star{question.suffix}
+                        </p>
+                    </template>
+                    </div>
+            </template>     -->
+
+            <!-- <template if:true={courseQuestions}>
+                <div class="slds-m-top_medium">
+                    <template for:each={courseQuestions} for:item="question">
+                        <p key={question.id}>{question.text}</p>
+                    </template>
+                </div>
+            </template>         -->
+        </template> 
+    </div>   
+    </template> 
+    <template if:true={underMaintanance}>
+        <div class="maintenance-message">
+            <p>
+                Due to some maintenance, the page will be temporarily unavailable for the next two hours.<br />
+                We apologize for any inconvenience caused and kindly request you to visit the page again after the maintenance period.
+            </p>
+        </div>
+    </template>
+</template>

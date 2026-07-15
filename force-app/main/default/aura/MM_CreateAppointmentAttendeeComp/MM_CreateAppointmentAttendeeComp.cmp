@@ -1,0 +1,98 @@
+<aura:component controller="MM_CreateAppointmentAttendeeCls" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="objAttendee" type="sobject"/>
+  <!--  <aura:attribute name="lst_AllFieldsets" type="List"/> -->
+    <aura:attribute name="objectName" type="string" default="sfal__AppointmentAttendee__c"/>
+    <aura:attribute name="lstMeeting" type="List"/>
+    <aura:attribute name="blockMeeting" type="boolean" default="false"/>
+    <aura:attribute name="inviteSent" type="boolean" default="false"/>
+    <aura:attribute name="professor" type="string"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+<aura:if isTrue="{!!v.inviteSent}">    
+	<div class="slds-modal__container slds-fade-in-open">
+        <header class="slds-modal__header">
+          <h2 id="modal-heading-01" class="slds-text-heading--medium">Send Invite to Mentor</h2>
+        </header>
+        
+        <div class="slds-modal__content slds-p-around_medium slds-align_absolute-center" id="modal-content-id-1">
+            <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-theme_default">                                     
+                <div class="slds-size_12-of-12"> 
+                    <div class="slds-text-align_left slds-m-around_x-small">
+                            <table>
+                                <tr>
+                                    <td>&nbsp;&nbsp;<label for="attendee">Mentor</label></td>
+                                    <td>
+                                        <lightning:input type="string" name="input1" value="{!v.professor}" disabled="true"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;&nbsp;<label for="check">Send Meeting Invite</label><span style="color:#ff0000">*</span></td>
+                                    <td class="tablecheck">
+                                        <lightning:input type="checkbox" aura:id="allCheck" checked="{!v.objAttendee.Send_Meeting_Invite__c}" value="{!v.objAttendee.Send_Meeting_Invite__c}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                    </div>
+                </div>
+                <div class="slds-size_12-of-12">
+                    <br/>
+                    <b>Professor Calendar Blocked on</b>
+                    <br/>
+                    <aura:iteration items="{!v.lstMeeting}" var="evt">
+                        <lightning:button variant="brand-outline" label="{!evt}" title="Brand action"/>
+                    </aura:iteration>    
+                    <br/><br/>
+                    <center>
+                        <lightning:button variant="brand" onclick="{!c.handleOnSubmit}" name="save" label="Save" />
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{!c.closeModel}"/>
+                    </center>
+                </div>    
+            </div> 
+            
+            <br/>  
+            
+            
+            
+            
+                    
+                
+        </div>
+    </div>    
+</aura:if>    
+    <aura:if isTrue="{!v.inviteSent}">  <br/><br/><br/><br/><br/><br/>
+     <center>   
+    <lightning:icon iconName="action:approval" alternativeText="Approved" title="Approved" />
+    </center>     
+    <br/>
+    	<div style="font-size: 15px;font-style: italic;"><center>Your Invitation has been sent Successfully!</center></div>
+        <div style="font-size: 15px;font-style: italic;"><center>To </center></div> 
+        <div style="font-size: 15px;font-style: italic;"><center>{!v.professor}</center></div>
+</aura:if>    
+</aura:component>

@@ -1,0 +1,77 @@
+<aura:component controller="ATT_BulkProxyAttendance_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="disableSave" type="boolean" default="false"/>
+    <aura:attribute name="selectedFromDate" type="DateTime"/>
+    <aura:attribute name="selectedToDate" type="DateTime"/>
+    <aura:attribute name="srnNos" type="String"/>
+    <aura:attribute name="reason" type="String"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-theme_default">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:avatar" alternativeText="Student Section Allocation" title="Student Section Allocation" /> &nbsp;
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Bulk Proxy Attendance">Bulk Proxy Attendance</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="slds-float_right">
+                                <lightning:button variant="brand-outline" label="Clear" title="Clear" onclick="{!c.clearDetails}"/>
+                                <lightning:button class="slds-button slds-button_brand" disabled="{!v.disableSave}" onclick="{!c.saveProxyAttendance}"> Save </lightning:button>
+                            </div>
+                            <p class="slds-text-body_small"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slds-grid slds-wrap slds-p-top_x-small">   
+            <div class="slds-col slds-size_1-of-5">
+            </div>
+            <div class="slds-col slds-size_1-of-4 slds-p-left_xxx-small" style="padding-right:0.2%">
+                <lightning:input aura:id="auraInputId" type="datetime" name="fromDate" label="Date From" value="{!v.selectedFromDate}" required="true"/>                         
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <lightning:input aura:id="auraInputId" type="datetime" name="toDate" label="Date to" value="{!v.selectedToDate}" required="true"/>
+            </div>  
+            <div class="slds-col slds-size_1-of-5">
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">   
+            <div class="slds-col slds-size_1-of-5">
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:input aura:id="auraInputId" label="Reason" name="reason" type="text" value="{!v.reason}" required="true"/>
+            </div>  
+            <div class="slds-col slds-size_1-of-5">
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">   
+            <div class="slds-col slds-size_1-of-5">
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:textarea aura:id="auraInputId" name="srnNos" label="Enter SRN No's" value="{!v.srnNos}" required="true"/>
+                <span><b>Ex:-</b>R19EN001,R19EN003,R19EN003</span>
+            </div>  
+            <div class="slds-col slds-size_1-of-5">
+            </div>
+        </div>
+    </div>
+</aura:component>

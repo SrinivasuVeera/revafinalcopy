@@ -1,0 +1,6 @@
+<apex:page standardcontroller="Contact" renderAs="pdf">
+    <apex:outputText value="{!Contact.Id}" />
+   
+    <apex:image value="{!Contact.rve_Convocation_QR_Code__c}" />
+    
+</apex:page>

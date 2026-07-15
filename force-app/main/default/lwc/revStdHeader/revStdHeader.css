@@ -1,0 +1,38 @@
+.header-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem 0.3125rem 1.5rem;
+    background-color: var(--reva-background-page-color);
+}
+    .naac_logo img {
+    height: 3.80rem;
+    width: 11.25rem;
+    object-fit: contain;
+}
+
+.reva-university img {
+    height: 3.80rem;
+    width: 11.0625rem;
+    object-fit: contain;
+}
+
+
+@media only screen and (max-width: 47.9375rem) {
+    .header-wrapper {
+        padding-bottom: 0.3125rem;
+    }
+   
+        .naac_logo img {
+        height: 3.115rem;
+        width: 6.25rem;
+        object-fit: contain;
+    }
+
+    .reva-university img {
+        height: 3.115rem;
+        width: 6.30rem;
+        object-fit: contain;
+    }
+   
+}

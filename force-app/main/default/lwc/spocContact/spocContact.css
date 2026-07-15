@@ -1,0 +1,104 @@
+.summary-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+}
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.badge.red {
+    background: #c23934; 
+}
+
+.badge.green {
+    background: #2e844a; 
+}
+.progress-container {
+    flex: 1;
+    margin-left: 10px;
+}
+.filters {
+    margin: 10px 0;
+}
+.selected-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #eef4ff;
+    border: 1px solid #d8e6ff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-top: 5px;
+    font-size: 13px;
+}
+.lookup-box {
+    border: 1px solid #d8dde6;
+    background: #fff;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.lookup-box div {
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.lookup-box div:hover {
+    background: #f3f3f3;
+}
+lightning-datatable {
+    margin-top: 10px;
+}
+.empty-state {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-size: 14px;
+}
+.slds-modal__container {
+    max-width: 600px;
+}
+.auto-height textarea {
+    min-height: 80px;
+}
+
+.slds-modal__footer lightning-button {
+    margin-left: 8px;
+}
+.auto-height textarea {
+    min-height: 120px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.auto-desc {
+    overflow: hidden;
+    resize: none;
+    min-height: 80px;
+}
+.description-box {
+    background-color: #f3f3f3;
+    border: 1px solid #d8dde6;
+    border-radius: 4px;
+}
+.truncate-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.name-link {
+    color: #0176d3;
+    font-weight: 500;
+}
+.name-link:hover {
+    text-decoration: underline;
+}

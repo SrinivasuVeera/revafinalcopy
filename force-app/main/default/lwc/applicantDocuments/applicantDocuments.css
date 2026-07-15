@@ -1,0 +1,14 @@
+.boxBorder{
+    border:0.5px solid black;
+    padding: 10px 10px 10px 20px;
+}
+.rightBorder{
+    border-left-style: dashed;
+    border-left-color: orange;
+}
+.upload{
+    
+        max-width: 80px;
+        height: 80px;
+    
+}

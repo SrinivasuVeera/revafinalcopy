@@ -1,0 +1,166 @@
+<template>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+    <template if:false={isSpeclExist}>
+        <lightning-card class="slds-card" title="RBS Specialization Selection">
+
+            <div class="slds-p-around_medium">
+                <lightning-layout horizontal-align="spread">
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-combobox label="Specialization-1" data-id="spec1" value={sp1value}
+                            placeholder="Select Specialization-1" options={specalizations}
+                            onchange={handleSpecialization} required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-combobox label="Specialization-2" data-id="spec2" value={sp2value}
+                            placeholder="Select Specialization-2" options={specalizations}
+                            onchange={handleSpecialization} required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-button label="Next" variant="brand" onclick={openModal}></lightning-button>
+            </div>
+
+
+        </lightning-card>
+    </template>
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open custom-modal-size">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Specialization Wise Courses</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-accordion allow-multiple-sections-open active-section-name={openSections}
+                        class="slds-m-bottom_medium">
+                        <template if:true={selectedSpec1}>
+                            <lightning-accordion-section name="spec1" label={spcl1Name}>
+                                <template if:true={hasCoursesForSpec1}>
+                                    <lightning-datatable key-field="Id" data={coursesForSpec1} columns={courseColumns}
+                                        hide-checkbox-column="true"></lightning-datatable>
+                                </template>
+                                <template if:false={hasCoursesForSpec1}>
+                                    <div class="slds-text-color_error slds-p-around_small">
+                                        Currently there are no courses assigned to "{spcl1Name}".
+                                    </div>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+
+                        <template if:true={selectedSpec2}>
+                            <lightning-accordion-section name="spec2" label={spcl2Name}>
+                                <template if:true={hasCoursesForSpec2}>
+                                    <lightning-datatable key-field="Id" data={coursesForSpec2} columns={courseColumns}
+                                        hide-checkbox-column="true"></lightning-datatable>
+                                </template>
+                                <template if:false={hasCoursesForSpec2}>
+                                    <div class="slds-text-color_error slds-p-around_small">
+                                        Currently there are no courses assigned to "{spcl2Name}".
+                                    </div>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+
+                    </lightning-accordion>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
+                    <lightning-button variant="brand" label="Next" disabled={isModelnextDis} onclick={handleSaveClick}
+                        class="slds-m-left_small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={showConfirmation}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Confirmation</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>Are you sure you want to go with selected specializations?</p>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="No" onclick={cancelConfirmation}></lightning-button>
+                    <lightning-button variant="brand" label="Yes" onclick={confirmSpecializations}
+                        class="slds-m-left_small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={isSpeclExist}>
+        <!-- NEW: Show disabled comboboxes for Specializations -->
+        <lightning-layout horizontal-align="spread" class="slds-p-around_medium">
+            <lightning-layout-item padding="around-small" size="6">
+                <lightning-input label="Specialization-1" value={selectedSpec1Name} disabled>
+                </lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item padding="around-small" size="6">
+                <lightning-input label="Specialization-2" value={selectedSpec2Name} disabled>
+                </lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+        <template if:true={hasSpclOfferings}>
+            <!-- Existing table -->
+            <table class="slds-table slds-table--bordered hardcore-courses-table">
+                <thead>
+                    <tr>
+                        <th class="slds-is-resizable" scope="col">SL. NO</th>
+                        <th class="slds-is-resizable" scope="col">COURSE</th>
+                        <th class="slds-is-resizable" scope="col">CREDITS</th>
+                        <th class="slds-is-resizable" scope="col">SPECIALIZATION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={lstSpclOfferings} for:item="cOffer" for:index="index">
+                        <tr key={cOffer.Id} class="slds-hint-parent">
+                            <td scope="col">{cOffer.SNO}</td>
+                            <td scope="col">{cOffer.hed__Course__r.Name}</td>
+                            <td scope="col">{cOffer.Credits__c}</td>
+                            <td scope="col">{cOffer.Specialization__r.Name}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+
+        </template>
+
+        <template if:false={hasSpclOfferings}>
+            <table class="slds-table slds-table--bordered hardcore-courses-table">
+                <thead>
+                    <tr>
+                        <th class="slds-is-resizable" scope="col">SL. NO</th>
+                        <th class="slds-is-resizable" scope="col">COURSE</th>
+                        <th class="slds-is-resizable" scope="col">CREDITS</th>
+                        <th class="slds-is-resizable" scope="col">SPECIALIZATION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="nocourse" colspan="4">No course offerings have been created by the Vertical Head.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+    </template>
+
+</template>

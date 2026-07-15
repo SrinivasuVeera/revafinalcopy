@@ -1,0 +1,25 @@
+<template>
+    <div class="container">
+        <!-- Conditionally render the flow only when isFlowLoaded is true -->
+        <template if:true={isFlowLoaded}>
+            <lightning-flow
+                flow-api-name={flowApiName}
+                flow-input-variables={flowInputVariables}
+                onstatuschange={handleFlowStatusChange}
+            >
+            </lightning-flow>
+        </template>
+
+        <!-- Display a loading message while waiting for the recordId -->
+        <template if:false={isFlowLoaded}>
+            <template if:true={isFlowFinished}>
+                <div class="completion-message">
+                    <p>Updated successfully.</p>
+                </div>
+            </template>
+            <template if:false={isFlowFinished}>
+                <p>Loading flow...</p>
+            </template>
+        </template>
+    </div>
+</template>

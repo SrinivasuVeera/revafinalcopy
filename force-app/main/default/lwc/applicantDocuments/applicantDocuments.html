@@ -1,0 +1,569 @@
+<template>
+  <template if:true={loading}>
+    <lightning-spinner alternative-text="Loading">
+    </lightning-spinner>
+  </template>
+
+
+  <lightning-layout horizontal-align="center">
+    <lightning-layout-item padding="around-small" size="9" class="border">
+      <lightning-card title="Documents to be Uploaded">
+
+
+        <div class="slds-grid slds-wrap">
+
+          <template for:each={fileTypes} for:item="row" for:index="idx">
+
+            <div key={row.label} class="slds-col slds-medium-size_4-of-12">
+              &bull;&nbsp;{row.label}
+            </div>
+          </template>
+        </div>
+        <div class="slds-col">
+          <span></span>
+        </div>
+       
+
+      </lightning-card>
+      <lightning-card title="Upload Documents" icon-name="standard:attach">
+        <template if:true={isUG}>
+          <div class="slds-grid slds-gutters showInLine">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-radio-group name="radioGroup"
+                          label="Applicant Photo"
+                          options={options}
+                          value={value}
+                          onchange={handlePhotoChange}
+                          type="radio"
+                          required>
+              </lightning-radio-group>
+            </div>
+          </div>
+
+          <template if:true={isUploadPhoto}>
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col slds-size_2-of-3">
+                <lightning-file-upload label="Applicant Photo:" name="passPic" accept={picacceptedFormats}
+                  record-id={recordId} onuploadfinished={handleApplicantPhotoUpload} required={isPassPicUploaded}>
+                </lightning-file-upload></span>
+              </div>
+              <div class="slds-col slds-size_1-of-3 upload">
+                <template if:true={passPicUploaded}>
+                  <br />
+                  <img src={picture} />
+                </template>
+              </div>
+            </div>
+          </template>
+          <template if:true={isCapturePhoto}>
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col slds-size_6-of-12"><br/>
+                <lightning-button variant="capture" label="Photo Capture" onclick={CapturePhoto}></lightning-button>
+              </div>
+              <div class="slds-col slds-size_6-of-12 upload">
+                <template if:true={passPicUploaded}>
+                <br />
+                <img src={picture} />
+              </template>
+              </div>
+            </div>
+          </template>
+    
+          <template if:true={photoCapture}>
+            <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+                <div class="wrapper">
+                  <video width="100%" height="100%" autoplay></video>
+                  <canvas width="1500%" height="1500%" style="display: none;"></canvas>
+                  <button class="button-0" onclick={clickPhoto}>Take Photo</button>  
+                </div>
+            </div>
+          </div>            
+        </template>
+        <template if:true={fileData}>
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              {fileData.filename} ({fileSizeDisp})
+              <lightning-button variant="brand" 
+              label="Upload" title="Upload" slot="actions" 
+              disabled={fileNotUploadable}
+              onclick={handleUpload} class="slds-var-m-left_x-small">
+          </lightning-button>
+            </div>
+          </div>
+        </template>
+
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="10thMarksheet:" name="mm10" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleMarksCard10Upload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={tenth}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="12thMarksheet:" name="mm12" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleMarksCard12Upload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={twelfth}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="CasteCertificate:" name="CC" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleCasteCertificateUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={Caste}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+         
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="EntranceExamRankCard:" name="EER" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleEntrenceExamRankCardUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={Rank}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="StudyCertificate:" name="SC" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleStudyCertificateUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={Study}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+     <template if:true={isValidCategory}>
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="Passport:" name="PP" accept={passportacceptedFormats} record-id={recordId}
+                onuploadfinished={handlePassportUpload} required = {studentCountry}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={Passport}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+        </template>
+
+        </template>
+
+        <template if:true={isPG}>
+          <!--  <div class="slds-grid slds-gutters">
+          <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload
+          label="Passprt Photo:"
+          name="passPic"
+          accept={picacceptedFormats}
+          record-id={recordId}
+          onuploadfinished={handlepassPicUpload}>
+        </lightning-file-upload></span>
+          </div>
+          <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={passPicUploaded}>
+                <br/>
+                <img src={picture}/>
+              </template>              
+          </div>
+      </div>
+
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_2-of-3">
+            <lightning-file-upload
+        label="10thMarksheet:"
+        name="mm10"
+        accept={acceptedFormats}
+        record-id={recordId}
+        onuploadfinished={handlemm10Upload}>
+      </lightning-file-upload></span>
+        </div>
+        <div class="slds-col slds-size_1-of-3 upload">
+            <template if:true={tenth}>
+              <br/>
+              <img src={picture}/>
+            </template>              
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters">
+      <div class="slds-col slds-size_2-of-3">
+          <lightning-file-upload
+      label="12thMarksheet:"
+      name="mm12"
+      accept={acceptedFormats}
+      record-id={recordId}
+      onuploadfinished={handlemm12Upload}>
+    </lightning-file-upload></span>
+      </div>
+      <div class="slds-col slds-size_1-of-3 upload">
+          <template if:true={twealth}>
+            <br/>
+            <img src={picture}/>
+          </template>              
+      </div>
+  </div>
+
+<div class="slds-grid slds-gutters">
+  <div class="slds-col slds-size_2-of-3">
+    <lightning-file-upload
+  label="Entrence Exam RankCard:"
+  name="EER"
+  accept={acceptedFormats}
+  record-id={recordId}
+  onuploadfinished={handleEERUpload}>
+</lightning-file-upload></span>
+  </div>
+  <div class="slds-col slds-size_1-of-3 upload">
+    <template if:true={Rank}>
+      <br/>
+      <img src={picture}/>
+    </template>
+  </div>
+
+  <div class="slds-grid slds-gutters">
+    <div class="slds-col slds-size_2-of-3">
+        <lightning-file-upload
+    label="Study Certificate:"
+    name="SC"
+    accept={acceptedFormats}
+    record-id={recordId}
+    onuploadfinished={handleSCUpload}>
+  </lightning-file-upload></span>
+    </div>
+    <div class="slds-col slds-size_1-of-3 upload">
+        <template if:true={Study}>
+          <br/>
+          <img src={picture}/>
+        </template>              
+    </div>
+</div>
+ 
+<div class="slds-grid slds-gutters">
+  <div class="slds-col slds-size_2-of-3">
+    <lightning-file-upload
+  label="Caste Certificate:"
+  name="CC"
+  accept={acceptedFormats}
+  record-id={recordId}
+  onuploadfinished={handleCCUpload}>
+</lightning-file-upload></span>
+  </div>
+  <div class="slds-col slds-size_1-of-3 upload">
+    <template if:true={Caste}>
+      <br/>
+      <img src={picture}/>
+    </template>
+  </div>
+</div>-->
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="Degree Marks Card:" name="DMC" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleDegreeMarksCardUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={DegreeMarks}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="Degree Certificate:" name="DC" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleDegreeCertificateUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={DegreeCertificate}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template if:true={isPhd}>
+          <!--  <div class="slds-grid slds-gutters">
+          <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload
+          label="Passprt Photo:"
+          name="passPic"
+          accept={picacceptedFormats}
+          record-id={recordId}
+          onuploadfinished={handlepassPicUpload}>
+        </lightning-file-upload></span>
+          </div>
+          <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={passPicUploaded}>
+                <br/>
+                <img src={picture}/>
+              </template>              
+          </div>
+      </div>
+
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_2-of-3">
+            <lightning-file-upload
+        label="10thMarksheet:"
+        name="mm10"
+        accept={acceptedFormats}
+        record-id={recordId}
+        onuploadfinished={handlemm10Upload}>
+      </lightning-file-upload></span>
+        </div>
+        <div class="slds-col slds-size_1-of-3 upload">
+            <template if:true={tenth}>
+              <br/>
+              <img src={picture}/>
+            </template>              
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters">
+      <div class="slds-col slds-size_2-of-3">
+          <lightning-file-upload
+      label="12thMarksheet:"
+      name="mm12"
+      accept={acceptedFormats}
+      record-id={recordId}
+      onuploadfinished={handlemm12Upload}>
+    </lightning-file-upload></span>
+      </div>
+      <div class="slds-col slds-size_1-of-3 upload">
+          <template if:true={twealth}>
+            <br/>
+            <img src={picture}/>
+          </template>              
+      </div>
+  </div>
+
+  <div class="slds-grid slds-gutters">
+  <div class="slds-col slds-size_2-of-3">
+    <lightning-file-upload
+  label="Entrence Exam RankCard:"
+  name="EER"
+  accept={acceptedFormats}
+  record-id={recordId}
+  onuploadfinished={handleEERUpload}>
+</lightning-file-upload></span>
+  </div>
+  <div class="slds-col slds-size_1-of-3 upload">
+    <template if:true={Rank}>
+      <br/>
+      <img src={picture}/>
+    </template>
+  </div>
+
+  <div class="slds-grid slds-gutters">
+    <div class="slds-col slds-size_2-of-3">
+        <lightning-file-upload
+    label="StudyCertificate:"
+    name="SC"
+    accept={acceptedFormats}
+    record-id={recordId}
+    onuploadfinished={handleSCUpload}>
+  </lightning-file-upload></span>
+    </div>
+    <div class="slds-col slds-size_1-of-3 upload">
+        <template if:true={Study}>
+          <br/>
+          <img src={picture}/>
+        </template>              
+    </div>
+</div>
+
+
+<div class="slds-grid slds-gutters">
+  <div class="slds-col slds-size_2-of-3">
+    <lightning-file-upload
+  label="Caste Certificate:"
+  name="CC"
+  accept={acceptedFormats}
+  record-id={recordId}
+  onuploadfinished={handleCCUpload}>
+</lightning-file-upload></span>
+  </div>
+  <div class="slds-col slds-size_1-of-3 upload">
+    <template if:true={Caste}>
+      <br/>
+      <img src={picture}/>
+    </template>
+  </div>
+</div>-->
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="Degree Marks Card:" name="DMC" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleDegreeMarksCardUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={DegreeMarks}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="Degree Certificate:" name="DC" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleDegreeCertificateUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={DegreeCertificate}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="Pg Degree Marks Card:" name="PGMC" accept={acceptedFormats}
+                record-id={recordId} onuploadfinished={handlePG_MarksCardUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={PgDegreeMarksCard}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="Pg Degree Certificate:" name="PGDC" accept={acceptedFormats}
+                record-id={recordId} onuploadfinished={handlePG_DergreeCertificateUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={PgDegreeCertificate}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="MPhill Certificate" name="MC" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleMPhilCertificateUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={MPhillCertificate}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="NET" name="Net" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleNETUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={NETM}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="SET" name="Set" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleSETUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={SETM}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+          </div>
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <lightning-file-upload label="KSET" name="Kset" accept={acceptedFormats} record-id={recordId}
+                onuploadfinished={handleKSETUpload}>
+              </lightning-file-upload></span>
+            </div>
+            <div class="slds-col slds-size_1-of-3 upload">
+              <template if:true={KSETM}>
+                <br />
+                <img src={picture} />
+              </template>
+            </div>
+           
+           
+          </div>         
+
+        </template>
+      </lightning-card>
+    </lightning-layout-item>
+
+    
+
+    <!-- Show list of ALready Uploaded Documents-->
+    <lightning-layout-item padding="around-small" size="3" class="border rightBorder">
+      <lightning-card title="Uploaded Documents" icon-name="standard:folder">
+        <template if:true={filesUploaded}>
+          <ul class="slds-list_dotted">
+            <template for:each={currentFiles} for:item="row" for:index="idx">
+              <li key={row.fileType} class="slds-var-m-left_small">{row.fileType}</li>    
+            </template>
+          </ul> 
+        </template>
+        <template if:false={filesUploaded}>
+          <span class="slds-var-m-left_medium">
+            No documents yet - please upload.
+          </span>
+        </template>
+      </lightning-card>
+    </lightning-layout-item>
+  </lightning-layout>
+</template>

@@ -1,0 +1,91 @@
+.login-wrapper {
+    display: flex;
+    justify-content: end;
+    padding: 0.3125rem 0.9375rem 0rem 0.9375rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    background-color: var(--reva-admission-portal-page-background-color);
+
+}
+
+.login-wrapper a {
+    color: var(--reva-admission-portal-brand-color);
+}
+
+.img-container {
+    min-width: 20px;
+    position: relative;
+}
+
+.img-container img {
+    height: 20px;
+    width: 20px;
+    object-fit: contain;
+}
+
+
+
+.navigation-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 15px 0 12px;
+    align-items: center;
+
+}
+
+.sub-header:first-child {
+    border-right: 1px dotted #00679a;
+    margin-right: 20px;
+    padding: 5px 20px;
+}
+
+
+.menu {
+    border: 0.0625rem solid #ccc;
+    position: absolute;
+    right: -0.625rem;
+    --caret-left: 86%;
+    background-color: white;
+    width: 12.5rem;
+    box-shadow: 0rem 0.5rem 1rem 0rem rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    margin-top: 0.625rem;
+
+}
+
+.menu::before {
+    content: "";
+    position: absolute;
+    top: -1.4375rem;
+    left: var(--caret-left);
+    margin-left: -0.3125rem;
+    border-width: 0.75rem;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+}
+
+
+
+@media only screen and (max-width:47.9375rem) {
+    .login-wrapper {
+        font-size: 0.8125rem;
+    }
+
+    .img-container {
+        min-width: 1.125rem;
+    }
+
+    .img-container img {
+        height: 1.125rem;
+        width: 1.125rem;
+    }
+
+    .img-container {
+        position: static;
+    }
+
+    .menu {
+        width: calc(100% - 1.25rem);
+        left: 0.625rem;
+    }
+}

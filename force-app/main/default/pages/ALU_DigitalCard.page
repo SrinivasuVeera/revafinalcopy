@@ -1,0 +1,143 @@
+<apex:page controller="ALU_DigitalCard_Ext" renderAs="pdf"  applyBodyTag="false" applyHtmlTag="false" showHeader="false" sidebar="false">  
+    <html>
+        <head> 
+            <style type="text/css" media="print" >
+                @page {
+                size: 10cm 29.7cm;
+                margin-top: 0.6cm;
+                margin-left: 0cm;
+                margin-right: 0cm;
+                margin-bottom: 0cm;
+                }
+                div.card1{ 
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                max-width: 390px;
+                height: 510px;
+                border: 1.5px solid black;
+                }
+                div.card2 { 
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                max-width: 390px;
+                height: 510px;
+                border: 1.5px solid black;
+                }
+                div.div1{
+                margin: auto;
+                width: 35%;
+                height: 120px;            
+                padding: 10px;
+                }
+                table td, table td * {
+                vertical-align: top;
+                }
+                .dotClass{
+                border-top:1.2pt dotted black;line-height: 0.5px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="card1">
+                <div align= "center" style="background-color:#39393B;text-align:center;" >
+                    <apex:image width="250" height="85%" url="{!$Resource.Reva_Id_Header}"/>
+                </div>
+                <br/>
+                <div style="text-align:center;" >
+                    <b>ALUMNI CARD</b>
+                </div>
+                <div class="div1" style="text-align:center;" >
+                    <!--<apex:image width="50%">{!objContact.Student_Image__c}</apex:image>-->
+                    <apex:panelGroup rendered="{!objContact.File_Passport_Size_Photo__c == null && docExists == false}">
+                        <apex:image width="110" height="110"  url="{!$Resource.DefaultProfilePic}"/>
+                    </apex:panelGroup>
+                    
+                    <apex:panelGroup rendered="{!docExists == false && objContact.File_Passport_Size_Photo__c != null}">
+                        <apex:outputText value="{!objContact.Student_Image__c}" escape="false"/>
+                    </apex:panelGroup>
+                    <apex:panelGroup rendered="{!docExists == true }">
+                        <apex:image url="/sfc/servlet.shepherd/version/download/{!objContact.ContentDocumentLinks[0].ContentDocument.LatestPublishedVersionId}" width="110px" height="110px"/>
+                    </apex:panelGroup>
+                </div>
+                <b>
+                    <!--<p style= "margin-left:0.2cm;margin-top:0.1cm;margin-bottom:0.1cm;width: 100%;">
+                        Digital Card Number : {!objContact.Digital_Card_Number__c}
+                    </p> <br/> -->
+                    <table style= "margin-left:0.2cm;width: 100%;">
+                        <tr>
+                            <td>SRN</td>	
+                            <td>:</td>
+                            <td>{!objContact.SRN_No__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>:</td>
+                            <td>{!objContact.Name}</td>
+                        </tr>
+                        <tr>
+                            <td>School/Dept</td>
+                            <td>:</td>
+                            <td style="white-space: pre-line;word-wrap:break-word; overflow-wrap:break-word;">{!programValue}</td>
+                        </tr>
+                        <tr>
+                            <td>Year</td>
+                            <td>:</td>
+                            <td>{!objContact.Year_Of_Graduation__c}</td>
+                        </tr>
+                        <tr>
+                            <td>DOB</td>
+                            <td>:</td>
+                            <td><apex:outputText value="{0,date,MMMM dd, yyyy}">
+                                <apex:param value="{!objContact.Birthdate}" />
+                                </apex:outputText></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile</td>
+                            <td>:</td>
+                            <td>{!objContact.MobilePhone}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>:</td>
+                            <td >
+                                <div style="word-wrap:break-word;overflow:hidden;">
+                                    {!objContact.Email}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </b>
+            </div >
+            <br/>
+            <div colspan="5" class="dotClass">&nbsp;</div>
+            <br/>
+            
+            <div class="card2">
+                <br/>
+                <div style="text-align:center;" >
+                    <h3><U>REVA University Alumni Association</U></h3>
+                </div>
+                <br/>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instructions:</b><br/>
+                <ol>
+                    <li><b>Alumni are expected to produce this card at the Security Office while entering the Campus.</b></li>
+                    <li><b>In case of any discrepancies, you are requested to report the same to REVA University Alumni cell through <a href="alumni@reva.edu.in">alumni@reva.edu.in</a> or +91 7795097733.</b></li>                  
+                </ol>
+                <br/><br/>               
+                <div style="background-color:orange;text-align:center;">
+                    <b>
+                        <br/><br/><br/>
+                        REVA University<br/>
+                        Rukmini Knowledge Park, Kattigenahalli,<br/>
+                        Yelahanka, Bangalore 560064 <br/>
+                        PH: 080 6622 6622
+                        <br/><br/>
+                    </b>
+                    <br/>
+                </div>
+                <div style="background-color:#39393B;text-align:center;">
+                    <br/><br/>
+                    <span style="color:white;"> www.reva.edu.in </span>
+                </div>
+            </div>
+        </body>
+    </html>
+</apex:page>

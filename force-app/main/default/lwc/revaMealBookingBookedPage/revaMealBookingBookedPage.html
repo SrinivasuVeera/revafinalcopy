@@ -1,0 +1,191 @@
+<template>
+    <!-- Title Section -->
+    <lightning-layout class="title-container slds-var-m-bottom_medium">
+        <lightning-layout-item size="12" class="slds-text-align_center">
+            <template if:true={isValied}>
+                <h1 class="booked-meals-title">AVAILED MEALS</h1>
+            </template>
+            <template if:false={isValied}>
+                <h1 class="booked-meals-title">BOOKED MEALS</h1>
+            </template>
+
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <!-- Booked Meals Section -->
+    <template if:true={isBookedMealsopen}>
+        <lightning-layout multiple-rows="true" class="content">
+            <lightning-layout-item size="12" class="test">
+
+
+                <div class="booked-meals-container">
+                    <!-- Meal Cards Grid -->
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <template for:each={bookedMeals} for:item="menu" for:index="index">
+                            <div key={menu.Id}
+                                class="slds-col slds-size_1-of-1 slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-p-around_x-small">
+
+                                <div class="meal-card">
+                                    <!-- Meal Image -->
+                                    <div class="meal-image">
+                                        <img src={menu.ImageURL} class="meal-img" alt="Meal Image" />
+                                    </div>
+
+                                    <!-- Meal Type -->
+                                    <h3 class="meal-title">{menu.Reva_Mess_Menu__r.Type__c}</h3>
+                                    <div class="underline"></div>
+                                    <div class="meal-boxconatinar">
+                                        <!-- Meal Details -->
+                                        <div class="meal-data">
+                                            <div class="date" title="date">
+                                                <img src={calendarIcon} />
+                                                <lightning-formatted-date-time value={menu.Reva_Mess_Menu__r.Date__c}
+                                                    time-zone="UTC"></lightning-formatted-date-time>
+                                            </div>
+                                            <div class="time" title="time">
+                                                <img src={timeIcon} />
+                                                <lightning-formatted-date-time
+                                                    value={menu.Reva_Mess_Menu__r.Start_Time__c} hour="2-digit"
+                                                    minute="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                                                -
+                                                <lightning-formatted-date-time
+                                                    value={menu.Reva_Mess_Menu__r.Display_End_Time__c} hour="2-digit"
+                                                    minute="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                                            </div>
+                                            <div class="meal-status" title="meal-status">
+                                                <img src={mealIcon} />
+                                                {menu.Reva_Meal_Booking_Status__c}
+                                            </div>
+                                        </div>
+
+                                        <!-- Menu List -->
+
+                                        <div class="menu-list">
+                                         
+                                            <ul>
+                                                <div class ='item-scrol'>
+                                                    <template if:true={menu.messItemsList}>
+                                                        <template for:each={menu.messItemsList} for:item="menuItem">
+                                                            <li key={menuItem}>{menuItem}</li>
+                                                        </template>
+                                                    </template>
+                                                </div>
+                                                
+                                            </ul>
+                                            
+                                        </div>
+
+                                        <!-- Buttons Below Each Card -->
+                                        <template if:true={menu.isMealBookedPage}>
+                                            <div class="btn-container">
+                                                <template if:true={menu.isCancelButton}>
+                                                    <div class="btn-wrapper">
+                                                        <button
+                                                            class="cancel-button slds-button slds-button_neutral custom-button"
+                                                            data-meal-id={menu.Id} onclick={handleMealSelection}>
+                                                            Cancel Meal
+                                                        </button>
+                                                    </div>
+                                                </template>
+                                                <template if:true={menu.isQrCodeButton}>
+                                                    <div class="btn-wrapper">
+                                                        <button
+                                                            class="qr-button slds-button slds-button_neutral custom-button"
+                                                            data-meal-id={menu.Id} onclick={handleShowQRCode}>
+                                                            Generate QR Code
+                                                        </button>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template if:true={menu.isFeedbackAllowed}>
+                                            <div class="btn-container">
+                                                <div class="btn-wrapper">
+                                                    <button
+                                                        class="qr-button slds-button slds-button_neutral custom-button"
+                                                        data-meal-id={menu.Id} onclick={handleFeedback}>
+                                                        FeedBack
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </template>
+    <template if:false={isBookedMealsopen}>
+        <template if:false={isValied}>
+            <!-- <h3 class="nomenu-list">YOU ARE NOT YET BOOKED MEALS , GO MEALS TO BOOK TAB THEN BOOK MEALS</h3> -->
+              <c-banner-messages warning={noBookedMealsMessage}></c-banner-messages>
+        </template>
+        <template if:true={isValied}>
+            <!-- <h3 class="nomenu-list">YOU DON'T HAVE AVAILED MEALS</h3> -->
+            <c-banner-messages warning={noAvailedMealsMessage}></c-banner-messages>
+        </template>
+    </template>
+
+    <!-- Spinner -->
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+
+    <template if:true={showQRModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <lightning-button-icon class="slds-modal__close" size="large" variant="bare-inverse"
+                    icon-name="utility:close" alternative-text="Close Modal"
+                    onclick={closeQRCodeModalIcon}></lightning-button-icon>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">QR Code</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c-active-q-r-code record-id={bookingIdSelected}></c-active-q-r-code>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={closeQRCodeModalIcon}>Cancel</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <template lwc:if={showFeedback}>
+        <div class="">
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleModalClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium modal-container">
+
+                        <c-reva-already-booked-meal onfeedbacksave={handleFeedbackSave}
+                            booked-meal-id={bookedMealId}></c-reva-already-booked-meal>
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+</template>

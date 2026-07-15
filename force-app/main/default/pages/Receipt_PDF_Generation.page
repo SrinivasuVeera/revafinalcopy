@@ -1,0 +1,114 @@
+<apex:page controller="StudentPaymentController" action="{!processPayment}" renderAs="pdf">
+      <apex:form >
+            <table border="1" cellspacing="0" style="text-align:center; margin-top:100px;">
+                  <tr>
+                        <th colspan="2">
+                              <apex:image id="theImage" value="{!$Resource.REVA_LOGO}" width="280" height="100" alt="Description of image here" />
+                              <center style="color:#808080;font-size:15px margin-bottom:10px;">Rukmini Knowledge Park, Kattigenahalli Yelahanka, Bengaluru - 560064</center>
+                              <br/>
+                        </th>
+                  </tr>
+                  <tr>
+                        <th colspan="2" style="background-color:#e68128;font-size:20px;color:white;padding:5px;">
+                              <center>Application Fee Receipt (2026-27)</center>
+                        </th>
+                   
+                  </tr>
+                  <tr style="text-align:left">
+                        <td> Application No: </td>
+                        <td> {!studentPayment.Contact__r.Application_Number__c} </td>
+                  </tr>
+                  <tr style="text-align:left">
+                        <td> Name of Applicant: </td>
+                        <td> {!studentPayment.Contact__r.Name} </td>
+                  </tr>
+                  <tr style="text-align:left">
+                        <td> Program Applied to: </td>
+                        <td> {!studentPayment.Contact__r.Program_Name__c} </td>
+                  </tr>
+                  <tr style="height:20px">
+                        <td> </td>
+                        <td> </td>
+                  </tr>
+                  <tr>
+                        <td colspan="2"> Registration successful and Application fee amount of INR {!studentPayment.Amount__c} for {!studentPayment.Contact__r.School_Name__c} is received - Academic Year 2026-27.
+                        </td>
+                        
+                  </tr>
+                  <tr style="height:20px">
+
+                        <td> </td>
+                        <td> </td>
+
+                  </tr>
+                  <tr style="text-align:left">
+                        <td> Date of Receipt: </td>
+                        <td>
+                              <apex:outputText value="{0,date, d-MMM-yyyy}">
+                               <apex:param value="{!NOW()}"></apex:param>
+                              </apex:outputText>
+                        </td>
+
+                  </tr>
+                  <tr style="text-align:left">
+                        <td> Payment Type: </td>
+                        <td>{!studentPayment.Payment_Mode_Type__c} </td>
+
+                  </tr>
+                  <tr style="text-align:left">
+                        <td> Payment Gateway: </td>
+                        <td> {!studentPayment.Payment_Gateway__c} </td>
+
+                  </tr>
+
+                  <tr style="text-align:left">
+                        <td> Transaction ID: </td>
+                        <td> {!studentPayment.Transaction_ID__c}</td>
+
+                  </tr>
+                  <tr style="height:20px">
+
+                        <td> </td>
+                        <td> </td>
+
+                  </tr>
+                  <tr>
+                        <th colspan="2"> I accept that the Application Fee paid is non-refundable </th>
+                  </tr>
+                  <tr>
+                        <td colspan="2">
+                              <b>
+                                    <i>Disclaimer: This is a computer generated fee receipt hence signature is not required.</i>
+                              </b>
+                        </td>
+                  </tr>
+
+
+
+            </table>
+            <br/>
+            <br/>
+
+            <div style="margin-top:200px">
+
+
+                  <div style="width:150px">
+                        <p style="float:left; color:#F38F3A;">Rukmini Educational Charitable Trust</p>
+                  </div>
+
+
+
+
+
+                  <p style="float:right;">
+
+                        <a href="www.reva.edu.in" style="text-decoration:none; color:#F38F3A;">www.reva.edu.in</a>
+                  </p>
+
+            </div>
+      </apex:form>
+
+
+
+
+</apex:page>

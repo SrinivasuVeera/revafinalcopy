@@ -1,0 +1,86 @@
+<template>
+    <lightning-card title="Accept Bulk Offline Cheque Requests">
+        <div class="slds-grid slds-wrap">
+
+            <div class="slds-col slds-size_1-of-4 slds-m-around_medium">
+                <lightning-combobox name="bankName" label="Bank Name" value={bankName} 
+                    placeholder="-- Select Bank Name --" options={bankNameOptions} onchange={handleBankNameChange}>
+                </lightning-combobox>
+            </div>
+
+            <div class="slds-col slds-size_1-of-4 slds-m-around_medium">
+                <lightning-input type="date" label="Cheque Realization Date"
+                    onchange={handleDateChange}></lightning-input>
+            </div>
+
+            <p class="slds-col slds-size_1-of-4 slds-m-around_medium">
+                <lightning-input type="search" class="slds-m-bottom_small" label="Cheque Number" placeholder="Enter Cheque Number"
+                   onchange={chequeNumberEntered} value={chequeNumber} maxlength="10"></lightning-input>
+             </p>
+        </div>
+
+        <template if:true={displayDataTable}>
+            <template if:true={recordfound}>
+                <div class="slds-m-around_medium">
+                    <lightning-datatable key-field="Id" data={records} columns={columns} max-row-selection=10
+                        onrowselection={handleRowSelection}>
+                    </lightning-datatable>
+                </div>
+            </template>
+
+            <template if:false={recordfound}>
+                <p style="text-align: left; font-size: 16px; margin: 10px;">No Records Found</p>
+            </template>
+        </template>
+        
+         <!-- <template if:false={displayDataTable}>
+                <p style="text-align: left; font-size: 16px; margin: 10px;">Select Bank Name or Enter Cheque Number</p>
+        </template> -->
+
+        <lightning-modal-footer>
+            <div>
+                <lightning-button variant="brand" label="Accept Payment" title="Accept Payment"
+                    onclick={handleClickAccept} disabled={disableAccept} class="slds-m-left_x-small">
+                </lightning-button>
+
+                <lightning-button variant="brand" label="Reject Payment" title="Reject Payment"
+                    onclick={handleClickReject} disabled={disableReject} class="slds-m-left_x-small">
+                </lightning-button>
+            </div>
+        </lightning-modal-footer>
+    </lightning-card>
+
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning-button-icon class="slds-modal__close" title="Close" icon-name="utility:close"
+                        icon-class="slds-button_icon-inverse" onclick={handleDialogClose}></lightning-button-icon>
+                    <h2 class="slds-text-heading_medium slds-hyphenate header-string">
+                        <div class="slds-p-around_medium lgc-bg">
+                            Selected Offline Payment Records
+                        </div>
+                    </h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                    <p>Selected Cheque Numbers are {selectedRowChequeDDNumber}</p>
+                    <lightning-modal-footer>
+                        <div>
+                            <lightning-button variant="brand" label="Confirm" title="Confirm"
+                                onclick={handleClickConfirm} class="slds-m-left_x-small">
+                            </lightning-button>
+
+                            <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={handleClickCancel}
+                                class="slds-m-left_x-small">
+                            </lightning-button>
+                        </div>
+                    </lightning-modal-footer>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

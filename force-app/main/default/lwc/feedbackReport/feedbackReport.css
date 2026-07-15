@@ -1,0 +1,125 @@
+.actions-cell {
+    text-align: center;
+    white-space: nowrap; /* keep buttons on same line */
+}
+.survey-wrapper {
+    box-shadow: 2px 4px 9px -4px #6e6e6e;
+    border: 1px solid var(--reva-brand-color);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+ .survey-heading {
+    display: flex;
+    background-color: var(--reva-component-heading-background-color);
+    color: black;
+    border: 0px;
+    font-size: 15px;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.firstColumn {
+    border-bottom: 1px dotted #f57f26;
+    text-align: center;
+    padding: 1%;
+}
+.curriText {
+    font-size: 14px;
+    font-weight: 600;
+}
+.instHead {
+    font-size: 14px;
+    font-weight: 600;
+}
+.padd {
+    padding: 0% 1% 1% 1%;
+}
+
+/* Mobile Responsive tweaks */
+@media screen and (max-width: 600px) {
+    .questions-container {
+      padding: 0 10px;
+    }
+  
+    .question-block {
+      margin-bottom: 20px;
+    }
+  
+    .question-block p {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+  
+    .stars {
+      font-size: 28px; /* Slightly larger stars for touch */
+    }
+  
+    .star {
+      margin-right: 8px; /* More spacing for easier tapping */
+    }
+  
+    .submit-btn {
+      width: 100%;
+      padding: 12px 0;
+      font-size: 18px;
+    }
+  
+    .result-container {
+      padding: 15px 10px;
+      font-size: 16px;
+    }
+  }
+
+  .questions-container {
+    text-align: left;
+    padding-top:40px;       
+    padding-bottom:20px;
+    padding-left: 180px;       
+    font-size: 14px;
+    font-weight: 700;
+  }
+  
+  .question-block {
+    margin-bottom: 15px;
+  }
+  
+  .stars {
+    cursor: pointer;
+  }
+  
+  .star {
+    font-size: 34px;
+    color: lightgray;
+    margin-right: 5px;
+    user-select: none;
+  }
+  
+  .star.filled {
+    color: gold;
+  }
+  
+  .submit-btn {
+    background-color: #0070d2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .submit-btn:hover {
+    background-color: #005fb2;
+  }
+  
+  .line {
+    border: 0;
+    height: 0.8px;
+    background: #e87a21; 
+    /*  margin: 10px 0; Add some space above and below the line */
+ }
+.button-container {
+        text-align: right;    
+        padding-bottom: 20px;
+        padding-right: 40px;
+ }

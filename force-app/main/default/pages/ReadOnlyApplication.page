@@ -1,0 +1,9 @@
+<apex:page controller="ReadOnlyApplicationController">
+  <apex:form >
+    <div align="right" draggable="false" >
+    <apex:commandButton action="{!save}"  value="Download Application" id="downloadAppl"/>
+  </div>
+    <c:ReadOnlyApplicationComponent />
+  </apex:form>
+   <!-- <c:ReadOnlyPdfApplicationComponent /> -->
+</apex:page>

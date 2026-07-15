@@ -1,0 +1,15 @@
+/* .slds-table {
+    width: 100%;
+    text-align: left;
+} */
+
+.slds-text-color_error {
+    color: red;
+}
+
+.slds-table {
+    margin: 1rem 0;
+}
+.slds-truncate {
+    max-width: 200px;
+}

@@ -1,0 +1,396 @@
+<aura:component Controller="CP_DefineCoursePlan_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">        
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 95rem;
+        }
+    </aura:html> 
+     
+    <aura:attribute name="strcourseoffer" type="String"/>
+    <aura:attribute name="strsemstr" type="String"/>
+    <aura:attribute name="courseplanlist" type="Course_Plan_Unit__c[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="courseunitWrp" type="Map"/>
+    <aura:attribute name="selectedTab" type="String" />
+    <aura:attribute name="seleTabId" type="String" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="isunitsModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="istopicsModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="hasModalOpenUnits" type="boolean" default="false"/>
+    <aura:attribute name="hasModalOpenTopics" type="boolean" default="false"/>
+    <aura:attribute name="selectedUnitsDocumentId" type="string"/>  
+    <aura:attribute name="selectedTopicsDocumentId" type="string"/>
+    <aura:attribute name="selectedUnitsFiles" type="List"/>
+    <aura:attribute name="selectedTopicsFiles" type="List"/>
+    <aura:attribute name="slctPlnunit" type="String"/>
+    <aura:attribute name="slctPlntopics" type="String"/>
+    <aura:attribute name="MapCourseOffer" type="Map" />
+    <aura:attribute name="crseOffId" type="string"/>
+    <aura:attribute name="SelectedCourseOff" type="String"/>
+    <aura:attribute name="strbatch" type="String"/>
+    <aura:attribute name="showCoursePlanunits" type="boolean" default="false"/>
+    <aura:attribute name="topicsfiles" type="boolean" />
+    <aura:attribute name="PlanunitsAddFile" type="boolean" default="false"/>
+    <aura:attribute name="topicsAddfiles" type="boolean" default="false"/>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="standard:channel_program_levels" alternativeText="Define Course Plan" title="Define Course Plan" /> &nbsp;
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Define Course Plan">Define Course Plan for<br/>
+                                        <b>{!v.strcourseoffer}</b> of <b>{!v.strsemstr}</b> of <b>{!v.strbatch}</b></span>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="slds-float_right">
+                            <aura:if isTrue="{!v.PlanunitsAddFile}"> 
+                            <lightning:button variant="brand" label="Save&nbsp;Units" onclick="{!c.saveunitsandAttachments}"/>
+                            <aura:if isTrue="{!v.courseplanlist.length > 0 }">
+                                <lightning:button variant="brand"  label="AddTopics" onclick="{!c.saveandAddTopics}"/> 
+                            </aura:if>
+                            <lightning:button variant="neutral" label="Cancel" onclick="{!c.cancelUnits}"/>
+                            </aura:if>
+                        </div>
+                        <p class="slds-text-body_small"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  	
+    
+    <aura:if isTrue="{!v.showCoursePlanunits}">
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Course Plan Units Confirmation</h1>
+                </header>                    
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center><b>Are you sure you want to create Course Plan Units?</b></center>
+                </div>                    
+                <footer class="slds-modal__footer">
+                    <lightning:button name='No' label='No' onclick='{!c.handleCreateNo}'/>
+                    <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleCreateYes}'/>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if> 
+    
+    <aura:if isTrue="{!v.PlanunitsAddFile}"> 
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-theme_default">          
+            <div class="slds-size_1-of-3">
+            </div>
+            <div class="slds-size_1-of-3">
+                <br/>
+                <div class="slds-text-align_left slds-m-around_x-small">
+                    <lightning:select value="{!v.crseOffId}"  name="input1" onchange="{!c.onchangecourseOff}" label="Previous Course Plans">
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.MapCourseOffer}" var="vrn" indexVar="key" >
+                            <option value="{!vrn.key}" > {!vrn.value} </option>
+                        </aura:iteration>
+                    </lightning:select> 
+                </div>
+                <div class="slds-text-align_left slds-m-around_x-small">
+                    <center> <lightning:button variant="brand" label="Next" onclick="{!c.onclickNext}"/> </center> 
+                </div>
+            </div>
+        </div>
+        <div class="slds-m-around--xx-large">
+            <div class="container-fluid">        
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Sl No"> Sl No</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Unit Name">Unit Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Documents">Documents</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Docs Exists">Docs Exists</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Action">Action</div>
+                            </th>
+                        </tr>
+                    </thead>   
+                    <tbody>      
+                        <aura:iteration items="{!v.courseplanlist}" var="crplnunit" indexVar="index">
+                            <tr>
+                                <td> 
+                                    {!index + 1}
+                                </td>
+                                <td>
+                                    <lightning:input name="crplnunitName" type="text"  value="{!crplnunit.Name}" />
+                                </td>
+                                <td>
+                                    <aura:if isTrue="{!not(empty(crplnunit.Id))}">
+                                        <a onclick="{!c.onclickAddunitsDoc}" data-Id="{!crplnunit.Id}" > Add/View Docs </a>
+                                    </aura:if>
+                                </td>
+                                <td>
+                                    <aura:if isTrue="{!not(empty(crplnunit.ContentDocumentLinks))}"> 
+                                        <lightning:icon iconName="doctype:attachment" size="small"
+                                                        alternativeText="Attachment file" title="Attachment" />
+                                        <aura:set attribute="else">
+                                            No documents Exists
+                                        </aura:set>
+                                    </aura:if>
+                                </td>
+                                <td>
+                                    <lightning:buttonIcon name="{!index}" iconName="utility:delete"  value="{!crplnunit.Id}" size="small" alternativeText="Delete" title="Delete" onclick="{!c.deletecoursePlanUnits}" class="removeIconBg" iconClass="removeIcon"/>
+                                </td> 
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table><br/>
+                <div class="slds-float_right">
+                    <lightning:button variant="brand" label="Add Units" onclick="{!c.addCoursePlanUnits}"/>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <div>
+        <aura:if isTrue="{!v.isunitsModalOpen}">
+            <div class="slds-modal__container">                    
+                <aura:if isTrue="{!not(empty(v.selectedUnitsFiles))}">
+                    <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-theme_default" >
+                        <div class="slds-size_1-of-3">
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <table class="slds-table slds-table--bordered slds-max-medium-table--stacked slds-table--striped" style="overflow: visible;">
+                                <thead>
+                                    <tr class="slds-text-heading--label">
+                                        <th class="slds-is-resizable" scope="col" style="color:#999999;">
+                                            <b>Documents</b>    
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col" style="color:#999999;">
+                                            <b>Action</b>
+                                        </th>
+                                    </tr>
+                                </thead>       
+                                <tbody>
+                                    <aura:iteration items="{!v.selectedUnitsFiles}" var="cont" indexVar="Index">
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Documents" class="slds-cell-wrap" scope="col">
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    <a onclick="{!c.displayDoc}" data-Id="{!cont.Id}" > {!cont.Title} </a>
+                                                </div>
+                                            </td>
+                                            <td data-label="Action" class="slds-cell-wrap" scope="col" >
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    <lightning:buttonIcon iconName="utility:delete"  value="{!cont.Id}" size="small" alternativeText="Delete" title="Delete" onclick="{!c.dltPlanUnitsDocs}" class="removeIconBg" iconClass="removeIcon"/>
+                                                </div>
+                                            </td>  
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>  
+                            </table>
+                        </div>
+                    </div>       
+                </aura:if>
+                <br/>
+                <center>
+                    <lightning:fileUpload name="fileUploader"
+                                          multiple="true"
+                                          recordId="{!v.slctPlnunit}"
+                                          onuploadfinished="{!c.handleFileUpload}" /><br/>
+                </center>
+            </div>
+            <div class="slds-float_right">
+                <lightning:button variant="brand" name='Back' label='Back To Units' onclick='{!c.handleBack}'/>
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.hasModalOpenUnits}">
+            <section onclick="{!c.closeModelfunits}"
+                     role="dialog"
+                     aria-modal="true"
+                     class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">                
+                    <div class='slds-grid slds-wrap'>
+                        <div class="slds-size--1-of-1 slds-align_absolute-center indicator">
+                            <lightning:fileCard fileId="{!v.selectedUnitsDocumentId}" description=" "/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </aura:if>
+    </div> 
+    
+    									<!--Toipcs Popup -->
+    <aura:if isTrue="{!v.topicsAddfiles}">
+    <div>
+        <aura:if isTrue="{!v.isModalOpen}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">                    
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{!c.closeModel}"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"> Add Topics</h2>
+                    </header>
+                    
+                    <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                        <lightning:tabset  onselect="{!c.tabSelected}" selectedTabId="{!v.selectedTab}"  variant="vertical"> 
+                            <aura:iteration items="{!v.courseunitWrp}"  var="item" indexVar="indexCourse">
+                                <lightning:tab label="{!item.value.courseplanunit}" id="{!item.value.coursePlanId}">
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                                        <thead>
+                                            <tr class="slds-text-title_caps">
+                                                <th scope="col" style="background-color:#efefef !important;">
+                                                    <div class="slds-truncate" title="Sl No"> Sl No </div>
+                                                </th>
+                                                <th scope="col" style="background-color:#efefef !important;">
+                                                    <div class="slds-truncate" title="Topic">Topic</div>
+                                                </th>
+                                                <th scope="col" style="background-color:#efefef !important;">
+                                                    <div class="slds-truncate" title="Documents">Documents</div>
+                                                </th>
+                                                <th scope="col" style="background-color:#efefef !important;">
+                                                    <div class="slds-truncate" title="DocsExists">Docs Exists</div>
+                                                </th>
+                                                <th scope="col" style="background-color:#efefef !important;">
+                                                    <div class="slds-truncate" title="Action">Action</div>
+                                                </th>
+                                            </tr>
+                                        </thead>   
+                                        <tbody>      
+                                            <aura:iteration items="{!item.value.lst_WrapCourses}" var="crplntopic" indexVar="index">
+                                                <tr>
+                                                    <td> 
+                                                        {!index+1} 
+                                                    </td>
+                                                    <td>
+                                                        <lightning:input name="crplntopicName" type="text"  value="{!crplntopic.topicname}" />
+                                                    </td>
+                                                    <td>
+                                                        <aura:if isTrue="{!not(empty(crplntopic.topicId))}">
+                                                            <a onclick="{!c.onclickAddTopicsDoc}" data-Id="{!crplntopic.topicId}"> Add/View Docs </a>
+                                                        </aura:if>
+                                                    </td>
+                                                    <td>
+                                                        <aura:if isTrue="{!crplntopic.fileexists == true}">
+                                                            <lightning:icon iconName="doctype:attachment" size="small"
+                                                                            alternativeText="Attachment file" title="Attachment" />
+                                                            <aura:set attribute="else">
+                                                                No documents Exists
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </td>
+                                                    <td>
+                                                        <lightning:buttonIcon name="{!index+'_'+indexCourse}" iconName="utility:delete"  value="{!crplntopic.topicId}" size="small" alternativeText="Delete" title="Delete" onclick="{!c.deletecoursePlanTopics}"  class="removeIconBg" iconClass="removeIcon" />
+                                                    </td> 
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                    <br/>  
+                                    <div class="slds-float_right">
+                                        <lightning:button variant="brand" label="Add Topics" name="{!indexCourse}"  value="{!item.value.coursePlanId}" onclick="{!c.addCrsePlanTopics}" />
+                                    </div>
+                                </lightning:tab>
+                            </aura:iteration>
+                        </lightning:tabset>
+                    </div>
+                    <footer class="slds-modal__footer" >
+                        <lightning:button variant="brand" label="Save Topics" onclick="{!c.saveAddTopics}" /> 
+                        <lightning:button variant="neutral" label="Cancel" onclick="{!c.CancelTopics}"/>  
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>               
+    </div> 
+    </aura:if>
+    										<!-- Topics popup -->
+    		
+    									    <!-- Topics File popup -->
+    <div>
+        <aura:if isTrue="{!v.istopicsModalOpen}">
+            <div class="slds-modal__container"> 
+                <aura:if isTrue="{!not(empty(v.selectedTopicsFiles))}">
+                    <div class="demo-only demo-only--sizing slds-grid slds-wrap slds-theme_default" >
+                        <div class="slds-size_1-of-3">
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <table class="slds-table slds-table--bordered slds-max-medium-table--stacked slds-table--striped" style="overflow: visible;">
+                                <thead>
+                                    <tr class="slds-text-heading--label">
+                                        <th class="slds-is-resizable" scope="col" style="color:#999999;">
+                                            <b>Documents</b>    
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col" style="color:#999999;">
+                                            <b>Action</b>
+                                        </th>
+                                    </tr>
+                                </thead>       
+                                <tbody>
+                                    <aura:iteration items="{!v.selectedTopicsFiles}" var="fls" indexVar="Index">
+                                        <tr class="slds-hint-parent">
+                                            <td data-label="Documents" class="slds-cell-wrap" scope="col">
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    <a onclick="{!c.displayTopicsDoc}" data-Id="{!fls.Id}" > {!fls.Title} </a>
+                                                </div>
+                                            </td>
+                                            <td data-label="Action" class="slds-cell-wrap" scope="col" >
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    <lightning:buttonIcon iconName="utility:delete"  value="{!fls.Id}" size="small" alternativeText="Delete" title="Delete" onclick="{!c.dltPlantopicsdocuments}" class="removeIconBg" iconClass="removeIcon"/> 
+                                                </div>
+                                            </td>  
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>  
+                            </table>
+                        </div>
+                    </div>  
+                </aura:if><br/>
+                <center>
+                    <lightning:fileUpload name="fileUploader"
+                                          multiple="true"
+                                          recordId="{!v.slctPlntopics}"
+                                          onuploadfinished="{!c.handleTopicsFileUpload}"/><br/>
+                </center>
+               </div>
+            <div class="slds-float_right">
+                <lightning:button variant="brand" name='Back' label='Back To Topics' onclick='{!c.handleBackTopics}'/>
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.hasModalOpenTopics}">
+            <div class="slds-modal__container">                
+                <div class='slds-grid slds-wrap'>
+                    <div class="slds-size--1-of-1 slds-align_absolute-center indicator">
+                        <lightning:fileCard fileId="{!v.selectedTopicsDocumentId}" description=" "/>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>               
+        </aura:if>
+    </div>     
+    									<!-- Topics File popup -->
+</aura:component>

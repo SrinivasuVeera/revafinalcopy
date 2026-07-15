@@ -1,0 +1,713 @@
+<aura:component controller="MSTR_createCourseOfferingCls" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global">
+	<aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="objTerm" type="sobject"/>
+    <aura:attribute name="lstHardCore" type="List"/>
+    <aura:attribute name="lstHcIntegrated" type="List"/>
+    <aura:attribute name="lstMandatory" type="List"/>
+    <aura:attribute name="lstoElective" type="List"/>
+    <aura:attribute name="lstpElective" type="List"/>
+    <aura:attribute name="lstPractical" type="List"/>   
+    <aura:attribute name="mapHardCorePl" type="List"/>
+    <aura:attribute name="mapHcIntegratedPl" type="List"/>
+    <aura:attribute name="mapMandatoryPl" type="List"/>
+    <aura:attribute name="mapoElectivePl" type="List"/>
+    <aura:attribute name="mappElectivePl" type="List"/>
+    <aura:attribute name="mapPracticalPl" type="List"/>
+    <aura:attribute name="deletedRecordIds" type="List"/>
+    <aura:attribute name="filterIds" type="string"/>
+    <aura:attribute name="totalCredit" type="integer"/>
+    
+ <!--   <aura:attribute name="recordId" type="string" default="a0P0w000003vefz"/>  -->
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!!v.objTerm.Sent_for_Approval__c}">
+    <div class="lookupComp">
+    	<table class="slds-table slds-table_bordered slds-table_striped records-table lookupComp">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#ead1dc !important;"></th>
+                    <th colspan="2" style="background-color:#ead1dc !important;">
+                        <div class="slds-truncate" style="text-align:center;">{!v.termName}</div>
+                    </th>
+                    <th style="background-color:#ead1dc !important;">
+                    	<div style="text-align:right;">
+                            Total Credit : {!v.totalCredit}
+                        	<lightning:buttonIcon iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.calculateCredit}"/>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:left;">Course</div>
+                    </th>
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:center;">Credits</div>
+                    </th>
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:center;">Action</div>
+                    </th>
+                </tr>
+            </thead>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Hardcore Courses</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">
+                        <span>Add Row <span>
+                            <lightning:buttonIcon iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addHardCoreRecord}"/>
+            			</span></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstHardCore}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.count}"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="lookupComp1">
+                        <c:CustomLookupComp 
+                            objectAPIName="hed__Course__c" 
+                            returnFields="['Name','hed__Course_ID__c','Credits__c']" 
+                            queryFields="['Name','hed__Course_ID__c']"
+                            selectedId="{!hCore.courseId}"
+                            selectedName = "{!hCore.courseName}"                
+                            filter="{!hCore.filter}"
+                            selectedCredit="{!hCore.credits}"/> 
+
+                        </div>
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="slds-grid slds-gutters">
+                          <div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                            	<a onclick="{!c.RemoveHardCoreRecord}" data-record="{!index}">
+                                   <!-- <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>
+                          </div>
+                          <div class="slds-col slds-size_1-of-2"></div>
+                        </div>                    	                                        	
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody> 
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Hardcore Integrated Courses</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">
+                        <span>Add Row <span>
+                            <lightning:buttonIcon iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addHcIntegratedRecord}"/>
+            			</span></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstHcIntegrated}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.count}"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="lookupComp1">
+                        <c:CustomLookupComp 
+                            objectAPIName="hed__Course__c" 
+                            returnFields="['Name','hed__Course_ID__c','Credits__c']" 
+                            queryFields="['Name','hed__Course_ID__c']"
+                            selectedId="{!hCore.courseId}"
+                            selectedName = "{!hCore.courseName}"                
+                            filter="{!hCore.filter}"
+                            selectedCredit="{!hCore.credits}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="slds-grid slds-gutters">
+                          <div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                            	<a onclick="{!c.RemoveHcIntegratedRecord}" data-record="{!index}">
+                                  <!--  <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>
+                          </div>
+                          <div class="slds-col slds-size_1-of-2"></div>
+                        </div>                    	
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody> 
+			<thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Practical / Term Work</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">
+                        <span>Add Row <span>
+                            <lightning:buttonIcon iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addPracticalRecord}"/>
+            			</span></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstPractical}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.count}"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="lookupComp1">
+                        <c:CustomLookupComp 
+                            objectAPIName="hed__Course__c" 
+                            returnFields="['Name','hed__Course_ID__c','Credits__c']" 
+                            queryFields="['Name','hed__Course_ID__c']"
+                            selectedId="{!hCore.courseId}"
+                            selectedName = "{!hCore.courseName}"                
+                            filter="{!hCore.filter}"
+                            selectedCredit="{!hCore.credits}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="slds-grid slds-gutters">
+                          <div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                            	<a onclick="{!c.RemovePractical}" data-record="{!index}">
+                                   <!-- <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>
+                          </div>
+                          <div class="slds-col slds-size_1-of-2"></div>
+                        </div>                    	
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div class="slds-truncate" style="text-align:left;">Open Electives</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right;background-color:#b7b7b7 !important;">
+                    	<span>Add Row <span>
+                            <lightning:buttonIcon iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addopenElectiveRecord}"/>
+            			</span></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.lstoElective}" var="oElective" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!oElective.count}"/>
+                        </div>    
+                    </td>
+                    <td>
+                    	{!oElective.Name}
+                    </td>
+                    <td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!oElective.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                                <a onclick="{!c.RemoveopenElective}" data-record="{!index}">
+                                   <!-- <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2"></div>
+                        </div>                    	
+                    </td>
+                </tr>    
+            	<aura:iteration items="{!oElective.lstPlanLi}" var="oel" indexVar="index1">                    
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!oel.count}"/>
+                        </div>    
+                    </td>
+                    <td>
+                    	<div class="lookupComp1">
+                        <c:CustomLookupComp 
+                            objectAPIName="hed__Course__c" 
+                            returnFields="['Name','hed__Course_ID__c','Credits__c']" 
+                            queryFields="['Name','hed__Course_ID__c']"
+                            selectedId="{!oel.courseId}"
+                            selectedName = "{!oel.courseName}"                
+                            filter="{!oel.filter}"
+                            filterIds="{!v.filterIds}"/>
+                        </div>
+                    </td>
+                    <td style="text-align:left;">&nbsp;</td>
+                    <td style="text-align:right;">
+                        <div class="slds-grid slds-gutters">
+                          <div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                              <aura:if isTrue="{!index1 != 0}">    
+                                <a onclick="{!c.RemoveopenElectiveLi}" id="{!index}" data-record="{!index1}">
+                                  <!--  <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>  
+                              </aura:if>
+                          </div>
+                          <div class="slds-col slds-size_1-of-2"  style="text-align:right;">
+                          	Add Row 
+                            <lightning:buttonIcon value="{!index}" iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addopenElectiveLiRec}"/>  
+                          </div>
+                        </div>
+                    </td>
+                </tr>    
+                </aura:iteration>    
+                </aura:iteration>    
+            </tbody>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div class="slds-truncate" style="text-align:left;">Professional Electives</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right;background-color:#b7b7b7 !important;">
+                    	<span>Add Row <span>
+                            <lightning:buttonIcon iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addProElectiveRecord}"/>
+            			</span></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstpElective}" var="pro" indexVar="index">
+                <tr>
+                	<td class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!pro.count}"/>
+                    </td>
+                    <td>
+                    	{!pro.Name}
+                    </td>
+                    <td class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!pro.credits}" disabled="true"/>
+                    </td>
+                    <td>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                                <a onclick="{!c.RemoveProElective}" data-record="{!index}">
+                                  <!--  <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2"></div>
+                        </div>                                                
+                    </td>
+                </tr>    
+                <aura:iteration items="{!pro.lstPlanLi}" var="pel" indexVar="index1">
+                <tr>
+                	<td class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!pel.count}"/>
+                    </td>
+                    <td>
+                    	<div class="lookupComp1">
+                        <c:CustomLookupComp 
+                            objectAPIName="hed__Course__c" 
+                            returnFields="['Name','hed__Course_ID__c','Credits__c']" 
+                            queryFields="['Name','hed__Course_ID__c']"
+                            selectedId="{!pel.courseId}"
+                            selectedName = "{!pel.courseName}"                
+                            filter="{!pel.filter}"/>
+                        </div>
+                    </td>
+                    <td> &nbsp;
+                   <!-- 	<lightning:input style="width:50px;" type="string" value="{!pel.credits}"/> -->
+                    </td>
+                    <td style="text-align:right;">
+                        <div class="slds-grid slds-gutters">
+                          <div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                              <aura:if isTrue="{!index1 != 0}">    
+                                <a onclick="{!c.RemoveProElectiveLi}" id="{!index}" data-record="{!index1}">
+                                   <!-- <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>  
+                              </aura:if>
+                          </div>
+                          <div class="slds-col slds-size_1-of-2"  style="text-align:right;">
+                          	Add Row 
+                            <lightning:buttonIcon value="{!index}" iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addProElectiveLiRec}"/>  
+                          </div>
+                        </div>
+                    </td>
+                </tr>    
+                </aura:iteration>
+                </aura:iteration>    
+            </tbody>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Mandatory Courses</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">
+                        <span>Add Row <span>
+                            <lightning:buttonIcon iconName="utility:add"  size="small" variant="bare" alternativeText="Add" onclick="{!c.addMandatoryRecord}"/>
+            			</span></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstMandatory}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.count}"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="lookupComp1">
+                        <c:CustomLookupComp 
+                            objectAPIName="hed__Course__c" 
+                            returnFields="['Name','hed__Course_ID__c','Credits__c']" 
+                            queryFields="['Name','hed__Course_ID__c']"
+                            selectedId="{!hCore.courseId}"
+                            selectedName = "{!hCore.courseName}"                
+                            filter="{!hCore.filter}"
+                            selectedCredit="{!hCore.credits}"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" class="inputFeild" type="string" value="{!hCore.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="slds-grid slds-gutters">
+                        	<div class="slds-col slds-size_1-of-2" style="text-align:right;">
+                            	<a onclick="{!c.RemoveMandatoryRecord}" data-record="{!index}">
+                                  <!--  <lightning:icon iconName="utility:record_delete" size="small" alternativeText="Delete"/>
+                                    <span class="slds-assistive-text">Delete</span> -->
+                                    <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                </a>
+                        	</div>
+                            <div class="slds-col slds-size_1-of-2"></div>
+                        </div>                    	
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody>
+        </table>    
+        <br/><br/><center>
+        <lightning:button variant="success" label="Save &amp; Return" onclick="{!c.saveRecord}"/> 
+        <lightning:button variant="success" label="Save &amp; Confirm" onclick="{!c.saveandSubmitRecord}"/> 
+        <lightning:button variant="destructive" label="Cancel" onclick="{!c.closeAction}"/>
+        </center><br/>
+    </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.objTerm.Sent_for_Approval__c}">
+    <div class="lookupComp">
+    	<table class="slds-table slds-table_bordered slds-table_striped records-table lookupComp">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#ead1dc !important;"></th>
+                    <th colspan="2" style="background-color:#ead1dc !important;">
+                        <div class="slds-truncate" style="text-align:center;">{!v.termName}</div>
+                    </th>
+                    <th style="background-color:#ead1dc !important;"></th>
+                </tr>
+            </thead>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:left;">Course</div>
+                    </th>
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:center;">Credits</div>
+                    </th>
+                    <th style="background-color:#efefef !important;">
+                        <div class="slds-truncate" style="text-align:center;">Action</div>
+                    </th>
+                </tr>
+            </thead>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Hardcore Courses</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">                      
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstHardCore}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.count}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <lightning:input type="string" value="{!hCore.courseName}" disabled="true"/>
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.credits}"  disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody> 
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Hardcore Integrated Courses</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstHcIntegrated}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.count}"  disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <lightning:input type="string" value="{!hCore.courseName}" disabled="true"/>              
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody> 
+			<thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Practical / Term Work</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstPractical}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.count}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <lightning:input type="string" value="{!hCore.courseName}" disabled="true"/>
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div class="slds-truncate" style="text-align:left;">Open Electives</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right;background-color:#b7b7b7 !important;">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.lstoElective}" var="oElective" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!oElective.count}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                    	{!oElective.Name}
+                    </td>
+                    <td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!oElective.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                    </td>
+                </tr>    
+            	<aura:iteration items="{!oElective.lstPlanLi}" var="oel" indexVar="index1">                    
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!oel.count}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <lightning:input type="string" value="{!oel.courseName}" disabled="true"/>
+                    </td>
+                    <td style="text-align:left;">&nbsp;</td>
+                    <td style="text-align:right;">
+                    </td>
+                </tr>    
+                </aura:iteration>    
+                </aura:iteration>    
+            </tbody>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div class="slds-truncate" style="text-align:left;">Professional Electives</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right;background-color:#b7b7b7 !important;">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstpElective}" var="pro" indexVar="index">
+                <tr>
+                	<td class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!pro.count}" disabled="true"/>
+                    </td>
+                    <td>
+                    	{!pro.Name}
+                    </td>
+                    <td class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!pro.credits}" disabled="true"/>
+                    </td>
+                    <td>            
+                    </td>
+                </tr>    
+                <aura:iteration items="{!pro.lstPlanLi}" var="pel" indexVar="index1">
+                <tr>
+                	<td class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!pel.count}" disabled="true"/>
+                    </td>
+                    <td>
+                        <lightning:input type="string" value="{!pel.courseName}" disabled="true"/>
+                    </td>
+                    <td> &nbsp;
+                    </td>
+                    <td style="text-align:right;">
+                    </td>
+                </tr>    
+                </aura:iteration>
+                </aura:iteration>    
+            </tbody>
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="background-color:#b7b7b7 !important;">
+                        <div style="text-align:left;">Mandatory Courses</div>
+                    </th>
+                    <th style="background-color:#b7b7b7 !important;"></th>
+                    <th style="text-align:right; background-color:#b7b7b7 !important;">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            	<aura:iteration items="{!v.lstMandatory}" var="hCore" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.count}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                        <lightning:input type="string" value="{!hCore.courseName}" disabled="true"/>
+                    </td>
+                    <td>
+                        <div  class="slds-align_absolute-center">
+                    	<lightning:input style="width:50px;" type="string" value="{!hCore.credits}" disabled="true"/>
+                        </div>    
+                    </td>
+                    <td>
+                    </td>                    
+                </tr>    
+                </aura:iteration>    
+            </tbody>
+        </table>    
+        <br/><br/>
+    </div>
+    </aura:if>
+    
+</aura:component>

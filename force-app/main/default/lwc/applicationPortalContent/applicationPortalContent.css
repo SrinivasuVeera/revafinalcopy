@@ -1,0 +1,89 @@
+@media screen and (max-width: 500px){
+    
+    .programTable tr {
+        width: 100%;
+    }
+}
+
+.RevaProgramsHeader{
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: orange;
+    /* font-family: Helvetica, sans-serif; */
+}
+
+.programTable{
+    margin-right: 5px;
+}
+
+td, tr {
+    border-radius:5px; 
+    font-size: 14px; 
+  }
+ 
+  .tg  {
+      border-collapse:collapse;
+      border:none; 
+      border-spacing:0;
+  }
+  
+  .tg td{
+      border:1px solid grey;
+      border-radius:5px;
+      color:#333;
+      /* font-family:Arial, sans-serif; */
+      align-items: center;
+      overflow:hidden;
+      padding:10px 5px;
+      word-break:normal;
+  }
+  
+  .tg th{
+      background: linear-gradient(0deg, rgba(255,115,0,1) 0%, rgba(253,187,45,1) 100%);
+      border:1px solid grey;
+      border-radius:5px;
+      color:#fff;
+      /* font-family:Arial, sans-serif; */
+      font-weight:normal;
+      overflow:hidden;
+      padding:10px 5px;
+      word-break:normal;
+  }
+  
+  .tg .tg-3{
+      border-color:inherit;
+      text-align:left;
+      vertical-align:middle
+  }
+  
+  .tg .header{
+      border-color:inherit;
+      
+      font-weight:bold;
+      text-align:center;
+      vertical-align:top
+  }
+  .tg .tg-12{
+      border-color:inherit;
+      font-weight:bold;
+      text-align:center;
+      vertical-align:middle;
+  }
+  
+  .tg .tg-bold{
+      border-color:inherit;
+      font-weight:bold;
+      text-align:center;
+      vertical-align:middle
+  }
+
+  .tg-12{
+    background: white;
+  }
+  .tg-bold{
+    background: white;
+  }
+
+  tr:nth-child(even) {
+    background: rgba(255, 186, 101, 0.2);
+}

@@ -1,0 +1,156 @@
+<template>
+
+    <lightning-card title="IA Attendance Edit" icon-name="utility:record_alt">
+        <div class="slds-m-around_medium">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th>Room No</th>
+                        <th>Date</th>
+                        <th>Exam Start Time</th>
+                        <th>Professor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><lightning-input type="text" onchange={handleRoomNo}></lightning-input></td>
+                        <td><lightning-input type="date" onchange={DateWiseAttendance}></lightning-input></td>
+                        <td><lightning-input type="time" onchange={handleStartTime}></lightning-input></td>
+                        <td><c-rve_-custom-look-up index-value ={index} onprofessorid={handleProfessorChange}></c-rve_-custom-look-up></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <lightning-layout>
+            <lightning-layout-item size="12"> 
+                <div class="footer">
+                    <lightning-button label="Search" variant="brand" onclick={Search} disabled={EnableAttendanceList} ></lightning-button>
+                </div>
+
+        <template if:true={checkStudents}>
+        <lightning-card  title='Attendance list' icon-name="custom:custom55">
+            <div class="slds-m-around_medium">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr>
+                            <th>SRN Number</th>
+                            <th>Student Name</th>
+                            <th>Attendance</th>
+                            <th>IA Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={Attendancelist} for:item="item" for:index="index">
+                            <tr key={item}>
+                                <td><div class="slds-truncate" data-id={item.index} title="SRN">{item.SRN}</div></td>
+                                <td><div class="slds-truncate" data-id={item.index} title="Name">{item.Name}</div></td>
+                                <td>
+                                    <div title="Attendance">
+                                        <div class="slds-form-element__control" title="Attendance" style="padding-bottom: 18px;">
+                                            <lightning-combobox data-id={item.index} options={picklistOptions}
+                                            value={item.hed__Attendance_Type__c} onchange={handleAttendanceChange}></lightning-combobox>
+                                             </div>
+                                    </div>
+                                </td>
+                            <td>
+                                <div title="IA Remarks">
+                                 <lightning-input data-id={item.index} variant="label-hidden" type="text" label="IA Remarks" value={item.hed_IA_Remarks__c} onchange={handleIARemarksChange}></lightning-input>
+                                </div>
+                            </td>
+                            </tr>
+                        </template>
+                       
+                    </tbody>
+                </table>
+            </div>
+            
+        </lightning-card>
+        <lightning-layout class="slds-m-top_medium slds-align_absolute-center">
+            <lightning-layout-item>
+                <lightning-button variant="brand" label="Previous" onclick={previousPage} disabled={isFirstPage}></lightning-button>&nbsp;&nbsp;
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <lightning-button variant="brand" label="Next" onclick={nextPage} disabled={isLastPage}></lightning-button>&nbsp;&nbsp;
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <lightning-button variant="success" label="Submit" onclick={submit} ></lightning-button>
+            </lightning-layout-item><br/>
+           
+        </lightning-layout><br/>
+        <P class="slds-align_absolute-center"> Page {currentPage} of {totalPages}</P>
+        </template>
+            </lightning-layout-item>
+        </lightning-layout>
+       
+       
+    </lightning-card>
+
+
+
+    <!-- Insert Attendance Event -->
+
+
+    <template if:true={hasRecords}>
+   
+        <lightning-card key={batchItem.batchName} title="IA Attendence" icon-name="utility:record_alt">
+        <template for:each={contactlist} for:item="batchItem" for:index="batchIndex">
+            <lightning-card key={batchItem.batchName} title={batchItem.batchName} icon-name="custom:custom55">
+                <div class="slds-m-around_medium">
+                    <table key={batchItem.batchName} class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr>
+                                <th>SRN Number</th>
+                                <th>Student Name</th>
+                                <th>Attendance</th>
+                                <th>Malpractices</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={batchItem.contacts} for:item="contact" for:index="contactIndex">
+                                <tr key={contact.contactid}>
+                                    <td>{contact.SRNNo}</td>
+                                    <td>{contact.cname}</td>
+                                    <td>
+                                     <lightning-input type="checkbox" 
+                                        checked={contact.Attendancecheckbox} 
+                                        onchange={handleAttendanceChange1} 
+                                        data-batch-index={batchIndex} 
+                             data-contact-index={contactIndex}>
+                                     </lightning-input>
+                                     </td>
+                                      <td>
+                                     <lightning-input type="checkbox" 
+                                        checked={contact.malpracticescheckbox} 
+                                        onchange={handlemalpracticesChange} 
+                                        data-batch-index={batchIndex} 
+                             data-contact-index={contactIndex}>
+                                     </lightning-input>
+                                     </td>
+                                     <td>
+                                     <lightning-input type="text" 
+                                        value={contact.description} 
+                                        onchange={handleDescriptionChange} 
+                                        data-batch-index={batchIndex} 
+                             data-contact-index={contactIndex}>
+                                       </lightning-input>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </lightning-card>
+        </template>
+    
+       
+        <!-- Save button outside the loop -->
+        <div class="slds-m-top_medium">
+          <lightning-button label="Save Attendance" onclick={saveAttendance}></lightning-button>
+        </div>
+        </lightning-card>
+    
+    
+    </template>
+        
+</template>

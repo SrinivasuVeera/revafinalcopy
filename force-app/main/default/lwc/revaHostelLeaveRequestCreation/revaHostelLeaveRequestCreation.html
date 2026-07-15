@@ -1,0 +1,183 @@
+<template>
+    <br />
+    <br />
+    <div class="header" style="padding-left:15px">
+        <strong> REVA Hostel Leave Request</strong>
+        <div>
+            <lightning-button label="New" class="slds-p-around_medium" onclick={handleShowNewCaseForm}
+                variant="brand"></lightning-button>
+        </div>
+    </div>
+    <template if:true={showNewRequestForm}>
+        <div class="">
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <strong>REVA Hostel Leave Request Details</strong>
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                    <div class="modal-container">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-combobox label="Reason For Leave" value={ReasonLeave}
+                                        options={LeaveOptions} onchange={handleLeaveOptions}
+                                        required></lightning-combobox>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-textarea label="Note to the approver" value={NoteApprover}
+                                        onchange={handleNoteApprover} required></lightning-textarea>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-input type="datetime" label="Start Date and Time" value={StartDate}
+                                        onchange={handleStartDate} required></lightning-input>
+                                </div>
+                            </lightning-layout-item>
+
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-input type="datetime" label="End Date and Time" value={EndDate}
+                                        onchange={handleEndDate} required></lightning-input>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-textarea label="Visiting Address" value={VisitingAddress}
+                                        onchange={handleVisitingAddress}></lightning-textarea>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <!--   <div class="custom-box">
+                                    <lightning-input type="checkbox" label="Agree to terms and conditions"
+                                        value={TermsConditions} onchange={handleTermsConditions}></lightning-input>
+                                </div>-->
+                            </lightning-layout-item>
+
+                        </lightning-layout>
+
+                        <!-- <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <lightning-input type="file" label="Upload Document"
+                                        accept=".pdf,.jpg,.jpeg,.png,.gif,.xls,.xlsx" onchange={handleFileChange}
+                                        disabled={fileUploaded}></lightning-input>
+                                </div>
+                            </lightning-layout-item>
+                          <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <template if:true={fileUploaded}>
+                                        <div class="slds-var-m-top_medium slds-text-align_center">
+                                            <p>File Uploaded: {fileName}</p>
+                                            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>-->
+                        <div class="button-container slds-m-right_small">
+                            <lightning-button label="Save" variant="brand" class="custom-button  slds-m-right_small"
+                                onclick={handleSave} disabled={isSaving}></lightning-button>
+                            <lightning-button label="Close" variant="brand" class="custom-button"
+                                onclick={handleClose}></lightning-button>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+    <template lwc:if={showListView}>
+        <section>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="slds-text-title_caps slds-theme_shade">Name</th>
+                        <th class="slds-text-title_caps slds-theme_shade">Status</th>
+                        <th class="slds-text-title_caps slds-theme_shade">Leave Extension/Shorten Status</th>
+                        <th class="slds-text-title_caps slds-theme_shade">Start Date and Time</th>
+                        <th class="slds-text-title_caps slds-theme_shade">End Date and Time</th>
+                        <th class="slds-text-title_caps slds-theme_shade">Note to the Approver</th>
+                        <th class="slds-text-title_caps slds-theme_shade"></th>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <template for:each={leaveRequests} for:item="eachRequest">
+                        <tr key={eachRequest.Id}>
+                            <td data-cell="Name" style="padding-left: 16px">
+                                <p class="case-number pointer-hover" data-id={eachRequest.Id} onclick={handleNameClick}>
+                                    <strong data-id={eachRequest.Id}>{eachRequest.Name}</strong>
+                                </p>
+                            </td>
+                            <td data-cell="Status">
+                                <strong class="slds-text-body_regular">{eachRequest.Status__c}</strong>
+                            </td>
+                            <td data-cell="Status">
+                                <strong class="slds-text-body_regular">{eachRequest.Leave_Approved_Extension_Status__c}</strong>
+                            </td>
+                            <td data-cell="Start Date and Time">
+
+                                <strong class="slds-text-body_regular"> <lightning-formatted-date-time
+                                        value={eachRequest.Start_Date_and_Time__c} year="numeric" day="2-digit"
+                                        month="long" hour="2-digit" minute="2-digit">
+                                    </lightning-formatted-date-time>
+                                </strong>
+                            </td>
+                            <td data-cell="End Date and Time">
+                                <strong class="slds-text-body_regular">
+                                    <lightning-formatted-date-time value={eachRequest.End_Date_and_Time__c}
+                                        year="numeric" day="2-digit" month="long" hour="2-digit" minute="2-digit">
+                                    </lightning-formatted-date-time></strong>
+                            </td>
+                            <td data-cell="Note to the Approver">
+                                <strong class="slds-text-body_regular"
+                                    style="padding-left:5px">{eachRequest.Note_to_the_approver__c}</strong>
+                            </td>
+                            <td data-cell="Extend Leave">
+                                <lightning-button label="Extend/Shorten Leave" data-id={eachRequest.Id}    class="slds-p-around_medium" onclick={handleExtendLeave}
+                                  variant="brand" disabled={eachRequest.isExtendButtonDisable}></lightning-button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </section>
+    </template>
+    <template if:true={error}>
+        <p>{error.body.message}</p>
+    </template>
+    <template if:false={leaveRequests}>
+        <p>No leave requests are found.</p>
+    </template>
+    <template lwc:if={showDetailPage}>
+        <c-reva-hostel-leave-request record-id={recordId} onclickback={handleClickBack}></c-reva-hostel-leave-request>
+    </template>
+
+</template>

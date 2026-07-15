@@ -1,0 +1,101 @@
+@font-face {
+    font-family: 'NunitoSans';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/NunitoSans/NunitoSans_10pt-Regular.ttf') format('TrueType');
+}
+    *{
+    font-family: 'NunitoSans', 'RobotoSlab', 'Roboto', 'Dosis', Helvetica !important;
+}
+.card:hover{
+   background-color: aliceblue;
+}
+.cards-container{
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+    align-items: center;
+}
+
+h5{
+    font-weight:600 ;
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+.card{
+    min-width: 250px;
+      /* -webkit-box-shadow: -3px 0px 17px -2px rgba(0,0,0,0.75); */
+/* -moz-box-shadow: -3px 0px 17px -2px rgba(0,0,0,0.75);
+box-shadow: -3px 0px 17px -2px rgba(0,0,0,0.75); */
+    flex: 1;
+    cursor:pointer;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    /* margin: 1rem; */
+    background-color: rgb(255 203 176);
+    padding: 1rem;
+    /* border-radius: 43px 41px 44px 0px / 44px 2px 44px 0px;     */
+    gap: 1rem;
+    max-width: 300px;
+
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+img{
+    border-radius: 10px;
+    width: 120px;
+    aspect-ratio: 1/ 1;
+    justify-self: flex-end;
+    align-self: flex-start;
+
+}
+.training-material-container{
+    padding: 2rem;
+    font-size: 1rem;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+.training-material-container h3{
+    font-weight: 600;
+    text-decoration: underline;
+}
+.modal-container{
+    overflow: auto;
+}
+
+
+
+
+/* @media (max-width:800px){
+    img{
+        width: 100px;
+        aspect-ratio: 1/1;
+    }
+} */
+@media(max-width:1800px){
+    /* .cards-container{
+        gap: 0;
+    } */
+    img{
+         width: 80px;
+        aspect-ratio: 1/ 1;
+    }
+    h5{
+        font-size: 0.8rem;
+    }
+ .training-material-container{
+    font-size: 0.8rem;
+    padding: 1rem;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+}
+
+@media(max-width:800px){
+    .card{
+        gap:0rem;
+    }
+}

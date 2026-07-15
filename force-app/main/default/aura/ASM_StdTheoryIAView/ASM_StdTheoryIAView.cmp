@@ -1,0 +1,50 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute type="List" name="iaMarks" default="[]"/>
+    
+    <div class="slds-box">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Course Name">Course Name</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Theory">Theory <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Theory_Maximum_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Seminar">Seminar <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Seminar_Maximum_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Quiz">Quiz <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Quiz_Maximum_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Total">Total <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Maximum_Internal_Marks__c}</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.iaMarks}" var="iam">
+                    <tr class="slds-hint-parent">
+                        <td data-label="Course">
+                            <div class="slds-truncate" title="{!iam.Course_Offering__r.hed__Course__r.Name}">{!iam.Course_Offering__r.hed__Course__r.Name}</div>
+                        </td>
+                        <td data-label="Theory">
+                            <div class="slds-truncate" title="{!iam.Theory_Secured_Marks__c}">{!iam.Theory_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Seminar">
+                            <div class="slds-truncate" title="{!iam.Seminar_Secured_Marks__c}">{!iam.Seminar_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Quiz">
+                            <div class="slds-truncate" title="{!iam.Quiz_Secured_marks__c}">{!iam.Quiz_Secured_marks__c}</div>
+                        </td>
+                        <td data-label="Total">
+                            <div class="slds-truncate">
+                                {!iam.Theory_Secured_Marks__c+iam.Seminar_Secured_Marks__c+iam.Quiz_Secured_marks__c}
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

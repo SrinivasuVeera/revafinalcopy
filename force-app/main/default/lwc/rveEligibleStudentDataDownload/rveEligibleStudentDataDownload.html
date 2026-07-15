@@ -1,0 +1,75 @@
+<template>
+    <template if:true={isOpen}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="max-width: 60rem;">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Download Students</h2>
+                    <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={handleClose}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close"
+                            size="small"></lightning-icon>
+                    </button>
+                </header>
+
+                <!-- <div class="slds-modal__content slds-p-around_medium slds-grid slds-wrap slds-gutters"> -->
+                <div class="slds-modal__content slds-p-around_medium slds-grid slds-wrap">
+                    <!-- School -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_small">
+                        <lightning-combobox label="Select School" value={selectedSchool} options={schoolOptions}
+                            onchange={handleSchoolChange}></lightning-combobox>
+                    </div>
+
+                    <!-- Program Batch -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-combobox label="Select Program Batch" value={selectedBatch}
+                            options={programBatchOptions} onchange={handleBatchChange}
+                            disabled={isBatchDisabled}></lightning-combobox>
+                    </div>
+
+                    <!-- Semester -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_small">
+                        <lightning-combobox label="Select Semester" value={selectedSemester} options={semesterOptions}
+                            onchange={handleSemesterChange} disabled={isSemesterDisabled}></lightning-combobox>
+                    </div>
+
+                    <!-- Type Of Exam -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-combobox label="Select Exam Type" value={selectedExamType} options={examTypeOptions}
+                            onchange={handleExamTypeChange} disabled={isExamTypeDisabled}></lightning-combobox>
+                    </div>
+
+                    <!-- Exam Eligibility -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_small">
+                        <lightning-combobox label="Exam Eligibility" value={selectedEligibility}
+                            options={eligibilityOptions} onchange={handleEligibilityChange}
+                            disabled={isExamEligibleDisabled}></lightning-combobox>
+                    </div>
+
+                    <!-- Fetch Button -->
+                    <div class="slds-col slds-size_1-of-1 slds-m-top_medium">
+                        <lightning-button variant="brand" label="Fetch Students"
+                            onclick={fetchStudents}></lightning-button>
+                    </div>
+
+                    <!-- Datatable -->
+                    <template if:true={students.length}>
+                        <div class="slds-col slds-size_1-of-1 slds-m-top_medium">
+                            <lightning-datatable key-field="Id" data={students} columns={columns} hide-checkbox-column>
+                            </lightning-datatable>
+                        </div>
+                    </template>
+                    <template if:true={noRecordsFound}>
+                        <p style="padding:1rem;">No records found for the selected filters.</p>
+                    </template>
+                </div>
+
+                <footer class="slds-modal__footer slds-grid slds-grid_align-end">
+                    <lightning-button variant="neutral" label="Close" onclick={handleClose}
+                        class="slds-m-right_small"></lightning-button>
+                    <lightning-button variant="brand" label="Download" onclick={downloadPDF}
+                        disabled={isDownloadDisabled}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

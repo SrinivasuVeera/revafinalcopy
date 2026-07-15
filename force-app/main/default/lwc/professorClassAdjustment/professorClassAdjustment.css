@@ -1,0 +1,38 @@
+.custom-container{
+	color : black;
+}
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-left: 80px;
+}
+
+.form-row > * {
+    flex: 1 1 calc(33.333% - 1rem);
+    min-width: 150px;
+}.green-dropdown lightning-combobox {
+    --slds-c-input-color-background: #e6ffe6; /* Light green background */
+    --slds-c-input-color-border: #28a745; /* Green border */
+    bottom: 7px;
+}
+.blue-dropdown lightning-combobox {
+    --slds-c-input-color-background: #dbeafe; /* Light Blue Background */
+    --slds-c-input-color-border: #007bff; /* Blue Border */
+    bottom: 7px;
+}.orange-dropdown lightning-combobox {
+    --slds-c-input-color-background: #ffe6cc; /* Light Orange Background */
+    --slds-c-input-color-border: #ff8c00; /* Dark Orange Border */
+    bottom: 7px;
+}
+:host {
+    display: block;
+    padding: 10px;
+}
+
+lightning-layout {
+    /* background: #fff5e6; */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}

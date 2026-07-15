@@ -1,0 +1,55 @@
+/* Modal container background */
+.modal-container {
+    background-color: #FFFFFF;
+    padding: 1rem;
+}
+
+/* Custom box styling (optional, keep borders) */
+.custom-box {
+    padding: 0.5rem;   
+    border-radius: 0.25rem;
+    background-color: #FFFFFF; /* Ensure consistency */
+}
+
+/* Button container */
+.button-container {
+    padding-top: 1rem;
+    text-align: right;
+    background-color: #FFFFFF; /* Match container */
+}
+
+/* Spinner styling */
+.slds-is-relative {
+    position: relative;
+}
+
+/* Ensure table and header match */
+.slds-box {
+    background-color: #FFFFFF;
+}
+
+.slds-page-header {
+    background-color: #FFFFFF;
+}
+.name-cell {
+    color: #0070D2; /* Blue color for Name */
+}
+thead th {
+    top: 0;
+    left: 0;
+    background-color: var(--reva-table-heading-background-color);
+    /*  cursor: pointer; */
+    text-transform: uppercase;
+    color: white;
+}
+
+tbody tr {
+    background-color: var(--reva-table-row-background-color) !important;
+}
+td {
+    max-width: 200px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    cursor: pointer;
+}

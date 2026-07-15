@@ -1,0 +1,325 @@
+<template>
+    <template if:true={showSetUpModal}>
+                <section role="dialog" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium">{modelHeader}</h2>
+                        </header>
+                        <div class="slds-modal__content">
+                            <div class="slds-m-around_large">
+                                <lightning-card title="School Programs" icon-name="standard:account">
+                                    <!-- <div class="slds-p-around_medium"> -->
+                                        <template if:true={displayProgrmaDetails}>
+                                            <!-- Programs Combobox -->
+                                            <lightning-combobox
+                                                name="programs"
+                                                label="Programs"
+                                                placeholder="Select Program"
+                                                options={programOptions}
+                                                value={selectedProgram}
+                                                onchange={handleProgramChange}
+                                                required
+                                                data-id="program">                                                
+                                            </lightning-combobox>
+                        
+                                            <!-- Program Batch Combobox -->
+                                            <template if:true={programBatchOptions.length}>
+                                                <lightning-combobox
+                                                    name="programBatch"
+                                                    label="Program Batch"
+                                                    placeholder="Select Program Batch"
+                                                    options={programBatchOptions}
+                                                    value={selectedProgramBatch}
+                                                    onchange={handleProgramBatchChange}
+                                                    required
+                                                    data-id="programBatch">                                                    
+                                                </lightning-combobox>
+                                            </template>
+                        
+                                            <!-- Semester Combobox -->
+                                            <template if:true={semesterOptions.length}>
+                                                <lightning-combobox
+                                                    name="semester"
+                                                    label="Semester"
+                                                    placeholder="Select Semester"
+                                                    options={semesterOptions}
+                                                    value={selectedSemester}
+                                                    onchange={handleSemesterChange}
+                                                    required
+                                                    data-id="semester">                                                    
+                                                </lightning-combobox>
+                                            </template>
+                                        </template>
+
+                                        <template if:false={displayProgrmaDetails}>
+                                            <lightning-input name="progName" label="Program Name" disabled value={progName}></lightning-input>
+                                            <lightning-input name="progBatchName" label="Program Batch Name" disabled value={progBatchName}></lightning-input>
+                                            <lightning-input name="progSemName" label="Program Semester Name" disabled value={progSemName}></lightning-input>
+                                        </template>
+                                        <!-- Feedback Template Type Combobox -->
+                                        <template if:true={selectedSemester}>
+                                            <lightning-combobox
+                                                name="templateType"
+                                                label="Feedback Template Type"
+                                                value={templateTypeDefaultValue}
+                                                placeholder="Select Feedback Template Type"
+                                                options={options}
+                                                read-only={readOnlyFlag}
+                                                onchange={handleTemplateTypeChange}
+                                                required
+                                                data-id="templateType">        
+                                            </lightning-combobox>            
+                                            <!-- <p>Selected value is: {templateTypeDefaultValue}</p> -->
+                                        </template>
+                        
+                                        <template if:true={templateTypeDefaultValue}>
+                                            <lightning-combobox 
+                                                name="templateSelect" 
+                                                label="Feedback Template Id" 
+                                                options={templateOptions} 
+                                                value={selectedTemplate} 
+                                                placeholder="Select Feedback Template Id"
+                                                read-only={readOnlyFlag}
+                                                onchange={handleTemplateChange}
+                                                required
+                                                data-id="templateSelect">
+                                            </lightning-combobox>
+                                        </template>        
+                                    <!-- </div> -->
+                                </lightning-card>
+                                <!-- <div class="slds-p-around_small"></div> -->
+                                <template if:true={selectedTemplate}>
+                                    <lightning-card title="Feedback Questions">
+                                        <div class="slds-p-left_medium">
+                                            <template for:each={questionsForSelectedTemplate} for:item="question">
+                                                <p key={question.id}>
+                                                    <!-- <b>{question.id} : </b> -->
+                                                     {question.text} 
+                                                </p>
+                                            </template>
+                                        </div>
+                                    </lightning-card>        
+                                    <!-- <div class="slds-p-around_small"></div> -->
+                                    <!-- Date Pickers -->
+                                    <!-- <lightning-card>      -->
+                                        <div class="slds-p-horizontal_medium slds-p-vertical_small">
+                                            <lightning-input 
+                                                type="date" 
+                                                label="From Date" 
+                                                value={fromDate} 
+                                                onchange={handleFromDateChange}
+                                                required
+                                                data-id="fromDate">
+                                            </lightning-input>
+                        
+                                            <lightning-input 
+                                                type="date" 
+                                                label="To Date" 
+                                                value={toDate} 
+                                                onchange={handleToDateChange}
+                                                required
+                                                data-id="toDate">
+                                            </lightning-input>            
+                                            <lightning-input 
+                                                name="minimumAttendance" 
+                                                label="Set Minimum Attendance" 
+                                                type="number" 
+                                                placeholder="Enter Minimum Attendance" 
+                                                value={minAttendance}
+                                                onchange={handleAttendanceChange}
+                                                required
+                                                data-id="minAttendance">
+                                            </lightning-input>
+                                            <!-- Checkbox -->
+                                            <lightning-input 
+                                                type="checkbox" 
+                                                label="Enable Feedback Template" 
+                                                checked={isChecked} 
+                                                onchange={handleCheckboxChange}>
+                                            </lightning-input>
+                                        </div> 
+                                    <!-- </lightning-card>    -->
+                                </template>
+                                <!-- <div class="line slds-m-bottom_xx-large"></div>
+                                <div class="button-container">
+                                        <button class="slds-button slds-button_brand slds-m-right_xx-large" onclick={handleSubmit}>Submit</button>
+                                        <button class="slds-button slds-button_brand">Back</button>    
+                                </div>  -->
+                                <div class="slds-p-around_xxx-small"></div>
+                                <!-- Error Message -->
+                                <template if:true={errorMessage}>
+                                            <div class="slds-text-color_error slds-m-top_xx-small" role="alert">
+                                                <lightning-icon icon-name="utility:error" size="small" alternative-text="Error"></lightning-icon>
+                                                <span class="slds-m-left_x-small">{errorMessage}</span>
+                                            </div>
+                                </template>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning-button class="slds-p-right_medium" variant="neutral" label="Cancel" onclick={handleSetupCancel}></lightning-button>
+                            <template if:false={isUpdateAction}>
+                                <lightning-button variant="brand" label="Save" onclick={handleDialogSubmit}></lightning-button>
+                            </template>
+                            <template if:true={isUpdateAction}>
+                                <lightning-button variant="brand" label="Update" onclick={handleDialogUpdate}></lightning-button>
+                            </template>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    
+    
+        <!-- <lightning-card title="Feedback Release Manager">
+            <lightning-button label="New Feedback" onclick={handleNew} class="slds-m-bottom_small"></lightning-button>
+    
+            <template if:true={feedbackList}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={feedbackList}
+                    columns={columns}
+                    onsave={handleSave}
+                    draft-values={draftValues}
+                    onrowaction={handleRowAction}>
+                </lightning-datatable>
+            </template>
+    
+            
+            <template if:true={showModal}>
+                <section role="dialog" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium">New Feedback Release</h2>
+                        </header>
+                        <div class="slds-modal__content">
+                            <lightning-record-edit-form object-api-name="Feedback_Release__c">
+                              
+                                <lightning-input name="Program_Batch_Id__c" label="Program Batch Id" onchange={handleChange}></lightning-input>
+                                <lightning-input name="Program_Id__c" label="Program Id" onchange={handleChange}></lightning-input>
+                                <lightning-input name="Semester_Id__c" label="Semester Id" onchange={handleChange}></lightning-input>
+                                <lightning-input type="date" name="Start_Date__c" label="Start Date" onchange={handleChange}></lightning-input>
+                                <lightning-input type="date" name="End_Date__c" label="End Date" onchange={handleChange}></lightning-input>
+                                <lightning-input name="Template_Type__c" label="Template Type" onchange={handleChange}></lightning-input>
+                                <lightning-input name="FeedbackTemplate__c" label="Feedback Template Id" onchange={handleChange}></lightning-input>
+                                <lightning-input type="checkbox" name="Active__c" label="Active" onchange={handleChange}></lightning-input>
+                            </lightning-record-edit-form>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+                            <lightning-button variant="brand" label="Save" onclick={handleSaveNew}></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </lightning-card> -->
+   
+        
+        <lightning-card title="Feedback Releases">
+                <lightning-button slot="actions" variant="brand" label="Setup New Feedback"
+                    title="Setup New Feedback" onclick={handleNewSetupClick}>
+                </lightning-button>
+
+                <!-- Tab strip -->
+                <div class="slds-tabs_default">
+                    <ul class="slds-tabs_default__nav" role="tablist">
+                        <li class="slds-tabs_default__item" role="presentation">
+                            <a class={latestTabClass} role="tab" data-tab="latest" onclick={handleTabChange}>
+                                Latest
+                            </a>
+                        </li>
+                        <li class="slds-tabs_default__item" role="presentation">
+                            <a class={historyTabClass} role="tab" data-tab="history" onclick={handleTabChange}>
+                                History
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab content -->
+                    <div class="slds-tabs_default__content slds-show">
+                        <template if:true={feedbackReleases.length}>
+                            <div class="slds-scrollable_x">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th style="width: 60px;">Program Batch Name</th>
+                                            <th scope="col">Semester Name</th>
+                                            <th scope="col">Start Date</th>
+                                            <th scope="col">End Date</th>
+                                            <th scope="col">Template Type</th>
+                                            <th scope="col">Template Id</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Edit</th>
+                                            <th style="width: 6px;" scope="col">Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={feedbackReleases} for:item="record">
+                                            <tr key={record.Id}>
+                                                <td>{record.Program_Batch_Name__c}</td>
+                                                <td>{record.Semester_Name__c}</td>
+                                                <td>{record.formattedStartDate}</td>
+                                                <td>{record.formattedEndDate}</td>
+                                                <td>{record.Template_Type__c}</td>
+                                                <td>{record.FeedbackTemplateName}</td>
+                                                <td>
+                                                    <input type="checkbox" disabled checked={record.Active__c} />
+                                                </td>
+                                                <td>
+                                                    <lightning-icon icon-name='utility:edit' alternative-text='edit'
+                                                        size='small' title='edit' data-id={record.Id}
+                                                        onclick={handleEditClick}>
+                                                    </lightning-icon>
+                                                </td>
+                                                <td>
+                                                    <lightning-icon icon-name='utility:delete' alternative-text='delete'
+                                                        size='small' title='delete' data-id={record.Id}
+                                                        onclick={openDeleteModal}>
+                                                    </lightning-icon>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                        <template if:false={feedbackReleases.length}>
+                            <div class="slds-m-around_medium slds-text-color_weak">No records found.</div>
+                        </template>
+                    </div>
+                </div>
+
+
+                 <!-- Spinner -->
+                <template if:true={isSpinner}>
+                    <div class="slds-is-relative">
+                        <section class="slds-modal slds-fade-in-open">
+                            <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </div>
+                </template>
+                <template if:true={isModalOpen}>
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <h2 class="slds-text-heading_medium">Confirm Delete</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium">
+                                Are you sure you want to delete the record?
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <lightning-button class="slds-p-right_medium" variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
+                                <lightning-button variant="destructive" label="Delete" onclick={confirmDelete}></lightning-button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>            
+                <template if:true={error}>
+                    <div class="slds-text-color_error slds-m-around_medium">
+                        Error loading feedback releases: {error.message}
+                    </div>
+                </template>
+        </lightning-card>
+</template>

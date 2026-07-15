@@ -1,0 +1,188 @@
+<template>
+    <lightning-card title="Academic Consultant - My School">
+
+        <template if:true={isSpoc}>
+            <lightning-input 
+                label="Search User"
+                value={searchKey}
+                onchange={handleUserSearch}>
+            </lightning-input>
+
+            <template if:true={selectedUserName}>
+                <div class="selected-pill">
+                    {selectedUserName}
+                    <lightning-button-icon icon-name="utility:close"
+                        onclick={removeUser}>
+                    </lightning-button-icon>
+                </div>
+            </template>
+
+            <template if:true={showDropdown}>
+                <div class="lookup-box">
+                    <template for:each={userOptions} for:item="u">
+                        <div key={u.Id}
+                             data-id={u.Id}
+                             data-name={u.Name}
+                             onclick={selectUser}>
+                            {u.Name}
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <p><b>Selected Records:</b> {selectedCount}</p>
+
+            <lightning-button 
+                label="Assign User"
+                variant="brand"
+                onclick={handleAssign}>
+            </lightning-button>
+
+        </template>
+        <lightning-combobox
+    label="Filter by Program"
+    value={selectedProgram}
+    options={programOptions}
+    onchange={handleProgramChange}>
+</lightning-combobox>
+
+        <div class="summary-bar">
+            <div class="badge red">Pending {pendingCount}</div>
+            <div class="badge green">Completed {completedCount}</div>
+
+        <!-- <div class="progress-container">
+                <lightning-progress-bar value={progressValue}></lightning-progress-bar>
+            </div>  -->
+        </div>
+
+<div class="filters slds-m-bottom_small">
+
+    <lightning-button-group>
+        <template if:true={isSpoc}>
+        <!-- <lightning-button 
+            label="All" 
+            onclick={showAll}>
+        </lightning-button> -->
+        </template>
+        <template if:true={isSchoolHeadUser}>
+            <lightning-button 
+                label="My School Pending"
+                onclick={showSchoolAll}>
+            </lightning-button>
+        </template>
+
+        <lightning-button 
+            label="Pending" 
+            onclick={showPending}>
+        </lightning-button>
+
+        <lightning-button 
+            label="Completed" 
+            onclick={showCompleted}>
+        </lightning-button>
+        
+
+       <!-- <template if:false={isSpoc}>
+
+        <lightning-button 
+            label="My Records" 
+            onclick={showMine}>
+        </lightning-button>
+        </template> -->
+
+        <template if:true={isSpoc}>
+
+        <lightning-button 
+            label="Assigned" 
+            onclick={showAssigned}>
+        </lightning-button>
+
+        <lightning-button 
+            label="Unassigned" 
+            onclick={showUnassigned}>
+        </lightning-button>
+        </template>
+        
+    </lightning-button-group>
+
+</div>
+
+        <lightning-datatable
+            key-field="Id"
+            data={filteredContacts}
+            columns={columns}
+            onrowaction={handleRowAction}
+            onrowselection={handleRowSelection}
+            onsort={handleSort}
+            sorted-by={sortedBy}
+            sorted-direction={sortedDirection}>
+        </lightning-datatable>
+
+        <!-- MODAL -->
+        <template if:true={showModal}>
+            <section class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+
+                    <header class="slds-modal__header">
+                        <h2>Edit Contact</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input label="School Name"
+                            value={selectedContact.School_Name__c}
+                            disabled>
+                        </lightning-input>
+                        <lightning-input label="Program Name"
+                            value={selectedContact.Primary_Academic_Program_Name__c}
+                            disabled>
+                        </lightning-input>
+
+                        <lightning-input label="Disposition"
+                            value={selectedContact.Disposition__c}
+                            disabled>
+                        </lightning-input>
+
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Description</label>
+                            
+                            <div class="slds-form-element__control">
+                                <div class="slds-box slds-theme_default description-box">
+                                    {selectedContact.Description1__c}
+                                </div>
+                            </div>
+                        </div>
+
+                        <lightning-combobox
+                            label="School Disposition"
+                            value={selectedContact.School_Disposition__c}
+                            options={schoolDispositionOptions}
+                            data-field="School_Disposition__c"
+                            onchange={handleChange}
+                            required>
+                        </lightning-combobox>
+
+                        <lightning-textarea
+                            label="School Description"
+                            data-field="School_Description__c"
+                            value={selectedContact.School_Description__c}
+                            onchange={handleChange}
+                            required>
+                        </lightning-textarea>
+
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                        <lightning-button variant="brand" label="Save"
+                            onclick={handleSave}
+                            class="slds-m-left_small">
+                        </lightning-button>
+                    </footer>
+
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </lightning-card>
+</template>

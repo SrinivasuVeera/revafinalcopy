@@ -1,0 +1,355 @@
+<template>
+    <div class="portal-background">
+    <!-- <div class="registration-from-wrapper"> -->
+        <!-- <div class="registration-info-section">
+            <div class="text-section">
+                <div class="heading">REVA Registration Process</div>
+                <div class="content">
+                    The student life at REVA is colourful, vibrant, and packed with activities to make the campus days
+                    memorable. With rich
+                    biodiversity, study lawns, and open-air theatre to enrich your learning experience, a student’s
+                    journey at REVA is
+                    unique in every way. The University’s comprehensive facilities offer you plenty to do, see, explore
+                    and experience while
+                    pursuing your studies.
+                </div>
+            </div>
+            <div class="image-section">
+                <div class="registration-icon">
+                    <img src={registrationProcessImageUrl} alt="Registration Process">
+                </div>
+            </div>
+        </div> -->
+
+       
+    <div class="container">
+        <!-- <img src={BannerImage} class="logo"> -->
+        
+        <div class="text-overlay">
+         
+ 
+        <!-- <lightning-card> -->
+              <!-- <div class="admission-bg"> -->
+        <div class="admission-card">
+
+           
+     <template if:true={showSpinner}> <!--SFDC-->
+        <div class="spinner-backdrop">
+            <lightning-spinner
+                alternative-text="Processing payment..."
+                size="medium">
+            </lightning-spinner>
+            <p class="spinner-text">Processing your payment, please wait…</p>
+        </div>
+    </template> <!--SFDC-->
+    
+         
+ <!-- Header -->
+        <div class="admission-header">
+              <div class="header-inline">
+            <span class="title-gradient">Admissions {propYear}</span>
+            <lightning-icon icon-name="utility:education" size="medium" class="education-icon"></lightning-icon>
+          </div>
+        </div>
+
+            <!-- Main form hidden when paid view is shown -->
+            <template if:false={showPaidView}>
+           
+          <div class="two-col">
+            <lightning-input label="First Name" value={firstName} name ="firstName" onchange={handleFirstNameChange} disabled={verifyEmail} required></lightning-input>
+            <lightning-input label="Last Name" value={lastName} name ="lastName" onchange={handleLastNameChange} disabled={verifyEmail} required></lightning-input>
+            </div>
+             <div class="email-row">
+             <lightning-input class="email-input" label="Email" value={email} name ="email" onchange={handleEmailChange} type="email" disabled={verifyEmail} required></lightning-input>
+            <lightning-button variant="destructive" label="Verify Email" onclick={sendEmailOtp} disabled={isVerifyEmailDisabled} ></lightning-button>
+            </div>
+            
+            <!-- <template if:true={emailInvalid}>
+                <div class="slds-text-color_error slds-m-top_small">Please enter a valid email address.</div>
+            </template>  -->
+            <template if:true={showEmailOTP}>
+    <!-- HIDE these when verified -->
+    <template if:false={isEmailVerified}>
+        <div class="otp-row">
+            <lightning-input 
+                class="otp-input-small" 
+                max-length="6" 
+                label="Email OTP" 
+                value={emailOtp} 
+                onchange={handleEmailOtpChange} 
+                required={otpRequired}>
+            </lightning-input>
+            
+            <lightning-button 
+                variant="destructive" 
+                label="Verify OTP" 
+                onclick={verifyEmailOtp} 
+                class="slds-m-top_medium">
+            </lightning-button>
+            
+            <lightning-button 
+                variant="destructive" 
+                label="Resend OTP" 
+                onclick={handleResendEmailOtp}>
+            </lightning-button>
+        </div>
+    </template>
+
+    <!-- SHOW success message ONLY when verified -->
+    <template if:true={isEmailVerified}>
+        <div class="slds-p-top_small slds-text-color_success slds-grid slds-grid_vertical-align-center">
+            <lightning-icon 
+                icon-name="utility:check" 
+                alternative-text="Verified" 
+                variant="success" 
+                size="x-small" 
+                class="slds-m-right_x-small">
+            </lightning-icon>
+            <strong>Email verified successfully!</strong>
+        </div>
+    </template>
+
+    <!-- Error/Resend Status Messages (Visible below success or input) -->
+    <template if:true={resendEmailOtpMessage}>
+        <div class="slds-text-color_success slds-m-top_small">{resendEmailOtpMessage}</div>
+    </template>
+    
+    <template if:true={emailOtpError}>
+        <div class="slds-text-color_error slds-m-top_small">Invalid OTP. Please try again.</div>
+    </template>
+
+    <!-- Payment Flow -->
+    <template if:true={emailExists}>
+        <div class="slds-text-color_success slds-m-top_small">Registration Completed Already, Please Proceed With Payment </div>
+        <lightning-button variant="destructive" label="Make Payment" onclick={PaymentPage} class="slds-m-top_medium" disabled={isPaymentClicked}></lightning-button>
+    </template>
+</template>
+
+            <template if:false={emailExists}>
+                <!-- <template if:true={showcountryCode}>  -->
+              <div class="otp-row">
+             <lightning-combobox label="Code" value={phoneCode} name ="phoneCode" options={phoneCodeOptions} onchange={handlePhoneCodeChange} disabled={disable} required></lightning-combobox>
+            <lightning-input label="Mobile Number" value={mobileNumber} name ="mobileNumber" onchange={handleMobileChange} disabled={disable} required></lightning-input>
+          
+           
+           <template if:false={otherCountry}>
+   
+
+            <lightning-button variant="destructive" label="Send OTP" onclick={sendOtp} disabled={mobileOtp} ></lightning-button>
+                          
+             </template>
+            </div>
+            <div>
+                 <template if:true={mobileErrorMessage}>
+                <div class="slds-text-color_error slds-grid slds-grid_align-spread slds-m-top_x-small">{mobileErrorMessage}</div>
+            </template>
+            <template if:true={mobileError}>
+                <div class="slds-text-color_error slds-grid slds-grid_align-spread slds-m-top_x-small">
+                    {mobileError}
+                </div>
+            </template>
+            </div>
+
+            <template if:true={showMobileOtp}> 
+                 <template if:false={isVerified}>
+                   <div class="otp-row">
+            <lightning-input label="Mobile OTP" value={otp} onchange={handleOtpChange} required={otpRequired} disabled={verifyPhone}></lightning-input>
+            <!-- <div class="slds-grid slds-grid_align-spread "> -->
+                <lightning-button variant="destructive" label="Verify OTP" onclick={verifyOtp} disabled={verifyPhone} class="slds-m-top_medium" ></lightning-button>
+                <lightning-button variant="destructive" label="Resend OTP" onclick={handleResendOtp} disabled={verifyPhone} class="slds-m-top_medium" ></lightning-button>
+                <template if:true={isVerified}>
+                    <div class="slds-col slds-text-color_success slds-align_absolute-center" title="Verified">
+                        <!-- Simple tick indicator -->
+                        <lightning-icon icon-name="utility:check" alternative-text="Verified" size="small" class="verified-icon"></lightning-icon>
+                    </div>
+                </template>
+            </div>
+            <template if:true={resendOtpMessage}>
+                <div class="slds-text-color_success slds-grid slds-grid_align-spread slds-m-top_small">{resendOtpMessage}</div>
+            </template>
+            <template if:true={otpError}>
+                <div class="slds-text-color_error slds-grid slds-grid_align-spread slds-m-top_small">Invalid OTP. Please try again.</div>
+            </template>
+            </template>
+            <template if:true={isVerified}>
+        <div class="slds-p-top_small slds-text-color_success slds-grid slds-grid_vertical-align-center">
+            <lightning-icon 
+                icon-name="utility:check" 
+                alternative-text="Verified" 
+                variant="success" 
+                size="x-small" 
+                class="slds-m-right_x-small">
+            </lightning-icon>
+            <strong>Mobile Number verified successfully!</strong>
+        </div>
+    </template>
+
+              </template>
+
+         <!-- <template if:true={showCategory}> -->
+             <div class="form-row">
+            <lightning-combobox label="Category" value={category} name ="category" options={categoryOptions} onchange={handleCategoryChange} disabled={disableCat} required></lightning-combobox>
+             </div>
+              <div class="two-col">
+              <template if:true={showStatePicklist}>
+                <lightning-combobox label="State" value={state} options={stateOptions} onchange={handleStateChange} disabled={disableState} required></lightning-combobox>
+            </template>
+            </div>
+             <div class="two-col">
+              <template if:true={showCountryPicklist}>
+                <lightning-combobox label="Country" value={country} options={countryOptions} onchange={handleCountryChange} disabled={disableCountry} required></lightning-combobox>
+            </template>
+             </div>
+             <!-- <lightning-card title="Select School and Program"> -->
+               <!-- <h1 style="color:#666666">Select School and Program</h1> -->
+                <div class="two-col">
+                   
+                <lightning-combobox 
+                    name="school"
+                    label="School"                  
+                    placeholder="Select School"     
+                    options={schools} 
+                    value={selectedSchool}
+                    onchange={onSchoolChange} 
+                    required
+                    disabled={disableCat}>
+                </lightning-combobox>
+
+                 <lightning-combobox 
+                    name="programSelector"
+                    label="Program"                 
+                    placeholder="Select Program"   
+                    value={selectedProgram} 
+                    options={programs}
+                    onchange={onProgramChange} 
+                    required
+                    disabled={disableCat}>
+                </lightning-combobox>
+               </div>
+            <!-- </br> -->
+             <!-- </lightning-card> -->
+            <!-- <c-school-program-p-l
+                onomniaggregate={handleSchoolProgramChange}
+                selection-mode="ApplicationFee"
+                selected-school={school}
+                selected-program={program}
+                disabled={disableCat}>
+            </c-school-program-p-l> -->
+
+
+            
+            <div class="slds-m-top_medium slds-m-bottom_medium">
+            <lightning-input type="checkbox" label="I authorise REVA to contact me for updates and notifications." checked={declarationChecked} onchange={handleDeclarationChange} disabled={disableDeclarationCheck} required></lightning-input>
+            </div>
+            <template if:true={submitErrorMessage}>
+                <div class="slds-text-color_error slds-m-top_small">{submitErrorMessage}</div>
+            </template>
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-top_medium">
+            <lightning-button variant="destructive" label={submitLabel} onclick={submitApplication} disabled={isSubmitDisabled}></lightning-button>
+
+            <div class="already-registered">
+                Already Registered,
+                <a href="javascript:void(0);" onclick={handleSignIn}>
+                    Click Here
+                </a>
+            </div>
+            </div>
+             <!-- </template> -->
+            </template>
+           
+           
+            </template>
+
+           <!-- Paid / Already registered view -->
+            <template if:true={IsshowPaidView}>
+                <div class="slds-box slds-theme_default slds-m-top_small">
+                    <div class="slds-text-heading_medium">Dear Applicant,</div>
+                    <div class="slds-m-top_small slds-text-body_regular">You have already registered with REVA University.</div>
+
+                    <div class="slds-m-top_large">
+                        <div class="slds-m-bottom_small">
+                            <span class="slds-text-color_brand slds-text-title_bold">School: </span>
+                            <span class="slds-text-title_bold">{paidSchool}</span>
+                        </div>
+                        <div class="slds-m-bottom_small">
+                            <span class="slds-text-color_brand slds-text-title_bold">Program: </span>
+                            <span class="slds-text-title_bold">{paidProgram}</span>
+                        </div>
+                        <div class="slds-m-bottom_small">
+                            <span class="slds-text-color_brand slds-text-title_bold">Application Number: </span>
+                            <span class="slds-text-title_bold">{paidApplicationNumber}</span>
+                        </div>
+                    </div>
+
+                    <div class="slds-m-top_medium slds-text-body_regular">{paidMessage}</div>
+               
+                    <span class="slds-text-title_bold">{addedMessage}</span>
+
+                     <div class="already-registered slds-m-top_small">
+                        
+                    Already reset? Click here to log in to the ,
+                   <a href="javascript:void(0);" onclick={handleApplicantPortal}>
+                        Applicant Portal
+                    </a>
+                     </div>
+                </div>  
+            </template>
+          
+            <template if:true={isPUCView}>
+                  <span class="slds-text-title_bold">{addedMessage}</span>
+            </template> 
+           <!-- Already Registerday -->
+            <template if:true={isSignInMode}>
+                <div class="email-row">
+             <lightning-input class="email-input" label="Email" value={email} name ="email" onchange={handleEmailChange} type="email" disabled={verifyEmail} required></lightning-input>
+            <lightning-button variant="destructive" label="Verify Email" onclick={sendEmailOtp} disabled={isVerifyEmailDisabled} ></lightning-button>
+            </div>
+
+             <template if:true={showEmailOTP}>
+    <!-- HIDE these when verified -->
+    <template if:false={isEmailVerified}>
+        <div class="otp-row">
+            <lightning-input 
+                class="otp-input-small" 
+                max-length="6" 
+                label="Email OTP" 
+                value={emailOtp} 
+                onchange={handleEmailOtpChange} 
+                required={otpRequired}>
+            </lightning-input>
+            
+            <lightning-button 
+                variant="destructive" 
+                label="Verify OTP" 
+                onclick={verifyEmailOtp} 
+                class="slds-m-top_medium">
+            </lightning-button>
+            
+            <lightning-button 
+                variant="destructive" 
+                label="Resend OTP" 
+                onclick={handleResendEmailOtp}>
+            </lightning-button>
+        </div>
+        </template>
+
+            <!-- Error/Resend Status Messages (Visible below success or input) -->
+    <template if:true={resendEmailOtpMessage}>
+        <div class="slds-text-color_success slds-m-top_small">{resendEmailOtpMessage}</div>
+    </template>
+    
+    <template if:true={emailOtpError}>
+        <div class="slds-text-color_error slds-m-top_small">Invalid OTP. Please try again.</div>
+    </template>
+
+             </template>
+            
+            </template>
+        </div>
+        <!-- </div> -->
+       <!-- </lightning-card> -->
+    </div>
+
+     </div>
+     </div>
+</template>

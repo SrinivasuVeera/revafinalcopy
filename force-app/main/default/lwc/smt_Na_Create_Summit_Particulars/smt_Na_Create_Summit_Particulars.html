@@ -1,0 +1,508 @@
+<template>
+    <template lwc:if={summitParticularsFlag}>
+       <!-- <lightning-card>
+          <h4 class="smt-particular-heading">
+             ORIGINAL SUMMIT PARTICULARS OF "{summitSectionLabel}" | SCHOOL : {schoolName}
+          </h4>
+          <section>
+             <table class="slds-text-body_small">
+                <thead>
+                   <tr>
+                      <th>S.No</th>
+                      <th>Particular</th>
+                      <th>Timeline</th>
+                      <th>Is Target Applicable</th>
+                      <th>Is Evidence Applicable</th>
+                      <th>Target</th>
+                      <th>Target Text</th>
+                   </tr>
+                </thead>
+                <tbody>
+                   <template
+                      for:each={summitParticulars}
+                      for:item="summitParticular"
+                   >
+                      <tr key={summitParticular.id}>
+                         <td data-cell="S.No">
+                            <strong>{summitParticular.id}</strong>
+                         </td>
+                         <td data-cell="Particular" class="particular-name">
+                            <lightning-input
+                               type="text"
+                               value={summitParticular.summitParticularName}
+                               data-id={summitParticular.id}
+                               data-label="summitParticularName"
+                               class="section-input"
+                               onchange={handleParticularChange}
+                            ></lightning-input>
+                         </td>
+                         <td data-cell="Timeline">
+                            <lightning-input
+                               type="date"
+                               value={summitParticular.timeline}
+                               data-id={summitParticular.id}
+                               data-label="timeline"
+                               class="section-input"
+                               onchange={handleParticularChange}
+                            ></lightning-input>
+                         </td>
+                         <td data-cell="Is Target Applicable">
+                            <lightning-input
+                               type="checkbox"
+                               checked={summitParticular.isTargetApplicable}
+                               data-id={summitParticular.id}
+                               data-label="isTargetApplicable"
+                               class="section-input"
+                               onchange={handleParticularChange}
+                            ></lightning-input>
+                         </td>
+                         <td data-cell="Is Evidence Applicable">
+                            <lightning-input
+                               type="checkbox"
+                               checked={summitParticular.isEvidenceApplicable}
+                               data-id={summitParticular.id}
+                               data-label="isEvidenceApplicable"
+                               class="section-input"
+                               onchange={handleParticularChange}
+                            ></lightning-input>
+                         </td>
+                         <td data-cell="Target">
+                            <lightning-input
+                               type="number"
+                               value={summitParticular.target}
+                               data-id={summitParticular.id}
+                               data-label="target"
+                               class="section-input"
+                               onchange={handleParticularChange}
+                            ></lightning-input>
+                         </td>
+                         <td data-cell="Target Text">
+                            <lightning-input
+                               type="text"
+                               value={summitParticular.targetText}
+                               data-id={summitParticular.id}
+                               data-label="targetText"
+                               class="section-input"
+                               onchange={handleParticularChange}
+                            ></lightning-input>
+                         </td>
+                      </tr>
+                   </template>
+                </tbody>
+             </table>
+             <div class="button-container">
+                <lightning-button
+                   label="Back"
+                   onclick={handleBackClick}
+                   variant="brand"
+                ></lightning-button>
+                <lightning-button
+                   label={buttonLabel}
+                   onclick={handleCreateOrUpdateParticulars}
+                   data-label={buttonLabel}
+                   variant="brand"
+                ></lightning-button>
+             </div>
+          </section>
+       </lightning-card> -->
+ 
+ 
+ 
+ 
+ 
+ 
+      <!------------------------ New Implementation based on Month wise -------------------------->
+ 
+ 
+ 
+ 
+   <lightning-card>
+       <h4 class="smt-particular-heading">
+          SUMMIT PARTICULARS OF 1 "{summitSectionLabel}" | SCHOOL : {schoolName}
+       </h4>
+       <section>
+       <table class="slds-text-body_small">
+          <thead>
+             <tr>
+                <th>S.No</th>
+                <th>Particular</th>
+                <th>Timeline</th>          
+                <th>Target</th>                
+                <th></th>
+             </tr>
+          </thead>
+          <tbody>             
+                <template
+                   for:each={summitParticulars}
+                   for:item="summitParticular"
+                >
+                   <tr key={summitParticular.id}>
+                      <td data-cell="S.No">
+                         <strong>{summitParticular.id}</strong>
+                      </td>
+                      <td data-cell="Particular" class="particular-name">
+                         <lightning-input
+                            type="text"
+                            value={summitParticular.summitParticularName}
+                            data-id={summitParticular.id}
+                            data-label="summitParticularName"
+                            class="section-input"
+                            onchange={handleParticularChange}
+                            disabled
+                         ></lightning-input>
+                      </td>                     
+                      <td data-cell="Timeline">
+                         <lightning-input
+                            type="date"
+                            value={summitParticular.timeline} 
+                            data-id={summitParticular.id}
+                            data-label="timeline"
+                            class="section-input"
+                            onchange={handleParticularChange}
+                            disabled
+                         ></lightning-input>
+                      </td>               
+                      <td data-cell="Target">
+                         <lightning-input
+                            type="number"
+                            value={summitParticular.target}
+                            data-id={summitParticular.id}
+                            data-label="target"
+                            class="section-input"
+                            onchange={handleParticularChange}
+                            disabled
+                         ></lightning-input>
+                      </td>                      
+                      <td data-cell="Enter Month data">
+                         <div class="row-btn">
+                         <lightning-button 
+                            data-id={summitParticular.summitParticularId} 
+                            data-label="targetText"
+                            class="section-input" 
+                            label="Enter Month Wise" 
+                            onclick={monthModel}
+                            variant="brand"
+                            disabled={isEnterMonthlyButtonDisabled}>
+                         </lightning-button>
+                         </div>
+                      </td>
+                   </tr>    
+                </template>             
+          </tbody>
+       </table> 
+       <div class="button-container">
+                <lightning-button
+                   label="Back"
+                   onclick={handleBackClick}
+                   variant="brand"
+                ></lightning-button>
+                <lightning-button
+                   label={buttonLabel}
+                   onclick={handleCreateOrUpdateParticulars}
+                   data-label={buttonLabel}
+                   variant="brand" 
+                   if:true={isUpdateParticularsButtonVisible}                 
+                ></lightning-button>
+       </div>    
+       </section>
+   </lightning-card> 
+
+   <!-- <template if:true={showSavedTablePartcular}>
+      <lightning-card>
+          <h4 class="smt-section-heading slds-text-title_caps">SUMMIT SECTIONS 3 - {schoolName}</h4>
+          <section>
+              <table class="slds-text-body_small">
+                  <thead>
+                      <tr>
+                          <th>Particular Name</th>
+                          <th>Timeline</th>
+                          <th>Target</th>
+                          <th>Save</th>
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <template for:each={savedParticulars} for:item="item">
+                          <tr key={item.name}>                                
+                              <td data-cell="Particular Name">
+                                  <lightning-input
+                                      type="text"
+                                      value={item.name}
+                                      data-id={item.id}
+                                      data-field="name"
+                                      class="section-input">
+                                  </lightning-input>
+                              </td>
+                              <td data-cell="Timeline">
+                                  <lightning-input
+                                     type="date"                                       
+                                     value={item.timeline}
+                                     data-id={item.id}
+                                     data-label="timeline"
+                                     class="section-input"                                       
+                                     disabled
+                                  ></lightning-input>
+                               </td>                              
+                              <td data-cell="Target">
+                                  <lightning-input
+                                     type="text"                                       
+                                     value={item.target}
+                                     data-id={item.id}
+                                     data-label="target"
+                                     class="section-input"                                       
+                                     disabled
+                                  ></lightning-input>
+                               </td>
+                              <td data-cell="Action">
+                                  <lightning-button-icon
+                                      icon-name="utility:save"
+                                      variant="brand"
+                                      alternative-text="Save"
+                                      data-id={item.id}                                       
+                                      style="float: top;padding-top: 30px;">
+                                  </lightning-button-icon>                                    
+                              </td>
+                              <td data-cell="Action">
+                                  <lightning-button label="Enter Month Wise" variant="brand"
+                                      data-id={item.id}                                       
+                                      style="float: top;padding-top: 30px;">
+                                  </lightning-button>
+                              </td>
+                          </tr>
+                      </template>
+                  </tbody>
+              </table>
+           </section>   
+          </div>
+      </lightning-card>
+  </template> -->
+ 
+    <!-- Modal Popup -->
+    <template if:true={isModalOpen}>
+        <div role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container popup">
+                <!-- Modal/Popup Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_small">Particular Name 1 : {changedSummitParticular.summitParticularName}</h2>
+                </header>
+ 
+                <!-- Modal/Popup Content -->
+                <div class="slds-modal__content slds-p-around_medium">
+                   
+                   <table class="slds-text-body_small">
+                      <thead>
+                         <tr>                           
+                            <th>Month</th>
+                            <th>Timeline</th>
+                            <th>Is Target Applicable</th>
+                            <th>Is Evidence Applicable</th>
+                            <th>Target</th>
+                            <th>Target Text</th>
+                            <th>Remarks</th>
+                            <!-- <th>Action</th> -->
+                         </tr>
+                      </thead>
+                      <tbody>
+             <template
+                      for:each={monthsDataVal}
+                      for:item="month"
+                   >
+                   <tr key={month.id}>                          
+                            <td data-cell="Particular" class="month-name">
+                                  <lightning-input
+                                  type="text"
+                                  value={month.Name}
+                                  data-id={month.Name}
+                                  data-label="Month"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange} 
+                                  disabled
+                                  ></lightning-input>
+                            </td>                           
+                            <td data-cell="Timeline">
+                               <lightning-input
+                                  type="date"
+                                  value={month.timeline}
+                                  data-id={month.Name}
+                                  data-label="timeline"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange}                                  
+                               ></lightning-input>                              
+                            </td>
+                            <td data-cell="Is Target Applicable">                              
+                               <lightning-input
+                                  type="checkbox"
+                                  checked={month.isTargetApplicable}
+                                  data-id={month.Name}
+                                  data-label="isTargetApplicable"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange}                                 
+                               ></lightning-input>
+                            </td>
+                            <td data-cell="Is Evidence Applicable">
+                               <lightning-input
+                                  type="checkbox"
+                                  checked={month.isEvidenceApplicable}
+                                  data-id={month.Name}
+                                  data-label="isEvidenceApplicable"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange}                                 
+                               ></lightning-input>                              
+                            </td>
+                            <td data-cell="Target">                              
+                               <lightning-input
+                                  type="text"
+                                  value={month.target}
+                                  data-id={month.Name}
+                                  data-label="target"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange}  
+                                  data-field="targetValue"                               
+                               ></lightning-input>                              
+                            </td>
+                            <!-- <td data-cell="Target">                              
+                               <lightning-input
+                                  type="number"
+                                  value={month.target}
+                                  data-id={month.Name}
+                                  data-label="target"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange}                                 
+                               ></lightning-input>                              
+                            </td>
+                            <td data-cell="Achieved" class="achieved">
+                                     <lightning-input type="text" data-sno={summitParticular.sNo}
+                                         value={summitParticular.achievedValue}
+                                         disabled={summitParticular.isAchievedInputDisabled} data-field="achievedValue"
+                                         onchange={handleInputChange}></lightning-input>
+                                 </td> -->
+                            <td data-cell="Target Text">                             
+                               <lightning-input
+                                  type="text"
+                                  value={month.targetText}
+                                  data-id={month.Name}
+                                  data-label="targetText"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange}                                 
+                               ></lightning-input>
+                            </td> 
+                            <td data-cell="Remarks">                             
+                               <lightning-input
+                                  type="text"
+                                  value={month.commentText}
+                                  data-id={month.Name}
+                                  data-label="commentText"
+                                  class="section-input"
+                                  onchange={handleMonthlyParticularChange}                                 
+                               ></lightning-input>
+                            </td>    
+                            <!-- <td data-cell="Remarks">                             
+                               <lightning-icon class="slds-p-top_small"
+                                  icon-name="utility:add"
+                                  size="small"
+                                  alternative-text="Add"
+                                  title="Add">
+                               </lightning-icon>
+                            </td>             -->
+                         </tr>    
+                        </template>   
+                      </tbody>
+                   </table>
+                   <div class="button-container">
+                      <lightning-button label="Close" onclick={closeModal} variant="brand"></lightning-button>
+                      <lightning-button data-label={modalButtonLabel} label={modalButtonLabel} onclick={handleCreateOrUpdateMonthWiseParticulars} variant="brand"></lightning-button>
+                   </div>
+                </div>             
+            </div>
+          </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+ 
+   </template>
+
+   <template if:true={createParticular}>
+      <lightning-card>
+         <h4 class="smt-particular-heading">
+          SUMMIT PARTICULARS OF 2 "{summitSectionLabel}" | SCHOOL : {schoolName}
+         </h4>
+         <section>
+            <table class="slds-text-body_small">
+               <thead>
+                     <tr>
+                        <th>Particular Name</th>
+                        <!-- <th>Timeline</th>
+                        <th>Target</th> -->
+                        <th>Action</th>
+                     </tr>
+               </thead>
+               <tbody>
+                     <template for:each={particulars} for:item="row">
+                        <tr key={row.id}>                                
+                           <!-- <td data-cell="S.No">
+                                 <strong>{row.srNo}</strong>
+                           </td>                               -->
+                           <td data-cell="Particular Name">
+                                 <lightning-input
+                                    type="text"
+                                    value={row.name}
+                                    data-id={row.id}
+                                    data-field="name"
+                                    class="section-input"
+                                    onchange={handleChange1}
+                                    required>
+                                 </lightning-input>
+                           </td>                                
+                           <!-- <td data-cell="Timeline">
+                                 <lightning-input
+                                    type="date"                                        
+                                    class="section-input"
+                                    value={row.timeline}
+                                    data-id={row.id}
+                                    data-field="timeline"
+                                    onchange={handleChange1}                                       
+                                    >
+                                 </lightning-input>
+                           </td>
+                           <td data-cell="Target">
+                                 <lightning-input
+                                    type="number"
+                                    value={row.target}
+                                    data-id={row.id}
+                                    data-field="target"
+                                    class="section-input"                                        
+                                    onchange={handleChange1}>
+                                 </lightning-input>
+                           </td> -->
+                           
+                           <td data-cell="Action">
+                                 <lightning-button-icon
+                                    icon-name="action:delete"
+                                    variant="brand"
+                                    data-id={row.id}
+                                    onclick={removeRow}
+                                    style="float: top;padding-top: 30px;">
+                                 </lightning-button-icon>                                    
+                           </td>
+                        </tr>
+                     </template>
+               </tbody>
+            </table>
+            <lightning-button
+                   label="Back"
+                   onclick={handleBackClick}
+                   variant="brand"
+                   style="float: right;margin-top: 15px;margin-right: 15px;">
+            </lightning-button>
+            <lightning-button label="Create particulars" onclick={createParticulars} variant="brand"
+               style="float: right;margin-top: 15px;margin-right: 10px;"></lightning-button>
+            <lightning-button label="Add Particulars" variant="brand" onclick={addRow} 
+               style="float: right;margin-top: 15px;margin-right: 5px;">
+            </lightning-button>
+         </section>
+      </lightning-card>
+   </template>
+ </template>

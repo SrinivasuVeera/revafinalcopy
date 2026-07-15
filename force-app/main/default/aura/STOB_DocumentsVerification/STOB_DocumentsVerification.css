@@ -1,0 +1,20 @@
+.THIS input[type=checkbox]:checked.green-checkbox{
+    border-color: #3385ff; 
+    box-shadow: 0 0 3px #3385ff; 
+    background-color: #3385ff;
+}
+.THIS div.lookupComp{
+    position: absolute;
+    z-index:0;
+}
+.THIS div.sectioncolour
+{
+     background-color: #fd5800;
+    color: DarkOrange;
+}
+.THIS .removeIcon {
+    color: #FFFFFF;
+}
+.THIS .removeIconBg {
+    background-color: #F2463B;
+}

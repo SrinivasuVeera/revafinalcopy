@@ -1,0 +1,309 @@
+<template>
+    <lightning-card title="RISE Exam Score Entry" icon-name="standard:contact">
+
+        <div class="slds-m-around_medium">
+
+            <!-- ── Search Panel ── -->
+            <div class="search-panel slds-box slds-box_small slds-m-bottom_medium">
+                <div class="slds-text-heading_small slds-m-bottom_small panel-title">
+                    <lightning-icon icon-name="utility:search" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                    Search Applicants
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 font-semibold">
+                        <lightning-input
+                            type="text"
+                            label="Search by Name / Application No. / Email / Mobile"
+                            placeholder="Enter keyword..."
+                            value={searchKey}
+                            onchange={handleSearchKeyChange}>
+                        </lightning-input>
+                    </div>
+                    <!-- Schools -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <lightning-combobox
+                            name="department"
+                            label="Select School"
+                            value={selectedDepartment}
+                            options={departments}
+                            onchange={handleDepartmentChange}>
+                        </lightning-combobox>
+                    </div>
+                    <!-- Academic Program -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">                        
+                        <lightning-combobox
+                            name="academicProgram"
+                            label="Academic Program"
+                            value={selectedAcademicProgram}
+                            options={academicPrograms}
+                            onchange={handleAcademicProgramChange}
+                            disabled={isProgramDisabled}>
+                        </lightning-combobox>
+                    </div>
+                    <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <lightning-input
+                            type="date"
+                            label="Exam Date"
+                            value={searchExamDate}
+                            onchange={handleExamDateChange}>
+                        </lightning-input>
+                    </div> -->
+                    <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-align_absolute-center"> -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="button-row slds-m-top_large">
+                            <lightning-button
+                                label="Search"
+                                variant="brand"
+                                icon-name="utility:search"
+                                onclick={handleSearch}
+                                class="slds-m-right_x-small">
+                            </lightning-button>
+                            <lightning-button
+                                label="Reset"
+                                variant="neutral"
+                                icon-name="utility:refresh"
+                                onclick={handleReset}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Info / Action Bar ── -->
+            <template if:true={contacts}>
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small info-bar">
+                    <div class="slds-col record-count-label">
+                        <lightning-badge label={recordCountLabel} class="count-badge"></lightning-badge>
+                        <template if:true={isDirty}>
+                            <span class="unsaved-indicator slds-m-left_small">
+                                <lightning-icon icon-name="utility:warning" size="x-small" variant="warning"></lightning-icon>
+                                &nbsp;{dirtyCountLabel} — click Submit to save, or Reset Fields to discard
+                            </span>
+                        </template>
+                    </div>
+                    <div class="slds-col slds-text-align_right action-buttons">
+                        <lightning-button
+                            label="Submit"
+                            variant="success"
+                            icon-name="utility:save"
+                            onclick={handleSubmit}
+                            disabled={isSubmitDisabled}
+                            class="slds-m-right_x-small">
+                        </lightning-button>
+                        <lightning-button
+                            label="Reset Fields"
+                            variant="destructive-text"
+                            icon-name="utility:undo"
+                            onclick={handleResetFields}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- ── Spinner ── -->
+            <template if:true={isLoading}>
+                <div class="spinner-container">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- ── Toast ── -->
+            <template if:true={toastMessage}>
+                <div class={toastClass} role="alert">
+                    <lightning-icon icon-name={toastIcon} size="small" class="slds-m-right_small"></lightning-icon>
+                    {toastMessage}
+                </div>
+            </template>
+
+            <!-- ── Table + Pagination ── -->
+            <template if:false={isLoading}>
+                <template if:true={hasContacts}>
+
+                    <!-- Pagination Controls (top) -->
+                    <div class="pagination-bar slds-grid slds-grid_align-spread slds-m-bottom_x-small">
+                        <!-- Left: page size selector -->
+                        <div class="slds-col slds-grid slds-grid_vertical-align-center">
+                            <span class="page-size-label slds-m-right_x-small">Rows per page:</span>
+                            <lightning-combobox
+                                value={pageSize}
+                                options={pageSizeOptions}
+                                onchange={handlePageSizeChange}
+                                variant="label-hidden"
+                                class="page-size-select">
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Right: nav buttons + page info -->
+                        <div class="slds-col slds-grid slds-grid_vertical-align-center">
+                            <span class="range-info slds-m-right_small">{rangeInfo}</span>
+                            <lightning-button-icon
+                                icon-name="utility:jump_to_left"
+                                alternative-text="First page"
+                                title="First page"
+                                onclick={handleFirstPage}
+                                disabled={isFirstPage}
+                                variant="border-filled"
+                                size="small"
+                                class="slds-m-right_xx-small">
+                            </lightning-button-icon>
+                            <lightning-button-icon
+                                icon-name="utility:chevronleft"
+                                alternative-text="Previous page"
+                                title="Previous page"
+                                onclick={handlePrevPage}
+                                disabled={isFirstPage}
+                                variant="border-filled"
+                                size="small"
+                                class="slds-m-right_xx-small">
+                            </lightning-button-icon>
+                            <span class="page-info slds-m-horizontal_x-small">{pageInfo}</span>
+                            <lightning-button-icon
+                                icon-name="utility:chevronright"
+                                alternative-text="Next page"
+                                title="Next page"
+                                onclick={handleNextPage}
+                                disabled={isLastPage}
+                                variant="border-filled"
+                                size="small"
+                                class="slds-m-right_xx-small">
+                            </lightning-button-icon>
+                            <lightning-button-icon
+                                icon-name="utility:jump_to_right"
+                                alternative-text="Last page"
+                                title="Last page"
+                                onclick={handleLastPage}
+                                disabled={isLastPage}
+                                variant="border-filled"
+                                size="small">
+                            </lightning-button-icon>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="table-container">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped rise-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="col-seq">#</th>
+                                    <th class="col-appno">App No.</th>
+                                    <th class="col-name">Name</th>
+                                    <th class="col-email">Email</th>
+                                    <th class="col-mobile">Mobile</th>
+                                    <!-- <th class="col-program">Program</th>
+                                    <th class="col-date">Exam Date</th> -->
+                                    <th class="col-score">Exam Score</th>
+                                    <th class="col-violation">Violation Score</th>
+                                    <th class="col-pushed">Pushed Date</th>
+                                    <th class="col-actual highlight-col">Actual Score *</th>
+                                    <th class="col-result highlight-col">Result *</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={pagedContacts} for:item="con">
+                                    <tr key={con.Id} class={con.rowClass}>
+                                        <td class="col-seq slds-text-color_weak">{con.rowIndex}</td>
+                                        <td class="col-appno">
+                                            <span class="app-number-badge">{con.Application_Number__c}</span>
+                                        </td>
+                                        <td class="col-name font-semibold">{con.Name}</td>
+                                        <td class="col-email text-small">{con.Email}</td>
+                                        <td class="col-mobile text-small">{con.MobilePhone}</td>
+                                        <!-- <td class="col-program text-small">{con.Primary_Academic_Program__c}</td>
+                                        <td class="col-date text-small">{con.Exam_Date1__c}</td> -->
+                                        <td class="col-score text-center">{con.RISE_Exam_Score__c}</td>
+                                        <td class="col-violation text-center">{con.RISE_Violation_Score__c}</td>
+                                        <td class="col-pushed text-small">{con.RISE_Pushed_Date__c}</td>
+                                        <td class="col-actual highlight-cell">
+                                            <lightning-input
+                                                type="number"
+                                                value={con.RISE_Actual_Score__c}
+                                                data-id={con.Id}
+                                                data-field="RISE_Actual_Score__c"
+                                                onchange={handleFieldChange}
+                                                onkeydown={handleScoreKeyDown}
+                                                variant="label-hidden"
+                                                placeholder="Score"
+                                                min="0"
+                                                step="0.01"
+                                                class="inline-input">
+                                            </lightning-input>
+                                        </td>
+                                        <td class="col-result highlight-cell">
+                                            <lightning-combobox
+                                                value={con.RISE_Result__c}
+                                                options={resultOptions}
+                                                data-id={con.Id}
+                                                data-field="RISE_Result__c"
+                                                onchange={handleFieldChange}
+                                                variant="label-hidden"
+                                                placeholder="Select..."
+                                                class="inline-input">
+                                            </lightning-combobox>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Controls (bottom) -->
+                    <div class="pagination-bar slds-grid slds-grid_align-end slds-m-top_x-small">
+                        <div class="slds-col slds-grid slds-grid_vertical-align-center">
+                            <span class="range-info slds-m-right_small">{rangeInfo}</span>
+                            <lightning-button-icon
+                                icon-name="utility:jump_to_left"
+                                alternative-text="First page"
+                                title="First page"
+                                onclick={handleFirstPage}
+                                disabled={isFirstPage}
+                                variant="border-filled"
+                                size="small"
+                                class="slds-m-right_xx-small">
+                            </lightning-button-icon>
+                            <lightning-button-icon
+                                icon-name="utility:chevronleft"
+                                alternative-text="Previous page"
+                                title="Previous page"
+                                onclick={handlePrevPage}
+                                disabled={isFirstPage}
+                                variant="border-filled"
+                                size="small"
+                                class="slds-m-right_xx-small">
+                            </lightning-button-icon>
+                            <span class="page-info slds-m-horizontal_x-small">{pageInfo}</span>
+                            <lightning-button-icon
+                                icon-name="utility:chevronright"
+                                alternative-text="Next page"
+                                title="Next page"
+                                onclick={handleNextPage}
+                                disabled={isLastPage}
+                                variant="border-filled"
+                                size="small"
+                                class="slds-m-right_xx-small">
+                            </lightning-button-icon>
+                            <lightning-button-icon
+                                icon-name="utility:jump_to_right"
+                                alternative-text="Last page"
+                                title="Last page"
+                                onclick={handleLastPage}
+                                disabled={isLastPage}
+                                variant="border-filled"
+                                size="small">
+                            </lightning-button-icon>
+                        </div>
+                    </div>
+
+                </template>
+
+                <template if:false={hasContacts}>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:people_list" size="large" class="slds-m-bottom_medium empty-icon"></lightning-icon>
+                        <p class="slds-text-heading_small">No applicants found</p>
+                        <p class="slds-text-color_weak slds-m-top_x-small">Try adjusting your search criteria or reset to load all records.</p>
+                    </div>
+                </template>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

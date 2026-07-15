@@ -1,0 +1,82 @@
+<aura:component controller="ASM_StdResultListView"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+    </aura:html>
+    <aura:attribute name="resultList" type="List" />
+
+    <aura:attribute name="isSelected" type="boolean" default="false" />
+    <aura:attribute name="selectedId" type="String" default="" />
+    <aura:attribute name="semName" type="String" default="" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+    <!-- <div class="slds-theme_default"> -->
+    <aura:if isTrue="{!!v.isSelected}">
+        <aura:if isTrue="{!not(empty(v.resultList))}">
+            <table class="slds-table slds-table--bordered result-table" style="overflow: visible;" width="100%">
+                <thead>
+                    <tr>
+                        <th scope="col"
+                            style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:40%;">SEMESTER
+                        </th>
+                        <th scope="col"
+                            style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:40%;">EXAMINATION
+                            YEAR</th>
+                        <th scope="col"
+                            style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:20%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.resultList}" var="res" indexVar="resIndex">
+                        <tr>
+                            <td data-label="Course"
+                                style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;height:3vw;">
+                                {!res.hed__Term__r.Name}
+                            </td>
+                            <td data-label="Course"
+                                style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;word-wrap: break-word;height:3vw;">
+                                {!res.Examination_Month_Year__c}
+                            </td>
+                            <td data-label="Course"
+                                style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;height:3vw;">
+                                <lightning:button label="View Result" onclick="{!c.selectResult}" name="{!resIndex}"
+                                    variant="base" />
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            <aura:set attribute="else">
+                <aura:if isTrue="{!!v.isSelected}">
+                    <div style="text-align:center;color:red; font-size:13px;font-weight:700">
+                        No data found
+                    </div>
+
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!v.isSelected}">
+        <c:ASM_StudentResultView summaryId="{!v.selectedId}" semName="{!v.semName}" />
+        <br />
+        <center>
+            <lightning:button label="Back to List" onclick="{!c.goBack}" />
+        </center>
+    </aura:if>
+    <!-- </div> -->
+</aura:component>

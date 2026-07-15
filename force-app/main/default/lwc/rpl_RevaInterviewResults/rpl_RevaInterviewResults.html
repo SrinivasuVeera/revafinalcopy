@@ -1,0 +1,51 @@
+<template>
+    <template lwc:if={data}>
+        <div class="container">
+            <section>
+                <table class="slds-text-heading_small">
+                    <thead>
+                        <tr>
+                            <th> SL NO.</th>
+                            <th> RECRUITMENT STAGE</th>
+                            <th> DATE & TIME</th>
+                            <th> ROUND</th>
+                            <th>RESULT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={data} for:item="result">
+                            <tr key={result.id}>
+                                <td data-cell="S.No">
+                                    <strong>{result.sNo}</strong>
+                                </td>
+                                <td data-cell="Recruitment Stage Name">
+                                    <strong>{result.interviewName}</strong>
+                                </td>
+                                <td data-cell="Round Time">
+                                    <strong>{result.interviewTime}</strong>
+                                </td>
+                                <td data-cell="Round Number">
+                                    <strong>{result.round}</strong>
+                                </td>
+                                <td data-cell="Result">
+                                    <strong class={result.variant}> {result.result}</strong>
+                                    <!-- <lightning-button class="slds-text-body_small" label={result.result}
+                                        variant={result.variant}>
+                                    </lightning-button> -->
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </template>
+    <template lwc:else>
+        <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+            <p class="slds-text-heading_large slds-text-color_error">No Interview Rounds
+                Available</p>
+            <p class="slds-text-body_regular">There are currently no interview have been
+                scheduled please come back later.</p>
+        </div>
+    </template>
+</template>

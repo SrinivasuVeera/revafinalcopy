@@ -1,0 +1,285 @@
+<template>
+    <div class="transport-container">
+        <template if:false={showFacultyDetails}>
+            <div class="heading">
+                <strong>TRANSPORT</strong>
+            </div>
+
+            <div class="details slds-var-p-around_medium">
+                <div class="slds-text-heading_small" style="color:#F07F07;"> <strong>Transport for {loginDetails.FirstName}
+                        {loginDetails.LastName} </strong></div>
+                <template if:true={showCourseData}>
+                    <div class="course-data">Course Details : {loginDetails.Program_Batch__r.Name} </div>
+                </template>
+            </div>
+
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12"
+                    style="padding: 5px 2% 2% 1px">
+                    <div class="slds-form-element" style="margin-top:22px;">
+                        <label class="slds-form-element__label" style="font-size:15px;" for="combobox-id-2">Route path/Pin Code</label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-combobox_container">
+                                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open "
+                                    aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                    <template if:true={selectedValue}>
+                                        <div data-key="pilldiv"
+                                            class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right"
+                                            role="none">
+                                            <span
+                                                class="slds-icon_container slds-icon-standard-account slds-combobox__input-entity-icon"
+                                                title="object">
+                                                <div class="slds-icon slds-icon_small" aria-hidden="true">
+                                                    <lightning-icon icon-name="custom:custom31"
+                                                        size="small"></lightning-icon>
+                                                </div>
+                                                <span class="slds-assistive-text">Record</span>
+                                            </span>
+                                            <input type="text"
+                                                class="slds-input slds-combobox__input slds-combobox__input-value"
+                                                id="combobox-id-5" aria-controls="listbox-id-5" role="textbox"
+                                                placeholder="Select an Option" readonly value={selectedValue} />
+                                            <button
+                                                class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                                onclick={removeRecordOnLookup} title="Remove selected option">
+                                                <span class="slds-button__icon" aria-hidden="true">
+                                                    <lightning-icon icon-name="utility:clear" size="xx-Small"
+                                                        class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                                        aria-hidden="true"></lightning-icon>
+                                                </span>
+                                                <span class="slds-assistive-text">Remove selected record</span>
+                                            </button>
+                                        </div>
+                                    </template>
+                                    <template if:false={selectedValue}>
+                                        <div data-key="searchdiv"
+                                            class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                            role="none">
+                                            <input type="text" onfocusout={onLeave} value={searchKey}
+                                                onkeyup={handleKeyChange} onchange={handleKeyChange}
+                                                class="slds-input slds-combobox__input slds-has-focus back-color"
+                                                id="combobox-id-2" aria-autocomplete="list" aria-controls="listbox-id-2"
+                                                role="textbox" placeholder="--Select the route path--" />
+                                            <span
+                                                class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                                <lightning-icon icon-name="utility:search" size="xx-Small"
+                                                    class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                                    aria-hidden="true"></lightning-icon>
+                                            </span>
+                                        </div>
+                                        <template if:true={recordsList}>
+                                            <div id="listbox-id-2-venu" data-key="dropdownresult"
+                                                class="slds-show slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                                                role="listbox">
+                                                <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                    <template if:true={message}>
+                                                        <center> {message}</center>
+                                                    </template>
+                                                    <template for:each={recordsList} for:item="record">
+                                                        <li id={record.Id} key={record.Id} onclick={onRecordSelection}
+                                                            role="presentation" class="slds-listbox__item">
+                                                            <div data-key={record.Id}
+                                                                data-name={record.RTR_Route_Path__c}
+                                                                class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                                role="option">
+                                                                <span
+                                                                    class="slds-media__figure slds-listbox__option-icon">
+                                                                    <span class="slds-icon_container">
+                                                                        <lightning-icon icon-name="custom:custom31"
+                                                                            size="small"></lightning-icon>
+                                                                    </span>
+                                                                </span>
+                                                                <span class="slds-media__body">
+                                                                    <span data-key={record.Id}
+                                                                        data-name={record.RTR_Route_Path__c}
+                                                                        class="slds-listbox__option-text slds-listbox__option-text_entity">{record.RTR_Route_Path__c}
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12"
+                    style="padding: 4px 4px 2px 0%;">
+                    <!-- <lightning-combobox name="Pick Up Point" class="lc-pick-up" label="Pick Up Point" value={value}
+                        placeholder="--Select the pick up point--" options={pickupPointOptions} onchange={handleChange} required
+                        disabled={studentCapacityFull}>
+                    </lightning-combobox> -->
+
+                    <div class="custom-dropdown" style="margin-top:22px;">
+                        <label class="slds-form-element__label" style="font-size:15px;" for="pickupPoint">Pick-up Point</label>
+                        <select name="pickupPoint" id="pickupPoint" class="lc-pick-up" onchange={handleChange} required
+                            disabled={studentCapacityFull}>
+                            <option value={value}>--Select the pick up point--</option>
+                            <template for:each={pickupPointOptions} for:item="option">
+                                <option key={option.value} value={option.value}>{option.label}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+                <template if:true={showMessageComponent}>
+                    <div class=" padMessage slds-p-around_small slds-text-color_error">
+                        <h3>{routeMessage}</h3>
+                    </div>
+                </template>
+            </div>
+            <template if:true={showConcessionAmount}>
+                <div>
+                    <h3>
+                        <strong>Concession Amount</strong>
+                    </h3>
+                    <h3>{concessionAmount}</h3>
+                </div>
+            </template>
+            <div class="slds-grid slds-wrap">
+                <template if:false={isProfessor}>
+                    <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12">
+
+                        <h3><strong>Payable Amount</strong></h3>
+                        <h3>{facultyAmount}</h3>
+                        <h3>{selectedAmount}</h3>
+
+                    </div>
+                </template>
+                <template if:true={showMonthlyDeduction}>
+                    <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12">
+                        <h3>
+                            <strong>Monthly Deduction</strong>
+                        </h3>
+                        <h3>{montlyDeduction}</h3>
+
+
+                    </div>
+                </template>
+            </div>
+            <template if:true={isstudent}>
+                <div>
+                    <lightning-input type="date" name="input1" label="Start Date" onchange={handleDateChange}
+                        class="slds-m-top_small"></lightning-input>
+                </div>
+                <div class="error-message slds-text-color_error" if:true={showStartDateError}>Please complete this
+                    field.</div>
+            </template>
+            <div class="slds-m-top_medium">
+                <div class="slds-grid slds-align_absolute-left slds-m-around_x-small">
+                    <lightning-input type="checkbox" checked={isChecked}
+                        onchange={handleCheckboxChange}></lightning-input>
+                    <div class="linkColor">
+                        <lightning-formatted-rich-text value={formattedLabelText}
+                            class="consentPad"></lightning-formatted-rich-text>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-clearfix">
+                <div class="slds-float_right">
+                    <lightning-button label="Submit" variant="brand" class="button slds-m-around_xx-small"
+                        onclick={handleSubmit} disabled={isSubmitButtonDisabled}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={showConfirmationModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium" style="color:#F07F07;">Confirm Registration</h2>
+                    </header>
+                    <template if:true={showCourseData}>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p><strong>Alert: </strong>Once you register for transportation, payment is mandatory. In case of any pending payment, the exam hall ticket may be blocked. Please be aware. </p>
+                    </div>
+                    </template>
+                    <template if:false={showCourseData}>
+                        <div class="slds-modal__content slds-p-around_medium">
+                        <p><strong>Alert: </strong>Are you sure you want to proceed with transport registration? Once confirmed, your transport registration will be completed, and the transport fee will be deducted from your salary.</p>
+                        </div>
+                    </template>
+                    <footer class="slds-modal__footer">
+                        <lightning-button style="margin-right: 10px;" label="Cancel" onclick={handleCancel} variant="neutral"></lightning-button>
+                        <lightning-button label="Confirm" onclick={handleConfirm} variant="brand"></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        
+        <!-- show faculty details if registered -->
+        <template if:true={showFacultyDetails}>
+            <div>
+                <div class=" marginAround slds-text-heading_small">
+                    <strong class="underline-text">{LABELS}</strong>
+                </div>
+                <div class="slds-grid slds-wrap padAround padAroundMin">
+                    <div
+                        class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 padAroundMin">
+                        <span class="mainDiv">
+                            <img src={IMAGES.rtrImage1} alt="user Image" height="450px" width="400px" />
+                            <p class='para-box'>{staticBusData.rtrBusImageData}</p>
+                        </span>
+
+                    </div>
+                    <div
+                        class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 padAroundMin">
+                        <span class="mainDiv">
+                            <img src={IMAGES.rtrImage2} alt="user Image" height="450px" width="400px" />
+                            <p class="para-box-1"> {staticBusData.rtrBusImageData1} </p>
+
+                        </span>
+                    </div>
+                    <div
+                        class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 padAroundMin">
+                        <span class="mainDiv"> <img src={IMAGES.rtrImage3} alt="user Image" height="450px"
+                                width="400px" />
+                            <p class="para-box-2">
+                                {staticBusData.rtrBusImageData2}
+                            </p>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="slds-var-p-around_medium">
+                <table
+                    class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-no-row-hover">
+                    <tbody>
+                        <tr>
+                            <th><strong>Route Number: </strong></th>
+                            <td>{routeMasterNumber}</td>
+
+                        </tr>
+                        <tr>
+                            <th><strong>Route Path: </strong></th>
+                            <td>{RoutePath}</td>
+
+                        </tr>
+                        <tr>
+                            <th><strong>Pick-up Point: </strong></th>
+                            <td>{pickupName}</td>
+
+                        </tr>
+                        <tr>
+                            <th><strong>Monthly Deduction: </strong></th>
+                            <td>{AmountDeduction}</td>
+
+                        </tr>
+                        <tr class={regStatus}>
+                            <th><strong>Registration Status: </strong></th>
+                            <td>{RegistrationStatus}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </template>
+    </div>
+</template>

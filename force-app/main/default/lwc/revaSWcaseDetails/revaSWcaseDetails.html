@@ -1,0 +1,341 @@
+<template>
+    <div class="slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 custom-container">
+
+        <!-- <lightning-card> -->
+        <div class="slds slds-p-around--big">
+            <div class="slds-box_small custom-top">
+                <span class="custom-box1"><strong> MANODHAARA </strong></span>
+
+            </div>
+
+            <div class="slds-m-vertical_xx-small">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-small-size_6-of-12 slds-medium-size_10-of-12 slds-large-size_10-of-12">
+                        <div class="slds-box" style="border:0px;">
+                            <span class="custom-box" style="padding-left: 10px; font-size: 13px;"><strong> Upcoming
+                                    Sessions </strong></span>
+                        </div>
+
+                    </div>
+                    <div lwc:if={filteredAppointments}
+                        class="slds-col slds-small-size_6-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12">
+                        <div class="slds-box custom-box2">
+                            <span class="custom-box">
+                                <template for:each={filteredAppointments} for:item="appointment">
+                                    <ul key={appointment.Id}>
+
+                                        <li>{appointment.Appointment_Date__c}</li>
+                                        <li>{appointment.Time_Slot_Formatted__c}</li>
+                                    </ul>
+                                </template>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <template if:true={error}>
+                <p style="color: red;">Error fetching custom metadata value: {error}</p>
+            </template>
+            <!-- adding appointmenttype picklist -->
+
+
+            <template if:true={showAppointmentType}>
+                <lightning-combobox name="appointmentType" label="Appointment Type" value={selectedAppointmentType}
+                    options={appointmentTypeOptions} onchange={handleAppointmentTypeChange}>
+                </lightning-combobox>
+            </template>
+            <template if:true={isReferral}>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="search" label="Search Contacts" value={searchTerm}
+                        onchange={handleSearch}></lightning-input>
+                   
+
+                    <template if:true={filteredContactslabel}>
+                        <!-- <template if:true = {filteredContactslabel.length} >      -->
+                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+
+                            <template for:each={filteredContacts} for:item="contactOption">
+                                <li key={contactOption.value} role="presentation" class="slds-listbox__item">
+                                    <div id={contactOption.value}
+                                        class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                        role="option" data-id={contactOption.value} onclick={handleContactSelect}>
+                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                            <span class="slds-icon_container slds-icon-standard-account">
+                                                <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                                    <use
+                                                        xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                                                {contactOption.label}
+                                            </span>
+                                            <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">
+                                                {contactOption.email} • {contactOption.SRN} •
+                                                {contactOption.ApplicationNumber}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+
+                        </ul>
+                    </template>
+                </div>
+            </template>
+
+        </div>
+        <div if:true={selectedContactDetails}>
+            <lightning-card title="Selected Contact Details">
+                <p style="margin-left: 8px;">Contact Label: {selectedContactDetails.label}</p>
+                <p style="margin-left: 8px;">Contact Email: {selectedContactDetails.email}</p>
+                <p style="margin-left: 8px;">Contact SRN: {selectedContactDetails.SRN}</p>
+                <p style="margin-left: 8px;">Contact Application No: {selectedContactDetails.ApplicationNumber}</p>
+                <!-- Add other elements for additional details -->
+            </lightning-card>
+        </div>
+
+
+        <!-- </lightning-card> -->
+        <template if:true={showParentCommponent}>
+            <div>
+
+
+
+                <div class="slds-m-vertical_xx-small">
+                    <div class="slds-grid slds-wrap">
+                        <div
+                            class="slds-col slds-small-size_4-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12 custom-background">
+                            <div class="slds-box slds-box_small" style="border:0px;">
+                                <span class="custom-heading2" style="padding-around: 10px;">PREVIOUS APPOINTMENT</span>
+                            </div>
+
+                        </div>
+                        <template if:true={showBookAppointmentButton}>
+                            <div
+                                class="slds-col slds-small-size_4-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12 custom-background">
+                                <div class="slds-box slds-box_small" style="border:0px;">
+                                    
+                                    <span onclick={navigateToCommunityPage} class="custom-heading2"
+                                        style="padding-around: 10px;">BOOK AN APPOINTMENT</span>
+                                </div>
+
+                            </div>
+                        </template>
+
+
+                    </div>
+                </div>
+
+
+
+                <!--<lightning-card title="Appointment Details"> -->
+                <table class="slds-table  slds-table--bordered appointment-table">
+                    <!-- ... Table header ... -->
+                    <thead>
+                        <tr style="font-size: 13px; padding-around: 5px;">
+                            <!-- <th scope="col">Case Number</th> -->
+                            <th style="background-color:grey; color:white; min-height:3vw;" scope="col">APPOINTMENT
+                                NUMBER</th>
+                            <th style="background-color:grey; color:white; min-height:3vw;" scope="col">APPOINTMENT DATE
+                            </th>
+                            <th style="background-color:grey; color:white; min-height:3vw;" scope="col">TIME SLOT</th>
+                            <th style="background-color:grey; color:white; min-height:3vw;" scope="col">APPOINTMENT
+                                STATUS</th>
+                            <!--<th style="background-color:grey; color:white; height:3vw;" scope="col">Notes</th> -->
+                            <th style="background-color:grey; color:white; min-height:3vw;" scope="col">TYPE</th>
+                            <th style="background-color:grey; color:white; min-height:3vw;" scope="col">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={appointments} for:item="appointment">
+                            <tr key={appointment.appointmentId} style="font-size: 13px;">
+                                <!-- ... Table data ... -->
+                                <!-- <td>{appointment.caseNumber}</td>  -->
+                                <td data-cell="APPOINTMENT NUMBER" colspan="1">{appointment.appointmentNumber}</td>
+                                <td data-cell="APPOINTMENT DATE" colspan="1">{appointment.appointmentDate}</td>
+                                
+                                <td data-cell="TIME SLOT" colspan="1">{appointment.timeSlot}</td>
+                                <td data-cell="APPOINTMENT STATUS" colspan="1">{appointment.appointmentStatus}</td>
+                                <td data-cell="TYPE" colspan="1">{appointment.appointmentType}</td>
+                                <td data-cell="ACTION" colspan="1">
+                                    <template if:true={appointment.showViewButton}>
+                                        <lightning-button class="view-button" variant="base" label="VIEW"
+                                            data-id={appointment.appointmentId}
+                                            onclick={handleViewAppointment}></lightning-button>
+                                    </template>
+
+                                    <template if:true={appointment.showCancelButton}>
+                                        <lightning-button class="cancel-button" variant="base" label="CANCEL"
+                                            data-id={appointment.appointmentId}
+                                            onclick={handleCancelAppointment}></lightning-button>
+                                    </template>
+                                    <template if:true={appointment.showRescheduleButton}>
+                                        <lightning-button class="view-button" variant="base" label="RESCHEDULE"
+                                            data-id={appointment.appointmentId}
+                                            onclick={handleRescheduleAppointment}></lightning-button>
+                                    </template>
+
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <!--</lightning-card> -->
+            </div>
+            <lightning-modal-body>
+                <template if:true={showAppointmentDetails}>
+                    <div class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <h2 class="slds-text-heading_medium" style=" font-size: 15px; color: #F07F07;;">
+                                    <strong>Appointment Details</strong>
+                                </h2>
+                                <button class="slds-button slds-button_icon slds-modal__close" title="Close"
+                                    onclick={handleCloseAppointmentDetails} style="color: #F07F07;">
+                                    <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+
+                                </button>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" style="font-size: 13px;">
+                                <!-- Add your appointment details here -->
+                                <p><strong>Appointment Number:</strong> {selectedAppointment.appointmentNumber}</p>
+                                <p><strong>Case Number:</strong> {selectedAppointment.caseNumber}</p>
+                                <p><strong>Appointment Date:</strong> {selectedAppointment.appointmentDate}</p>
+                                <p><strong>Time Slot:</strong> {selectedAppointment.timeSlot}</p>
+                                <p><strong>Candidate's Name:</strong> {selectedAppointment.studentName}</p>
+                                <p><strong>Email:</strong> {selectedAppointment.email}</p>
+                                <p><strong>Appointment Status:</strong> {selectedAppointment.appointmentStatus}</p>
+                                
+                                <template if:false={professorProfile}>
+                                <p><strong>Description :</strong> {selectedAppointment.caseDescription}</p>
+                                <p><strong>Teams Link :</strong> <lightning-formatted-rich-text
+                                        value={selectedAppointment.microsoftTeamsLink}></lightning-formatted-rich-text>
+                                </p>
+                                
+                                <template if:true={isAppointmentCompleted}>
+                                    <p><strong>Counseling Points:</strong></p><lightning-formatted-rich-text value={selectedAppointment.counsellingPoints}></lightning-formatted-rich-text>
+                                    <p><strong>Homework:</strong></p><lightning-formatted-rich-text value={selectedAppointment.notes}></lightning-formatted-rich-text>
+                                    <p><strong>Medical Information:</strong> {selectedAppointment.medicalInformation}
+                                    </p>
+                                    <p><strong>Next Follow-Up Date:</strong> {selectedAppointment.nextFollowUpdate}</p>
+                                </template>
+                                </template>
+
+                                <template if:true={professorProfile}>
+                                <template if:true={selectedAppointmentTypeSelf}>
+                                <p><strong>Description :</strong> {selectedAppointment.caseDescription}</p>
+                                <p><strong>Teams Link :</strong> <lightning-formatted-rich-text
+                                        value={selectedAppointment.microsoftTeamsLink}></lightning-formatted-rich-text>
+                                </p>
+                                
+                                <template if:true={isAppointmentCompleted}>
+                                    <p><strong>Counseling Points:</strong> {selectedAppointment.counsellingPoints}</p>
+                                    <p><strong>Homework:</strong> {selectedAppointment.notes}</p>
+                                    <p><strong>Medical Information:</strong> {selectedAppointment.medicalInformation}
+                                    </p>
+                                    <p><strong>Next Follow-Up Date:</strong> {selectedAppointment.nextFollowUpdate}</p>
+                                </template>
+                                </template>
+                                </template>
+                                <template if:true={isAppointmentInitiated}>
+                                    <p><strong>You will be getting a confirmation from counsellor once your appointment
+                                            is confirmed</strong></p>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </lightning-modal-body>
+
+
+            <div class="slds-modal slds-fade-in-open" if:true={showCheckboxConfirmation}>
+                <div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-modal__content slds-p-around_medium slds-text-align_center">
+                            <b>
+                                <h2
+                                    style="border-bottom: 1px solid #F07F07; padding-bottom: 5px; color: #F07F07;  font-size: 15px;">
+                                    Cancel Appointment</h2>
+                            </b>
+                            <p>Are you sure you want to cancel the appointment?</p>
+                            <div class="slds-form-element__control custom-vertical-radio-group" style="display:block">
+                                <lightning-radio-group options={radioOptions} value={selectedRadioValue}
+                                    onchange={handleRadioChange}></lightning-radio-group>
+                            </div>
+                        </div>
+                        <template if:true={isSelectedRadioYes}>
+                            <lightning-input label="Reason" type="text" name="reasonInput" value={reason}
+                                onchange={handleReasonChange}></lightning-input>
+                        </template>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <lightning-button label="Cancel" onclick={handleCancelClick}></lightning-button>
+                        <lightning-button class="submit-button" label="Confirm" variant="neutral"
+                            onclick={handleConfirmClick} disabled={isConfirmButtonDisabled}></lightning-button>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open" if:true={showCheckboxConfirmation}></div>
+            
+        </template>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col ">
+                <template if:true={showcustomcalendar}>
+                    <c-custom-calendar selected-appointment-type={selectedAppointmentType}
+                        select-contact={selectedContactId}></c-custom-calendar>
+
+                </template>
+            </div>
+        </div>
+        
+        <template if:true={showDatePickerModal}>
+            <lightning-card title="Time Slots">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12"
+                    style="padding-right: 10px;">
+                    <div class="slds-m-around_medium">
+                        <!-- Date picker component here -->
+                        <lightning-input type="date" label="Select Date" onchange={handleDateChange}
+                            value={selectedDate} min={minDate}></lightning-input>
+                        <!--</div>-->
+                        <div class="slds-m-top_x-small">
+                            <lightning-button class="submit-button" label="Submit" variant="neutral"
+                                onclick={handleButtonClick} disabled={isSubmitButtonDisabled}></lightning-button>
+                        </div>
+                        <template if:true={hideSlot}>
+                        <template if:true={timeSlots}>
+                            <div class="slds-m-around_medium slds-grid slds-wrap">
+                                <lightning-layout multiple-rows>
+                                    <template for:each={timeSlots} for:item="timeSlot">
+                                        <lightning-layout-item key={timeSlot} size="12" small-device-size="6"
+                                            medium-device-size="6" large-device-size="6" padding="horizontal-small">
+                                            <div>
+                                                <input class='custom-input-container' type="text"
+                                                    onclick={handleTileClick} data-timeslot={timeSlot.hourKey}
+                                                    value={timeSlot.hourKey} disabled={timeSlot.disabled}
+                                                    readonly></input>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </template>
+                                </lightning-layout>
+                               
+                            </div>
+                        </template>
+                        </template>
+
+                        <button class="slds-button slds-button_neutral submit-button"
+                            disabled={isRescheduleButtonDisabled} onclick={handleRescheduleConfirm}>Reschedule</button>
+                        <button class="slds-button slds-button_neutral" onclick={handleRescheduleCancel}>Cancel</button>
+
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+        <!--</div>
+</section> -->
+    </div>
+</template>

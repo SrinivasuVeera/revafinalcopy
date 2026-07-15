@@ -1,0 +1,13 @@
+.THIS label.slds-form-element__label {
+    display : inline-block;
+    visibility : hidden;
+    text-align:left;
+    margin-left: 30px;
+     margin-right:40px;
+    
+    
+}
+
+.THIS .tablecheck{
+   padding-right: 110px;
+}

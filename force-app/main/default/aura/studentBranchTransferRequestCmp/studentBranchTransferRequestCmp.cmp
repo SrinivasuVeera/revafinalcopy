@@ -1,0 +1,152 @@
+<aura:component controller="studentBranchTransferRequestCls" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="branch" type="sobject"/>
+    <aura:attribute name="schoolMap" type="Map"/>
+    <aura:attribute name="branchMap" type="Map"/>
+    <aura:attribute name="ErrorMsg" type="string"/>
+    <aura:attribute name="approvalStatus" type="string"/>
+    <aura:attribute name="disabled" type="boolean" default="false"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-theme_default">  
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:avatar" alternativeText="Student Branch Transfer Request" title="Student Branch Transfer Request" /> &nbsp;
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Student Branch Transfer Request">Student Branch Transfer Request</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="slds-float_right">
+                                <lightning:button class="slds-button slds-button_brand" label="Submit Request"
+                                                  title="Submit Request" onclick="{!c.saveStudSection}" disabled="{!v.disabled}"/>
+                             <!--   <lightning:button variant="brand-outline" label="Cancel" title="Cancel" onclick="{!c.cancelBtn}"/>
+                              -->
+							</div>
+                            <p class="slds-text-body_small"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="slds-grid slds-wrap slds-gutters slds-theme_default slds-p-top_x-small">
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">Name</label>
+                 <br/>
+                {!v.branch.Name}
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">Current School</label>
+                 <br/>
+                {!v.branch.currentSchool}
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">Current Program</label>
+                 <br/>
+                {!v.branch.currentProgram}
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">Current Semester</label>
+                 <br/>
+                {!v.branch.currentSemester}
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">SRN Number</label>
+                 <br/>
+                {!v.branch.srn}
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">Application Number</label>
+                 <br/>
+                {!v.branch.applicationNo}
+            </div>
+            <aura:if isTrue="{!v.branch.branchStatus != ''}">
+                <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <label class="slds-form-element__label" for="unique-id-of-input">Branch Transfer Status</label>
+                     <br/>
+                    {!v.branch.branchStatus}
+                </div>
+            </aura:if>    
+        </div>    
+        <br/><br/>
+        <aura:if isTrue="{!v.ErrorMsg == 'Success'}">
+        	<div class="slds-grid slds-gutters">
+                <div class="slds-col"></div>
+                <div class="slds-col">
+                    Requesting Transfer of School To <br/>
+                    <lightning:combobox aura:id="schoolId" variant ="label-hidden" placeholder="Select"
+                                        value="{!v.branch.selectedSchool}" options="{!v.schoolMap}" onchange="{!c.changeSchool}" disabled="{!v.disabled}"/>
+                </div>
+                <div class="slds-col"></div>
+                <div class="slds-col"></div>
+                <div class="slds-col">
+                    Requesting Transfer of Program To <br/>
+                    <lightning:combobox aura:id="branchId" variant ="label-hidden" placeholder="Select"
+                                        value="{!v.branch.selectedBranch}" options="{!v.branchMap}" disabled="{!v.disabled}"/>
+                </div>
+                <div class="slds-col"></div>
+                <div class="slds-col"></div>
+            </div>
+            <br/>
+            <aura:if isTrue="{!v.approvalStatus != undefined}">
+                <div class="slds-grid slds-wrap">	
+                	<div class="slds-col slds-size_1-of-4"></div>
+                    <div class="slds-col slds-size_2-of-4">
+                        <div class="slds-notify slds-notify_toast slds-theme_success">
+                            <span class="slds-assistive-text">success</span>
+                            <div class="slds-notify__content">
+                                <p class="slds-align_absolute-center">{!v.approvalStatus}</p>                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4"></div>
+                </div>        
+            </aura:if>    
+        <aura:set attribute="else">
+            <div class="slds-grid slds-wrap">	
+                <div class="slds-col slds-size_1-of-4"></div>
+                <div class="slds-col slds-size_2-of-4">
+                    <div class="slds-notify slds-notify_toast slds-theme_error">
+                        <span class="slds-assistive-text">error</span>
+                        <div class="slds-notify__content">
+                            <h5 class="slds-text-heading_small slds-align_absolute-center">Error Message </h5>
+                            <br/>
+                            <p class="slds-align_absolute-center">{!v.ErrorMsg}</p>                
+                        </div>
+                    </div>
+                </div> 
+                <div class="slds-col slds-size_1-of-4"></div>
+            </div>    
+        </aura:set>    
+        </aura:if>
+    </div>
+    
+</aura:component>

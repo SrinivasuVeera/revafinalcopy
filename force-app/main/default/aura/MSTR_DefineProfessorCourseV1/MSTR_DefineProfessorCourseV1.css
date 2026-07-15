@@ -1,0 +1,65 @@
+.THIS .scrollable-table {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.THIS .preference-list li {
+    background-color: white;
+    padding: 0.2rem 0;
+    margin-top: 1px;
+}
+
+.THIS .scrollable-tabset {
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.THIS .scrollable-table {
+    overflow-x: auto;
+}
+
+
+
+.THIS .wide-table {
+    min-width: 1100px;
+}
+
+.THIS .no-data-message {
+    text-align: center;
+    padding: 1.5rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #a94442;
+    background-color: white;
+    border: 1px solid #ebccd1;
+    border-radius: 6px;
+    margin-top: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.THIS .no-data-message2 {
+    text-align: center;
+    padding: 1.5rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #a94442;
+    background-color: white;
+    border: 1px solid #ebccd1;
+    border-radius: 6px;
+    margin-top: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.THIS .slds-vertical-tabs {
+    overflow: visible;
+}
+
+.THIS {
+    font-family: 'NunitoSans', 'RobotoSlab', 'Roboto', 'Dosis', Helvetica !important;
+}

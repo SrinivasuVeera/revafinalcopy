@@ -1,0 +1,24 @@
+<aura:component
+  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+  access="global">
+
+  <div class="fees-payments-wrapper">
+
+    <div class="fees-payments-heading">
+      <b>SUPPORT REQUEST</b>
+    </div>
+
+    <lightning:tabset selectedTabId="CreatCase" class="tab-active" variant="scoped">
+
+      <lightning:tab label="Create Case" id="CreatCase">
+        <c:REVA_CaseCreationCmp />
+      </lightning:tab>
+
+      <lightning:tab label="Case Details" id="CaseDetails">
+        <c:revaStdCaseDetails />
+      </lightning:tab>
+
+    </lightning:tabset>
+  </div>
+
+</aura:component>

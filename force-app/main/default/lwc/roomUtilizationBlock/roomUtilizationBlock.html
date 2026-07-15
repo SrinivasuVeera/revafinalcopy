@@ -1,0 +1,479 @@
+<template>
+
+    <lightning-card title="Block-Wise School Room Summary">
+
+        <template if:true={blockSchoolData}>
+
+            <div class="slds-grid slds-wrap">
+
+                <!-- Date Filters -->
+                <div class="slds-grid slds-gutters slds-m-bottom_medium slds-size_1-of-1">
+
+                    <!-- Start Date -->
+                    <div class="slds-col slds-size_1-of-3">
+
+                        <lightning-input 
+                            type="date" 
+                            label="Start Date" 
+                            value={startDate} 
+                            onchange={handleStartDateChange}>
+                        </lightning-input>
+
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="slds-col slds-size_1-of-3">
+
+                        <lightning-input 
+                            type="date" 
+                            label="End Date" 
+                            value={endDate} 
+                            onchange={handleEndDateChange}>
+                        </lightning-input>
+
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="slds-col slds-align-bottom slds-p-top_medium">
+
+                        <template if:true={showExportButton}>
+
+                         <lightning-button 
+                           label="Export All Block Data" 
+                           onclick={handleExportAllBlocks} 
+                           variant="brand"
+                           class="slds-m-left_medium">
+                         </lightning-button>
+
+                        </template>
+
+                        <lightning-button
+                            label="Available Rooms"
+                            variant="brand"
+                            onclick={handleAvailableRoomsClick}
+                            class="slds-m-left_small">
+                        </lightning-button>
+
+                    </div>
+
+                </div>
+
+                <!-- Block Cards -->
+                <template for:each={blockSchoolData} for:item="block">
+
+                    <div key={block.Block} class="slds-col slds-size_1-of-3 slds-p-around_small">
+
+                        <div class="block-box slds-box slds-box_xx-small slds-theme_shade"
+                             data-block={block.Block}
+                             onclick={toggleBlock}>
+
+                            <div class="slds-grid slds-gutters slds-align_absolute-center">
+
+                                <div class="slds-col slds-size_2-of-3">
+
+                                    <strong>{block.Block}</strong><br/>
+
+                                    Total Rooms: {block.TotalRooms}<br/>
+
+                                    Booked Rooms: {block.BookedRooms}<br/>
+
+                                    Available Rooms:
+                                    <a href="javascript:void(0);" onclick={handleAvailableRoomsClick}>
+                                        {block.AvailableRooms}
+                                    </a>
+                                    <br/>
+
+                                    Room Utilization: {block.RoomUtilization}%
+
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-3">
+
+                                    <svg viewBox="0 0 36 36" class="circle">
+
+                                        <path class="circle-bg"
+                                            d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            fill="none"
+                                            stroke="#dfe3e6"
+                                            stroke-width="3"/>
+
+                                        <path class="circle-progress"
+                                            d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            fill="none"
+                                            stroke="#0070d2"
+                                            stroke-width="3"
+                                            stroke-dasharray={block.RoomUtilizationDash}
+                                            stroke-linecap="round"/>
+
+                                        <text x="18"
+                                              y="20.35"
+                                              class="percentage"
+                                              text-anchor="middle"
+                                              font-size="4">
+
+                                            {block.RoomUtilization}%
+
+                                        </text>
+
+                                    </svg>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </template>
+
+                <!-- Selected Block Schools -->
+                <template if:true={selectedBlock}>
+
+                    <div class="slds-col slds-size_1-of-1 slds-m-top_medium">
+
+                        <h2 class="slds-text-heading_medium slds-m-top_large">
+
+                            Schools in {selectedBlock.Block}
+
+                            <lightning-button 
+                                label="Export Block Data" 
+                                onclick={handleExportSelectedBlock} 
+                                variant="brand"
+                                class="slds-m-left_medium">
+                            </lightning-button>
+
+                        </h2>
+
+                        <div class="slds-grid slds-wrap">
+
+                            <template for:each={selectedBlock.Schools} for:item="school">
+
+                                <div key={school.SchoolName}
+                                     class="slds-col slds-size_1-of-5 slds-p-around_x-small">
+
+                                    <div class="school-card slds-box slds-box_xx-small">
+
+                                        <div class="slds-grid slds-gutters slds-align_absolute-center">
+
+                                            <div class="slds-col slds-size_2-of-3">
+
+                                                <strong style="color:black">
+                                                    {school.SchoolName}
+                                                </strong>
+                                                <br/>
+
+                                                Total Rooms: {school.TotalRooms}<br/>
+
+                                                Booked Rooms: {school.BookedRooms}<br/>
+
+                                                Utilization: {school.Utilization}%
+
+                                            </div>
+
+                                            <div class="slds-col slds-size_1-of-5">
+
+                                                <svg viewBox="0 0 36 36" class="circle">
+
+                                                    <path class="circle-bg"
+                                                        d="M18 2.0845
+                                                            a 10.9155 10.9155 0 0 1 0 31.831
+                                                            a 10.9155 10.9155 0 0 1 0 -31.831"
+                                                        fill="none"
+                                                        stroke="#dfe3e6"
+                                                        stroke-width="3"/>
+
+                                                    <path class="circle-progress"
+                                                        d="M18 2.0845
+                                                            a 10.9155 10.9155 0 0 1 0 31.831
+                                                            a 10.9155 10.9155 0 0 1 0 -31.831"
+                                                        fill="none"
+                                                        stroke="#2e8540"
+                                                        stroke-width="3"
+                                                        stroke-dasharray={school.UtilizationDash}
+                                                        stroke-linecap="round"/>
+
+                                                    <text x="18"
+                                                          y="20.35"
+                                                          class="percentage"
+                                                          text-anchor="middle"
+                                                          font-size="4">
+
+                                                        {school.Utilization}%
+
+                                                    </text>
+
+                                                </svg>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </template>
+
+                        </div>
+
+                    </div>
+
+                </template>
+
+            </div>
+
+        </template>
+
+        <!-- Available Rooms Modal -->
+        <template if:true={showModal}>
+
+            <section role="dialog"
+                     tabindex="-1"
+                     class="slds-modal slds-fade-in-open">
+
+              <!-- <div class="slds-modal__container">-->
+                    <div class="slds-modal__container custom-modal-container">
+
+                    <header class="slds-modal__header">
+
+                        <h2 class="slds-text-heading_medium">
+                            Available Rooms
+                        </h2>
+
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+
+                        <!-- Dropdown + Buttons -->
+                        <!-- Filters + Buttons ->
+<div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">-->
+    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium modal-filter-section">
+
+    <!-- Block Dropdown -->
+    <div class="slds-col slds-size_1-of-4">
+
+        <lightning-combobox
+            label="Select Block"
+            value={selectedBlockFilter}
+            options={blockDropdownOptions}
+            onchange={handleBlockChange}>
+        </lightning-combobox>
+
+    </div>
+
+    <!-- Floor Dropdown -->
+    <div class="slds-col slds-size_1-of-4">
+
+        <lightning-combobox
+            label="Select Floor"
+            value={selectedFloor}
+            options={floorDropdownOptions}
+            onchange={handleFloorChange}>
+        </lightning-combobox>
+
+    </div>
+
+    <!-- Room Dropdown ->
+    <div class="slds-col slds-size_1-of-4">
+
+        <lightning-combobox
+            label="Select Room"
+            value={selectedRoom}
+            options={roomDropdownOptions}
+            onchange={handleRoomChange}>
+        </lightning-combobox>
+
+    </div>-->
+    <!-- Slot Dropdown -->
+<div class="slds-col slds-size_1-of-4">
+
+    <lightning-combobox
+        label="Select Slot"
+        value={selectedSlot}
+        options={slotDropdownOptions}
+        onchange={handleSlotChange}>
+    </lightning-combobox>
+
+</div>
+
+
+
+    <!-- Buttons -->
+    <div class="slds-col slds-size_1-of-4">
+
+        <div class="slds-m-top_large">
+
+          <!--  <lightning-button
+                label="View"
+                variant="brand"
+                onclick={handleViewAvailableRooms}>
+            </lightning-button>-->
+
+            <lightning-button
+                label="Download"
+                class="slds-m-left_x-small"
+                onclick={handleDownloadAvailableRooms}>
+            </lightning-button>
+
+           <lightning-button
+              label="Change Date"
+              class="slds-m-left_small"
+              onclick={handleChangeDateClick}>
+            </lightning-button>
+
+            <lightning-button
+                label="Cancel"
+                class="slds-m-left_x-small"
+                onclick={closeModal}>
+            </lightning-button>
+
+        </div>
+
+    </div>
+
+</div>
+<template if:true={showDateFilters}>
+
+    <section
+        role="dialog"
+        tabindex="-1"
+        class="slds-modal slds-fade-in-open">
+
+        <div class="slds-modal__container">
+
+            <!-- HEADER -->
+            <header class="slds-modal__header">
+
+                <h2 class="slds-text-heading_medium">
+                    Change Date
+                </h2>
+
+            </header>
+
+            <!-- BODY -->
+            <div class="slds-modal__content slds-p-around_medium">
+
+                <lightning-input
+                    type="date"
+                    label="Start Date"
+                    value={popupStartDate}
+                    onchange={handlePopupStartDate}>
+                </lightning-input>
+
+                <lightning-input
+                    type="date"
+                    label="End Date"
+                    value={popupEndDate}
+                    onchange={handlePopupEndDate}
+                    class="slds-m-top_small">
+                </lightning-input>
+
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="slds-modal__footer">
+
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleChangeDateClick}>
+                </lightning-button>
+
+                <lightning-button
+                    label="Done"
+                    variant="brand"
+                    onclick={handleDoneDateChange}
+                    class="slds-m-left_small">
+                </lightning-button>
+
+            </footer>
+
+        </div>
+
+    </section>
+
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>
+
+                        <!-- Table -->
+                        <template if:true={availableRooms.length}>
+
+                            <!--<table class="slds-table slds-table_bordered slds-table_cell-buffer">-->
+                                <!--<div class="table-scroll"> -->
+                                    <div class="table-scroll slds-scrollable_y">
+
+
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Block</th>
+                                        <th>Room Number</th>
+                                        <th>Room Type</th>
+                                        <th>Floor</th>
+                                        <th>School</th>
+                                        <th>School Head</th>
+                                        <th>Available Slots</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <template for:each={availableRooms} for:item="room">
+
+                                        <tr key={room.RoomNumber}>
+                                            <td>{room.Date}</td>
+                                            <td>{room.Block}</td>
+                                            <td>{room.RoomNumber}</td>
+                                            <td>{room.RoomType}</td>
+                                            <td>{room.Floor}</td>
+                                            <td>{room.SchoolName}</td>
+                                            <td>{room.SchoolHead}</td>
+                                            <td>{room.AvailableSlots}</td>
+
+                                        </tr>
+
+                                    </template>
+
+                                </tbody>
+
+                            </table> </div>
+
+                        </template>
+
+                        <template if:false={availableRooms.length}>
+
+                            <p>No available rooms found.</p>
+
+                        </template>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <div class="slds-backdrop slds-backdrop_open"></div>
+
+        </template>
+
+        <!-- Error -->
+        <template if:true={error}>
+
+            <p class="slds-text-color_error">
+                Error loading data: {error.message}
+            </p>
+
+        </template>
+
+    </lightning-card>
+
+</template>

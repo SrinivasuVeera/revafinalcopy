@@ -1,0 +1,145 @@
+/* center whole page */
+.outer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f9f9f9;
+}
+
+.booking-container {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.facility-select {
+  margin: 1rem 0;
+  text-align: center;
+}
+.pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 2rem;
+  padding: 0.25rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+}
+.placeholder {
+  color: #999;
+}
+.facility-dropdown {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Slots */
+.slot-select {
+  margin: 1rem 0;
+}
+.slot-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+
+h1 {
+  text-align: center;
+  color: #16325c;
+  margin-bottom: 1rem;
+}
+
+.toggle-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.date-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* --- Facilities --- 
+.ms-inputbox {
+  width: 100%;
+  position: relative;
+  border: 1px solid #d8dde6;
+  border-radius: 0.25rem;
+  background: #fff;
+  min-height: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  min-height: 2rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.placeholder {
+  color: #999;
+}
+
+.facility-dropdown {
+  background: #fff;
+  border: 1px solid #d8dde6;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  max-height: 15rem;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* --- Facility Box --- 
+.facility-box {
+  border: 1px solid #d8dde6;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #f4f6f9;
+}*/
+
+.facility-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}

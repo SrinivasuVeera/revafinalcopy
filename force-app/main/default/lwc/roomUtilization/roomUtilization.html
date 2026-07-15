@@ -1,0 +1,148 @@
+<template>
+    <div class="utilization-container">
+        <h1 class="header">ClassRoom & LAB Utilization {selectedDepartment}</h1>
+    
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+         <!-- Department Combobox -->
+         <div class="slds-col slds-size_1-of-3 slds-p-left_small">
+          <lightning-combobox
+            name="department"
+            label="Select Department"
+            value={selectedDepartment}
+            options={departments}
+            onchange={handleDepartmentChange}>
+          </lightning-combobox>
+        </div>
+
+            <!-- Button and Info Message Side by Side -->
+           <div style="display: flex; align-items: center; gap: 1rem;">
+               <lightning-button 
+                 label="Export Available Slots DATA"
+                 icon-name="utility:download"
+                 onclick={handleAvailableSlotExportClick}
+                 class="slds-m-left_small">
+               </lightning-button>
+              <p style="margin: 0; font-size: 0.9rem;">
+                 This Week and Next Week data only available to export.
+               </p>
+            </div>
+       </div>
+
+       
+        <!-- Summary Metrics -->
+        <div class="summary">
+            <p><strong>Total Rooms:</strong> {totalRooms}</p>
+            <p><strong>Booked Rooms:</strong> {bookedRooms}</p>
+            <p><strong>Available Rooms:</strong> {availableRooms}</p>
+            <p><strong>Room Utilization:</strong> {utilizationPercentage1}%</p>
+            <p><strong>Time Range:</strong> {selectedTimeRange}</p>
+        </div>
+
+        <div class="summary">
+            <p><strong>Total Slot:</strong> {totalSlots}</p>
+            <p><strong>Allotted Slot:</strong> {allottedSlots}</p>
+            <p><strong>Free Slot:</strong> {freeSlots}</p>
+            <p><strong>Slot Utilization:</strong> {slotPercentage}%</p>
+            <p><strong>Time Range:</strong> {selectedTimeRange}</p>
+        </div>
+        <div class="slds-grid slds-wrap slds-align-items-center">
+        <!-- Time Range Selection -->
+        <div class="slds-col slds-size_2-of-3">
+           
+            <lightning-radio-group 
+                name="timeRange" 
+                label="Select Time Range"   
+                options={timeRangeOptions}
+                value={selectedTimeRange} 
+                type="button"
+                onchange={handleTimeRangeChange}>
+            </lightning-radio-group>
+          </div>
+          <div class="slds-col slds-size_1-of-3 break-info">
+            <p> Break Hours,Saturday & Sundays are not considered <br> in the Room utilization report.</p>
+        </div></div>
+         
+        <!-- Main Layout -->
+        <div class="slds-grid slds-gutters">
+            <!-- Room Container -->
+            <div class="main-container">
+                <div class="room-container">
+                    <!-- Ensure roomData is available -->
+                    <template if:true={roomData}>
+                        <template for:each={roomData} for:item="room">
+                            <div key={room.roomNumber} 
+                                 class="room-card"
+                                 data-id={room.roomNumber} 
+                                 onclick={handleRoomClick}>
+
+                                <p class="room-number"><strong>Room:</strong> {room.roomNumber}</p>
+
+                                <!-- Circle Utilization Percentage -->
+                                <template if:false={room.isSelected}>
+                                    <div class="progress-circle">
+                                        <svg class="progress-circle-svg" width="80" height="80" viewBox="0 0 36 36">
+                                            <circle class="circle-bg" cx="18" cy="18" r="15"></circle>
+                                            <circle class="circle-progress" cx="18" cy="18" r="15" stroke-dasharray={room.strokeDash}></circle>
+                                            <text x="18" y="18" class="percentage">{room.utilizationPercentage}%</text>
+                                        </svg>
+                                    </div> 
+                                </template>
+
+                                <!-- Selected Room Details -->
+                                <template if:true={room.isSelected}>
+                                    <div class="room-details">
+                                        <p><strong>Block:</strong> {room.block}</p>
+                                        <p><strong>Floor:</strong> {room.floor}</p>
+                                        <p><strong>Type:</strong> {room.type}</p>
+                                        <p><strong>Room Slot:</strong> {room.totalSlots}</p>
+
+                                        <!-- Clickable Slots -->
+                                        <p>
+                                            <a href="#" class="slot-link" data-roomid={room.roomNumber} data-slottype="Booked" onclick={handleSlotClick}>
+                                                <strong>Booked Slot:</strong>
+                                            </a> {room.roomBooked}
+                                        </p>
+
+                                        <p>
+                                            <a href="#" class="slot-link" data-roomid={room.roomNumber} data-slottype="Available" onclick={handleSlotClick}>
+                                                <strong>Available Slot:</strong>
+                                            </a> {room.availableSlots}
+                                        </p>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                   
+                    </template>
+                </div>
+                
+            </div>
+
+            <!-- Slot Details Popup -->
+            <template if:true={showSlotPopup}>
+                <div class= "slot-popup">
+                <!--</div>"slds-col slds-size_1-of-3 slot-details-container">-->
+                    <h3><strong>{selectedSlotType} Slots for Room {selectedRoomNumber}</strong></h3>
+                    <table class="slot-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Slots</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={selectedSlotDetails} for:item="slot">
+                                <tr key={slot.date}>
+                                    <td>{slot.date}</td>    
+                                    <td>{slot.slotText}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                    <div style="width: 100%; display: flex; justify-content: flex-end;">
+                    <button class="close-btn" onclick={handleCloseSlotPopup}>Close</button></div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

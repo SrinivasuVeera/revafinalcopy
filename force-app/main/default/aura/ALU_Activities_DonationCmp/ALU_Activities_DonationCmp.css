@@ -1,0 +1,52 @@
+.THIS .slds-form-element__control .slds-radio {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 1rem;
+}
+
+.THIS .slds-form-element__label {
+    display: inline-block;
+    vertical-align: middle;
+}
+.THIS.radio-group-container {
+    text-align: center;
+}
+.THIS .slds-radio_faux {
+    border-color: #0070D2;
+}
+
+.THIS .slds-form-element__label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4A4A4A;
+    margin-bottom: 0.5rem;
+}
+
+.THIS .slds-radio .slds-radio__label {
+    font-size: 14px;
+    color: #4A4A4A;
+    margin-left: 0.5rem;
+     text-align: center;
+}
+.THIS.slds-form-element__label {
+    text-align: center;
+}
+.THIS.mygroup .slds-form-element__label {
+    text-align: center;
+}
+.THIS .radio-group-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.THIS .slds-form-element__label {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.THIS .input-field {
+    background-color: #f5f5f5;
+    padding: 10px;
+}

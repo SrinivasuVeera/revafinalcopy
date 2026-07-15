@@ -1,0 +1,84 @@
+.custom-toast {
+    
+    --slds-c-toast-color-background : orange;
+}
+
+:host {
+    font-size: 13px;
+    --slds-c-button-neutral-color-background: #F07F07;
+    --slds-c-button-neutral-color-border:  #F07F07;
+    --slds-c-button-neutral-color-border-hover: #F07F07;
+    --slds-c-button-neutral-color-background-hover: #F07F07;
+    --slds-c-button-text-color: white;
+    --slds-c-button-text-color-hover: white;
+    --slds-c-button-text-color-active: white;
+    --slds-c-button-neutral-color-background-active: #F07F07;
+    --slds-c-toast-color-background : #F07F07;
+    /* Other CSS custom properties here */
+  }
+.acknowledgement-container{
+    display: flex;
+    gap: 15px;
+}
+.orange-combobox .slds-combobox {
+    border: 1px solid #FFA500; /* Orange color */
+    background-color: #FFFAF0; /* Light orange background */
+}
+
+select {
+    width: 100%; /* Make the select input take full width */
+}
+
+textarea{
+    width: 100%; /* Make the select input take full width */
+}
+
+.custom-link {
+    color: #F07F07;
+    /* Add any other styles you want for the link */
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    width: 20px; /* Set the width of the slider thumb */
+    height: 20px; /* Set the height of the slider thumb */
+    background: #F07F07; /* Set the background color of the slider thumb */
+    border: 2px solid #F07F07; /* Set border color for the slider thumb */
+    appearance: none;
+    border-radius: 50%; /* Create a circular slider thumb */
+    cursor: pointer; /* Set cursor to pointer for user interaction */
+}
+
+/* Style for the slider track */
+input[type="range"] {
+    width: 100%; /* Set the width of the slider track to 80% of the container */
+    height: 10px; /* Set the height of the slider track */
+    appearance: none; /* Remove default styles */
+    background: #ddd; /* Set the background color of the slider track */
+    border-radius: 5px; /* Set border-radius for rounded corners */
+    outline: none; /* Remove outline */
+    margin-bottom: 15px;
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+    background: #F07F07; /* Change color when the thumb is actively dragged */
+}
+
+.slider-container ::-webkit-slider-thumb:hover {
+    background:  #F07F07;
+  }
+  .slider-container:active::-webkit-slider-thumb {
+    background: #F07F07;
+  }
+
+.custom-label{
+    margin-top: 15px;
+    font-size: 13px; font-weight: bold;
+}
+
+.custom-dropdown{
+    font-size: 13px; color: #555; height: 30px; border: 1px solid #F0DBC8; background-color: #F0DBC8;
+}
+
+.custom-sec{
+    padding-right: 10px; padding-top : 10px;
+}

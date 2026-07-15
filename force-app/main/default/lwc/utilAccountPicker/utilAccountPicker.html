@@ -1,0 +1,54 @@
+<template>
+    <div class="slds-form-element">
+    <template if:true={label}>
+        <label class="slds-form-element__label">{label}</label>
+    </template>
+
+    <div class="slds-combobox_container">
+        <template if:true={selectedRecord}>
+            <lightning-pill
+                label={selectedRecord.name}
+                onremove={handleRemove}>
+                <lightning-icon
+                    icon-name="standard:account"
+                    size="x-small">
+                </lightning-icon>
+            </lightning-pill>
+        </template>
+
+        <template if:false={selectedRecord}>
+            <div class={comboboxClass}>
+                <lightning-input
+                    variant="label-hidden"
+                    placeholder={placeholder}
+                    value={searchKey}
+                    onkeyup={handleKeyUp}>
+                </lightning-input>
+
+                <template if:true={showDropdown}>
+                    <div class="slds-dropdown slds-dropdown_fluid slds-dropdown_length-5">
+                        <ul class="slds-listbox slds-listbox_vertical">
+                            <template for:each={records} for:item="rec">
+                                <li key={rec.Id}
+                                    class="slds-listbox__item"
+                                    data-id={rec.Id}
+                                    data-name={rec.Name}
+                                    onclick={handleSelect}>
+                                    <div class="slds-media slds-listbox__option">
+                                        <span class="slds-media__body">
+                                            <lightning-formatted-rich-text
+                                                value={rec.highlightedName}>
+                                            </lightning-formatted-rich-text>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</div>
+
+</template>

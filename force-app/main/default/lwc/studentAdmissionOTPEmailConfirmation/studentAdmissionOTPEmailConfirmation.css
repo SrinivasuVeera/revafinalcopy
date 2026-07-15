@@ -1,0 +1,214 @@
+/* ===============================
+   ADMISSION CARD
+   Exact match to LoginPage card
+   =============================== */
+
+.admission-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    max-height: 100vh;
+    overflow-y: auto;
+    width: 380px;
+    max-width: 90vw;
+}
+
+/* Red Scrollbar — identical to LoginPage */
+.admission-card::-webkit-scrollbar {
+    width: 4px;
+}
+.admission-card::-webkit-scrollbar-thumb {
+    background: #c30010;
+    border-radius: 10px;
+}
+
+/* ===============================
+   HEADER
+   Exact match — same class names & values as LoginPage
+   =============================== */
+
+.admission-header {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.header-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.title-gradient {
+    font-size: clamp(18px, 1.8vw, 24px);
+    font-weight: 700;
+    color: #000;
+}
+
+/* ===============================
+   INFO PARAGRAPHS
+   =============================== */
+
+.info-para {
+    font-size: 0.875rem;
+    color: #444444;
+    text-align: center;
+    line-height: 1.65;
+    margin: 0 0 14px 0;
+}
+
+/* ===============================
+   FORM FIELDS
+   Mirrors LoginPage input token:
+   border-radius: 12px, height: 44px
+   =============================== */
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #3c3c3c;
+}
+
+.required-mark {
+    color: #c0392b;
+    font-weight: 700;
+    margin-right: 2px;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+.custom-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    background: #ffffff;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.custom-input:focus {
+    border-color: #c0392b;
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+}
+
+.hint-text {
+    font-size: 0.75rem;
+    color: #888888;
+    font-style: italic;
+    margin-top: 2px;
+    padding-left: 2px;
+}
+
+/* ===============================
+   BUTTON
+   Matches LoginPage: height 42px, border-radius 10px, red #c0392b
+   =============================== */
+
+.login-btn {
+    background: #c0392b;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    height: 42px;
+    padding: 0 24px;
+    width: 100%;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    box-sizing: border-box;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.login-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ===============================
+   DIVIDER LINE
+   =============================== */
+
+.line-divider {
+    width: 100%;
+    height: 1px;
+    background: #e8ecf0;
+    margin-bottom: 14px;
+}
+
+/* ===============================
+   BACK TO LOGIN ROW
+   Exact clone of LoginPage .already-registered
+   =============================== */
+
+.already-registered {
+    font-size: 0.875rem;
+    text-align: center;
+    color: #444;
+}
+
+.already-registered a,
+.register-link {
+    margin-left: 4px;
+    font-weight: 600;
+    color: #c0392b;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.already-registered a:hover,
+.register-link:hover {
+    text-decoration: underline;
+}
+
+/* ===============================
+   SLDS OVERRIDES
+   =============================== */
+
+:host .slds-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+:host .slds-col {
+    flex: unset !important;
+}
+
+/* ===============================
+   RESPONSIVE — mirrors LoginPage breakpoints
+   =============================== */
+
+@media (max-width: 480px) {
+    .title-gradient {
+        font-size: 18px;
+    }
+
+    .portal-background {
+        justify-content: center;
+        padding-right: 0;
+        padding: 16px;
+    }
+
+    .admission-card {
+        width: 100%;
+        padding: 14px 12px;
+    }
+}

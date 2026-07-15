@@ -1,0 +1,551 @@
+<template>
+      <c-student-announcement-popup></c-student-announcement-popup>  
+    <div class="container">
+        <div class="topheader">
+                <template lwc:if={showExistingHostelRequest}>
+                    <template if:true={applicantPortal}>
+                        <template if:true={showButton}>
+                        <lightning-button label="Partial Payment" variant="brand" title="Partial Payment"
+                            onclick={handlePartialPayClick} class="slds-float--left"></lightning-button>
+                        </template>
+                </template>
+                </template>
+            <template if:true={showPartialPayment}>
+                <c-partial-payment-initiate onclosemodal={handleCloseModal}></c-partial-payment-initiate>
+            </template>
+        </div>
+        <div class="first-page">
+            <h5>HOSTEL</h5>
+            <div class="hostel-information">
+                <h1>Hostel For {currentUserContact.FirstName} {currentUserContact.LastName}</h1>
+                <h4>Course Details : {programBatch}</h4>
+            </div>
+        </div>
+        <template lwc:if={showAcknowledgeAndRegister}>
+            <div class="general-information">
+                <img src={revaHostelImageUrl} alt="REVA Hostel " class="housing-image" />
+                <!-- <p>
+                    The lush green campus of REVA Independent PU College offers amenities like no other. With
+                    comfortable, home like halls of residence/ student housing for both girls & boys and sumptuous
+                    eateries and mess to sports arenas and gyms, RIPU welcomes you in with both arms into its abundant
+                    world. Hostel regulatory committee comprising our own team of faculties monitors students round the
+                    clock and Special study hours are conducted every day after college hours especially for hostel
+                    students.
+                </p>
+                <p>
+                    REVA Student Housing is a home away from home. REVA has housing for boys and girls on the campus
+                    providing accommodation facilities. The housing blocks are aesthetically built and are situated
+                    amidst lush greenery. The University also has a guest house to facilitate parents and guests to stay
+                    when they come to visit their wards.
+                </p> -->
+
+            </div>
+           <!-- <div class="acknowledgement-container">
+                <input type="checkbox" checked={termsAccepted} onchange={handleCheckboxChange} />
+                <p>I Agree To The Terms & Conditions</p>
+            </div>-->
+            <div class="register-button">
+                <template if:true={provisonPaid}>
+                <lightning-button label="Register For Hostel" variant="brand" title="Register for Hostel"
+                    onclick={handleRegisterClick}></lightning-button>
+                </template>
+            </div>
+        </template>
+
+        <template lwc:if={showHostelRegistrationPage}>
+            <div class="second-page">
+                <div class="tabs">
+                    <!-- <div class="tab" tabindex="0" data-step="1" onclick={handleStepClick}>FEES DETAILS</div> -->
+                    <template if:false={applicantPortal}>
+                    <div class="tab" tabindex="0" data-step="2"  onclick={handleStepClick}>REGISTRATION</div>
+                    </template>
+                    <div class="sth-page">
+                    <template if:true={applicantPortal}>
+                        <h4>REGISTRATION</h4>
+                    </template>
+                    </div>
+                </div>
+
+                <template lwc:if={showHostelSelection}>
+                    <div class="hostel-selection-container">
+                        <!-- <template if:true={shouldShowPremiumCheckboxes}> -->
+                            <div class="header">
+                                <input type="checkbox" checked={isPremium} onchange={handlePremiumCheckboxChange} />
+                                <p>Premium Room</p>
+                            </div>
+                       <!-- </template> -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>Preferred Room
+                                        Sharing</label>
+                                    <div class="input-container">
+
+                                        <lightning-combobox name="PreferredRoomSharing" value={selectedRoomSharing}
+                                            options={roomSharingOptions} onchange={handlePreferredRoomSharingChange}
+                                            disabled={isPreferredRoomSharingDisabled}>
+                                        </lightning-combobox>
+                                        <template if:true={isPremium}>
+                                            <p style="color: green">You selected the Premium room.</p>
+                                        </template>
+                                        <br />
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>Select Payment
+                                        Type</label>
+                                    <div class="input-container">
+
+                                        <lightning-combobox name="PaymentType" value={selectPaymentType}
+                                            options={paymentTypeOptions} onchange={handlePaymentTypeChange}>
+                                        </lightning-combobox>
+                                        <br />
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <div class="custom-box" style="margin-left: 15px">
+                            <strong>Total Fee : </strong>
+                            <strong class="total-fee"> &#8377; {totalHostelFee} /-</strong>
+                        </div>
+                        <div class="custom-box" style="margin-left: 15px">
+                            <strong>Caution Fee : </strong>
+                            <strong class="total-fee"> &#8377; {cautionFee} /-</strong>
+                        </div>
+                        <template if:true={showBookingAmount}>
+                            <div class="custom-box" style="margin-left: 15px">
+                                <strong>Booking Amount : </strong>
+                                <strong class="booking-amount"> &#8377; {bookingAmount} /-</strong>
+                            </div>
+                        </template>
+
+                        <p style="margin-top: 1rem; margin-left: 15px; color: rgb(18, 17, 17);">
+                         <strong>Note: Caution deposit is not applicable for rejoiners.</strong>
+                         </p>
+
+
+
+                        <div class="register-button">
+                            <lightning-button label="Register" variant="brand" onclick={handleSubmitEvent}
+                                disabled={isNextButtonDisabled}></lightning-button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <template lwc:if={showExistingHostelRequest}>
+            <!-- isHostelRequest-->
+            <div class="sth-page">
+            <template if:true={applicantPortal}>
+                <h4>DETAILS</h4>
+            </template>
+            </div>
+            <div class="sth-page1">
+                <template if:false={applicantPortal}>
+                <h4>DETAILS</h4>
+            </template>
+            </div>
+            <lightning-layout horizontal-align="end" class="button-container">
+                <lightning-layout-item>
+                    <template if:true={isRejoinStatus}>
+                        <lightning-button label="Rejoin" class="slds-p-around_medium" onclick={handleRejoinClick} variant="brand"></lightning-button>
+                    </template>
+                </lightning-layout-item>
+
+                <lightning-layout-item>
+                     <template if:false={applicantPortal}>
+                         <template if:false={isRejoinStatus}>
+                       <template if:false={advregister}>
+                <template if:true={isadvancedRegistration}>
+                    <lightning-button label="Advanced Registration" class="slds-p-around_medium" onclick={handleAdvancedRegisterClick} variant="brand"></lightning-button>
+                        </template>
+                       </template>
+                         </template>
+                     </template>
+            </lightning-layout-item>
+
+
+            <template if:true={showChangeRequest}>
+                <lightning-button label="Request Room Change" class="slds-p-around_medium" onclick={handleChangeRoomType} variant="brand"></lightning-button>
+            </template>
+
+                <!-- Modal Popup -->
+            <template if:true={isModalOpen}>
+                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 class="slds-modal__title">Confirm Registration</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            Are you sure you want to proceed with advanced registration?
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning-button label="Cancel" onclick={handleCancel} class="slds-m-right_small"></lightning-button>
+                            <lightning-button label="Register" variant="brand" onclick={handleRegister}></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+                <lightning-layout-item>
+                    <template if:true={isApprovedHistory}>
+                        <lightning-button label="View Vacating Approval History" class="slds-p-around_medium" onclick={handleVactingHistory} variant="brand"></lightning-button>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+                <div class="sixth-page">
+                <p>You already have an existing hostel request. Below are the details</p>
+                <template if:false={roomAlloted}>
+                    <div class="details-table">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>NAME</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Name}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>TYPE</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Type__c} Sharing </strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <!-- Row 5 -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>STATUS</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Status__c} </strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        
+                         <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>REQUESTED STATUS</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Requested_Status__c}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </template>
+                <!-- Row 2 -->
+                <template if:true={roomAlloted}>
+                    <div class="details-table">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>NAME</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Name}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>TYPE</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Type__c} Sharing </strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <!-- Row 5 -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>STATUS</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Status__c} </strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>ROOM NUMBER</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Room_Number__c}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <!-- Row 3 -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>BLOCK</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Block__c}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                         <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>REQUESTED STATUS</strong>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" small-device-size="6" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <strong>{existingHostelRequest.Requested_Status__c}</strong>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </template>
+
+                <template if:true={roomAlloted}>
+                    <template if:false={applicantPortal}>
+                    <div class="tiles-container">
+                        <div class="tiles" tabindex="0" onclick={handleMealBooking}>
+                            Book Meal
+                        </div>
+                       <!-- <div class="tiles" tabindex="0" onclick={redirectToRevaMealBooking}>Book Meal</div>-->
+                        <div class="tiles" tabindex="0" onclick={redirectToRevaHostelCasePage}>Student Support</div>
+                        <div class="tiles" tabindex="0" onclick={redirectToRevaHostelLeavesPage}>Apply For Leave</div>
+                        <!-- <div class="tiles" tabindex="0" onclick={handleCancelClick}>Hostel Vacation</div> -->
+                    </div>
+                  </template>
+                </template>
+
+                <template if:false={roomAlloted}>
+                    <template if:true={isHostelNotVacated}>
+                        <div class="tiles-container">
+                            <div class="tiles" tabindex="0" onclick={redirectToRevaMealBooking}>Book Meal</div>
+                            <div class="tiles" tabindex="0" onclick={redirectToRevaHostelCasePage}>Student Support</div>
+                            <div class="tiles" tabindex="0" onclick={redirectToRevaHostelLeavesPage}>
+                                Apply For Leave
+                            </div>
+                        </div>
+
+                    </template>
+                </template>
+            </div>
+        </template>
+
+        <template lwc:if={showRevaMealBooking}>
+            <!-- <c-reva-hostel-meal-booking></c-reva-hostel-meal-booking> -->
+            <!-- <c-reva-hostel-u-i-testing></c-reva-hostel-u-i-testing> -->
+            <c-reva-meal-booking-home-page></c-reva-meal-booking-home-page>
+        </template>
+        <template lwc:if={showRevaLeaveRequest}>
+            <c-reva-hostel-leave-request-creation></c-reva-hostel-leave-request-creation>
+
+        </template>
+        <!-- <template if:true={showToasts}>
+            <div class="slds-box slds-theme_default slds-p-around--medium">
+                <h3 class="slds-text-heading_medium" style="text-align: center; margin-bottom: 20px">
+                    <strong style="color: #da3218; font-size: 28px"> Payment Page </strong>
+                </h3>
+                <div class="slds-box slds-theme_default slds-p-around--medium"
+                    style="margin-top: 20px; margin-bottom: 20px">
+                    <p>Total Amount: {totalHostelFee}</p>
+                    <br />
+                    <button class="slds-button slds-button_brand" onclick={redirectToStudentFeePaymentComponent}>
+                        Next
+                    </button>
+                </div>
+            </div>
+        </template> -->
+
+
+    </div>
+
+
+    <template if:true={isAcademicPopup}>
+
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+
+       <div class="slds-modal__container">
+
+         <header class="slds-modal__header">
+
+         <h2>Select Academic Year</h2>
+
+          </header>
+
+     <div class="slds-modal__content slds-p-around_medium">
+
+      <lightning-combobox
+      label="Academic Year"
+      options={academicYearOptions}
+      value={selectedRequestId}
+      onchange={handleAcademicYear}>
+      </lightning-combobox>
+
+     </div>
+
+     <footer class="slds-modal__footer">
+
+       <lightning-button
+        label="Next"
+        variant="brand"
+        onclick={handleAcademicNext}>
+       </lightning-button>
+
+      </footer>
+
+     </div>
+ 
+       </section>
+
+<div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>
+    
+    <!-- Modal Popup room type change-->
+    <template if:true={isModalOpens}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <!-- Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Select Room Type</h2>
+                </header>
+
+                <!-- Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                      <input type="checkbox" checked={isPremiumCheck} onchange={handlePremiumCheckbox} />
+                            Premium Room  
+                       
+                    <lightning-combobox
+                        name="roomType"
+                        label="Room Type"
+                        value={selectedRoomType}
+                        placeholder="Select a room type"
+                        options={roomChangeOptions}
+                        onchange={handleRoomSelect}
+                        required>
+                    </lightning-combobox>
+
+                    <!-- Reason Text Area -->
+                    <lightning-textarea
+                        name="reason"
+                        label="Reason"
+                        value={reason}
+                        placeholder="Enter reason for room change"
+                        onchange={handleReasonChange}
+                        required>
+                    </lightning-textarea>
+                </div>
+
+                <!-- Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
+                    <lightning-button variant="brand" label="Submit" onclick={handleSubmit}  disabled={isSubmitting}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={isConfirmPopup}>
+
+<section role="dialog" tabindex="-1"
+class="slds-modal slds-fade-in-open">
+
+<div class="slds-modal__container">
+
+<header class="slds-modal__header">
+
+<h2>Confirmation</h2>
+
+</header>
+
+<div class="slds-modal__content slds-p-around_medium">
+
+<p>
+
+Are you sure you want to change the room for 
+<b>{selectedAcademicYear}</b> 
+Academic Year?
+
+</p>
+
+</div>
+
+<footer class="slds-modal__footer">
+
+<lightning-button
+label="Cancel"
+onclick={cancelConfirm}>
+</lightning-button>
+
+<lightning-button
+label="Confirm"
+variant="brand"
+onclick={confirmSubmit}>
+</lightning-button>
+
+</footer>
+
+</div>
+
+</section>
+
+<div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>
+</template>

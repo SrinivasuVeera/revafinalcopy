@@ -1,0 +1,21 @@
+trigger ResultTrgigger on hed__Term_Grade__c (before insert,after insert,after update,after delete,after undelete) {
+    if(Trigger.IsBefore){
+        if(Trigger.IsInsert){
+            ASM_ResultTrgHandler.linkParents(Trigger.new);
+        }
+    }
+    if(Trigger.isAfter){
+        if(Trigger.IsInsert){
+            ASM_ResultTrgHandler.rollupTotals(Trigger.new);
+        }
+        if(Trigger.IsUpdate){
+            ASM_ResultTrgHandler.rollupTotals(Trigger.new);
+        }
+        if(Trigger.IsDelete){
+            ASM_ResultTrgHandler.rollupTotals(Trigger.old);
+        }
+        if(Trigger.IsUndelete){
+            ASM_ResultTrgHandler.rollupTotals(Trigger.new);
+        }
+    }
+}

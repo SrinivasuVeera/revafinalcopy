@@ -1,0 +1,360 @@
+<aura:component controller="createLateFeeCtrlV1" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="selectedBatchId" type="string" />
+    <aura:attribute name="mapSchools" type="Map" />
+    <aura:attribute name="mapPrograms" type="List" />
+    <aura:attribute name="selectedSchool" type="string" />
+    <aura:attribute name="selectedPrograms" type="List" />
+    <aura:attribute type="List" name="prgBatchList"/>
+    <aura:attribute name="feeCalculationMap" type="Map"/>
+    <aura:attribute name="feeTypeMap" type="Map"/>
+    <aura:attribute name="objLateFee" type="sobject"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="deletedRecordIds" type="List"/>
+    <aura:attribute name="isInsert" type="boolean" default="false"/>
+    <aura:attribute name="updatedLateFee" type="sobject"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+	
+	<div class="slds-theme_default" ><br/>
+        <div style="margin-left:1%;margin-right:1%;">
+            <div class="slds-section slds-is-open">
+                <h2 class="slds-section__title slds-theme_shade">
+                    <span class="slds-truncate slds-p-horizontal_small" title="LFM">Create Late Fee Master</span>
+                </h2>
+            </div> 
+			
+            <div class="c-container" >
+                <div class="slds-grid slds-wrap slds-gutters slds-theme_default">
+                    <div class="slds-size_1-of-12"></div>
+                    <div class="slds-size_3-of-12">
+                        <ul class="slds-has-dividers_bottom-space">
+                            <li class="slds-item">
+                                <lightning:tile label="Fee Type">
+                                    <ul class="slds-list_horizontal slds-has-dividers_right">
+                                        <li class="slds-item"><b style="font-size:15px;">
+                                            <lightning:select value="{!v.objLateFee.selectedFeeType}"  label="" name="FeeType">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.feeTypeMap}" var="vrn" indexVar="key" >
+                                                    <option value="{!vrn.key}" > {!vrn.value} </option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                            </b></li>
+                                    </ul>
+                                </lightning:tile>
+                            </li>
+                        </ul>                 
+                    </div>
+                    <div class="slds-size_1-of-12"></div>
+                    <div class="slds-size_3-of-12">
+                        <ul class="slds-has-dividers_bottom-space">
+                            <li class="slds-item">
+                                <lightning:tile label="Fee Calculation Type">
+                                    <ul class="slds-list_horizontal slds-has-dividers_right">
+                                        <li class="slds-item"><b style="font-size:15px;">
+                                            <lightning:select value="{!v.objLateFee.selectedMode}"  label="" name="FeeCalType">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.feeCalculationMap}" var="vrn" indexVar="key" >
+                                                    <option value="{!vrn.key}" > {!vrn.value} </option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                            </b></li>
+                                    </ul>
+                                </lightning:tile>
+                            </li>
+                        </ul>                 
+                    </div>
+                    <div class="slds-size_1-of-12"></div>
+                    <div class="slds-size_3-of-12">
+                        <ul class="slds-has-dividers_bottom-space">
+                            <li class="slds-item">
+                                <lightning:tile label="School">
+                                    <ul class="slds-list_horizontal slds-has-dividers_right">
+                                        <li class="slds-item"><b style="font-size:15px;">
+                                            <lightning:select value="{!v.objLateFee.selectedSchool}"  label="" name="School" onchange="{!c.handleSchoolChange}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.mapSchools}" var="vrn" indexVar="key" >
+                                                    <option value="{!vrn.key}" > {!vrn.value} </option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                            </b></li>
+                                    </ul>
+                                </lightning:tile>
+                            </li>
+                        </ul>                 
+                    </div>
+                    <aura:if isTrue="{!not(empty(v.mapPrograms))}">
+                    <div class="slds-size_1-of-12"></div>    
+                	<div class="slds-size_5-of-12">
+                        <ul class="slds-has-dividers_bottom-space">
+                            <li class="slds-item"><center>
+                                <lightning:tile label="Program">
+                                    <ul class="slds-list_horizontal slds-has-dividers_right">
+                                        <div class="slds-align_absolute-center">
+                                            <li class="slds-item">
+                                                <b style="font-size:15px;">
+                                                    <lightning:dualListbox aura:id="selectPrj"
+                                                       name="Program"
+                                                       label=""
+                                                       sourceLabel="Available Program"
+                                                       selectedLabel="Selected Program"
+                                                       options="{!v.mapPrograms}"
+                                                       value="{!v.objLateFee.selectedProgram}"
+                                                       onchange="{!c.handleProgramChange}"/>
+                                                </b> 
+                                            </li></div>
+                                    </ul>
+                                </lightning:tile></center>
+                            </li>
+                        </ul>                 
+                    </div>
+                    <div class="slds-size_6-of-12"></div>    
+                    </aura:if>
+                    <aura:if isTrue="{!not(empty(v.prgBatchList))}">
+                        <div class="slds-size_2-of-12"></div>
+                        <div class="slds-size_8-of-12 slds-box">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr class="slds-text-title_caps"> 
+                                    <th>
+                                        <center>
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox">
+                                                        <ui:inputCheckbox aura:id="selectAllId"
+                                                                          change="{!c.selectAllCheckbox}" />
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </center>
+                                    </th>
+                                    <th><div class="slds-truncate">Program Batch</div></th>
+                                    <th><div class="slds-truncate">Existing Record</div></th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.prgBatchList}" var="mainBody" indexVar="index">
+                                    <tr>
+                                        <td>
+                                            <center>
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <label class="slds-checkbox">
+                                                            <ui:inputCheckbox text="{!mainBody.Id}"
+                                                                              value="{!mainBody.isChecked}" disabled="{!mainBody.exRecord}"/>
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-form-element__label text"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </center>
+                                        </td>
+                                        <td>
+                                            {!mainBody.Name}
+                                        </td>
+                                        <td>
+                                            <aura:if isTrue="{!mainBody.exRecord}">
+                                                <a onclick="{!c.updateFeeRecord}" data-record="{!index}">Update</a>
+                                            </aura:if>    
+                                        </td>
+                                    </tr>    
+                                </aura:iteration>
+                            </tbody>    
+                        </table>
+                        </div>
+                        <div class="slds-size_2-of-12"></div>
+                        <div class="slds-size_12-of-12">
+                        <br/><br/>
+                        <center>
+                            <lightning:button variant="success" label="Submit"  onclick="{!c.submitButtonHandler}" />
+                        </center><br/><br/>
+                        </div>    
+                    </aura:if>    
+                </div>
+            </div>     
+        </div>
+    </div>    
+    
+    
+    <aura:if isTrue="{!v.isModalOpen}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">                
+                <header class="slds-modal__header">                   
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Late Fee</h2>
+                </header>                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{!v.isInsert}">
+                        <aura:if isTrue="{!v.objLateFee.selectedMode == 'Daily Basis'}">
+                            <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                                <div class="slds-size_1-of-12"></div>
+                                <div class="slds-size_3-of-12">
+                                    <lightning:input name="Amount" label="Amount"  value="{!v.objLateFee.totAmount}"/>
+                                </div>
+                            </div>
+                            <br/><br/>
+                            <center>
+                                <lightning:button variant="success" label="Save"  onclick="{!c.saveButtonClick}" />
+                                <lightning:button variant="success" label="Cancel"  onclick="{!c.cancelButtonHandler}" />
+                            </center><br/><br/>
+                        </aura:if>
+                        <aura:if isTrue="{!v.objLateFee.selectedMode == 'Date Range'}">
+                            <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                                <div class="slds-size_10-of-12"></div>
+                                <div class="slds-size_1-of-12">
+                                    <lightning:button variant="success" label="Add"  onclick="{!c.AddFee}" />
+                                </div>
+                                <div class="slds-size_1-of-12"></div>
+                                
+                                <div class="slds-size_1-of-12"></div>
+                                <div class="slds-size_10-of-12">
+                                    <table class="slds-table slds-table_bordered slds-table_striped slds-table_fixed-layout records-table">
+                                    <thead>
+                                        <tr class="slds-text-title_caps"> 
+                                            <th>From Day</th>
+                                            <th>To Day</th>
+                                            <th>Amount</th>
+                                            <th>Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.objLateFee.lateFee}" var="lfee" indexVar="index">
+                                            <tr>
+                                                <td>
+                                                   <lightning:input name="fDays" label=""  value="{!lfee.FromDay}"/> 
+                                                </td>
+                                                <td>
+                                                   <lightning:input name="tDays" label=""  value="{!lfee.totDay}"/> 
+                                                </td>
+                                                <td>
+                                                   <lightning:input name="tAmount" label=""  value="{!lfee.totAmount}"/> 
+                                                </td>
+                                                <td>
+                                                    <aura:if isTrue="{!index != 0}">
+                                                    <a onclick="{!c.RemoveFee}" data-record="{!index}">
+                                                        <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                                    </a>
+                                                    </aura:if>    
+                                                </td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>    
+                                </table>
+                                </div>
+                                <div class="slds-size_1-of-12"></div>
+                            </div>    
+                            <br/><br/>
+                            <center>
+                                <lightning:button variant="success" label="Save"  onclick="{!c.saveButtonClick}" />
+                                <lightning:button variant="success" label="Cancel"  onclick="{!c.cancelButtonHandler}" />
+                            </center><br/><br/>
+                        </aura:if>   
+                    </aura:if>    
+                    <aura:if isTrue="{!!v.isInsert}">
+                        <aura:if isTrue="{!v.updatedLateFee.selectedMode == 'Daily Basis'}">
+                            <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                                <div class="slds-size_1-of-12"></div>
+                                <div class="slds-size_3-of-12">
+                                    <lightning:select value="{!v.updatedLateFee.selectedMode}"  label="Fee Calculation Type" name="idFeeCalType">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.feeCalculationMap}" var="vrn" indexVar="key" >
+                                            <option value="{!vrn.key}" > {!vrn.value} </option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+                                <div class="slds-size_1-of-12"></div>
+                                <div class="slds-size_3-of-12">
+                                    <lightning:input name="Amount" label="Amount"  value="{!v.updatedLateFee.totAmount}"/>
+                                </div>
+                            </div>
+                            <br/><br/>
+                            <center>
+                                <lightning:button variant="success" label="Save"  onclick="{!c.updateButtonClick}" />
+                                <lightning:button variant="success" label="Cancel"  onclick="{!c.cancelButtonHandler}" />
+                            </center><br/><br/>
+                        </aura:if>
+                        <aura:if isTrue="{!v.updatedLateFee.selectedMode == 'Date Range'}">
+                            <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                                <div class="slds-size_1-of-12"></div>
+                                <div class="slds-size_3-of-12">
+                                    <lightning:select value="{!v.updatedLateFee.selectedMode}"  label="Fee Calculation Type" name="idFeeCalType">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.feeCalculationMap}" var="vrn" indexVar="key" >
+                                            <option value="{!vrn.key}" > {!vrn.value} </option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+                                <div class="slds-size_6-of-12"></div>
+                                <div class="slds-size_2-of-12">
+                                	<lightning:button variant="success" label="Add"  onclick="{!c.updAddFee}" />
+                                </div>    
+                                <div class="slds-size_2-of-12"></div>
+                                <div class="slds-size_8-of-12">
+                                	<table class="slds-table slds-table_bordered slds-table_striped slds-table_fixed-layout records-table">
+                                        <thead>
+                                            <tr class="slds-text-title_caps"> 
+                                                <th>From Day</th>
+                                                <th>To Day</th>
+                                                <th>Amount</th>
+                                                <th>Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <aura:iteration items="{!v.updatedLateFee.lateFee}" var="lfee" indexVar="index">
+                                                <tr>
+                                                    <td>
+                                                       <lightning:input name="fDays" label=""  value="{!lfee.FromDay}"/> 
+                                                    </td>
+                                                    <td>
+                                                       <lightning:input name="tDays" label=""  value="{!lfee.totDay}"/> 
+                                                    </td>
+                                                    <td>
+                                                       <lightning:input name="tAmount" label=""  value="{!lfee.totAmount}"/> 
+                                                    </td>
+                                                    <td>
+                                                        <aura:if isTrue="{!index != 0}">
+                                                        <a onclick="{!c.updRemoveFee}" data-record="{!index}">
+                                                            <lightning:helptext iconName="utility:record_delete" content="Delete" />
+                                                        </a>
+                                                        </aura:if>    
+                                                    </td>
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>    
+                                    </table>
+                                </div>
+                                <div class="slds-size_2-of-12"></div>
+                            </div>    
+                        	<br/><br/>
+                            <center>
+                                <lightning:button variant="success" label="Save"  onclick="{!c.updateButtonClick}" />
+                                <lightning:button variant="success" label="Cancel"  onclick="{!c.cancelButtonHandler}" />
+                            </center><br/><br/>    
+                        </aura:if>
+                    </aura:if>    
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>    
+</aura:component>

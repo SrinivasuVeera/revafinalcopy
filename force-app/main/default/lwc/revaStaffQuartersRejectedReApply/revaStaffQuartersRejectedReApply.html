@@ -1,0 +1,25 @@
+<template>
+
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-m-top_xx-large">
+        <lightning-spinner lwc:if={boolSpinner} alternative-text="Loading" size="large"></lightning-spinner>
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 class="slds-text-heading_medium">Re-Apply for Quarters</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium">
+                <lightning-combobox label="Room Type" value={roomType} options={roomTypeValues} onchange={handleRoomType} required></lightning-combobox>
+                <lightning-input label="Joining Date" type="date" value={joiningDate} onchange={handleJoiningDateChange} required></lightning-input>
+            </div>
+            <div class="slds-modal__footer slds-modal__footer_directional">
+                <button class="slds-button slds-button_neutral" onclick={closeModal}>Cancel</button>
+                <button class="slds-button slds-button_brand" onclick={updateExistingRequest} disabled={disableQuarters}>Save</button>
+              </div>
+          
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

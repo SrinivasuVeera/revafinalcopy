@@ -1,0 +1,44 @@
+<template>
+    <lightning-card title="Invigilator Assignments Edit">
+        <div class="slds-m-around_medium">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Room Number</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Shift</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Professor</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={roomAssignments} for:item="assignment"  for:index="index">
+                        <tr key={assignment.Id}>
+                            <td class="slds-truncate" data-label="Room Number">{assignment.Room}</td>
+                            <td class="slds-truncate" data-label="Date">{assignment.Date}</td>
+                            <td class="slds-truncate" data-label="Shift">{assignment.Shift}</td>
+                            <td class="slds-truncate" data-label="Time">{assignment.Time}</td>
+                            <td class="" data-label="Professor" style="position: relative;">
+                                <template if:false={assignment.isEditMode}>
+                                    {assignment.selectedProfessor}
+                                </template>
+                                <template if:true={assignment.isEditMode}>
+                                    <c-rve_-custom-look-up  index-value={index} onprofessorid={handleProfessorChange}></c-rve_-custom-look-up>
+                                </template>
+                            </td>
+                            <td class="slds-truncate" data-label="Actions">
+                                <template if:false={assignment.isEditMode}>
+                                    <lightning-button label="Edit" variant="brand" onclick={handleEditClick} data-id={assignment.Id}></lightning-button>
+                                </template>
+                                <template if:true={assignment.isEditMode}>
+                                    <lightning-button label="Save" variant="brand" onclick={handleSaveClick} data-id={assignment.Id}></lightning-button>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+</template>

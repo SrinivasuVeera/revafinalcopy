@@ -1,0 +1,334 @@
+<!-- <template>
+    <div class="container">
+        <template lwc:if={modifiedData}>
+            <h1 class="">{placementRegistrationText}</h1>
+            <h1 class="">NOTE: Kindly ensure that the uploaded file size is less than 2MB.</h1>
+            <div class="document-upload-container">
+                <img src={file_icon}>
+                <table>
+                    <tbody>
+                        <template for:each={modifiedData} for:item="row">
+                            <tr key={row.id}>
+                                <td data-cell="S.No">
+                                    <p class="slds-text-link pointer-hover" data-id={row.id}
+                                        onclick={viewResultHandler}>
+                                        <span class="mar-bottom"> <strong>{row.id}</strong></span>
+                                    </p>
+                                </td>
+                                <td class="mar-bottom" data-cell="Document Name">
+                                    <span class="mar-bottom"><strong>{row.documentName}</strong></span>
+                                </td>
+                                <td data-cell="Upload / Preview">
+                                    <div class="upload-preview">
+                                        <lightning-button-icon icon-name="utility:attach" title="Attach Document"
+                                            variant="brand" onclick={handleUploadClick} data-row-id={row.id}
+                                            size="large"
+                                            class="slds-m-horizontal_auto reva-brand-button"></lightning-button-icon>
+                                        <lightning-button-icon if:true={row.fileData} icon-name="action:preview"
+                                            title="View Document" variant="brand" onclick={handlePreviewClick}
+                                            data-row-id={row.id} size="large"
+                                            class="slds-m-horizontal_auto reva-brand-button slds-m-left_medium"></lightning-button-icon>
+                                    </div>
+                                </td>
+                                <td data-cell="Upload / Preview">
+                                    <div class="upload-preview">
+                                        <lightning-button-icon icon-name="action:upload" title="Submit Document"
+                                            variant="brand" onclick={handleSubmitClick} data-row-id={row.id}
+                                            disabled={row.isButtonDisabled} size="large"
+                                            class="slds-m-horizontal_auto reva-brand-button"></lightning-button-icon>
+                                        <img src={row.imgSrc}
+                                            class="slds-m-horizontal_auto slds-m-left_medium status-icon" />
+                                        
+                                    </div>
+                                </td>
+                               
+                                <td class="slds-hide">
+                                    <input type="file" accept=".pdf" onchange={handleFileChange} data-row-id={row.id} />
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <div class="next-prev-button-section">
+                    <button class="reva-brand-button  prev-next-btn" onclick={handleNext}>Next</button>
+                </div>
+            </div>
+        </template>
+
+
+        <template if:true={isSpinner}>
+            <div class="slds-is-relative">
+                <section class="slds-modal slds-fade-in-open">
+                    <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+            </div>
+        </template>
+
+    </div>
+</template> -->
+<!-- <template>
+    <div class="container">
+        <template lwc:if={resumeData}>
+            <h1>{placementRegistrationText}</h1>
+            <h1>NOTE: Kindly ensure that the uploaded file size is less than 2MB.</h1>
+
+            <div class="document-upload-container">
+                <img src={file_icon}>
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td data-cell="S.No">
+                                <p class="slds-text-link pointer-hover" data-id={resumeData.id}
+                                    onclick={viewResultHandler}>
+                                    <span class="mar-bottom">
+                                        <strong>1</strong>
+                                    </span>
+                                </p>
+                            </td>
+
+                            <td class="mar-bottom" data-cell="Document Name">
+                                <span class="mar-bottom"><strong>{resumeData.documentName}</strong></span>
+                            </td>
+
+                            <td data-cell="Upload / Preview">
+                                <div class="upload-preview">
+                                    <lightning-button-icon icon-name="utility:attach" title="Attach Document"
+                                        variant="brand" onclick={handleUploadClick} data-row-id={resumeData.id}
+                                        size="large" class="slds-m-horizontal_auto reva-brand-button">
+                                    </lightning-button-icon>
+
+                                    <template lwc:if={resumeData.fileData}>
+                                        <lightning-button-icon icon-name="action:preview" title="View Document"
+                                            variant="brand" onclick={handlePreviewClick} data-row-id={resumeData.id}
+                                            size="large"
+                                            class="slds-m-horizontal_auto reva-brand-button slds-m-left_medium">
+                                        </lightning-button-icon>
+                                    </template>
+                                </div>
+                            </td>
+
+                            <td data-cell="Submit">
+                                <div class="upload-preview">
+                                    <lightning-button-icon icon-name="action:upload" title="Submit Document"
+                                        variant="brand" onclick={handleSubmitClick} data-row-id={resumeData.id}
+                                        disabled={resumeData.isButtonDisabled} size="large"
+                                        class="slds-m-horizontal_auto reva-brand-button">
+                                    </lightning-button-icon>
+
+                                    <img src={resumeData.imgSrc}
+                                        class="slds-m-horizontal_auto slds-m-left_medium status-icon" />
+                                </div>
+                            </td>
+
+                            <td class="slds-hide">
+                                <input type="file" accept=".pdf" onchange={handleFileChange}
+                                    data-row-id={resumeData.id} />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="next-prev-button-section">
+                    <button class="reva-brand-button prev-next-btn" onclick={handleNext}>Next</button>
+                </div> 
+            </div>
+        </template>
+
+        <template if:true={isSpinner}>
+            <div class="slds-is-relative">
+                <section class="slds-modal slds-fade-in-open">
+                    <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+            </div>
+        </template>
+    </div>
+</template> -->
+
+<!-- <template>
+    <div class="container">
+        <template lwc:if={resumeData}>
+            <h1>{placementRegistrationText}</h1>
+            <h1>NOTE: Kindly ensure that the uploaded file size is less than 2MB.</h1>
+
+            <div class="document-upload-container">
+                <img src={file_icon}>
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td data-cell="S.No">
+                                <p class="slds-text-link pointer-hover" data-id={resumeData.id}
+                                    onclick={viewResultHandler}>
+                                    <span class="mar-bottom">
+                                        <strong>1</strong>
+                                    </span>
+                                </p>
+                            </td>
+
+                            <td class="mar-bottom" data-cell="Document Name">
+                                <span class="mar-bottom"><strong>{resumeData.documentName}</strong></span>
+                            </td>
+
+                            <td data-cell="Upload / Preview">
+                                <div class="upload-preview">
+                                    <lightning-button-icon icon-name="utility:attach" title="Attach Document"
+                                        variant="brand" onclick={handleUploadClick} data-row-id={resumeData.id}
+                                        size="large" class="slds-m-horizontal_auto reva-brand-button">
+                                    </lightning-button-icon>
+
+                                    <template lwc:if={resumeData.fileData}>
+                                        <lightning-button-icon icon-name="action:preview" title="View Document"
+                                            variant="brand" onclick={handlePreviewClick} data-row-id={resumeData.id}
+                                            size="large"
+                                            class="slds-m-horizontal_auto reva-brand-button slds-m-left_medium">
+                                        </lightning-button-icon>
+                                    </template>
+                                </div>
+                            </td>
+
+                            <td data-cell="Submit">
+                                <div class="upload-preview">
+                                    <lightning-button-icon icon-name="action:upload" title="Submit Document"
+                                        variant="brand" onclick={handleSubmitClick} data-row-id={resumeData.id}
+                                        disabled={resumeData.isButtonDisabled} size="large"
+                                        class="slds-m-horizontal_auto reva-brand-button">
+                                    </lightning-button-icon>
+
+                                    <img src={resumeData.imgSrc}
+                                        class="slds-m-horizontal_auto slds-m-left_medium status-icon" />
+                                </div>
+                            </td>
+
+                            <td class="slds-hide">
+                                <input type="file" accept=".pdf" onchange={handleFileChange}
+                                    data-row-id={resumeData.id} />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="acknowledgement-container" style="margin-top: 20px;">
+                <div style="margin: 5px; text-align:center; font-size:1rem;">
+                    <lightning-input type="checkbox" disabled={isCheckboxDisabled} name="acknowledgment"
+                        class="slds-text-heading_small"
+                        label="By submitting this application, you agree that you have provided accurate and complete information to the best of your knowledge."
+                        checked={acknowledgmentChecked} onchange={handleAcknowledgmentChange}></lightning-input>
+                </div>
+                <div style="margin: 8px; font-size:1rem; text-align:center;">
+                    <lightning-button label="Submit" title="Submit For Verification" variant="brand"
+                        onclick={handleSubmit} class="slds-m-horizontal_auto submit-button reva-brand-button"
+                        disabled={isSubmitDisabled}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={isSpinner}>
+            <div class="slds-is-relative">
+                <section class="slds-modal slds-fade-in-open">
+                    <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+            </div>
+        </template>
+    </div>
+</template> -->
+
+
+<template>
+    <div class="container">
+        <template lwc:if={resumeData}>
+            <h1>{placementRegistrationText}</h1>
+            <h1>NOTE: Kindly ensure that the uploaded file size is less than 2MB.</h1>
+
+            <div class="document-upload-container">
+                <img src={file_icon}>
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td data-cell="S.No">
+                                <p class="slds-text-link pointer-hover" data-id={resumeData.id}
+                                    onclick={viewResultHandler}>
+                                    <span class="mar-bottom">
+                                        <strong>1</strong>
+                                    </span>
+                                </p>
+                            </td>
+
+                            <td class="mar-bottom" data-cell="Document Name">
+                                <span class="mar-bottom"><strong>{resumeData.documentName}</strong></span>
+                            </td>
+
+                            <td data-cell="Upload / Preview">
+                                <div class="upload-preview">
+                                    <lightning-button-icon icon-name="utility:attach" title="Attach Document"
+                                        variant="brand" onclick={handleUploadClick} data-row-id={resumeData.id}
+                                        size="large" class="slds-m-horizontal_auto reva-brand-button">
+                                    </lightning-button-icon>
+
+                                    <template lwc:if={resumeData.fileData}>
+                                        <lightning-button-icon icon-name="action:preview" title="View Document"
+                                            variant="brand" onclick={handlePreviewClick} data-row-id={resumeData.id}
+                                            size="large"
+                                            class="slds-m-horizontal_auto reva-brand-button slds-m-left_medium">
+                                        </lightning-button-icon>
+                                    </template>
+                                </div>
+                            </td>
+
+                            <td data-cell="Submit">
+                                <div class="upload-preview">
+                                    <lightning-button-icon icon-name="action:upload" title="Submit Document"
+                                        variant="brand" onclick={handleSubmitClick} data-row-id={resumeData.id}
+                                        disabled={resumeData.isButtonDisabled} size="large"
+                                        class="slds-m-horizontal_auto reva-brand-button">
+                                    </lightning-button-icon>
+
+                                    <img src={resumeData.imgSrc}
+                                        class="slds-m-horizontal_auto slds-m-left_medium status-icon" />
+                                </div>
+                            </td>
+
+                            <td class="slds-hide">
+                                <input type="file" accept=".pdf" onchange={handleFileChange}
+                                    data-row-id={resumeData.id} />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Acknowledgment & Submit -->
+            <div class="acknowledgement-container" style="margin-top: 20px;">
+                <div style="margin: 5px; text-align:center; font-size:1rem;">
+                    <lightning-input type="checkbox" name="acknowledgment" class="slds-text-heading_small"
+                        label="By submitting this application, you agree that you have provided accurate and complete information to the best of your knowledge."
+                        checked={acknowledgmentChecked} onchange={handleAcknowledgmentChange}
+                        disabled={isCheckboxDisabledFinal}>
+                    </lightning-input>
+                </div>
+
+                <div style="margin: 8px; font-size:1rem; text-align:center;">
+                    <lightning-button label="Submit" title="Submit For Verification" variant="brand"
+                        onclick={handleSubmit} class="slds-m-horizontal_auto submit-button reva-brand-button"
+                        disabled={isSubmitDisabledFinal}>
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Spinner -->
+        <template if:true={isSpinner}>
+            <div class="slds-is-relative">
+                <section class="slds-modal slds-fade-in-open">
+                    <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+            </div>
+        </template>
+    </div>
+</template>

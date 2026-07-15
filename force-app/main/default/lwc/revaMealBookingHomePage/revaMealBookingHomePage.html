@@ -1,0 +1,26 @@
+<template>
+    <div class="tabs">
+        <div class="tab" tabindex="0" data-step="1" onclick={handleStepClick}>Meals to Book</div>
+        <div class="tab" tabindex="0" data-step="2" onclick={handleStepClick}>Booked Meals/QR Scan</div>
+        <div class="tab" tabindex="0" data-step="3" onclick={handleStepClick}>Availed Meals / Feedback</div>
+    </div>
+    <div class="child-container">
+        <lightning-card>
+            <template lwc:if={showBookingPage}>
+                <c-reva-meal-booking-meal-to-book-page record-id={recordId}
+                    onclickback={handleClickBack}></c-reva-meal-booking-meal-to-book-page>
+            </template>
+            <template lwc:elseif={showBookedPage}>
+                <c-reva-meal-booking-booked-page></c-reva-meal-booking-booked-page>
+            </template>
+            <template lwc:elseif={showAvailedPage}>
+                <c-reva-meal-booking-booked-page is-valied={isValied}></c-reva-meal-booking-booked-page>
+            </template>
+            <template if:true={showBackButton}>
+                <div class="btn-container" style="padding-top: 10px; padding-left:10px">
+                    <lightning-button label="Back" variant="brand" onclick={handleBackClick}></lightning-button>
+                </div>
+            </template>
+        </lightning-card>
+    </div>
+</template>

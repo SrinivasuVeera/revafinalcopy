@@ -1,0 +1,36 @@
+/*
+    All critical styles are INLINE via JS to bypass Salesforce LWC Shadow DOM scoping.
+    Only pseudo-states and focus rings are handled here — mirrors CustomForgotPasswordNew exactly.
+*/
+
+:host {
+    display: block;
+}
+
+/* Input focus — red ring matching CustomForgotPasswordNew */
+input:focus {
+    border-color: #c0392b !important;
+    box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.14) !important;
+    outline: none !important;
+}
+
+/* Login button hover — matches CustomForgotPasswordNew reset button */
+button:hover:not(:disabled) {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Helper & register link hover */
+a:hover {
+    text-decoration: underline !important;
+}

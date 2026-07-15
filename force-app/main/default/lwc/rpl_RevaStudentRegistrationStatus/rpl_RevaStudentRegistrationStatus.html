@@ -1,0 +1,217 @@
+<template>
+
+    <div class="container">
+        <h1 class="slds-m-bottom_large">{placementRegistrationText}</h1>
+        <div class="status-container">
+            <div class="tabs">
+                <div class="tab" tabindex="0" data-step="1" onclick={handleStepClick}>DOCUMENT UPLOAD STATUS</div>
+                <div class="tab" tabindex="0" data-step="2" onclick={handleStepClick}> APPROVAL STATUS </div>
+            </div>
+            <!-- Row 1 -->
+             
+            <template lwc:if={isApprovalStatus}>
+                    <div class="slds-grid slds-wrap pad-around">
+                        <div class="slds-col slds-size_5-of-12 ">
+                            SRN
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            {registrationData.Rpl_SRN__c}
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap pad-around">
+                        <div class="slds-col slds-size_5-of-12">
+                            Name
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            {registrationData.Name}
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap pad-around">
+                        <div class="slds-col slds-size_5-of-12">
+                            Email
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            {registrationData.Rpl_Personal_Mail_ID__c}
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-wrap pad-around">
+                        <div class="slds-col slds-size_5-of-12">
+                            Course Name
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            {registrationData.Contact__r.Primary_Academic_Program__r.Name}
+                        </div>
+                    </div>
+                     <div class="slds-grid slds-wrap pad-around">
+                        <div class="slds-col slds-size_5-of-12">
+                            Status
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            {registrationData.approvalStatus}
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap pad-around">
+                        <div class="slds-col slds-size_5-of-12">
+                            Reason For Document Fail
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            {registrationData.reasonForRejection}
+                        </div>
+                    </div>
+
+
+
+                
+          <!--      <lightning-layout multiple-rows>
+                    
+                    <lightning-layout-item size="12" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>SRN</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>{registrationData.Rpl_SRN__c}</h2>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                 Row 2 
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>Name</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>{registrationData.Name}</h2>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                 Row 3 
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>Email</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>{registrationData.Rpl_Personal_Mail_ID__c}</h2>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                 Row 4 
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>Course Name</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>{registrationData.Contact__r.Primary_Academic_Program__r.Name}</h2>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                 Row 5 
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>Status</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>{registrationData.approvalStatus}</h2>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                 Row 6 
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>Reason For Document Fail</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" small-device-size="4" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <h2>{registrationData.reasonForRejection}</h2>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>-->
+            </template>
+
+            <template lwc:if={isDocumentStatus}>
+                <section>
+                    <table class="slds-text-heading_small">
+                        <thead>
+                            <tr>
+                                <th>S.NO</th>
+                                <th> DOCUMENT / INFORMATION</th>
+                                <th> STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={modifiedData} for:item="row">
+                                <tr style="border-bottom: 1px solid black" key={row.id}>
+                                    <td data-cell="S.NO">
+                                        <strong>{row.id}</strong>
+                                    </td>
+                                    <td data-cell="Document / Information">
+                                        <strong>{row.documentName}</strong>
+                                    </td>
+                                    <td data-cell="Status">
+                                        <img src={row.imgSrc} />
+                                        <!--  <lightning-icon icon-name={row.statusLabel} size={row.iconSize}
+                                            variant={row.variant} alternative-text="Status" class={row.iconClass}>
+                                        </lightning-icon> -->
+                                    </td>
+                                </tr>
+                              <!--  <hr key={row.id} style="background-color:red;">-->
+
+                            </template>
+                        </tbody>
+                    </table>
+                </section>
+                <div class="acknowledgement-container">
+                    <div style="margin: 5px; text-align:center; font-size:1rem;">
+                        <lightning-input type="checkbox" disabled={isCheckboxDisabled} name="acknowledgment"
+                            class="slds-text-heading_small"
+                            label="By submitting this application, you agree that you have provided accurate and complete information to the best of your knowledge."
+                            checked={acknowledgmentChecked} onchange={handleAcknowledgmentChange}></lightning-input>
+                    </div>
+                    <div style="margin: 8px; font-size:1rem">
+
+                        <lightning-button label="Submit For Verification" title="Submit For Verificaiton"
+                            variant="brand" onclick={handleSubmit}
+                            class="slds-m-horizontal_auto submit-button reva-brand-button"
+                            disabled={isSubmitDisabled}></lightning-button>
+                    </div>
+                </div>
+            </template>
+            <template lwc:if={isSpinner}>
+                <div class="slds-is-relative">
+                    <section class="slds-modal slds-fade-in-open">
+                        <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</template>

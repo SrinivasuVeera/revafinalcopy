@@ -1,0 +1,43 @@
+<template>
+    <lightning-card title="Cases with Manodhaara Appointments" icon-name="custom:custom38">
+        <template if:true={casesWithAppointments}>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr>
+                        <th>Case Number</th>
+                        <th>Manodhaara Appointment Details</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={casesWithAppointments} for:item="caseItem">
+                        <tr key={caseItem.Cases.Id}>
+                            <td>{caseItem.Cases.CaseNumber}</td>
+                            <td>
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer appointment-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Appointment Numbers</th>
+                                            <th>Appointment Date</th>
+                                            <th>Notes By Counsellor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={caseItem.Appointments} for:item="appointment">
+                                            <tr key={appointment.Id}>
+                                                <td>{appointment.Name}</td>
+                                                <td>{appointment.Appointment_Date__c}</td>
+                                                <td>{appointment.Notes_For_Counsellor__c}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>{caseItem.Cases.Description}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+    </lightning-card>
+</template>

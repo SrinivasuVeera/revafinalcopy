@@ -1,0 +1,85 @@
+<!-- 
+ <template>
+    <lightning-spinner lwc:if={boolSpinner} alternative-text="Loading" size="large"></lightning-spinner>
+    <template lwc:if={dataAvl}>
+        <template lwc:if={strMessage}>
+            <c-banner-messages if:true={showError} error={strMessage}></c-banner-messages>
+            <c-banner-messages if:true={showWarning} warning={strMessage}></c-banner-messages>
+        </template>
+          <div class="header">
+        <template lwc:if={showBooking}>
+            <template lwc:if={roomTypeValues}>
+                <lightning-combobox name="Quarters Type" label="Quarters Type" value={roomType} options={roomTypeValues}
+                    onchange={handleRoomType}></lightning-combobox>
+                    <lightning-input type="date" label="Joining Date" value={joiningDate} 
+                    onchange={handleJoiningDateChange}></lightning-input>
+                    <div style="margin-top:10px !important;">
+                      <lightning-button class="slds-m-top_small" variant="brand" label="Apply For Quarters"
+                        title="Apply For Quarters" onclick={handleQuarters} disabled={disableQuarters} >
+                      </lightning-button>
+                   </div>
+            </template>
+        </template>
+        </div>
+    </template>
+    
+</template-->
+
+
+
+<!--Added by rajashekar for new ui-->
+
+<template>
+
+    <div class="container">
+        <lightning-spinner lwc:if={boolSpinner} alternative-text="Loading" size="large"></lightning-spinner>
+
+
+        <div class="first-page">
+            <h5>Quarters</h5>
+            <div class="hostel-information">
+                <h1>Quarters For {currentUserContact.FirstName} {currentUserContact.LastName}</h1>
+                <h4>Employee Details : {currentUserContact.employeeNumber}</h4>
+            </div>
+        </div>
+
+
+        <template if:true={showBooking}>
+            <div class="tab">
+                <h4 style="margin-top:7px;">REGISTRATION</h4>
+            </div>
+
+            <div class="slds-box slds-theme_default slds-p-around--medium"
+                style="border: 1px solid #0a0b0b; border-radius: 0.25rem; margin-top: 20px;">
+                <div class="slds-grid">
+                    <div class="slds-col">
+
+                        <template lwc:if={roomTypeValues}>
+
+                            <lightning-combobox name="Quarters Type" label="Quarters Type" value={roomType}
+                                options={roomTypeValues} onchange={handleRoomType}></lightning-combobox>
+
+                            <lightning-input type="date" label="Joining Date" value={joiningDate}
+                                onchange={handleJoiningDateChange}></lightning-input>
+                            <br />
+                            <br />
+                            <div class="register-button">
+                                <lightning-button class="slds-m-top_small" label="Apply For Quarters" variant="brand"
+                                    title="Apply For Quarters" onclick={handleQuarters} disabled={disableQuarters}>
+                                </lightning-button>
+                            </div>
+
+                        </template>
+
+                    </div>
+                </div>
+            </div>
+
+        </template>
+
+        <template if:false={showBooking}>
+            <c-reva-teaching-staff-booked-room-details onopenregistration ={handleReApplyOpen}></c-reva-teaching-staff-booked-room-details>
+        </template>
+
+    </div>
+</template>

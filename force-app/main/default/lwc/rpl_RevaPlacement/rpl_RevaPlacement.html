@@ -1,0 +1,237 @@
+<template>
+    <template lwc:if={isApprovalSuccess}>
+        <c-rpl_-reva-eligible-drives-and-results></c-rpl_-reva-eligible-drives-and-results>
+    </template>
+
+    <template lwc:else>
+        <template lwc:if={isPlacementRegistrationStarted}>
+            <div class="header">
+                <div class="about">
+                    <h1><strong>REVA Placement Registration Process</strong></h1>
+                    <br>
+                    <h3>{headerText}<br></h3>
+                </div>
+                <div class="svg">
+                    <img src={svgImage}>
+                </div>
+            </div>
+
+            <div class="container">
+                <!-- LEFT SIDE: Path Flow -->
+                <div class="side path-flow">
+                    <div class="parent">
+                        <span class="progress-line"></span>
+
+                        <!-- STEP 1: Register -->
+                        <div class="div1 step-icon one">
+                            <img src={registerYourselfLogoOrange}>
+                        </div>
+
+                        <template if:false={isAlreadyRegistered}>
+                            <div class="div2 step-name one" style="color: #f57f26;" onclick={handleStepClick}
+                                data-step-number="1">Register Yourself</div>
+                            <div class="slds-button div3 active blend" style="background-color: #f57f26;"
+                                data-step-number="1" onclick={handleStepClick}>1</div>
+                        </template>
+
+                        <template if:true={isAlreadyRegistered}>
+                            <div class="div2 step-name one" style="color: green; cursor: default;">
+                                ✅ Registered
+                            </div>
+                            <div class="slds-button div3 active blend"
+                                style="background-color: green; cursor: default;">✔</div>
+                        </template>                       
+
+                        <!-- Verify Mail/SMS -->
+                        <div class="div4 step-icon two"> <img src={verifyEmailOrSmsLogoOrange}></div>
+                            <template if:false={isOtpVerified}>
+                                <div class="div5 step-name two" onclick={handleStepClick} data-step-number="2">
+                                    Verify Email/SMS
+                                </div>
+                                <div class="slds-button div6 two" data-step-number="2" onclick={handleStepClick}>
+                                    2
+                                </div>
+                            </template>
+
+                            <template if:true={isOtpVerified}>
+                                <div class="div5 step-name two" style="color: green; cursor: default;">
+                                    ✅ Verified
+                                </div>
+                                <div class="slds-button div6 active blend"
+                                    style="background-color: green; cursor: default;">
+                                    ✔
+                                </div>
+                            </template>
+
+                        <!-- STEP 2: Basic Details -->
+                        <div class="div7 step-icon three">
+                            <img src={fillBasicDetailsLogoBW}>
+                        </div>
+                        <!-- <div class="div8 step-name three" onclick={handleStepClick} data-step-number="2">
+                            Fill Basic Details
+                        </div>
+                        <div class="slds-button div9 three" data-step-number="2" onclick={handleStepClick}>
+                            2
+                        </div> -->
+                        <!-- <template if:false={isBasicDetailsCompleted}>
+                            <div class="div8 step-name three" style="color: #f57f26;" onclick={handleStepClick}
+                                data-step-number="2">Fill Basic
+                                Details</div>
+                            <div class="slds-button div9 three" style="background-color: #f57f26;" data-step-number="2"
+                                onclick={handleStepClick}>2</div>
+                        </template>
+
+                        <template if:true={isBasicDetailsCompleted}>
+                            <div class="div8 step-name three" style="color: green; cursor: default;">
+                                ✅ Basic Details Filled
+                            </div>
+                            <div class="slds-button div9 three" style="background-color: green; cursor: default;">✔
+                            </div>
+                        </template> -->
+                        <div class="div8 step-name three" style={stepTwoColorStyle} onclick={handleStepClick}
+                            data-step-number="3">
+                            {stepTwoLabel}
+                        </div>
+                        <div class="slds-button div9 three" style={stepTwoButtonStyle} data-step-number="3"
+                            onclick={handleStepClick}>
+                            {stepTwoButtonLabel}
+                        </div>
+
+                        <!-- STEP 3: Document Upload -->
+                        <div class="div10 step-icon four">
+                            <img src={educationDetailsLogoBW}>
+                        </div>
+                        <!-- <div class="div11 step-name four" onclick={handleStepClick} data-step-number="3">
+                            Document Upload
+                        </div>
+                        <div class="slds-button div12 four" data-step-number="3" onclick={handleStepClick}>
+                            3
+                        </div> -->
+                        <!-- <template if:false={isDocumentUploadCompleted}>
+                            <div class="div11 step-name four" style="color: #f57f26;" onclick={handleStepClick}
+                                data-step-number="3">Document
+                                Upload</div>
+                            <div class="slds-button div12 four" style="background-color: #f57f26;" data-step-number="3"
+                                onclick={handleStepClick}>3</div>
+                        </template>
+
+                        <template if:true={isDocumentUploadCompleted}>
+                            <div class="div11 step-name four" style="color: green; cursor: default;">
+                                ✅ Document Uploaded
+                            </div>
+                            <div class="slds-button div12 four" style="background-color: green; cursor: default;">✔
+                            </div>
+                        </template> -->
+                        <div class="div11 step-name four" style={stepThreeColorStyle} onclick={handleStepClick}
+                            data-step-number="4">
+                            {stepThreeLabel}
+                        </div>
+                        <div class="slds-button div12 four" style={stepThreeButtonStyle} data-step-number="4"
+                            onclick={handleStepClick}>
+                            {stepThreeButtonLabel}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE: Step Content -->
+                <div class="side path-content">
+
+                    <!-- ✅ Registered Message Always Visible -->
+                    <template if:true={isAlreadyRegistered}>
+                        <div class="slds-text-color_success slds-p-around_small" style="font-size: 16px;">
+                            ✅ Contact Details Updated.
+                        </div>
+                    </template>
+
+                    <!-- STEP 1 -->
+                    <template lwc:if={isFirstStep}>
+                        <lightning-layout class="path-container" horizontal-align="center" pull-to-boundary="small"
+                            vertical-align="start">
+                            <lightning-layout-item size="12" padding="around-small">
+                                <div class="header-column">
+                                    <template if:false={isAlreadyRegistered}>
+                                        <c-rpl_-reva-placement-register-yourself-page contact-id={contactId}
+                                            placement-registration-text={placementRegistrationText}
+                                            onrevastudentyourselfpage={handlestudentselfregister}>
+                                        </c-rpl_-reva-placement-register-yourself-page>
+                                    </template>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                    <!-- STEP 2 -->
+                    <!-- <template lwc:if={isBasicDetailsCompleted}>
+                        <div class="slds-text-color_success slds-p-around_small" style="font-size: 16px;">
+                            ✅ Basic Details Completed.
+                        </div>
+                    </template> -->
+
+                    <template lwc:if={isSecondStep}>
+                        <lightning-layout class="path-container" horizontal-align="center" pull-to-boundary="small"
+                            vertical-align="start">
+                            <lightning-layout-item size="12" padding="around-small">
+                                <div class="header-column">
+                                    
+                                        <c-rpl_-reva-verify-sms onotpverified={handleOtpVerified} contact-id={contactId}
+                                            placement-registration-text={placementRegistrationText}
+                                            student-regform={studentRegDetails}
+                                            onrevaverifysms={handlerevaverifysms}></c-rpl_-reva-verify-sms>
+                                    
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                    <template lwc:elseif={isThirdStep}>
+                        <lightning-layout class="path-container" horizontal-align="center" pull-to-boundary="small"
+                            vertical-align="start">
+                            <lightning-layout-item size="12" padding="around-small">
+                                <div class="header-column">
+                                    <!-- <c-rpl_-reva-fill-basic-details contact-id={contactId}
+                                        placement-registration-text={placementRegistrationText}
+                                        fill-basic-details-right-col-text={fillBasicDetailsRightColText}
+                                        onfillbasicdetailcompleted={handleBasicDetailsCompleted}
+                                        is-save-button-disabled={isStudentBasicDetailsSaveBtnDisabled}>
+                                    </c-rpl_-reva-fill-basic-details> -->
+                                    <c-rpl_-reva-fill-basic-details contact-id={contactId}
+                                        placement-registration-text={placementRegistrationText}
+                                        fill-basic-details-right-col-text={fillBasicDetailsRightColText}
+                                        onfillbasicdetailcompleted={handleBasicDetailsCompleted}
+                                        is-save-button-disabled={isStudentBasicDetailsSaveBtnDisabled}>
+                                    </c-rpl_-reva-fill-basic-details>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                    <!-- STEP 3 -->
+                    <template lwc:elseif={isFourthStep}>
+                        <lightning-layout class="path-container" horizontal-align="center" pull-to-boundary="small"
+                            vertical-align="start">
+                            <lightning-layout-item size="12" padding="around-small">
+                                <div class="header-column">
+                                    <c-rpl_-reva-document-upload record-id={studentregrecordid}
+                                        placement-registration-text={placementRegistrationText}
+                                        onshownextstage={showStepFive}>
+                                    </c-rpl_-reva-document-upload>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <!-- Placement Not Started -->
+        <template lwc:else>
+            <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+                <p class="slds-text-heading_large slds-text-color_error">Placement Not Started</p>
+                <p class="slds-text-body_regular">
+                    We appreciate your interest in the placement process. The placement
+                    process has not yet started. Once we start the process, we will notify you as soon as possible.
+                </p>
+            </div>
+        </template>
+    </template>
+</template>

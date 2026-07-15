@@ -1,0 +1,13 @@
+.THIS td {
+    width: 50%;
+}
+.THIS .slds-grid {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+.THIS.full-width {
+  width: 100%;
+}
+.THIS .custom-button {
+    background-color: #f96515;
+}

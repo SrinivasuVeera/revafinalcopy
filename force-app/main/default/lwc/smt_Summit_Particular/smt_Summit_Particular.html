@@ -1,0 +1,100 @@
+<template>
+    <template lwc:if={showParticulars}>
+        <lightning-card>
+            <div class="header">
+                <h4 class="smt-heading">SUMMIT PARTICULARS - {sectionName}</h4>
+            </div>
+
+            <section>
+                <table class="slds-text-body_regular">
+                    <thead>
+                        <tr>
+                            <th> S.No</th>
+                            <th> Particular</th>
+                            <th> Timeline </th>
+                            <th> Target</th>
+                            <th> Achieved</th>
+                            <!-- <th> Evidence</th> -->
+                            <th> Percentage Achieved</th>
+                            <!-- <th> Save</th> -->
+                            <th>Enter Monthly</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={summitParticulars} for:item="summitParticular">
+                            <tr key={summitParticular.Id}>
+                                <td data-cell="S.No">
+                                    <strong>{summitParticular.sNo}</strong>
+                                </td>
+                                <td data-cell="Particular">
+                                    <strong>{summitParticular.summitParticularName}</strong>
+                                </td>
+                                <td data-cell="Timeline">
+                                    <strong>{summitParticular.timeLine}</strong>
+                                </td>
+                                <td data-cell="Target">
+                                    <strong>{summitParticular.target}</strong>
+                                </td>
+                                <td data-cell="Achieved" class="achieved">
+                                    <lightning-input type="text" data-sno={summitParticular.sNo}
+                                        value={summitParticular.achievedValue}
+                                        disabled={summitParticular.isAchievedInputDisabled} data-field="achievedValue"
+                                        onchange={handleInputChange}></lightning-input>
+                                </td>
+                                <!-- <td data-cell="Evidence" class="evidence">
+                                    <lightning-input type="url" data-sno={summitParticular.sNo}
+                                        disabled={summitParticular.isEvidenceInputDisabled} data-field="evidenceValue"
+                                        value={summitParticular.evidenceValue}
+                                        onchange={handleInputChange}></lightning-input>
+                                    <a lwc:if={summitParticular.showUrl} href={summitParticular.evidenceValue}
+                                        target="_blank">Open</a>
+                                </td> -->
+
+                                <td data-cell="Percentage Achieved">
+                                    <lightning-badge label={summitParticular.percentageAchieved}
+                                        style={summitParticular.badgeStyle}></lightning-badge>
+                                </td>
+                                <!-- <td data-cell="Save">
+                                    <lightning-button-icon icon-name="utility:save" variant="brand"
+                                        disabled={summitParticular.isSaveButtonDisabled} data-sno={summitParticular.sNo}
+                                        onclick={handleSaveParticular} alternative-text="Save">
+                                    </lightning-button-icon>
+                                </td> -->
+                                <!-- {summitParticular.Id} -->
+                                <td data-cell="Save">
+                                    <lightning-button variant="brand" label="Monthly data"
+                                            data-sno={summitParticular.sNo} 
+                                            onclick={handleMonthParticular} alternative-text="Monthly data">
+                                    </lightning-button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <lightning-button label="Back" onclick={handleBackClick} variant="brand"
+                    style="float: right;margin-block: 1rem;"></lightning-button>
+            </section>
+        </lightning-card>
+    </template>
+    <template lwc:if={showNoParticularsMessage}>
+        <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+            <p class="slds-text-heading_large slds-text-color_error">No Summit Particulars Found</p>
+
+        </div>
+        <lightning-button label="Back" onclick={handleBackClick} variant="brand"
+            style="float: right;margin-block: 1rem;"></lightning-button>
+    </template>
+    <template lwc:if={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+
+    <template lwc:if={showMonthParticulars}>
+        <c-smt_-summit_-particular_-month summit-section-id={summitSectionId} semester={semester} 
+        section-name={sectionName} summit-particular-id={summitParticularId} summit-particular-name={summitParticularName} onclickback1={handleClickBackFromParticularsMonth}></c-smt_-summit_-particular_-month>           
+    </template>
+</template>

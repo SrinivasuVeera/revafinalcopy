@@ -1,0 +1,86 @@
+.custom-box label{
+    color: black;
+    font-weight: 500;
+}
+.input-container input {
+    padding: 5px;
+    border: 1px solid black;
+    width: 100%;
+    min-height: 2rem;
+    margin-top: 4px;
+    font-weight: 500;
+    
+}
+.section-input{
+    font-weight: 500;
+}
+
+@media (max-width:500px){
+    table {
+    font-size: 12px;
+}
+}
+
+@media (max-width: 650px) {
+
+    td{
+        display: grid;
+        grid-template-columns: 21ch auto;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;   
+    }   
+
+    td:first-child{
+        padding-top: 2rem;
+    }
+
+    td:last-child{
+        padding-bottom: 2rem;
+    }
+    th{
+        display: none;
+    }
+    td::before{
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+    }
+  
+}
+section{
+    border: 2px solid black;
+    width: fit-content;
+    margin: auto;
+    padding: 1rem;
+    overflow: auto;
+}
+
+table {
+    border-collapse: collapse;
+    overflow: auto;
+    width: 100%;
+    border-spacing: 0;
+    background-color: white;
+}
+
+
+table, th, td {
+    /* border-collapse: collapse; */
+    padding: 5px;
+    text-align: left;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: grey;
+   /*  cursor: pointer; */
+    text-transform:uppercase;
+    color: white;
+}
+
+.smt-section-heading{
+    font-weight: 700;
+    font-size: 16px;
+    margin-block: 10px;
+    text-align: center;
+}

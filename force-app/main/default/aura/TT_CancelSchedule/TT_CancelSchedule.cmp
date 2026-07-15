@@ -1,0 +1,115 @@
+<aura:component controller="TT_CancelScheduleController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<aura:attribute name="universityList" type="List" />
+    <aura:attribute name="facultyList" type="List" />
+    <aura:attribute name="schoolList" type="List" />
+    <aura:attribute name="programList" type="List" />
+    <aura:attribute name="programBatchList" type="List" />
+    <aura:attribute name="semesterList" type="List" />
+    <aura:attribute name="sectionList" type="List" />
+    <aura:attribute name="selectedUniversity" type="String" />
+    <aura:attribute name="selectedFaculty" type="String" />
+    <aura:attribute name="selectedSchool" type="String" />
+    <aura:attribute name="selectedProgram" type="String" />
+    <aura:attribute name="selectedProgramBatch" type="String" />
+    <aura:attribute name="selectedSemester" type="String" />
+    <aura:attribute name="selectedSection" type="String" />
+    <aura:attribute name="startDate" type="DateTime" />
+    <aura:attribute name="endDate" type="DateTime" />
+    <aura:attribute name="reason" type="String" />
+    
+    <aura:attribute name="freeSch" type="Boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <div class="slds-grid slds-theme_default slds-wrap">
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="university" label="University" aura:id="universityId" variant="label-inline" value="{!v.selectedUniversity}"  disabled="true" >
+                <aura:iteration items="{!v.universityList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="true"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="faculty" label="Faculty" aura:id="facultyId" variant="label-inline" value="{!v.selectedFaculty}" onchange="{!c.onFacultyChange}" disabled="{!v.freeSch}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.facultyList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+       <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="school" label="School" aura:id="schoolId" variant="label-inline" value="{!v.selectedSchool}" onchange="{!c.onSchoolChange}" disabled="{!v.freeSch}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.schoolList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="program" label="Program" aura:id="programId" variant="label-inline" value="{!v.selectedProgram}" onchange="{!c.onProgramChange}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.programList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="programBatch" variant="label-inline" label="Program Batch" aura:id="programBatchId" value="{!v.selectedProgramBatch}" onchange="{!c.onProgramBatchChange}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.programBatchList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="semester" label="Semester" aura:id="semesterId" variant="label-inline" value="{!v.selectedSemester}" onchange="{!c.onSemesterChange}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.semesterList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="section" label="Section" aura:id="sectionId" value="{!v.selectedSection}" variant="label-inline">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.sectionList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"></div>
+    <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"></div>
+    <div class="slds-col slds-size_2-of-4" style="padding-left:0;">
+        <lightning:input type="text" name="reason" label="Reason" value="{!v.reason}" variant="label-inline" maxlength="60" placeholder="Enter reason" required="true" class="no-left-padding"/>
+    </div>
+       <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:input type="datetime" name="startDate" variant="label-inline" label="Start DateTime" value="{!v.startDate}" required="true"/>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:input type="datetime" variant="label-inline" name="entDate" label="End DateTime" value="{!v.endDate}" required="true"/>
+        </div>
+    </div>
+    <div style="text-align:center">
+        <div >
+            <lightning:button label="Confirm" variant="brand" title="Confirm" onclick="{!c.onConfirm}" />
+            <lightning:button label="Cancel"  title="Cancel" onclick="{!c.onCancel}"/>
+        </div>
+    </div>
+</aura:component>

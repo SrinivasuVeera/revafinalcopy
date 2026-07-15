@@ -1,0 +1,443 @@
+.slds-table--bordered tbody td .slds-table--bordered tbody th {
+    /* border-top: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgba(5, 5, 5, 0.83))); */
+    border-top: 4px solid white !important;
+}
+
+/* .aca-table{
+    table-layout: fixed;
+} */
+
+
+
+.aca-table tbody tr:focus{
+    background: var(--reva-table-row-background-color) !important;
+}
+
+
+
+
+.sub-header{
+    text-align: center !important;
+    background: #6e6e6e;
+    font-size: 15px;
+    color: white;
+    padding: 8px !important;
+    border: 2px solid white;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+  }
+
+
+.questions-container {
+    text-align: left;
+    padding-top:40px;       
+    padding-bottom:20px;
+    padding-left: 180px;       
+    font-size: 14px;
+    font-weight: 700;
+  }
+  
+  .question-block {
+    margin-bottom: 15px;
+  }
+  
+  .stars {
+    cursor: pointer;
+  }
+  
+  .star {
+    font-size: 34px;
+    color: lightgray;
+    margin-right: 5px;
+    user-select: none;
+  }
+  
+  .star.filled {
+    color: gold;
+  }
+  
+  .submit-btn {
+    background-color: #0070d2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .submit-btn:hover {
+    background-color: #005fb2;
+  }
+  
+  .result-container {
+    margin-top: 20px;
+    background-color: #f4f6f9;
+    padding: 15px;
+    border-radius: 5px;
+  }
+
+  /* Mobile Responsive tweaks */
+  @media screen and (max-width: 600px) {
+    .questions-container {
+      padding: 0 10px;
+    }
+  
+    .question-block {
+      margin-bottom: 20px;
+    }
+  
+    .question-block p {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+  
+    .stars {
+      font-size: 28px; /* Slightly larger stars for touch */
+    }
+  
+    .star {
+      margin-right: 8px; /* More spacing for easier tapping */
+    }
+  
+    .submit-btn {
+      width: 100%;
+      padding: 12px 0;
+      font-size: 18px;
+    }
+  
+    .result-container {
+      padding: 15px 10px;
+      font-size: 16px;
+    }
+  }
+
+  .survey-wrapper {
+    box-shadow: 2px 4px 9px -4px #6e6e6e;
+    border: 1px solid var(--reva-brand-color);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+ .survey-heading {
+    display: flex;
+    background-color: var(--reva-component-heading-background-color);
+    color: black;
+    border: 0px;
+    font-size: 15px;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+ .curriText {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+ .firstColumn {
+    border-bottom: 1px dotted #f57f26;
+    text-align: center;
+    padding: 1%;
+}
+
+ .instHead {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+ .padd {
+    padding: 0% 1% 1% 1%;
+}
+
+ .slds-tabs_scoped__link,
+ .slds-tabs--scoped__link {
+    font-size: 14px;
+}
+
+ .slds-is-active .slds-tabs_scoped__link {
+    background-color: #f57f26 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+
+ .slds-tabs_scoped__content {
+    border: 0px solid white !important;
+    padding-top: 5px !important;
+    padding: 7px 1px 5px 0px !important;
+}
+
+ /* .slds-tabs_scoped__nav {
+    display: flex;
+    align-items: flex-start;
+    
+    border: 0px solid white !important;
+} 
+*/
+/* background-color:#E9E9E9 !important; */
+ .slds-tabs_scoped__nav {
+    /*Orange tabset background*/
+    display: flex;
+    align-items: flex-start;
+    border: 0 solid white !important;
+    background-color: transparent !important;
+}
+
+ .slds-tabs_scoped__content {
+    background-color: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundAlt, rgb(255, 255, 255)));
+    border: px solid white !important;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    border-bottom-left-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    padding: 7px 1px 5px 0px !important;
+}
+
+ .slds-tabs_scoped__content .slds-tabs--scoped__content {
+    background-color: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundAlt, rgb(255, 255, 255)));
+    border: 0px solid white !important;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    border-bottom-left-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    padding-top: 10px !important;
+}
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Optional: Adjust height as needed */
+}
+
+
+/*////////////////////////////////////////////////////////////////////*/
+
+.title {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-info {
+  font-weight: bold;
+  color: #4F73A3;
+  margin: 5px;
+}
+
+.fees-payments-wrapper {
+  box-shadow: 2px 4px 9px -4px #6e6e6e;
+  border: 1px solid var(--reva-brand-color);
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
+  margin: 10px;
+}
+
+.fees-payments-heading {
+  display: flex;
+  background-color: var(--reva-component-heading-background-color);
+  color: black;
+  font-size: 15px;
+  padding: 10px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.table-scroll-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.slds-table {
+  font-size: inherit !important;
+  background-color: #c7c7c7 !important;
+  border: 2px solid white;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.slds-table--bordered tbody td,
+.slds-table--bordered tbody th {
+  border-top: 4px solid white !important;
+}
+
+.aca-table thead th {
+  text-align: center !important;
+  background-color: var(--reva-table-heading-background-color);
+  color: white;
+  padding: 8px !important;
+  font-size: 13px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.aca-table tbody td {
+  text-align: center !important;
+  color: black;
+  background: var(--reva-table-row-background-color) !important;
+  padding: 8px !important;
+  font-size: 13px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.aca-table tbody tr:hover {
+  background: var(--reva-table-row-background-color) !important;
+}
+
+.note-message {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.button-container {
+  text-align: right;
+  padding-bottom: 20px;
+  padding-right: 40px;
+}
+
+.line {
+  border: 0;
+  height: 0.8px;
+  background: #e87a21;
+}
+
+/* ========== Mobile Card View Styles ========== */
+.course-card {
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 12px;
+  box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.course-card-header {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.course-card-body p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+
+.feedback-buttons lightning-button {
+  margin-top: 5px;
+}
+
+/* Hide mobile cards on desktop, show tables instead */
+.desktop-view {
+  display: block;
+}
+.mobile-view {
+  display: none;
+}
+
+/* ===== Responsive Styling ===== */
+@media screen and (max-width: 768px) {
+  .fees-payments-heading {
+    font-size: 14px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .title-info {
+    font-size: 14px;
+  }
+
+  .aca-table thead th,
+  .aca-table tbody td {
+    font-size: 12px;
+    padding: 6px !important;
+  }
+
+  .button-container {
+    text-align: center;
+    padding-right: 0;
+  }
+
+  .slds-button_brand {
+    width: 60%;
+    font-size: 14px;
+  }
+}
+
+/* Phones: Show card view, hide table view */
+@media screen and (max-width: 600px) {
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+
+  .course-card {
+    font-size: 13px;
+  }
+
+  .slds-button_brand {
+    width: 100%;
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .title-info {
+    font-size: 13px;
+  }
+}
+
+.maintenance-message {
+  text-align: center;
+  color: red;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 50px;
+}
+
+/********************************* Text Area Start *****************************/
+.text-area-container {
+    position: relative;
+    width: 500px;
+}
+
+.custom-textarea {
+    width: 100%;
+    height: 75px;
+    padding: 10px;
+    padding-bottom: 25px; /* extra space for char count inside textarea */
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 1.4;
+    resize: none;
+}
+
+.char-count {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: gray;
+    pointer-events: none;
+    background: white;
+    opacity: 0.6;
+    padding: 0 3px;
+    border-radius: 3px;
+}
+/********************************* Text Area End *****************************/

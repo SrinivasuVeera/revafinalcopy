@@ -1,0 +1,17 @@
+.font_black {
+    color: black;  
+}
+.top_margin{
+    margin-top: 120px;
+}
+.slds-table_custom_width_container {
+    width: 60%; /* Adjust the width percentage as needed */
+    margin: 0 auto; /* Center the table horizontally */
+}
+.width_container {
+    width: 80%; /* Adjust the width percentage as needed */    
+}
+  
+.slds-table {
+    width: 100%; /* Ensure the table takes full width of the container */
+}

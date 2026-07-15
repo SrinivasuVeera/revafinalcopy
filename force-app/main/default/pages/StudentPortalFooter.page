@@ -1,0 +1,253 @@
+<apex:page showHeader="false" standardStylesheets="false">
+    <apex:form >
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/bootstrap.min.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/bootstrap.min.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/scss/inner.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/scss/style.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/media_screen.scss/responsive.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/owl.carousel.css"/>
+        <apex:stylesheet value="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+        <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/aos.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/demo/default/media/img/logo/favicon-32x32.png"/>   
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+     
+<div class="img-container">
+    <footer>
+        <div class="path-2">
+            <img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/path2.svg" alt="Path2" class="img-fluid"/>
+        </div>
+        <div class="container">
+            <div class="footer-panel1">
+                <div class="footer-desktop-menu">
+                    <div class="row">
+                        <div class="col-6 col-md-3">
+                            <h2>Why REVA</h2>
+                            <ul>
+                                <li><a href="https://www.reva.edu.in/why-reva">Overview</a></li>
+                                <li><a href="https://www.reva.edu.in/teaching-methodology">Teaching Methodology</a></li>
+                                <li><a href="https://www.reva.edu.in/women-education">Women Education</a></li>
+                                <li><a href="https://www.reva.edu.in/competitive-environment">Competitive Environment </a></li>
+                                <li><a href="https://www.reva.edu.in/international-standards">International Standards</a></li>
+                                <li><a href="https://www.reva.edu.in/360-degree-student-care">360 Degree Student Care</a></li>
+                                <li><a href="https://www.reva.edu.in/scholarships">Scholarships</a></li>
+                                <li><a href="https://www.reva.edu.in/csr">Social Initiatives - CSR</a></li>
+                                <li><a href="https://www.reva.edu.in/students-achievements">Students Achievements</a></li>
+                                <li><a href="https://www.reva.edu.in/health-safety">Health and Safety</a></li>
+                                <li><a href="https://www.reva.edu.in/awards">Awards and Rankings</a></li>
+                            </ul>
+                            <h2>Login</h2>
+                            <ul>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Staff Login</a></li>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Student Login</a></li>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Parent Login</a></li>
+                                <li><a target="_blank" href="https://login.microsoftonline.com/">Email Login </a></li>
+                                <li><a target="_blank" href="https://attendance.reva.edu.in/cosec">Employee Service Centre </a></li>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Online Payment Portal</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h2>Resources</h2>
+                            <ul>
+                                <li><a href="https://www.reva.edu.in/reva-reflections">REVA Reflections</a></li>
+                                <li><a href="https://www.reva.edu.in/insight">REVA Insight</a></li>
+                                <li><a href="https://www.reva.edu.in/naac">NAAC </a></li>
+                                <li><a href="https://www.reva.edu.in/nirf-2022">NIRF </a></li>
+                            </ul>
+                            <h2>Careers</h2>
+                            <ul>
+                                <li><a href="">Training and Development </a></li>
+                                <li><a href="https://www.reva.edu.in/employee-engagement">Employee Engagement</a></li>
+                                <li><a href="https://www.reva.edu.in/careers">Current Openings </a></li>
+                            </ul>
+                            <h2><a target="_blank" href="https://alumni.reva.edu.in/">Alumni</a></h2>
+                            <h2>Contact</h2>
+                            <ul>
+                                <li><a href="https://www.reva.edu.in/contact-us">Contact</a></li>
+                                <li><a href="https://www.reva.edu.in/feedback">Feedback/Grevience Form</a></li>
+                                <li><a href="https://www.reva.edu.in/faq">FAQ</a></li>
+                            </ul>
+                            <!--<h2>Important Information</h2>
+                                       <ul>
+                                          <li><a href="javascript:void(0)">CET Code - E232</a></li>
+                                          <li><a href="javascript:void(0)">COMEDK Code - E164</a></li>
+                                          <li><a href="javascript:void(0)">COA Code - KA36 </a></li>
+                                       </ul>-->
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h2>Entrepreneurship</h2>
+                            <ul>
+                                <li><a target="_blank" href="https://www.revanest.com">REVA NEST</a></li>
+                                <li><a href="https://www.reva.edu.in/uiic">REVA UIIC</a></li>
+                                <li><a target="_blank" href="https://race.reva.edu.in">REVA RACE </a></li>
+                            </ul>
+                            <h2>Happenings</h2>
+                            <ul>
+                                <li><a href="https://www.reva.edu.in/news">News</a></li>
+                                <li><a href="https://www.reva.edu.in/events">Events </a></li>
+                                <li><a href="https://www.reva.edu.in/activity-and-workshops">Activity and Workshops</a></li>
+                                <li><a href="https://www.reva.edu.in/image-gallery">Image Gallery</a></li>
+                                <li><a href="https://www.reva.edu.in/video-gallery">Video Gallery</a></li>
+                                <li><a href="https://www.reva.edu.in/press">Press Release</a></li>
+                                <li><a href="https://www.reva.edu.in/media-coverage">Media Coverage</a></li>
+                                <!--li><a href="">Archives</a></li--></ul>
+                            <h2>University E-Resources </h2>
+                            <ul>
+                                <li><a href="https://library.reva.edu.in/opac" target="_blank">e-Library</a></li>
+                                <li><a href="https://swayam.gov.in/" target="_blank">Swayam</a></li>
+                                <li><a href="https://epgp.inflibnet.ac.in/" target="_blank">e- Resources for PG</a></li>
+                                <li><a href="https://moodle.reva.edu.in" target="_blank">Moodle</a></li>
+                                <li><a href="https://revaedu.sharepoint.com/sites/e-Learning/" target="_blank">LMS</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h2>Others</h2>
+                            <ul>
+                                <li><a href="https://www.reva.edu.in/sitemap">Sitemap </a></li>
+                                <li><a href="https://www.reva.edu.in/blog">Blog</a></li>
+                                <li><a href="https://www.reva.edu.in/disclaimer">Disclaimer</a></li>
+                                <li><a href="https://www.reva.edu.in/terms-condition">Terms and Condition </a></li>
+                                <li><a href="https://www.reva.edu.in/privacy-policy">Privacy Policy </a></li>
+                                <li><a href="https://www.reva.edu.in/erp">ERP </a></li>
+                                <li><a href="https://www.reva.edu.in/other-applications-url">Applications URL</a></li>
+                            </ul>
+                            <h2>International Relations</h2>
+                            <ul>
+                                <li><a href="https://www.reva.edu.in/international-relations-overview">Overview</a></li>
+                                <li><a href="https://www.reva.edu.in/international-collaborations">International Collaborations </a></li>
+                                <li><a href="https://www.reva.edu.in/notices-and-announcements">International Announcements</a></li>
+                                <li><a href="https://www.reva.edu.in/internship-programme">Internship Programme</a></li>
+                                <li><a href="https://www.reva.edu.in/visitors">Visitors</a></li>
+                                <li><a href="https://www.reva.edu.in/study-abroad">Study Abroad</a></li>
+                                <li><a href="https://www.reva.edu.in/summerwinter-schools">Summer/Winter Schools</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="footer-panel">
+                                <h4>REVA University</h4>
+                                <p>Rukmini Knowledge Park, Kattigenahalli, Yelahanka, Bangalore, Karnataka, India, 560 064</p>
+                                <div class="footer-contact">
+                                    <ul>
+                                        <li class="tel-icon"><i class="fa fa-phone" aria-hidden="true"></i> 
+                                            <a href="tel:+91- 90211 90211" class="cta__number">+91- 90211 90211 </a>
+                                            <a href="tel:+91-80-46966966" class="cta__number"> +91-80-46966966</a></li>
+                                        <li class="message-icon"> <a href="mailto:admissions@reva.edu.in" class="admission_mail">
+                                            <i class="fa fa-envelope" aria-hidden="true">
+                                            </i> admissions@reva.edu.in</a></li> 
+                                    </ul>
+                                </div>
+                                <div class="footer-input">
+                                    <form name="newsletter_frm" id="newsletter_frm" method="post" action="">
+                                        <h3>Subscribe Newsletter</h3>
+                                        <input type="email"  name="email_newsletter" class="form-control email_newsletter" placeholder="Enter your email"/>
+                                        <div class="submit-btn">
+                                            <!--  <button type="button" name="submit_newsletter"><i class="fa fa-angle-right reserve-button" aria-hidden="true"></i></button> -->
+                                        </div> <span class="errEmail"></span> </form>
+                                </div>
+                                <div class="follow-us">
+                                    <h3>Follow Us</h3>
+                                    <ul>
+                                        <li>
+                                            <a rel="nofollow" href="https://www.facebook.com/REVAUniversity" target="_blank">
+                                                <img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/facebook-icon.svg"/></a> 
+                                        </li>
+                                        <li>
+                                              <a rel="nofollow" href="https://twitter.com/REVAuniversity" target="_blank">
+                                                  <img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/twitter-icon.svg" alt="twitter"/></a>
+                                        </li>
+                                        <li>
+                                            <a rel="nofollow" href="https://www.youtube.com/user/RevaUniversity/videos" target="_blank"><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/you-tube-icon.svg" alt="You Tube"/></a>
+                                        </li>
+                                        <li>
+                                            <a rel="nofollow" href="https://www.instagram.com/reva_university/" target="_blank"><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/insta-icon.svg" alt="Insta"/></a>
+                                        </li>
+                                        <li>
+                                            <a rel="nofollow" href="https://www.linkedin.com/school/reva-university/" target="_blank"><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/linkdin-icon.svg" alt="linkdin"/>
+                                        </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <p class="font-12">© RECT All Rights Reserved
+                                    <br/> Website Design and Development by <a href="https://www.stercodigitex.com/" target="_blank" class="sterco">Sterco Digitex</a> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!----- footer mobile menu -->
+                <div class="footer-mobile-menu">
+                    <div class="row">
+                        <div class="col-6 col-md-3">
+                            <h2><a href="https://www.reva.edu.in/why-reva">Why REVA</a></h2> </div>
+                        <div class="col-6 col-md-3">
+                            <h2><a href="https://www.reva.edu.in/international-relations-overview">International Relations</a></h2> </div>
+                        <div class="col-6 col-md-3">
+                            <h2><a href="https://www.reva.edu.in/careers">Careers</a></h2> </div>
+                        <div class="col-6 col-md-3">
+                            <h2><a href="https://www.reva.edu.in/happening">Happenings</a></h2> </div>
+                        <div class="col-6 col-md-3">
+                            <h2><a href="https://www.reva.edu.in/contact-us">Contact</a></h2> </div>
+                        <div class="col-6 col-md-3">
+                            <h2><a target="_blank" href="https://alumni.reva.edu.in/">Alumni</a></h2> </div>
+                        <div class="col-6 col-md-3">
+                            <h2><a target="_blank" href="https://library.reva.edu.in/opac/">Library E-Resources</a></h2> </div>
+                        <div class="col-6 col-md-3">
+                            <h2><a href="https://login.microsoftonline.com/" target="_blank">Login</a></h2>
+                            <ul>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Staff Login</a></li>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Student Login</a></li>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Parent Login</a></li>
+                                <li><a target="_blank" href="https://attendance.reva.edu.in/cosec">Employee Service Centre </a></li>
+                                <li><a target="_blank" href="https://ruerp.reva.edu.in">Online Payment Portal</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3 pt-5">
+                            <h2><a href="https://www.reva.edu.in/privacy-policy">Other</a></h2>
+                            <ul>
+                                <li><a href="https://www.reva.edu.in/sitemap">Sitemap </a></li>
+                                <li><a href="https://www.reva.edu.in/disclaimer">Disclaimer</a></li>
+                                <li><a href="https://www.reva.edu.in/blog">Blog</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-input">
+                        <form name="newsletter_frm" id="newsletter_frm" method="post" action="">
+                            <h3>Subscribe Newsletter</h3>
+                            <input type="email" name="email_newsletter" class="form-control email_newsletter" placeholder="Enter your email"/>
+                            <div class="submit-btn">
+                            <!--    <button type="button" name="submit_newsletter"><i class="fa fa-angle-right reserve-button" aria-hidden="true"></i></button> -->
+                            </div> <span class="errEmail"></span> </form>
+                    </div>
+                    <div class="follow-us">
+                        <h3>Follow Us</h3>
+                        <ul>
+                            <li>
+                                <a href="https://www.facebook.com/REVAUniversity" target="_blank"><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/facebook-icon.svg" alt="facebook"/></a> 
+                            </li>
+                            <li>
+                                  <a href="https://twitter.com/REVAuniversity" target="_blank"><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/twitter-icon.svg" alt="twitter"/></a> 
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/user/RevaUniversity/videos" target="_blank"><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/you-tube-icon.svg" alt="You Tube"/></a> 
+                            </li>
+                            <li>
+                                 <a href="https://www.instagram.com/reva_university/" target="_blank">
+                                     <img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/insta-icon.svg" alt="Insta"/></a> 
+                            </li>
+                            <li>
+                                <a href="https://www.linkedin.com/school/reva-university/" target="_blank">
+                                    <img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/linkdin-icon.svg"/></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="font-12">© RECT All Rights Reserved
+                        <br/> Website Design and Development by <a href="https://www.stercodigitex.com/" target="_blank" class="sterco">Sterco Digitex</a> </p>
+                </div>
+            </div>
+        </div>
+        
+    </footer>
+</div>
+    </apex:form>
+</apex:page>

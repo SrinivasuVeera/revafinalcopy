@@ -1,0 +1,87 @@
+<apex:page controller="FEE_PaytmResponse_API"  sidebar="false" showHeader="false" action="{!updateStudentFee}">
+   <head>
+        <style type= "text/css">
+            .box {
+            width: 700px;
+            height: 450px;            
+            padding: 90px 60px 90px 60px;
+            border: 3px solid rgb(235, 52, 219);
+            box-shadow: 0 0 10px #777777;
+            border-radius: 10px;
+            font-size: large;
+            }
+            #btn{
+            padding:85px 110px;;
+            }
+        </style>
+    </head>
+    <apex:form id="success" styleClass="slds-scope">
+        <apex:slds />
+       <br/><br/><br/>        
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <span></span>
+            </div>           
+            <div class="slds-col" style="font-weight:bold;"> 
+                <!-- <span> <font size="3" color="blue"> Razorpay Payment Response..! </font> </span>-->
+                <div>
+                    
+                </div>
+                <div class="box">
+                 <apex:image value="{!$Resource.REVA_LOGO}" width="50%" style="text-align:top;"/>
+                    
+                    <div>
+                        <table>
+                            <tr>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td> Payment Mode</td>
+                                <td> :</td>
+                                <td>Paytm - {!paymentMode}</td>                                
+                            </tr> 
+                            <tr>
+                                <td> Tranasactionid</td>
+                                <td> :</td>
+                                <td>{!paytmData.TXNID}</td>                                
+                            </tr> 
+                             <tr>
+                                <td>Amount</td>
+                                <td> : </td>
+                                <td>{!paytmData.TXNAMOUNT}</td>                                
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>:</td>
+                                <td>{!paytmData.STATUS}</td>
+                            </tr>
+                            <tr>
+                                <td> Purpose of Payment</td>
+                                <td> :</td>
+                                <td>{!PurposeofPayment}</td>                                
+                            </tr>
+                            <tr>
+                                <td> Date &amp; Time of Transaction</td>
+                                <td> : </td>
+                                <td>{!paytmData.TXNDATE}</td>                                
+                            </tr>                      
+                        </table>                     
+                    </div>                    
+                </div>        
+            </div>            
+        </div>
+        <br/>
+        <p style="text-align:center;font-weight:bold;font-color:blue;">
+            You will be able to Download the Receipt through <b>Payment Details</b> Section under the <b>Fee</b> Tab.
+            <br/><br/>
+            <apex:commandButton title="Back" value="Back to Home" oncomplete="redirect();"/>
+        </p>        
+    </apex:form> 
+    <script>
+    function redirect(){
+        window.location = "{!homeUrl}";
+    }
+    
+    </script>
+    
+</apex:page>

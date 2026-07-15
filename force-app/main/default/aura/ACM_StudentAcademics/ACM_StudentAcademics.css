@@ -1,0 +1,217 @@
+.THIS .slds-tabs_scoped__item{
+    position: relative !important;
+    margin-bottom: calc(-1 * var(--lwc-borderWidthThin,1px))!important;
+    background-color: #fef1e8 !important;
+}
+.THIS .title{
+   display: flex;
+   flex-direction: column;
+ }
+ .THIS .title-name{
+    font-size: large;
+    font-weight: bold;
+ }
+ .THIS .title-info{
+    font-weight: bold;
+    color: #4F73A3;
+    margin:5px;
+ }
+.THIS .Container{
+    background-color:grey;
+}
+.THIS .title-year{
+    font-weight: bold;
+    margin-left: auto;
+    background-color: white;
+    padding: 0.5rem;
+    color: #4F73A3;
+    
+}
+.THIS .Heading{
+    background-color: grey;
+    border-radius: 10px;
+    height: 40px;
+    color: white;
+    margin: 2px;     
+        }
+.THIS .slds-tabs_scoped__nav {
+    display: flex;
+    align-items: flex-start;
+    /* background-color:#E9E9E9 !important; */
+    border:0px solid white !important;
+    }
+
+    .THIS .slds-tabs_scoped__link {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        cursor: pointer;
+        height: var(--lwc-lineHeightTab,2.5rem);
+        line-height: var(--lwc-lineHeightTab,2.5rem);
+        padding: 0 var(--lwc-spacingMedium,1rem);
+        color: var(--slds-g-color-neutral-base-30, var(--lwc-colorTextActionLabel,rgba(0, 0, 0, 0.86)));
+        border-top: 0px;
+        border-bottom: 0px;
+        border-image: initial;
+        border-left: var(--lwc-borderWidthThin,1px) solid transparent;
+        border-right: var(--lwc-borderWidthThin,1px) solid transparent;
+        border-radius: 0px;
+        color: black;
+        font-size:15px;
+        font-weight: 600;                             
+    }
+    .THIS .slds-tabs--scoped__link {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        cursor: pointer;
+        height: var(--lwc-lineHeightTab,2.5rem);
+        line-height: var(--lwc-lineHeightTab,2.5rem);
+        padding: 0 var(--lwc-spacingMedium,1rem);
+        color: var(--slds-g-color-neutral-base-30, var(--lwc-colorTextActionLabel,rgba(0, 0, 0, 0.86)));
+        border-top: 0px;
+        border-bottom: 0px;
+        border-image: initial;
+        border-left: var(--lwc-borderWidthThin,1px) solid transparent;
+        border-right: var(--lwc-borderWidthThin,1px) solid transparent;
+        border-radius: 0px;
+        color: black;
+        font-size:15px;
+        font-weight: 600;                            
+    }
+    
+    .THIS .slds-is-active .slds-tabs_scoped__link{
+        background-color:#f57318 !important;
+        color:white !important;
+        font-weight:600 !important;
+        text-decoration: none !important;
+    }
+    .THIS .slds-tabs_scoped__content {
+        border: 0px solid white !important;
+        padding-top:5px !important;     
+        padding: 7px 1px 5px 0px!important;                                                              
+    }
+.THIS .slds-tabs_scoped__content {
+    background-color: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundAlt,rgb(255, 255, 255)));
+    border:0px solid white !important;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--lwc-borderRadiusMedium,0.25rem);
+    border-bottom-left-radius: var(--lwc-borderRadiusMedium,0.25rem);
+    padding: 7px 1px 5px 0px!important;
+                                }
+.THIS .slds-tabs_scoped__content .slds-tabs--scoped__content {
+    background-color: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundAlt,rgb(255, 255, 255)));
+    border:0px solid white !important;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--lwc-borderRadiusMedium,0.25rem);
+    border-bottom-left-radius: var(--lwc-borderRadiusMedium,0.25rem);
+    padding-top:10px !important;
+                                }
+.THIS .slds-table--bordered {
+border-collapse: separate !important;
+border-top: white !important;
+border-bottom:white !important;
+border: 1px solid white !important;
+                                }
+.THIS .slds-table_bordered{
+    border-collapse: separate !important;
+    border-top: white !important;
+    border-bottom:white !important;
+    border: 1px solid white !important;
+    }
+
+
+.THIS .cACM_StudentAcademics .slds-table {
+    font-size: inherit!important;
+    background-color: #c7c7c7!important;
+    border: 2px solid white;
+}
+
+.THIS .slds-table {
+    font-size: inherit!important;
+    background-color: #c7c7c7 !important;
+    border: 2px solid white;
+}
+.THIS .slds-table--bordered tbody td .slds-table--bordered tbody th {
+    /* border-top: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgba(5, 5, 5, 0.83))); */
+    border-top: 4px solid white !important;
+}
+.THIS .slds-table--bordered tbody td {
+    /* border-top: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,rgba(5, 5, 5, 0.83))); */
+    border-top: 4px solid white !important;
+}
+/*New CSS Modified-- Keval*/
+
+.THIS.fees-payments-wrapper {
+    box-shadow: 2px 4px 9px -4px #6e6e6e;
+    border: 1px solid var(--reva-brand-color);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.THIS .fees-payments-heading {
+    display: flex;
+    background-color: var(--reva-component-heading-background-color);
+    color: black;
+    border: 0px;
+    font-size: 15px;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.THIS .aca-table{
+    table-layout: fixed;
+}
+
+.THIS .aca-table thead th{
+    text-align: center !important;
+    background-color: var(--reva-table-heading-background-color);
+    color: white;
+    padding: 8px !important;
+    font-size: 13px;
+    white-space: normal;
+    word-wrap: break-word;
+
+}
+.THIS .aca-table tbody tr:focus{
+    background: var(--reva-table-row-background-color) !important;
+}
+
+.THIS .aca-table tbody tr:hover {
+    background: var(--reva-table-row-background-color) !important;
+}
+.THIS .aca-table tbody td {
+    text-align: center !important;
+    color: black;
+    background: var(--reva-table-row-background-color) !important;
+    padding: 8px !important;
+    font-size: 13px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+
+
+@media only screen and (max-width:767px) {
+
+    .THIS .aca-table thead th {
+        padding: 5px !important;
+        font-size: 11px;
+    }
+
+    .THIS .aca-table tbody td{
+        padding: 5px !important;
+        font-size: 12px;
+    }
+
+
+}

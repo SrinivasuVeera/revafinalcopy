@@ -1,0 +1,231 @@
+<template>
+  <lightning-card title="Alternate Facility Selection" icon-name="standard:room">
+    <div class="slds-p-around_medium">
+
+      <!-- 🔹 Top Nav Buttons -->
+      <div class="slds-m-bottom_medium">
+        <lightning-button label="Pending Requests"
+                          variant={pendingButtonVariant}
+                          data-view="pending"
+                          onclick={handleViewChange}>
+        </lightning-button>
+
+        <lightning-button label="Completed Requests"
+                          variant={completedButtonVariant}
+                          class="slds-m-left_small"
+                          data-view="completed"
+                          onclick={handleViewChange}>
+        </lightning-button>
+      </div>
+
+      <!-- 🔹 Alternate Facility Selector (shown only after click) -->
+      <template if:true={showAlternateSelector}>
+        <div class="slds-box slds-theme_default slds-m-top_medium">
+          <p><b>Date:</b> {bookingDate}</p>
+          <p><b>Slot:</b> {slot}</p>
+          <p><b>School:</b> {school}</p>
+          <p><b>Course Offering:</b> {courseOfferingName}</p>
+          <p><b>Section:</b> {sectionName}</p>
+          <p><b>Room Change Status:</b> {roomChangeStatus}</p>
+
+          <!-- Same/Other School Buttons -->
+          <div class="slds-m-top_medium">
+            <lightning-button variant="brand" label="Same School Facilities" onclick={handleSameSchool}></lightning-button>
+            <lightning-button variant="neutral" label="Other School Facilities" class="slds-m-left_small" onclick={handleOtherSchool}></lightning-button>
+          </div>
+
+          <!-- Select Other School -->
+          <template if:true={showSchoolSelector}>
+            <div class="slds-m-top_medium">
+              <lightning-combobox
+                name="school"
+                label="Select Other School"
+                value={selectedOtherSchool}
+                placeholder="Choose a School"
+                options={schoolOptions}
+                onchange={handleSchoolChange}>
+              </lightning-combobox>
+            </div>
+          </template>
+
+          <!-- Select Alternate Facility -->
+          <template if:true={showFacilityOptions}>
+            <div class="slds-m-top_medium">
+              <lightning-combobox
+                name="facility"
+                label="Select Alternate Facility"
+                value={selectedFacility}
+                placeholder="Choose a Facility"
+                options={facilities}
+                onchange={handleFacilityChange}>
+              </lightning-combobox>
+            </div>
+
+            <div class="slds-m-top_medium">
+              <lightning-button
+                variant="brand"
+                label="Confirm Alternate Booking"
+                onclick={confirmAlternate}
+                disabled={disableConfirm}>
+              </lightning-button>
+            </div>
+          </template>
+        </div>
+      </template>
+
+     
+      
+      <!-- 🔹 Pending Requests Table View -
+<template if:true={isPendingView}>
+  <h3 class="slds-text-heading_small slds-m-bottom_small">
+    Pending Room Change Requests
+  </h3>
+
+  <template if:true={pendingRequests.length}>
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+      <thead>
+        <tr class="slds-line-height_reset">
+          <th scope="col">Date</th>
+          <th scope="col">Slot</th>
+          <th scope="col">Course Offering</th>
+          <th scope="col">School</th>
+          <th scope="col">Section</th>
+          <th scope="col">Batch</th>
+          <th scope="col">Select Room</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template for:each={pendingRequests} for:item="req">
+          <tr key={req.Id}>
+            <td>{req.Date__c}</td>
+            <td>{req.Slot__c}</td>
+            <td>{req.hed__Course_Offering__r.Name}</td>
+            <td>{req.School__c}</td>
+            <td>{req.Section__r.Name}</td>
+            <td>{req.Batch_Group__r.Name}</td>
+            <!- Link moved here ->
+            <td>
+              <a href="javascript:void(0)" 
+                 class="slds-text-link" 
+                 data-id={req.Id} 
+                 onclick={handleCourseClick}>
+                Click Here
+              </a>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </template>
+
+  <template if:false={pendingRequests.length}>
+    <!-<p>⚠️ No pending requests found.</p>->
+  </template>
+</template>-->
+
+     <!-- 🔹 Pending Requests Table View -->
+<template if:true={isPendingView}>
+  <h3 class="slds-text-heading_small slds-m-bottom_small">
+    Pending Room Change Requests
+  </h3>
+
+  <template if:true={pendingRequests.length}>
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+      <thead>
+        <tr class="slds-line-height_reset">
+          <th scope="col">Date</th>
+          <th scope="col">Slot</th>
+          <th scope="col">Course Offering</th>
+          <th scope="col">School</th>
+          <th scope="col">Section</th>
+          <th scope="col">Batch</th>
+          <th scope="col">Select Room</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template for:each={pendingRequests} for:item="req">
+          <tr key={req.Id}>
+            <td>{req.Date__c}</td>
+            <td>{req.Slot__c}</td>
+            <td>{req.courseOfferingName}</td>
+            <td>{req.School__c}</td>
+            <td>{req.sectionName}</td>
+            <td>{req.batchName}</td>
+            <td>
+              <a href="javascript:void(0)" 
+                 class="slds-text-link" 
+                 data-id={req.Id} 
+                 onclick={handleCourseClick}>
+                Click Here
+              </a>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </template>
+
+  <template if:false={pendingRequests.length}>
+    <p>⚠️ No pending requests found.</p>
+  </template>
+</template>
+
+      <!-- 🔹 Completed Requests -->
+<template if:true={isCompletedView}>
+  <h3 class="slds-text-heading_small slds-m-bottom_small">
+    Completed Room Change Requests
+  </h3>
+
+  <template if:true={completedRequests.length}>
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+      <thead>
+        <tr class="slds-line-height_reset">
+          <th scope="col">Date</th>
+          <th scope="col">Slot</th>
+          <th scope="col">Course Offering</th>
+          <th scope="col">School</th>
+          <th scope="col">Section</th>
+          <th scope="col">Batch</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template for:each={completedRequests} for:item="req">
+          <tr key={req.Id}>
+            <td>{req.Date__c}</td>
+            <td>{req.Slot__c}</td>
+            <td>{req.hed__Course_Offering__r.Name}</td>
+            <td>{req.School__c}</td>
+            <td>{req.Section__r.Name}</td>
+            <td>{req.Batch_Group__r.Name}</td>
+            <td>
+              <lightning-badge label="Completed" class="slds-theme_success"></lightning-badge>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </template>
+
+  <template if:false={completedRequests.length}>
+    <p>⚠️ No completed requests found.</p>
+  </template>
+</template>
+
+
+      
+
+      <!-- Spinner -->
+      <template if:true={isLoading}>
+        <div class="slds-m-top_medium slds-align_absolute-center">
+          <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        </div>
+      </template>
+
+      <!-- Messages -->
+      <template if:true={message}>
+        <p class="slds-m-top_medium">{message}</p>
+      </template>
+    </div>
+  </lightning-card>
+</template>

@@ -1,0 +1,584 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+    </template>
+    <div if:true={visibleFeedbackCategory}>        
+        <div class="survey-heading">
+            <b>Feedback</b>
+        </div>
+        <lightning-tabset selectedtabid="feedbackoncurriculam" class="tab-active" variant="scoped">
+
+            <lightning-tab label="Student Feedback" id="StudentFeedback">
+                <div class="slds-grid slds-grid_vertical padd">                    
+                    <div class="slds-col">
+                        <template if:true={showFacultyActiveCC}>
+                            <!-- <lightning-card title="Faculty Enrollments"> -->
+                                <template if:true={enrollments}>
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="actions-cell" scope="col">S.no</th>
+                                                <th class="actions-cell" scope="col">Course Code</th>
+                                                <!-- <th class="actions-cell" scope="col">School</th> -->
+                                                <th class="actions-cell" scope="col">Course Offering Name</th>                                               
+                                                <th class="actions-cell" scope="col">Section</th>
+                                                <th class="actions-cell" scope="col">Semester</th>                                                
+                                                <th class="actions-cell" scope="col">Actions</th>
+                                                <!-- <th class="actions-cell" scope="col">SectionId</th>
+                                                <th class="actions-cell" scope="col">OfferingId</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={enrollments} for:item="record">
+                                                <tr key={record.enrollmentId}>
+                                                    <td class="actions-cell">{record.serialNo}</td>
+                                                    <td class="actions-cell">{record.courseCode}</td>
+                                                    <!-- <td class="actions-cell">{record.school}</td> -->
+                                                    <td class="actions-cell">{record.courseOfferingName}</td>
+                                                    <td class="actions-cell">{record.section}</td>                                                    
+                                                    <td class="actions-cell">{record.semester}</td>
+                                                    <!-- <td class="actions-cell">{record.sectionId}</td>
+                                                    <td class="actions-cell">{record.courseOfferingId}</td> -->
+                                                    <td class="actions-cell">
+                                                        <lightning-button
+                                                            variant="brand"
+                                                            label="Details"
+                                                            title="Details"
+                                                            onclick={handleDetails}
+                                                            data-id={record.enrollmentId}
+                                                            class="slds-m-right_small">
+                                                        </lightning-button>
+                                                        <lightning-button
+                                                            variant="neutral"
+                                                            label="Report"
+                                                            title="Report"
+                                                            onclick={handleReport}
+                                                            data-id={record.enrollmentId}>
+                                                        </lightning-button>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </template>
+                                <template if:true={error}>
+                                    <p class="slds-text-color_error">{error}</p>
+                                </template>
+                            <!-- </lightning-card> -->
+                        </template>  
+
+                        <template if:true={showStudentDetails}>
+                            <lightning-card variant="narrow">            
+                                <table class="slds-table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="actions-cell"><b>School : </b>{SchoolName} </td>
+                                            <td class="actions-cell"><b>Semester : </b> {Semester}</td>
+                                            <td class="actions-cell"><b>Section : </b>{Section}</td>
+                                            <td class="actions-cell"><b>Course Offering Name : </b>{CourseOfferingName}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </lightning-card> 
+                            <div class="slds-p-around_x-small"></div>           
+                            <lightning-card title="Student Details" class="slds-m-top_medium">
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="actions-cell" scope="col">#</th>
+                                            <th class="actions-cell" scope="col">Name</th>
+                                            <th class="actions-cell" scope="col">SRN</th>
+                                            <th class="actions-cell" scope="col">Course Feedback</th>
+                                            <th class="actions-cell" scope="col">Faculty Feedback</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={studentList} for:item="student">
+                                            <tr key={student.srn}>
+                                                <td class="actions-cell">{student.serialNo}</td>
+                                                <td class="actions-cell">{student.studentName}</td>
+                                                <td class="actions-cell">{student.srn}</td>                            
+                                                <td class="actions-cell">
+                                                    <template if:true={student.courseFeedback}>
+                                                        ✔️
+                                                    </template>
+                                                    <template if:false={student.courseFeedback}>
+                                                        ❌
+                                                    </template>
+                                                </td>
+                                                <td class="actions-cell">
+                                                    <template if:true={student.facultyFeedback}>
+                                                        ✔️
+                                                    </template>
+                                                    <template if:false={student.facultyFeedback}>
+                                                        ❌
+                                                    </template>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </lightning-card>        
+                            <div class="line slds-m-bottom_x-large"></div>
+                            <div class="button-container">                                
+                                <button class="slds-button slds-button_brand" onclick={handleBackButton}>Back</button>    
+                            </div>
+                        </template>   
+                        
+                        <template if:true={showSummaryReport}>
+                            <template if:true={feedbackDataCourse.length}>
+                                <lightning-card title="Feedback on course">
+                                    <div class="slds-m-top_medium">
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">                           
+                                                    <th scope="col">Serial no.</th>
+                                                    <th scope="col">Question</th>
+                                                    <th scope="col">Average</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={feedbackDataCourse} for:item="item" for:index="index">
+                                                    <tr key={item.qId}>                               
+                                                        <!-- <td>{item.qId}</td> -->
+                                                        <td>{index+1}</td>
+                                                        <td>{item.question}</td>
+                                                        <td>{item.averageResponse}</td>
+                                                    </tr>
+                                                </template>
+                                                <tr class="slds-text-title_bold">
+                                                    <td colspan="2" class="slds-text-align_right">Total Average</td>
+                                                    <td>{totalAverageCourse}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </lightning-card>    
+                            </template>                        
+                            <div class="slds-p-around_x-small"></div>                           
+                            <template if:true={feedbackDataFaculty.length}>
+                                <lightning-card title="Feedback on faculty">
+                                    <div class="slds-m-top_medium">
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">
+                                                    <!-- <th scope="col">Course Offering ID</th>
+                                                    <th scope="col">Template ID</th> -->
+                                                    <th scope="col">Serial no.</th>
+                                                    <th scope="col">Question</th>
+                                                    <th scope="col">Average</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={feedbackDataFaculty} for:item="item" for:index="index">
+                                                    <tr key={item.qId}>
+                                                        <!-- <td>{item.courseOfferingId}</td>
+                                                        <td>{item.templateId}</td> -->
+                                                        <!-- <td>{item.qId}</td> -->
+                                                         <td>{index+1}</td>
+                                                        <td>{item.question}</td>
+                                                        <td>{item.averageResponse}</td>
+                                                    </tr>
+                                                </template>
+                                                <tr class="slds-text-title_bold">
+                                                    <td colspan="2" class="slds-text-align_right">Total Average</td>
+                                                    <td>{totalAverageFaculty}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <template if:true={directorFeedbackStatus}>    
+                                        <div class="slds-m-top_medium slds-m-bottom_medium">
+                                            <lightning-textarea 
+                                                name="remark" 
+                                                label="Director Remark" 
+                                                type="text" 
+                                                value={directorRemark}
+                                                disabled
+                                                >  
+                                        </lightning-textarea> 
+                                        </div>     
+                                        <!-- <lightning-button name="facultyPdf" label="Download PDF" onclick={handleDownload} class="slds-m-bottom_medium"></lightning-button>             -->
+                                    </template>
+                                </lightning-card>
+                            </template>
+                            <div class="line slds-m-bottom_x-large"></div>
+                            <div class="button-container">                                
+                                <button class="slds-button slds-button_brand" onclick={handleBackButton}>Back</button>    
+                            </div>
+                        </template>
+                    </div>                   
+                </div>
+            </lightning-tab>
+
+            <lightning-tab label="Feedback on Curriculum" id="FeedbackONCurriculam">                
+                <div class="slds-grid slds-grid_vertical padd">
+                    <template if:true={ShowInstructions}>
+                        <div class="slds-col firstColumn">
+                            <span class="curriText">Write Feedback on Curriculum</span>
+                        </div>
+                        <div class="slds-col">
+                            <div class="instHead">Instructions :</div>
+                            1. Please answer all the questions<br />
+                            2. Feedback can be only submitted once<br />
+                            3. Click on proceed to take the Feedback                                                   
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-clearfix">
+                                <div class="slds-float_right">
+                                    <lightning-button variant="brand" class="slds-button backColor"
+                                        label="Proceed" onclick={displayFacultyEnrollment}></lightning-button> 
+                                </div>
+                            </div>
+                        </div>
+                    </template>   
+                    <template if:true={ShowEnrollments}>
+                        <div class="slds-col">
+                            <template if:true={ShowCourses}>                                
+                                <lightning-card title="Faculty Enrollments">
+                                    <template if:true={enrollments}>
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">
+                                                    <th class="actions-cell" scope="col">S.no</th>
+                                                    <th class="actions-cell" scope="col">Course Code</th>
+                                                    <!-- <th class="actions-cell" scope="col">School</th> -->
+                                                    <th class="actions-cell" scope="col">Course Offering Name</th>                                               
+                                                    <th class="actions-cell" scope="col">Section</th>
+                                                    <th class="actions-cell" scope="col">Semester</th>                                                
+                                                    <th class="actions-cell" scope="col">Actions</th>
+                                                    <!-- <th class="actions-cell" scope="col">SectionId</th>
+                                                    <th class="actions-cell" scope="col">OfferingId</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={enrollments} for:item="record">
+                                                    <tr key={record.enrollmentId}>
+                                                        <td class="actions-cell">{record.serialNo}</td>
+                                                        <!-- <td class="actions-cell">{record.school}</td> -->
+                                                         <!-- <td class="actions-cell">{record.programBatchId}</td> -->
+                                                        <td class="actions-cell">{record.courseCode}</td>
+                                                        <td class="actions-cell">{record.courseOfferingName}</td>
+                                                        <td class="actions-cell">{record.section}</td>                                                    
+                                                        <td class="actions-cell">{record.semester}</td>
+                                                        <!-- <td class="actions-cell">{record.sectionId}</td>
+                                                        <td class="actions-cell">{record.courseOfferingId}</td> -->
+                                                        <td class="actions-cell">
+                                                            <template if:true={record.courseFeedbackCheck}>
+                                                                <span class="slds-text-color_success slds-text-title_bold">✔️</span>
+                                                            </template>
+                                                            <template if:false={record.courseFeedbackCheck}>
+                                                                <lightning-button
+                                                                    variant="brand"
+                                                                    label="Give Feedback"
+                                                                    title="Give Feedback"
+                                                                    onclick={displayQuestionSet}
+                                                                    data-id={record.enrollmentId}>
+                                                                </lightning-button>
+                                                            </template>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </template>
+                                    <template if:true={error}>
+                                        <p class="slds-text-color_error">{error}</p>
+                                    </template>
+                                </lightning-card>
+                            </template>
+                            <!-- <div if:true={displayQuestions}> 
+                                <lightning-card variant="narrow">            
+                                    <table class="slds-table">
+                                        <tbody>
+                                            <tr>                                                
+                                                <td class="actions-cell"><b>Semester : </b>{Semester}</td>
+                                                <td class="actions-cell"><b>Section : </b>{Section}</td>
+                                                <td class="actions-cell"><b>Course Offering Name : </b>{CourseOfferingName}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </lightning-card> 
+                                <div class="slds-p-around_x-small"></div>
+                                <lightning-card variant="narrow"> 
+                                    <div class="questions-container">  
+                                        <template for:each={questionsWithStars} for:item="question" for:index="index">
+                                                <div key={question.id} class="question-block">
+                                                    <p>{question.text}</p>
+                                                    <div class="stars">
+                                                        <template for:each={question.stars} for:item="star">
+                                                            <span
+                                                                key={star.value}
+                                                                class={star.class}
+                                                                data-index={index}
+                                                                data-star={star.value}
+                                                                onclick={handleStarClick}
+                                                                >
+                                                                ★
+                                                            </span>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                        </template>
+                                    </div>
+                                    <div class="line slds-m-bottom_x-large"></div>
+                                    <div class="button-container">
+                                            <button class="slds-button slds-button_brand slds-m-right_x-large" onclick={handleSubmitQuestions}>Submit</button>
+                                            <button class="slds-button slds-button_brand" onclick={questionDisplayBackButton}>Back</button>    
+                                    </div>
+                                </lightning-card>
+                            </div> -->
+                           
+                                <lightning-card variant="narrow">            
+                                    <table class="slds-table">
+                                        <tbody>
+                                            <tr>                                                
+                                                <td class="actions-cell"><b>Semester : </b>{Semester}</td>
+                                                <td class="actions-cell"><b>Section : </b>{Section}</td>
+                                                <td class="actions-cell"><b>Course Offering Name : </b>{CourseOfferingName}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </lightning-card> 
+                                <div class="slds-p-around_x-small"></div>
+                                <lightning-card variant="narrow"> 
+                                    <div class="questions-container">  
+                                        <div if:true={displayQuestions}> 
+                                            <template for:each={questionsWithStars} for:item="question" for:index="index">
+                                                    <div key={question.id} class="question-block">
+                                                        <p>{question.text}</p>
+                                                        <div class="stars">
+                                                            <template for:each={question.stars} for:item="star">
+                                                                <span
+                                                                    key={star.value}
+                                                                    class={star.class}
+                                                                    data-index={index}
+                                                                    data-star={star.value}
+                                                                    onclick={handleStarClick}
+                                                                    >
+                                                                    ★
+                                                                </span>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                            </template>
+                                        </div>
+                                        <template if:true={displayMessage}>
+                                            <div class="slds-text-heading_medium slds-text-align_center">{errorMessage}</div>
+                                        </template>
+                                    </div>
+                                    <div class="line slds-m-bottom_x-large"></div>
+                                    <div class="button-container">
+                                        <template if:false={displayMessage}>
+                                            <button class="slds-button slds-button_brand slds-m-right_x-large" onclick={handleSubmitQuestions}>Submit</button>
+                                        </template>                                            
+                                        <button class="slds-button slds-button_brand" onclick={questionDisplayBackButton}>Back</button>    
+                                    </div>
+                                </lightning-card>
+                            
+                        </div>                        
+                    </template>  
+                </div>                
+            </lightning-tab>
+            <lightning-tab label="Feedback on Infrastructure" id="FeedbackONMentor">
+                <div class="slds-grid slds-grid_vertical padd">
+                    <div class="slds-col firstColumn">                            
+                        <span class="curriText">Write Feedback on Infrastructure</span>
+                    </div>
+                    <div class="slds-col">
+                        <div class="instHead">Instructions :</div>
+                        1. Please answer all the questions<br />
+                        2. Feedback can be only submitted once<br />
+                        3. Click on proceed to take the Feedback
+                    </div>
+                    <div class="slds-col">
+                        <div class="slds-clearfix">
+                            <div class="slds-float_right">                                    
+                                <!-- <lightning-button variant="brand" class="slds-button backColor" label="Proceed"></lightning-button>  -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning-tab>           
+
+        </lightning-tabset>      
+    </div>
+    <!-- <template if:true={showFacultyActiveCC}>
+        <lightning-card title="Faculty Enrollments">
+            <template if:true={enrollments}>
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="actions-cell" scope="col">S.no</th>
+                            <th class="actions-cell" scope="col">School</th>
+                            <th class="actions-cell" scope="col">Semester</th>
+                            <th class="actions-cell" scope="col">Section</th>
+                            <th class="actions-cell" scope="col">Course Offering Name</th>
+                            <th class="actions-cell" scope="col">Actions</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={enrollments} for:item="record">
+                            <tr key={record.enrollmentId}>
+                                <td class="actions-cell">{record.serialNo}</td>
+                                <td class="actions-cell">{record.school}</td>
+                                <td class="actions-cell">{record.semester}</td>
+                                <td class="actions-cell">{record.section}</td>
+                                <td class="actions-cell">{record.courseOfferingName}</td>                                
+                                <td class="actions-cell">
+                                    <lightning-button
+                                        variant="brand"
+                                        label="Details"
+                                        title="Details"
+                                        onclick={handleDetails}
+                                        data-id={record.enrollmentId}
+                                        class="slds-m-right_small">
+                                    </lightning-button>
+                                    <lightning-button
+                                        variant="neutral"
+                                        label="Report"
+                                        title="Report"
+                                        onclick={handleReport}
+                                        data-id={record.enrollmentId}>
+                                    </lightning-button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+            <template if:true={error}>
+                <p class="slds-text-color_error">{error}</p>
+            </template>
+        </lightning-card>
+    </template>   -->
+
+    <!-- <template if:true={showStudentDetails}>
+        <lightning-card variant="narrow">            
+            <table class="slds-table">
+                <tbody>
+                    <tr>
+                        <td class="actions-cell"><b>School : </b>{SchoolName} </td>
+                        <td class="actions-cell"><b>Semester : </b> {Semester}</td>
+                        <td class="actions-cell"><b>Section : </b>{Section}</td>
+                        <td class="actions-cell"><b>Course Offering Name : </b>{CourseOfferingName}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </lightning-card> 
+        <div class="slds-p-around_x-small"></div>           
+        <lightning-card title="Student Details" class="slds-m-top_medium">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                <thead>
+                    <tr>
+                        <th class="actions-cell" scope="col">#</th>
+                        <th class="actions-cell" scope="col">Name</th>
+                        <th class="actions-cell" scope="col">SRN</th>
+                        <th class="actions-cell" scope="col">Course Feedback</th>
+                        <th class="actions-cell" scope="col">Faculty Feedback</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={studentList} for:item="student">
+                        <tr key={student.srn}>
+                            <td class="actions-cell">{student.serialNo}</td>
+                            <td class="actions-cell">{student.studentName}</td>
+                            <td class="actions-cell">{student.srn}</td>                            
+                            <td class="actions-cell">
+                                <template if:true={student.courseFeedback}>
+                                    ✔️
+                                </template>
+                                <template if:false={student.courseFeedback}>
+                                    ❌
+                                </template>
+                            </td>
+                            <td class="actions-cell">
+                                <template if:true={student.facultyFeedback}>
+                                    ✔️
+                                </template>
+                                <template if:false={student.facultyFeedback}>
+                                    ❌
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </lightning-card>        
+    </template>   
+
+    <template if:true={feedbackDataCourse.length}>
+        <lightning-card title="Feedback on course">
+            <div class="slds-m-top_medium">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">                           
+                            <th scope="col">Question ID</th>
+                            <th scope="col">Question</th>
+                            <th scope="col">Average</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={feedbackDataCourse} for:item="item">
+                            <tr key={item.qId}>                               
+                                <td>{item.qId}</td>
+                                <td>{item.question}</td>
+                                <td>{item.averageResponse}</td>
+                            </tr>
+                        </template>
+                        <tr class="slds-text-title_bold">
+                            <td colspan="2" class="slds-text-align_right">Total Average</td>
+                            <td>{totalAverageCourse}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </lightning-card>    
+    </template>
+
+    <div class="slds-p-around_x-small"></div>  
+     
+    <template if:true={feedbackDataFaculty.length}>
+        <lightning-card title="Feedback on faculty">
+            <div class="slds-m-top_medium">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">                            
+                            <th scope="col">Question ID</th>
+                            <th scope="col">Question</th>
+                            <th scope="col">Average</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={feedbackDataFaculty} for:item="item">
+                            <tr key={item.qId}>                                
+                                <td>{item.qId}</td>
+                                <td>{item.question}</td>
+                                <td>{item.averageResponse}</td>
+                            </tr>
+                        </template>
+                        <tr class="slds-text-title_bold">
+                            <td colspan="2" class="slds-text-align_right">Total Average</td>
+                            <td>{totalAverageFaculty}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <template if:true={directorFeedbackStatus}>    
+                <div class="slds-m-top_medium slds-m-bottom_medium">
+                    <lightning-textarea 
+                        name="remark" 
+                        label="Director Remark" 
+                        type="text" 
+                        value={directorRemark}
+                        disabled
+                        >  
+                   </lightning-textarea> 
+                </div>     
+                <lightning-button name="facultyPdf" label="Download PDF" onclick={handleDownload} class="slds-m-bottom_medium"></lightning-button>            
+            </template>
+        </lightning-card>
+    </template>       -->
+</template>

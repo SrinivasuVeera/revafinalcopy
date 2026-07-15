@@ -1,0 +1,17 @@
+.outer-container {
+    display: flex;
+    justify-content: center;
+}
+.custom-box {
+    background: #f4f6f9;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}.form-container {
+    width: 60%;
+    margin: 20px auto;   /* 👈 TOP + CENTER spacing */
+}
+
+lightning-card {
+    border-radius: 10px;
+}

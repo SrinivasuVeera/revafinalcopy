@@ -1,0 +1,130 @@
+<template>
+    <template if:true={spinner}>
+        <div class="slds-spinner_container">
+            <div role="alert" class="slds-spinner slds-spinner_brand slds-spinner_large">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <div class="slds-form slds-box">
+        <div class="slds-form__row">
+            <div class="slds-form__item">
+                <label class="slds-form-element__label">Course Name:</label>
+                <div class="slds-form-element__control">
+                    <b>{courseName}</b>
+                </div>
+            </div>
+            <div class="slds-form__item">
+                <label class="slds-form-element__label">Section:</label>
+                <div class="slds-form-element__control">
+                    <b>{sectionName}</b>
+                </div>
+            </div>
+            <div class="slds-form__item">
+                <label class="slds-form-element__label">IA Type::</label>
+                <div class="slds-form-element__control">
+                    <b>{iaType}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={studentList}>
+        <div class="slds-table_header-fixed_container" style="height:450px;">
+            <div class="slds-scrollable_y" style="height:100%;">
+                <table class="slds-table slds-table_bordered slds-table_col-bordered slds-max-medium-table_stacked slds-table_header-fixed" style="overflow: visible;" width="100%">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th style="width: 30%;"><div class="slds-truncate">Student Name</div></th>
+                            <th style="width: 10%;"><div class="slds-truncate">Knowledge<br/> Max: {crsConnection.hed__Course_Offering__r.hed__Course__r.Knowledge_of_Exercise_Max_Marks__c}</div></th>
+                            <th style="width: 10%;"><div class="slds-truncate">Execution<br/> Max: {crsConnection.hed__Course_Offering__r.hed__Course__r.Execution_of_Exercise_Max_Marks__c}</div></th>
+                            <th style="width: 10%;"><div class="slds-truncate">Description<br/> Max: {crsConnection.hed__Course_Offering__r.hed__Course__r.Description_of_Experiment_Max_Marks__c}</div></th>
+                            <th style="width: 10%;"><div class="slds-truncate">Viva voce<br/> Max: {crsConnection.hed__Course_Offering__r.hed__Course__r.Viva_Voce_Practical_Max_Marks__c}</div></th> 
+                            <th style="width: 10%;"><div class="slds-truncate">Punctuality<br/> Max: {crsConnection.hed__Course_Offering__r.hed__Course__r.Punctuality_Max_Marks__c}</div></th>
+                            <th style="width: 10%;"><div class="slds-truncate">Results<br/> Max: {crsConnection.hed__Course_Offering__r.hed__Course__r.Results_Max_Marks__c}</div></th>
+                            <th style="width: 10%;"><div class="slds-truncate">Total<br/> Max: {crsConnection.hed__Course_Offering__r.hed__Course__r.Maximum_Internal_Marks__c}</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={studentList} for:item="crs" for:index="index">
+                            <tr key={crs.crsConn.Id}>
+                                <td>{crs.crsConn.hed__Contact__r.Name}<br/>{crs.crsConn.hed__Contact__r.SRN_Number__c}</td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" name={index} min="-1" max={crs.crsConn.hed__Course_Offering__r.hed__Course__r.Knowledge_of_Exercise_Max_Marks__c}
+                                        value={crs.iaMark.Knowledge_of_Exercise_Secured_Marks__c}
+                                        data-id={crs.crsConn.Id} variant="label-hidden"
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" name={index} min="-1" max={crs.crsConn.hed__Course_Offering__r.hed__Course__r.Execution_of_Exercise_Max_Marks__c}
+                                        value={crs.iaMark.Execution_of_Exercise_Secured_Marks__c}
+                                        data-id={crs.crsConn.Id} variant="label-hidden"
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" name={index} min="-1" max={crs.crsConn.hed__Course_Offering__r.hed__Course__r.Description_of_Experiment_Max_Marks__c}
+                                        value={crs.iaMark.Description_of_Experiment_Secured_Mark__c}
+                                        data-id={crs.crsConn.Id} variant="label-hidden"
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" name={index} min="-1" max={crs.crsConn.hed__Course_Offering__r.hed__Course__r.Viva_Voce_Practical_Max_Marks__c}
+                                        value={crs.iaMark.Viva_Voce_Practical_Secured_Marks__c}
+                                        data-id={crs.crsConn.Id} variant="label-hidden"
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" name={index} min="-1" max={crs.crsConn.hed__Course_Offering__r.hed__Course__r.Punctuality_Max_Marks__c}
+                                        value={crs.iaMark.Punctuality_Secured_Marks__c}
+                                        data-id={crs.crsConn.Id} variant="label-hidden"
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:20px">
+                                    <lightning-input type="number" name={index} min="-1" max={crs.crsConn.hed__Course_Offering__r.hed__Course__r.Results_Max_Marks__c}
+                                        value={crs.iaMark.Results_Secured_Marks__c}
+                                        data-id={crs.crsConn.Id} variant="label-hidden"
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                    </div>
+                                </td>
+                               
+                                <td 
+                                data-label="Total" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                <div style="margin-bottom:20px">
+                                    {crs.iaMark.Total_Secured_Marks_New__c} 
+                                </div>
+                                 </td>
+                                <!-- Repeat other fields here -->
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <lightning-button label="Update Marks" onclick={saveIaMarks} variant="brand"></lightning-button>
+        <lightning-button label="Back to List" onclick={backToList}></lightning-button>
+    </template>
+
+    <template if:false={studentList}>
+        <p>No students enrolled for this Course & Section.</p>
+    </template>
+</template>

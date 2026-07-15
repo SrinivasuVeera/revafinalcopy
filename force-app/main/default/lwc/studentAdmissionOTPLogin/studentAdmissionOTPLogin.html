@@ -1,0 +1,113 @@
+<template>
+    <div style={backgroundStyle}>
+        <div class="portal-background">
+            <div class="container">
+                <div class="text-overlay">
+                    <div class="admission-card">
+
+                        <!-- Header — matches LoginPage exactly -->
+                        <div class="admission-header">
+                            <div class="header-inline">
+                                <span class="title-gradient">OTP Login</span>
+                                <!-- <lightning-icon icon-name="utility:password" size="medium" class="education-icon"></lightning-icon> -->
+                            </div>
+                        </div>
+
+                        <div class="slds-p-around_medium">
+
+                            <!-- Identifier -->
+                        <!--    <lightning-input
+                                label="Enter Email"
+                                value={identifier}
+                                onchange={handleIdentifierChange}
+                                disabled={otpSent}>
+                            </lightning-input>  -->
+
+                            <!-- Username Field -->
+                            <div style={fieldWrapperStyle}>
+                                <label style={labelStyle}>
+                                    <span>*</span>&nbsp;Enter Email
+                                </label>
+                                <input
+                                    type="text"
+                                    style={inputStyle}
+                                    placeholder="Email"
+                                    name="Email"
+                                    value={identifier}
+                                    onchange={handleIdentifierChange}
+                                    disabled={otpSent} />
+                                <span style={hintTextStyle}>Eg.: gunavardhan.reddy@gmail.com</span>
+                            </div>
+
+                            <!-- Send OTP -->
+                            <template if:false={otpSent}>
+                                <div class="slds-m-top_medium slds-m-bottom_small">
+                                    <button
+                                        onclick={sendOTP}
+                                        class="login-btn"
+                                        disabled={isLoading}>Send OTP
+                                    </button>
+                                </div>
+                            </template>
+
+                            <!-- OTP Section -->
+                            <template if:true={otpSent}>
+
+                                <div class="slds-m-top_medium">
+
+                                    <lightning-input
+                                        label="Enter OTP"
+                                        value={otp}
+                                        onchange={handleOTPChange}>
+                                    </lightning-input>
+
+                                    <p class="slds-text-body_small slds-m-top_x-small">
+                                        OTP is valid for 5 minutes.
+                                    </p>
+
+                                    <!-- Action Buttons -->
+                                    <div class="slds-m-top_medium slds-grid slds-gutters">
+
+                                        <!-- Verify OTP -->
+                                        <div>
+                                            <lightning-button class="slds-p-left_medium slds-p-right_medium"
+                                                variant="destructive"
+                                                label="Verify OTP"
+                                                onclick={verifyOTP}
+                                                disabled={isLoading}>
+                                            </lightning-button>
+                                        </div>
+
+                                        <!-- Resend OTP -->
+                                        <div>
+                                            <lightning-button
+                                                variant="neutral"
+                                                label={resendLabel}
+                                                onclick={resendOTP}
+                                                disabled={disableResend}>
+                                            </lightning-button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </template>
+
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="line-divider"></div>
+
+                        <!-- Back to Login — matches "Already Registered" row -->
+                       <!-- <div class="already-registered slds-m-top_small">
+                            Remembered your password?
+                            <a href="https://admission.reva.edu.in/s/login/" class="register-link">Sign-In Here</a>
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

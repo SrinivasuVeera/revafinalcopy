@@ -1,0 +1,222 @@
+/* .row {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 15px;
+     
+   
+}
+.row-heading {
+    background-color: #707070;
+    color: white;
+    font-weight: bold;
+
+    
+}
+.heading {
+    background-color: #707070;
+    color: white;
+}
+ */
+ tr{
+    border-top: 4px solid white;
+    font-size: 0.8rem;
+}
+.tab:first-child{
+    background-color: var(--reva-brand-color);
+    color: white;
+}
+section{
+    overflow: auto;
+}
+table {
+    border-collapse: collapse;
+    overflow: auto;
+    width: 100%;
+    border-spacing: 0;
+    background-color: white;
+}
+
+
+table, th, td {
+    /* border-collapse: collapse; */
+    padding: 1rem;
+    text-align: left;
+}
+
+thead th {
+    
+    background-color: #707070 !important;
+   color: white;
+   padding: 8px !important;
+   font-size: 13px;
+   white-space: normal;
+   word-wrap: break-word;
+}
+
+tbody tr{
+    background-color: var(--reva-table-row-background-color) !important;
+}
+
+@media (max-width: 650px) {
+   /*  td{
+        display: grid;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;
+    } */
+    .small-ch {
+        display: grid;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;
+        grid-template-columns: 12ch auto;
+        align-items: center;
+    }   
+    .medium-ch {
+        display: grid;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;
+        grid-template-columns: 20ch auto;
+        align-items: center;
+    }
+    td:first-child{
+        padding-top: 2rem;
+    }
+
+    td:last-child{
+        padding-bottom: 2rem;
+    }
+    th{
+        display: none;
+    }
+    td {
+        display: grid;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        grid-template-columns: 12ch auto;
+    }
+    td::before{
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+        white-space: nowrap;
+    }
+    /*********Newly added**************/
+    .ack-btn {
+        /*width: fit-content;
+        justify-self: start;*/
+        justify-self: start;
+        margin-left: 0;
+    }
+    /* td[data-cell="Acknowledgement"]::before {
+        content: "Acknowledgement :";
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    td[data-cell="Acknowledgement"] {
+        grid-template-columns: auto !important;
+    }*/
+    td[data-cell="Acknowledgement"]::before {
+    content: "Acknowledgement :";
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/*td[data-cell="Acknowledgement"] {
+    grid-template-columns: 12ch auto !important;
+    align-items: center;
+}*/
+ td[data-cell="Acknowledgement"] {
+        display: grid;
+        grid-template-columns: auto auto !important;
+        align-items: center;
+       /* gap: 0.5rem;*/
+       column-gap: 0.25rem;
+        padding: 0.5rem 1rem;
+    }
+    /***************************/
+  
+}
+
+@media (max-width:500px){
+    table {
+    font-size: 11px;
+}
+.container{
+    padding: 0rem;
+}
+.tab{
+    flex: 1;
+}
+
+
+
+}
+/*************Newly added**********************/
+.ack-btn {
+    background-color: #F07F07;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    
+}
+
+.ack-btn:hover {
+    background-color: #d96f06;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-btn {
+    margin: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+
+.confirm {
+    background-color: #F07F07;
+    color: white;
+}
+
+.cancel {
+    background-color: #F07F07;
+    color: white;
+}
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+.modal-close:hover {
+    color: red;
+}

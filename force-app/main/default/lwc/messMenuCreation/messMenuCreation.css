@@ -1,0 +1,53 @@
+.date-container{
+    min-width: 270px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    margin-block: 30px;
+    flex-wrap: wrap;
+    gap: 3rem;
+    font-weight: 600;
+}
+
+
+
+
+.date-container strong{
+color: #F07F07;
+}
+.line{
+border-bottom: 2px solid #F07F07;
+width: 98%;
+margin: auto;
+}
+.title{
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 14px;
+    color: #F07F07;
+    font-size: 1.2rem;
+}
+
+@media(max-width:500px){
+    .title{
+        font-size:12px;
+    }
+}
+.date-item {
+    display: inline-block;
+    margin-right: 10px; 
+}
+
+.date-item {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #d8dde6;
+    border-radius: 4px;
+}
+
+.date-value {
+    margin-right: 5px;
+}

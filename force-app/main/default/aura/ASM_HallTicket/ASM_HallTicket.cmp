@@ -1,0 +1,179 @@
+<aura:component controller="ASM_HallTicketCtrl"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute name="lst_StudentFee" type="List" />
+    <aura:attribute name="lst_Attendance" type="List" />
+    <aura:attribute name="lstSurveyPending" type="List" />
+    <aura:attribute name="SRNNumber" type="String" />
+    <aura:attribute name="HallTicketEnabled" type="boolean" default="false" />
+    <aura:attribute name="PendingServey" type="String" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+    <!-- <div class="slds-theme_default"> -->
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="doctype:image" alternativeText="Hall Ticket" title="Hall Ticket" />
+                        &nbsp;
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate slds-text-title_caps"
+                                        title="Hall Ticket">Hall Ticket</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="slds-float_right">
+
+                        </div>
+                        <p class="slds-text-body_small"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aura:if isTrue="{!(v.PendingServey == 'Pending')}">
+        <div class="slds-section slds-is-open">
+            <h3 class="slds-section__title slds-theme_shade ">
+                <span class="slds-page-header__title slds-truncate slds-text-title_caps"
+                    style="font-weight: bold;font-size:13px;color:#0068B1;" title="Hall Ticket">Pending Survey</span>
+            </h3>
+        </div>
+        <table class="slds-table slds-table--bordered survey-name">
+            <thead>
+                <tr class="slds-text-heading--label">
+                    <th class="slds-is-resizable" scope="col">
+                        <b>Survey Name</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.lstSurveyPending}" var="surv" indexVar="index">
+                    <tr>
+                        <td class="slds-is-resizable" scope="col">
+                            {!surv.SurveyName}
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </aura:if>
+    <aura:if isTrue="{!(v.lst_Attendance.length > 0)}">
+        <div class="slds-section slds-is-open">
+            <div class="attendance-heading">
+                <b>Attendance</b>
+            </div>
+            <!-- <h3 class="slds-section__title slds-theme_shade "> 
+                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" style="font-weight: bold;font-size:12pt;color:#063970;" title="Hall Ticket">Attendance Shortage</span>                    
+                </h3>                 -->
+        </div>
+
+        <table class="slds-table slds-table--bordered course-table">
+            <thead>
+                <tr class="slds-text-heading--label">
+                    <th class="slds-is-resizable" scope="col">
+                        <b> COURSE </b>
+                    </th>
+                    <th class="slds-is-resizable" scope="col">
+                        <b> TOTAL CLASSES</b>
+                    </th>
+                    <th class="slds-is-resizable" scope="col">
+                        <b> TOTAL ATTENDED CLASSES</b>
+                    </th>
+                    <th class="slds-is-resizable" scope="col">
+                        <b> CLASSES ATTENDED %</b>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <aura:iteration items="{!v.lst_Attendance}" var="att" indexVar="index">
+                    <tr>
+                        <td class="slds-is-resizable" scope="col">
+                            {!att.CourseName}
+                        </td>
+                        <td class="slds-is-resizable" scope="col">
+                            {!att.Total_Classes}
+                        </td>
+                        <td class="slds-is-resizable" scope="col">
+                            {!att.Attended_Classes}
+                        </td>
+                        <td class="slds-is-resizable" scope="col">
+                            {!att.TotalPercentAttend}
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </aura:if>
+    <aura:if isTrue="{!not(empty(v.lst_StudentFee))}">
+        <div class="slds-section slds-is-open">
+            <div class="attendance-heading">
+                <b>Pending Fee Payments</b>
+            </div>
+            <!-- <h3 class="slds-section__title slds-theme_shade "> 
+                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" style="font-weight: bold;font-size:12pt;color:#063970;" title="Hall Ticket">Pending Fee Payments</span>                    
+                </h3>  -->
+        </div>
+        <table class="slds-table slds-table--bordered fee-table" style="overflow: visible; width:80%;">
+            <thead>
+                <tr class="slds-text-heading--label">
+                    <th class="slds-is-resizable" scope="col">
+                        <b> FEE TYPE </b>
+                    </th>
+                    <th class="slds-is-resizable" scope="col">
+                        <b> DUE DATE </b>
+                    </th>
+                    <th class="slds-is-resizable" scope="col">
+                        <b> PENDING AMOUNT </b>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <aura:iteration items="{!v.lst_StudentFee}" var="att" indexVar="index">
+                    <tr>
+                        <td class="slds-is-resizable" scope="col">
+                            {!att.FeeName}
+                        </td>
+                        <td class="slds-is-resizable" scope="col">
+                            {!att.DueDate}
+                        </td>
+                        <td class="slds-is-resizable" scope="col">
+                            {!att.PendingAmount}
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </aura:if>
+    <aura:if isTrue="{!(v.HallTicketEnabled == true)}">
+        <div class="slds-section slds-is-open">
+            <h3 class="slds-section__title  slds-align_absolute-center">
+                <center>
+                    <div class="slds-align_absolute-center">
+                        <lightning:button label="Preview &amp; Download" iconName="utility:download" variant="brand"
+                            iconPosition="left" onclick="{!c.openUrl}" class="backColor" />
+                    </div>
+                </center>
+            </h3>
+        </div><br />
+    </aura:if>
+    <!-- </div> -->
+</aura:component>

@@ -1,0 +1,241 @@
+<template>
+    <lightning-card>
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-spinner_container">
+                <div class="slds-spinner--brand slds-spinner slds-spinner--large slds-is-relative">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Header Section -->
+        <template if:true={hasCourseData}>
+            <div class="slds-page-header slds-p-around_medium">
+                <div class="slds-align_absolute-center">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="standard:groups" alternative-text="Student RBS Group Allocation"
+                                title="Student RBS Group Allocation">
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1 class="slds-text-align_center" style="font-size: 1.5rem; font-weight: bold;">
+                                        <span class="slds-page-header__title slds-truncate">
+                                            RBS Students Allocation For Program Batch <span
+                                                style="color: orange;">{progPlanName}</span> of Semester <span
+                                                style="color: orange;">{termName}</span>
+                                        </span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                    <thead>
+                        <tr class="slds-text-heading_label">
+                            <th scope="col" class="slds-text-align_left"><strong>Specialization / Course
+                                    Offering</strong></th>
+                            <th scope="col" class="slds-text-align_center"><strong>Assigned</strong></th>
+                            <th scope="col" class="slds-text-align_center"><strong>Active</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={courseOfferingData} for:item="parentCourse">
+                            <tr key={parentCourse.key} class="slds-hint-parent specialization-header">
+                                <td class="elective-name-cell">
+                                    <a href="#" data-id={parentCourse.specializationId}
+                                        data-specialization-name={parentCourse.key} onclick={handleSpclClick}
+                                        class="elective-link">
+                                        <strong>{parentCourse.key}</strong>
+                                    </a>
+                                </td>
+                                <td class="slds-text-align_center"></td>
+                                <td class="slds-text-align_center"></td>
+                            </tr>
+                            <template for:each={parentCourse.courses} for:item="course" for:index="index">
+                                <tr key={course.courseOfferingId} class="slds-hint-parent">
+                                    <td class="elective-name-cell slds-pl-large">
+                                        <span class="slds-m-left_small">{course.courseName}</span>
+                                    </td>
+                                    <td class="slds-text-align_center">
+                                        <strong>{course.assigned}</strong>
+                                    </td>
+                                    <td class="slds-text-align_center">
+                                        <lightning-input type="checkbox" checked={course.active} data-index={index}
+                                            data-parent={parentCourse.key} data-course-id={course.courseOfferingId}
+                                            onchange={handleActiveSubject}>
+                                        </lightning-input>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <template if:false={hasCourseData}>
+            <div class="slds-page-header slds-p-around_large">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="utility:error" variant="error"
+                                    alternative-text="Records not found" title="Records not found">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-truncate slds-text-title_caps">
+                                    Records not found.
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={isModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+                aria-labelledby="modal-heading-01" aria-modal="true">
+                <div class="slds-modal__container modal-container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close" onclick={closeModal} alternative-text="close"
+                            variant="bare-inverse" class="slds-modal__close">
+                        </lightning-button-icon>
+
+                        <div class="slds-page-header">
+                            <div class="slds-page-header__row">
+                                <div class="slds-page-header__col-title">
+                                    <div class="slds-text-align_left">
+                                        <div class="slds-media">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name="custom:custom55"
+                                                    alternative-text="Student RBS Allocation"
+                                                    title="Student RBS Allocation">
+                                                </lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <div class="slds-page-header__name">
+                                                    <div class="slds-page-header__name-title">
+                                                        <h1 class="slds-text-align_center"
+                                                            style="font-size: 1.5rem; font-weight: bold;">
+                                                            <span class="slds-page-header__title slds-truncate">
+                                                                <strong>{headerName}</strong>
+                                                            </span>
+                                                        </h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-page-header__col-actions">
+                                    <div class="slds-page-header__controls">
+                                        <lightning-button variant="brand" label="Create Course Connection"
+                                            onclick={saveCourseConnection} disabled={isSaveButton}
+                                            class="slds-m-left_x-small">
+                                        </lightning-button>
+                                        <lightning-button variant="neutral" label="Cancel" onclick={closeModal}
+                                            class="slds-m-left_x-small">
+                                        </lightning-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_large">
+                        <template if:true={rbsStudentData}>
+                            <div class="slds-p-top_medium">
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="checkbox-column">
+                                                <lightning-input type="checkbox" onchange={handleSelectAll}
+                                                    checked={allSelected}>
+                                                </lightning-input>
+                                            </th>
+                                            <th scope="col"><strong>Sl.No</strong></th>
+                                            <th scope="col"><strong>Student Name</strong></th>
+                                            <th scope="col"><strong>Section</strong></th>
+                                            <th scope="col"><strong>SRN Number</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={rbsStudentData} for:item="student" for:index="index">
+                                            <tr key={student.contactId}>
+                                                <td class="checkbox-column">
+                                                    <lightning-input type="checkbox" data-id={student.contactId}
+                                                        checked={student.checked} onchange={handleStudentSelect}>
+                                                    </lightning-input>
+                                                </td>
+                                                <td>{student.index}</td>
+                                                <td>{student.contactName}</td>
+                                                <td>{student.section}</td>
+                                                <td>{student.srnNumber}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <template if:true={showCreateSubject}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading_medium">RBS Allocation</h1>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-text-align_center">
+                            <strong>Are you sure you want to allocate the students?</strong>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="No" onclick={handleCourseNo}></lightning-button>
+                        <lightning-button class="slds-m-left_small" data-id={selectedCourseId} variant="brand"
+                            label="Yes" onclick={handleCourseYes}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <template if:true={showCnfForConnection}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading_medium">RBS Allocation</h1>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-text-align_center">
+                            <strong>Are you sure you want to create the course connection for selected
+                                students?</strong>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="No" onclick={handleCourseCnfNo}></lightning-button>
+                        <lightning-button class="slds-m-left_small" variant="brand" label="Yes"
+                            onclick={handleCourseCnfYes}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,38 @@
+<template>
+    <template lwc:if={filesList}>
+        <lightning-card>
+            <main class="table" id="customers_table">
+                <section class="table__header">
+                    <lightning-file-upload record-id={recordId} onuploadfinished={handleUploadFinished} multiple>
+                    </lightning-file-upload>
+                </section>
+                <section class="table__body">
+                    <table class="slds-text-body_small">
+                        <thead>
+                            <tr>
+                                <th>Document Name</th>
+                                <th>Preview</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={filesList} for:item="file">
+                                <tr key={file.id}>
+                                    <td data-cell="Document Name"><strong>{file.label}</strong></td>
+                                    <td data-cell="Preview">
+                                        <lightning-button class="slds-text-body_small" label="Preview" variant="brand"
+                                            data-id={file.value} onclick={previewHandler}></lightning-button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+        </lightning-card>
+    </template>
+    <template lwc:else>
+        <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+            <p class="slds-text-heading_medium slds-text-color_error">No Attachments Found</p>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,229 @@
+<template>
+    <lightning-card >
+    
+            <div class="slds-m-around_medium">
+            <div class="form-row">
+                <lightning-input
+                    type="checkbox"
+                    label="National"
+                    onchange={handleCheckboxChange}
+                    disabled={isNoneChecked}
+                    checked={isCheckboxChecked}>
+                </lightning-input>
+            </div>
+
+            <template if:true={isCheckboxChecked}>
+                <template for:each={nationalExams} for:item="exam">
+                    <div key={exam.id} class="exam-container">
+                        <div class="form-row">
+
+                        <lightning-combobox
+                            name="examName"
+                            label="Exam Name"
+                            value={exam.examName}
+                            placeholder="Select Exam Name"
+                            options={examNameOptions}
+                            data-id={exam.id}
+                            onchange={handleExamChange}
+                            required>
+                        </lightning-combobox>     
+                        <lightning-input
+                            type="text"
+                            label="Reg/Roll No"
+                            value={exam.rollNo}
+                            name="rollNo"
+                            data-id={exam.id}
+                            onchange={handleExamChange}
+                            required>
+                        </lightning-input>
+                        <lightning-input
+                        type="number"
+                        label="Rank Scored"
+                        value={exam.rank}
+                        name="rank"
+                        data-id={exam.id}
+                        onchange={handleExamChange}>
+                    </lightning-input>
+                        </div>
+                        <div class="form-row">
+
+                        <lightning-input
+                            type="text"
+                            label="Total Marks"
+                            value={exam.totalMarks}
+                            name="totalMarks"
+                            data-id={exam.id}
+                            onchange={handleExamChange}>
+                        </lightning-input>
+                        <lightning-input
+                            type="text"
+                            label="Scored Marks"
+                            value={exam.scoredMarks}
+                            name="scoredMarks"
+                            data-id={exam.id}
+                            onchange={handleExamChange}>
+                        </lightning-input>
+                        <lightning-combobox
+                            name="allotegCat"
+                            label="Alloted Category"
+                            value={exam.allotegCat}
+                            placeholder="Select Category"
+                            options={allotegCat}
+                            data-id={exam.id}
+                            onchange={handleExamChange}>
+                        </lightning-combobox>
+                        <div class="delete-icon-container">
+                        <lightning-button-icon
+                            icon-name="utility:delete"
+                            variant="bare"
+                            alternative-text="Remove Exam"
+                            data-id={exam.id}
+                            onclick={handleRemoveExam}>
+                        </lightning-button-icon>
+                        </div>
+                        </div>
+                    </div>
+                </template>
+               
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        variant="neutral"
+                        label="Add Exam"
+                        onclick={handleAddNationalExam}>
+                    </lightning-button>
+                </div>
+              
+            </template>          
+        </div>
+
+        <div class="slds-m-around_medium">
+            <div class="form-row">
+                <lightning-input
+                    type="checkbox"
+                    label="State"
+                    onchange={handleCheckboxChangeState}
+                    disabled={isNoneChecked}
+                    checked={isCheckboxCheckedState}>
+                </lightning-input>
+            </div>
+
+            <template if:true={isCheckboxCheckedState}>
+                <template for:each={stateExams} for:item="exam">
+                    <div key={exam.id} class="exam-container">
+                        <div class="form-row">
+                        <lightning-combobox
+                            name="examName"
+                            label="Exam Name"
+                            value={exam.examName}
+                            placeholder="Select Exam Name"
+                            options={StateexamNameOptions}
+                            data-id={exam.id}
+                            onchange={handleExamChangeState}
+                            required>
+                        </lightning-combobox>
+                        <lightning-input
+                            type="text"
+                            label="Reg/Roll No"
+                            value={exam.rollNo}
+                            name="rollNo"
+                            data-id={exam.id}
+                            onchange={handleExamChangeState}
+                            required>
+                        </lightning-input>
+                        <lightning-input
+                            type="number"
+                            label="Rank Scored"
+                            value={exam.rank}
+                            name="rank"
+                            data-id={exam.id}
+                            onchange={handleExamChangeState}>
+                        </lightning-input>       
+                    </div>
+                    
+                    <div class="form-row">
+                        <lightning-input
+                        type="text"
+                        label="Total Marks"
+                        value={exam.totalMarks}
+                        name="totalMarks"
+                        data-id={exam.id}
+                        onchange={handleExamChangeState}>
+                    </lightning-input>
+                        <lightning-input
+                        type="text"
+                        label="Scored Marks"
+                        value={exam.scoredMarks}
+                        name="scoredMarks"
+                        data-id={exam.id}
+                        onchange={handleExamChangeState}>
+                    </lightning-input>
+                    <lightning-combobox
+                    name="allotegCat"
+                    label="Alloted Category"
+                    value={exam.allotegCat}
+                    placeholder="Select Category"
+                    options={allotegCat}
+                    data-id={exam.id}
+                    onchange={handleExamChangeState}>
+                </lightning-combobox>
+                        <!-- <lightning-combobox
+                        name="state"
+                        label="State"
+                        value={exam.state}
+                        placeholder="Select State"
+                        options={stateOptions}
+                        data-id={exam.id}
+                        onchange={handleExamChangeState}
+                        required>
+                    </lightning-combobox> -->
+                    <div class="form-row1">
+                    <lightning-input
+                    type="text"
+                    label="State"
+                    value={exam.state}
+                    name="state"
+                    data-id={exam.id}
+                    onchange={handleExamChangeState}>
+                </lightning-input>
+                </div>
+                <div class="delete-icon-container">
+                        <lightning-button-icon
+                            icon-name="utility:delete"
+                            variant="bare"
+                            alternative-text="Remove Exam"
+                            data-id={exam.id}
+                            onclick={handleRemoveExamState}>
+                        </lightning-button-icon>
+                        </div>
+                    </div>
+                    </div>
+                </template>
+             
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        variant="neutral"
+                        label="Add Exam"
+                        onclick={handleAddStateExam}>
+                    </lightning-button>
+                </div>
+               
+            </template>
+        </div>
+        <div class="slds-m-around_medium">
+            <div class="form-row">
+                <lightning-input
+                    type="checkbox"
+                    label="None"
+                    onchange={handleNoneCheckboxChange}
+                    disabled={isChecked}>
+                </lightning-input>
+            </div>
+            </div>
+        <lightning-button
+            variant="brand"
+            label="Save"
+            class="slds-m-left_small"
+            onclick={handleSave}>
+        </lightning-button>
+    </lightning-card>
+</template>

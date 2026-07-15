@@ -1,0 +1,64 @@
+/* Horizontal layout container */
+.horizontal-layout {
+    display: flex;
+    flex-direction: row; /* Ensures side-by-side alignment */
+    justify-content: space-between; /* Adds space between QR code and details */
+    align-items: center; /* Vertically aligns items */
+    flex-wrap: wrap; /* Ensures wrapping if space is constrained (mobile-friendly) */
+    gap:4px; /* Space between items */
+}
+
+/* QR Code Styling */
+.qr-code-container {
+    flex: 1; /* Makes it flexible for responsiveness */
+    text-align: center; /* Center the QR code image */
+}
+.qr-timer-overlay {
+    color: red;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+
+}
+
+.qr-code {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+
+/* Booking Details Styling */
+.booking-details {
+    flex: 0; /* Makes it flexible for responsiveness */
+    text-align: left; /* Align text to the left */
+    margin: 10px;
+}
+
+.booking-details p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Responsive Photo Styling */
+.photo {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+}
+
+/* Card responsiveness */
+@media (max-width: 768px) {
+    .horizontal-layout {
+        flex-direction: column; /* Ensures side-by-side on mobile too */
+    }
+
+    .qr-code {
+        max-width: 400px; /* Reduce QR code size for smaller screens */
+        max-height: 200px;
+    }   
+
+    .photo {
+        max-width: 150px; /* Reduce photo size for smaller screens */
+    }
+}

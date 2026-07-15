@@ -1,0 +1,188 @@
+<aura:component controller="ALU_StudentNOCComp_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="listFeestudents" type="List" />
+    <aura:attribute name="listResults" type="List" />
+    <aura:attribute name="listUpdateCon" type="List" />
+    <aura:attribute name="PlacedCon" type="boolean"/>
+    <aura:attribute name="HigherStudiesCon" type="boolean"/>
+    <aura:attribute name="StartupEntrepreneurCon" type="boolean"/>
+    <aura:attribute name="FamilybusinessCon" type="boolean"/>
+    <aura:attribute name="GovtCon" type="boolean"/>
+    <aura:attribute name="OtherCon" type="boolean"/>
+    <aura:attribute name="Pstunt" type="string" />
+    <aura:attribute name="MapStudentPosition" type="Map" />
+    <aura:attribute name="MapPlacement" type="Map" />
+    <aura:attribute name="MapJngReva" type="Map" />
+    <aura:attribute name="MapStarted" type="Map" />
+    <aura:attribute name="MapCoaching" type="Map" />
+    <aura:attribute name="SelectedPosition" type="String"/>
+    <aura:attribute name="SelectedPlcment" type="String"/>
+    <aura:attribute name="SelectedCoaching" type="String"/>
+    <aura:attribute name="SelectedStrtd" type="String"/>
+    <aura:attribute name="fileName" type="String"/>
+    <aura:attribute name="fileNameUploaded" type="String"/>
+    <aura:attribute name="files" type="ContentDocument[]"/>
+    <aura:attribute name="showNocForm" type="boolean"/>
+    <aura:attribute name="showStudentData" type="boolean"/>
+    <aura:attribute type="Contact" name="objCont" default="{'sobjectType':'Contact',
+                                                           'Id':'',
+                                                           'Placement__c':'',
+                                                           'Company__c':'',
+                                                           'Designation__c':'',
+                                                           'Location__c':'',
+                                                           'Date_of_Joining__c':'',
+                                                           'Joining_REVA__c':'',
+                                                           'Which_Program__c':'',
+                                                           'University_Name__c':'',
+                                                           'Date_of_Joining_HS__c':'',
+                                                           'Country_HS__c':'',
+                                                           'Location_HS__c':'',
+                                                           'Firm_Name__c':'',
+                                                           'Started__c':'',
+                                                           'Designation_SU__c':'',
+                                                           'Location_SU__c':'',
+                                                           'Type_of_Business__c':'',
+                                                           'Location_B__c':'',
+                                                           'Type_of_Job_Targeting__c':'',
+                                                           'Coaching_required_from_REVA_University__c':'',
+                                                           'Others__c':'',
+                                                           'Approval_Status__c':'',
+                                                           'Position_of_Student__c':'',
+                                                           }" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.showNocForm}" >
+        <center> <button class="slds-button slds-button_brand" onclick="{!c.onClickNoc}"> NOC Form </button> </center>
+    </aura:if>
+    
+    
+    <div>
+        <aura:if isTrue="{!v.showStudentData}">
+            <aura:if isTrue="{!and(v.listFeestudents.length == 0, v.listResults.length == 0)}"> 
+                <aura:if isTrue="{!v.listUpdateCon.length > 0}">
+                    Please fill the below Details to Apply for NOC.
+                    <lightning:select value="{!v.objCont.Position_of_Student__c}"  label="Student Position" name="pstn" onchange="{!c.OnchangeStudentPosition}" >
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.MapStudentPosition}" var="vrn" indexVar="key" >
+                            <option value="{!vrn.key}" > {!vrn.value} </option>
+                        </aura:iteration>
+                    </lightning:select><br/>
+                    
+                    <!-- Placed -->
+                    <aura:if isTrue="{!v.PlacedCon}">
+                        <lightning:select value="{!v.objCont.Placement__c}"  label="Student Placement" name="pstn" onchange="{!c.OnchangePlacement}" >
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.MapPlacement}" var="vrn" indexVar="key" >
+                                <option value="{!vrn.key}" > {!vrn.value} </option>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:input type="text" name="cmpny" label="Company" value="{!v.objCont.Company__c}" />
+                        <lightning:input type="text" name="desig" label="Designation" value="{!v.objCont.Designation__c}" />
+                        <lightning:input type="text" name="loc" label="Location" value="{!v.objCont.Location__c}" />
+                        <lightning:input type="date" label="Date of Joining" name="dofj" value="{!v.objCont.Date_of_Joining__c}"  messageWhenValueMissing="Complete this field."/>
+                        <lightning:input aura:id="fileId"  type="file" value="{!v.fileName}" Name="file"  multiple="false" required="true" onchange="{!c.filechange}"/>
+                        <div class="slds-text-body_small slds-text-color_error"> {!v.fileNameUploaded} </div>
+                        *Please attach your Offer Letter for our reference.<br/>
+                    </aura:if>
+                    <!-- Placed -->
+                    
+                    <!-- Higher Studies -->
+                    <aura:if isTrue="{!v.HigherStudiesCon}">
+                        <lightning:select value="{!v.objCont.Joining_REVA__c}"  label="Joining in REVA?" name="jng" onchange="{!c.OnchangeJoining}" >
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.MapJngReva}" var="vrn" indexVar="key" >
+                                <option value="{!vrn.key}" > {!vrn.value} </option>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:input type="text" name="prgm" label="Which Program?" value="{!v.objCont.Which_Program__c}" />
+                        <lightning:input type="text" name="unvrsty" label="University Name" value="{!v.objCont.University_Name__c}" />
+                        <lightning:input type="date" label="Date of Joining HS" name="dofjhs" value="{!v.objCont.Date_of_Joining_HS__c}"  messageWhenValueMissing="Complete this field."/>
+                        <lightning:input type="text" name="cntry" label="Country HS" value="{!v.objCont.Country_HS__c}" />
+                        <lightning:input type="text" name="cntry" label="Location HS" value="{!v.objCont.Location_HS__c}" />
+                        <lightning:input aura:id="fileId"  type="file" value="{!v.fileName}" Name="file"  multiple="false" required="true" onchange="{!c.filechange}"/>
+                        <div class="slds-text-body_small slds-text-color_error"> {!v.fileNameUploaded} </div>
+                        *Please attach your Application Form/Admission Certification for our reference.<br/>
+                    </aura:if>
+                    <!-- Higher Studies -->
+                    
+                    <!-- startup/Entrepreneur -->
+                    <aura:if isTrue="{!v.StartupEntrepreneurCon}">
+                        <lightning:input type="text" name="frm" label="Firm Name" value="{!v.objCont.Firm_Name__c}" />
+                        <lightning:select value="{!v.objCont.Started__c}"  label="Started?" name="jng" onchange="{!c.OnchangeStarted}" >
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.MapStarted}" var="vrn" indexVar="key" >
+                                <option value="{!vrn.key}" > {!vrn.value} </option>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:input type="text" name="design" label="Designation SU" value="{!v.objCont.Designation_SU__c}" />
+                        <lightning:input type="text" name="loc" label="Location HS" value="{!v.objCont.Location_SU__c}" /><br/>
+                    </aura:if>
+                    <!-- startup/Entrepreneur -->
+                    
+                    <!-- Looking into the family business -->
+                    <aura:if isTrue="{!v.FamilybusinessCon}">
+                        <lightning:input type="text" name="bus" label="Type Of Business" value="{!v.objCont.Type_of_Business__c}" />
+                        <lightning:input type="text" name="bus" label="Location B" value="{!v.objCont.Location_B__c}" />
+                    </aura:if>
+                    <!-- Looking into the family business -->
+                    
+                    <!-- Civil services/ Government job -->
+                    <aura:if isTrue="{!v.GovtCon}">
+                        <lightning:input type="text" name="bus" label="Type Of Job Targeting" value="{!v.objCont.Type_of_Job_Targeting__c}" />
+                        <lightning:select value="{!v.objCont.Coaching_required_from_REVA_University__c}"  label="Coaching required from REVA University?" name="jng" onchange="{!c.OnchangeCoaching}" >
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.MapCoaching}" var="vrn" indexVar="key" >
+                                <option value="{!vrn.key}" > {!vrn.value} </option>
+                            </aura:iteration>
+                        </lightning:select><br/>
+                    </aura:if>
+                    <!-- Civil services/ Government job -->
+                    
+                    <!-- Others -->
+                    <aura:if isTrue="{!v.OtherCon}">
+                        <lightning:input type="text" name="bus" label="Others" value="{!v.objCont.Others__c}" /><br/>
+                    </aura:if>
+                    <!-- Others -->
+                    
+                    <center>
+                        <button class="slds-button slds-button_brand" onclick="{!c.saveContact}"> Save </button>
+                        <button class="slds-button slds-button_outline-brand" onclick="{!c.CancelModel}"> Cancel </button> 
+                    </center>
+                </aura:if>
+            </aura:if>   
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showStudentData}">
+            <aura:if isTrue="{!and(v.listFeestudents.length > 0, v.listResults.length > 0)}"> 
+                <aura:if isTrue="{!v.listUpdateCon.length > 0}">
+                    <br/><br/><br/><br/>
+                    <center><b> There are Pending Fees yet to be paid. Please pay the remaining fees and then apply for NOC.</b></center><br/>
+                    <center><b> You have not cleared all the exams. Once you have cleared all, your eligible to apply for NOC. </b></center>
+                </aura:if>
+            </aura:if>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showStudentData}">
+            <aura:if isTrue="{!and(v.listFeestudents.length > 0, v.listResults.length == 0)}">
+                <aura:if isTrue="{!v.listUpdateCon.length > 0}">
+                    <center><b> There are Pending Fees yet to be paid. Please pay the remaining fees and then apply for NOC.</b></center>
+                </aura:if>
+            </aura:if>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showStudentData}">
+            <aura:if isTrue="{!and(v.listFeestudents.length == 0, v.listResults.length > 0)}">
+                <aura:if isTrue="{!v.listUpdateCon.length > 0}">
+                    <center><b> You have not cleared all the exams. Once you have cleared all, your eligible to apply for NOC. </b></center>
+                </aura:if>	
+            </aura:if>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showStudentData}">
+            <aura:if isTrue="{!and(v.listFeestudents.length == 0, v.listResults.length == 0)}">
+                <aura:if isTrue="{!v.listUpdateCon.length == 0}">
+                    <center><b> The Details have already been submitted.</b></center>
+                </aura:if>
+            </aura:if>
+        </aura:if>
+    </div>
+</aura:component>

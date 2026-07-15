@@ -1,0 +1,77 @@
+<template>
+    <template if:true={hasRecords}>
+    <lightning-card title="Invigilation Schedule" icon-name="custom:custom68">
+        <div class="slds-m-around_medium">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">Room Name</th>
+                        <th scope="col">Shift</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Attendance Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterate over roomAssignments data and display each row -->
+                    <template for:each={invigilatorAssignments} for:item="assignment" for:index="index">
+                        <tr key={assignment}>
+                            <td data-id={assignment.index} data-label="Room Name">{assignment.name}</td>
+                            <td data-id={assignment.index} data-label="Exam Shift">{assignment.rve_Shift__c}</td>
+                            <td data-id={assignment.index} data-label="Date">{assignment.rve_Date__c}</td>
+                            <td data-id={assignment.index} data-label="End Time">{assignment.starttime}</td>
+                            <td data-id={assignment.index} data-label="End Time">{assignment.endtime}</td>                            
+                            <td data-label="Action">
+                                <!-- View button for each record -->
+                                <template if:true={assignment.attendancecheckbox}>
+                                    <lightning-button
+                                        data-id={assignment.index}
+                                        label="Submitted"
+                                        variant="success"
+                                        disabled={assignment.attendancecheckbox}>
+                                    </lightning-button>
+                                </template>
+                                <template if:false={assignment.attendancecheckbox}>
+                                    <lightning-button
+                                        data-id={assignment.index}
+                                        label="Attendance"
+                                        variant="brand"
+                                        onclick={handleView}>
+                                    </lightning-button>
+                                </template>
+                            </td>
+                            <td data-id={assignment.index} data-label="Attendance Type">{assignment.AttendanceMarkedType}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        
+            <template if:true={Selected}>
+                <!-- Pass the selectedSchoolName to the child component -->
+                <c-rve-invigilator-attendence 
+                examdate={selectedAssignment.rve_Date__c}
+                roomname={selectedAssignment.name}
+                shift={selectedAssignment.rve_Shift__c}
+                endtime={selectedAssignment.endtime}
+                starttime={selectedAssignment.starttime}
+                invigilatorrecordid={selectedAssignment.id}
+                millisecendtime={selectedAssignment.millisecendtime}
+                millisecstarttime={selectedAssignment.millisecstarttime}
+                qrattendancestatus={selectedAssignment.QRAttendanceStatus}
+                >
+                </c-rve-invigilator-attendence>
+                <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+            </template>
+    </lightning-card>
+</template>
+
+<template if:false={hasRecords}>
+    <!-- Display message if no records are found -->
+    <lightning-card title="Invigilation Schedule" icon-name="custom:custom68">
+        <div class="slds-text-color_error">   You dont have Invigilation duty for today</div>
+    </lightning-card>
+</template>
+</template>

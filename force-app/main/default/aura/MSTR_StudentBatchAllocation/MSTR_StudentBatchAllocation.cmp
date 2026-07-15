@@ -1,0 +1,306 @@
+<aura:component controller="MSTR_StudentBatchAllocation_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    
+    <aura:attribute name="lstSecterms" type="List"/>
+    <aura:attribute name="strprogram" type="String"/>
+    <aura:attribute name="strTerm" type="String"/>
+    <aura:attribute name="selectedSection" type="String"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="batchWrp" type="Map"/>
+    <aura:attribute name="lstUnassigned" type="List"/>
+    <aura:attribute name="unassignedSize" type="Integer"/>
+    <aura:attribute name="selectedTab" type="String" default="1"/>
+    <aura:attribute name="lstBatches" type="String[]"/>
+    <aura:attribute name="MapMovetoBatches" type="Map" />
+    <aura:attribute name="batcheDetails" type="Map" />
+    <aura:attribute name="showConfirmStudents" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds-theme_default">  
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:avatar" alternativeText="Student Batch Allocation" title="Student Batch Allocation" /> &nbsp;
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Student Batch Allocation">Student Batch Allocation for the <br/>
+                                            Program Batch {!v.strprogram} <br/>
+                                            of Semester {!v.strTerm}</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br/>
+        <aura:if isTrue="{!not(empty(v.lstSecterms))}">
+            <div class="slds-form_horizontal slds-form slds-grid slds-wrap">
+                <table class="slds-table slds-table--bordered slds-max-medium-table--stacked slds-table--striped" style="overflow: visible;">
+                    <thead>
+                        <tr class="slds-text-heading--label">
+                            <th class="slds-is-resizable" scope="col" >
+                                <b> Sections </b>    
+                            </th>
+                            <!--<th class="slds-is-resizable" scope="col" >
+                                <b> Batch 1 </b>    
+                            </th>
+                            <th class="slds-is-resizable" scope="col" >
+                                <b> Batch 2 </b>
+                            </th>-->
+                        </tr>
+                    </thead>  
+                    <aura:iteration items="{!v.lstSecterms}" var="objSecTerm" indexVar="index">
+                        <tr class="slds-hint-parent">
+                            <td data-label="Student Name" class="slds-cell-wrap" scope="col">
+                                <div class="slds-truncate" style="white-space:normal;">
+                                    <a data-Id="{!objSecTerm.Id}" data-value="{!objSecTerm.Name}" onclick="{!c.termOnclick}" > {!objSecTerm.Name} </a> 
+                                </div>
+                            </td>  
+                            <!--<td data-label="Batch 1" class="slds-cell-wrap" scope="col">
+                                <div class="slds-truncate" style="white-space:normal;margin-align:left;">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+                                </div>
+                            </td>
+                            <td data-label="Batch 2" class="slds-cell-wrap" scope="col">
+                                <div class="slds-truncate" style="white-space:normal;text-align:left;">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+                                </div>
+                            </td>-->
+                        </tr>
+                    </aura:iteration>
+                </table>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-align_absolute-center" style="color:red">  No Sections Exists </div>
+            </aura:set>
+        </aura:if>   
+    </div>
+    <div>
+        <aura:if isTrue="{!v.isModalOpen}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">                    
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{!c.closeModel}"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        
+                        <h2> 
+                            <div class="slds-page-header">
+                                <div class="slds-page-header__row">
+                                    <div class="slds-page-header__col-title">
+                                        <div class="slds-media">
+                                            <div class="slds-media__figure">
+                                                <lightning:icon iconName="custom:custom55" alternativeText="Define Professor Course Preference" title="Define Professor Course Preference"/>
+                                            </div>
+                                            <div class="slds-media__body" style="text-align: left;">
+                                                <div class="slds-page-header__name">
+                                                    <div class="slds-page-header__name-title">
+                                                        <h1>
+                                                            <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Section Name">{!v.selectedSection}</span>
+                                                        </h1>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-float_right">
+                                                    <lightning:button variant="brand" label="Save" title="Save" onclick="{!c.saveStudentTermMapping}" />
+                                                    <!--<lightning:button variant="brand" label="Save &amp;Submit" title="Save &amp; Submit"/> -->
+                                                    <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closeModel}"/>
+                                                </div>
+                                                <p class="slds-text-body_small"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-float_right">
+                                <aura:if isTrue="{!v.showConfirmStudents}">
+                                    <div role="dialog" class="slds-modal slds-fade-in-open ">
+                                        <div class="slds-modal__container">
+                                            <header class="slds-modal__header">
+                                                <h1 class="slds-text-heading--medium">Batch Allocation</h1>
+                                            </header>                    
+                                            <div class="slds-modal__content slds-p-around--medium">
+                                                <center><b>Are you sure you want to Allocate Batches?</b></center>
+                                            </div>                    
+                                            <footer class="slds-modal__footer">
+                                                <lightning:button name='No' label='No' onclick='{!c.handleAllocateNo}'/>
+                                                <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleAllocateYes}'/>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                    <div class="slds-backdrop slds-backdrop--open"></div>            
+                                </aura:if> 
+                            </div>
+                        </h2>
+                    </header>
+                    
+                    <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                        <aura:if isTrue="{!not(empty(v.lstUnassigned)) || not(empty(v.batchWrp))}">
+                            <lightning:tabset selectedTabId="{!v.selectedTab}"> 
+                                <aura:if isTrue="{!not(empty(v.lstUnassigned))}">
+                                    <lightning:tab label="{!'Unassigned ('+ v.unassignedSize +')'}" aura:id="tabId">
+                                        <div class="slds-table--header-fixed_container" style="height:450px;">
+                                            <div class="slds-scrollable_y" style="height:500%;">
+                                                <table class="slds-table slds-table_bordered slds-table--header-fixed">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" style="width:10%;">
+                                                                <div class="slds-truncate slds-cell-fixed" title="Sl.No"> Sl.No </div> 
+                                                            </th>
+                                                            <th scope="col" style="width:10%;">
+                                                                <div class="slds-truncate slds-cell-fixed" title="Student Name"> &nbsp;&nbsp;&nbsp;&nbsp;Student Name </div>
+                                                            </th>
+                                                            <th scope="col" style="width:10%;">
+                                                                <div class="slds-truncate slds-cell-fixed" title="Section"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section </div>
+                                                            </th> 
+                                                            <th scope="col" style="width:10%;">
+                                                                <div class="slds-truncate slds-cell-fixed" title="SRN Number">  SRN Number </div>
+                                                            </th>
+                                                            <th  scope="col" style="width:10%;">
+                                                                <div class="slds-truncate slds-cell-fixed" title="Move To">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Move To </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <aura:iteration items="{!v.lstUnassigned}" var="studentTerm" indexVar="indexStudnt">
+                                                        <tr >
+                                                            <td style="width:10%;">
+                                                                {!indexStudnt + 1}
+                                                            </td>
+                                                            <td style="width:10%;">
+                                                                {!studentTerm.studentName}
+                                                            </td >  
+                                                            <td style="width:10%;">
+                                                                {!studentTerm.TermId}
+                                                            </td>
+                                                            <td style="width:10%;">
+                                                                &nbsp;&nbsp;&nbsp;{!studentTerm.srnNumber}
+                                                            </td>
+                                                            <td style="width:10%;">
+                                                                <lightning:combobox aura:id="sectionId" variant ="label-hidden" name="{!indexStudnt}"
+                                                                                    value="{!studentTerm.batchNumber}" options="{!v.MapMovetoBatches}" onchange="{!c.changeUnAssignBatches}"/>
+                                                            </td>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </lightning:tab>
+                                </aura:if>
+                                <aura:if isTrue="{!not(empty(v.batchWrp))}">
+                                    <aura:iteration items="{!v.batchWrp}" var="item" indexVar="indexbacth">
+                                        <lightning:tab label="{!item.value.batchName +' ('+ item.value.totalRecords+')'}" id="{!item.value.batchNo}">
+                                            <div class="slds-table--header-fixed_container" style="height:450px;">
+                                                <div class="slds-scrollable_y" style="height:500%;">
+                                                    <table class="slds-table slds-table_bordered slds-table--header-fixed">
+                                                        <thead>
+                                                            <tr>
+                                                                <!--   <th class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                                                <div class="slds-form-element">
+                                                                    <div class="slds-form-element__control">
+                                                                        <label class="slds-checkbox">
+                                                                            <ui:inputCheckbox aura:id="selectAllId"
+                                                                                              text="{!item.value.batchNo}"
+                                                                                              change="{!c.selectAllCheckbox}"/>
+                                                                            <span class="slds-checkbox_faux"></span>
+                                                                            <span class="slds-form-element__label"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </th> -->
+                                                                <th scope="col" style="width:10%;">
+                                                                    <div class="slds-truncate slds-cell-fixed" title="Sl.No"> Sl.No </div> 
+                                                                </th>
+                                                                <th scope="col" style="width:10%;">
+                                                                    <div class="slds-truncate slds-cell-fixed" title="Student Name"> &nbsp;&nbsp;&nbsp;&nbsp;Student Name </div>
+                                                                </th>
+                                                                <th scope="col" style="width:10%;">
+                                                                    <div class="slds-truncate slds-cell-fixed" title="Section"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section </div>
+                                                                </th> 
+                                                                <th scope="col" style="width:10%;">
+                                                                    <div class="slds-truncate slds-cell-fixed" title="SRN Number">  SRN Number </div>
+                                                                </th>
+                                                                <th  scope="col" style="width:10%;">
+                                                                    <div class="slds-truncate slds-cell-fixed" title="Move To">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Move To </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>  
+                                                        <aura:iteration items="{!item.value.lst_studentmap}" var="studentTerm" indexVar="indexStudnt">
+                                                            <tr >
+                                                                <!-- <td class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                                                <div class="slds-form-element">
+                                                                    <div class="slds-form-element__control">
+                                                                        <label class="slds-checkbox">
+                                                                            <ui:inputCheckbox text="{!studentTerm.progEnrollId}"
+                                                                                              value="{!studentTerm.isChecked}"
+                                                                                              />
+                                                                            <span class="slds-checkbox_faux"></span>
+                                                                            <span class="slds-form-element__label text"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </td> -->
+                                                                <td style="width:10%;">
+                                                                    {!indexStudnt + 1}
+                                                                </td>
+                                                                <td style="width:10%;">
+                                                                    {!studentTerm.studentName}
+                                                                </td >  
+                                                                <td style="width:10%;">
+                                                                    {!studentTerm.TermId}
+                                                                </td>
+                                                                <td style="width:10%;">
+                                                                    &nbsp;&nbsp;&nbsp;{!studentTerm.srnNumber}
+                                                                </td>
+                                                                <td style="width:10%;">
+                                                                    <lightning:combobox aura:id="sectionId" variant ="label-hidden" name="{!indexbacth+'_'+indexStudnt}"
+                                                                                        value="{!studentTerm.batchNumber}" options="{!v.MapMovetoBatches}" onchange="{!c.onChangeSelectedBatches}"/>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </table>
+                                                </div>
+                                            </div><br/>
+                                            <!--<center>
+                                                <aura:if isTrue="{!item.value.lst_studentmap.length > 0}" >
+                                                    
+                                                </aura:if>
+                                            </center>-->
+                                        </lightning:tab>
+                                        
+                                    </aura:iteration>
+                                    
+                                </aura:if>
+                                
+                            </lightning:tabset>
+                        </aura:if>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

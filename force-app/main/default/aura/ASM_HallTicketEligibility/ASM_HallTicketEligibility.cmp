@@ -1,0 +1,157 @@
+<aura:component Controller="ASM_HallTicketEligibility_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="MapProgbtch" type="Map" />
+    <aura:attribute name="MapSemester" type="Map" />
+    <aura:attribute name="MapStudent" type="Map" />
+    <aura:attribute name="selectedProgbtch" type="string" />
+    <aura:attribute name="selectedSem" type="string" />
+    <aura:attribute name="selectedStudnt" type="string" />
+    <aura:attribute name="Progbatch" type="string" />
+    <aura:attribute name="Semester" type="string" />
+    <aura:attribute name="Student" type="string" />
+    <aura:attribute name="SurveyPending" type="string" />
+    <aura:attribute name="listStudents" type="List" />
+    <aura:attribute name="listFeestudents" type="List" />
+    <aura:attribute name="listAttendanceStudents" type="List" />
+    <aura:attribute name="listSurveyStudents" type="List" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="inelgtyp" type="string" />
+    <aura:attribute name="selectedelgtyp" type="string" />
+    <aura:attribute name="selectedCount" type="integer" default="0"
+                    description="selected Records Count"/>
+    <aura:attribute name="elgtyps" type="String[]" default="Open Surveys,Attendance Shortage,Pending Fees,Open Surveys &amp; Attendance Shortage,Open Surveys &amp; Pending Fees,Attendance Shortage &amp; Pending Fees,Open Surveys &amp; Attendance Shortage &amp; Pending Fees"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds-theme_default">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="custom:custom55" alternativeText="HallTicket Eligibility Details" title="HallTicket Eligibility Details"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="HallTicket Eligibility Details">HallTicket Eligibility Details</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="slds-float_right">
+                                <aura:if isTrue="{!not(empty(v.Semester))}">
+                                    <aura:if isTrue="{!not(empty(v.listStudents))}">
+                                        <lightning:button variant="brand" label="Save" onclick="{!c.SaveStudents}" />
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap">        
+            <div class="slds-box slds-size_1-of-3">
+                <lightning:select value="{!v.Progbatch}"  label="Program Batches" name="progbtch" onchange="{!c.OnchangeprogBatches}" >
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.MapProgbtch}" var="vrn" indexVar="key" >
+                        <option value="{!vrn.key}" > {!vrn.value} </option>
+                    </aura:iteration>
+                </lightning:select>
+                <aura:if isTrue="{!not(empty(v.Progbatch))}">
+                    <lightning:select value="{!v.Semester}"  label="Semesters" name="semester" onchange="{!c.OnchangeSemester}" >
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.MapSemester}" var="vrn" indexVar="key" >
+                            <option value="{!vrn.key}" > {!vrn.value} </option>
+                        </aura:iteration>
+                    </lightning:select>
+                </aura:if>
+                <aura:if isTrue="{!not(empty(v.Progbatch))}">
+                <aura:if isTrue="{!not(empty(v.Semester))}">
+                    <lightning:select value="{!v.inelgtyp}" label="InEligibility Type" name="Eligibilitytypes" onchange="{!c.OnchangeEligibilityType}" >
+                        <option value="">-- None --</option>
+                        <aura:iteration items="{!v.elgtyps}" var="elgtypes">
+                            <option value="{!elgtypes}" text="{!elgtypes}"></option>
+                        </aura:iteration>
+                    </lightning:select>
+                </aura:if>
+                </aura:if>
+            </div>
+            
+            <div class="slds-box slds-size_2-of-3">
+                <aura:if isTrue="{!not(empty(v.Semester))}">
+                    <aura:if isTrue="{!not(empty(v.inelgtyp))}">
+                        <aura:if isTrue="{!not(empty(v.listStudents))}">                                    
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                                <thead>
+                                    <tr class="slds-text-heading--label">
+                                        <th class="slds-is-resizable" scope="col">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox">
+                                                        <ui:inputCheckbox aura:id="selectAllId"
+                                                                          change="{!c.selectAllCheckbox}"/>
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col">
+                                            <div class="slds-truncate" title="Student Name"> Student Name</div>
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col">
+                                            <div class="slds-truncate" title="SRN Number">SRN Number</div>
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col">
+                                            <div class="slds-truncate" title="Eligibility Status">Eligibility Status</div>
+                                        </th>
+                                    </tr>
+                                </thead>   
+                                <tbody>      
+                                    <aura:iteration items="{!v.listStudents}" var="objProgEnrl" indexVar="index">
+                                        <tr>
+                                            <td class="slds-is-resizable" scope="col">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <label class="slds-checkbox">
+                                                            <ui:inputCheckbox text="{!objProgEnrl.Id}" value="{!objProgEnrl.objProgEnrlmnt.Issue_Hall_Ticket__c}"/>
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-form-element__label text"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="slds-is-resizable" scope="col"> 
+                                                {!objProgEnrl.objProgEnrlmnt.hed__Contact__r.Student_Full_Name__c}
+                                            </td>
+                                            <td class="slds-is-resizable" scope="col"> 
+                                                {!objProgEnrl.objProgEnrlmnt.hed__Contact__r.SRN_Number__c}
+                                            </td>
+                                            <td class="slds-is-resizable" scope="col">
+                                                {!objProgEnrl.str_Eligibility}
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </aura:if>
+                        <aura:if isTrue="{!v.listStudents.length == 0}"> 
+                           <center> No students Exists...! </center> 
+                        </aura:if>
+                    </aura:if>
+                </aura:if>
+            </div>            
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,24 @@
+.orange-footer {
+    background-color: #ff8c00;
+}
+
+.orange-footer .slds-button_neutral {
+    color: white;
+    border-color: white;
+}
+
+.orange-footer .slds-button_brand {
+    background-color: #e67e00;
+    border-color: white;
+}
+.centered-data td, .centered-data th {
+    text-align: center;
+    vertical-align: middle;
+}
+.slds-table {
+    text-align: center;
+    vertical-align: middle;
+}
+.slds-modal__footer lightning-button + lightning-button {
+    margin-left: 1rem; /* Custom gap size */
+}

@@ -1,0 +1,341 @@
+:host {
+    --fs-step-name: 14px;
+    font-family: initial;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden ;
+}
+
+/* @media (max-width:1100px) {
+    :host {
+        --fs-step-name: 16px;
+    }
+}
+@media (max-width:900px) {
+    :host {
+        --fs-step-name: 15px; 
+    }
+} */
+
+
+@media (max-width:700px) {
+    :host {
+        --fs-step-name: 13px;
+    }
+}
+
+@media (max-width:400px) {
+    :host {
+        --fs-step-name: 11px;
+    }
+    .container{
+        padding: 0;
+    }
+} 
+
+body {
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    overflow: auto;
+    flex-flow: row wrap;
+    height: 100vh;
+    width: 100%;
+    justify-content: center;
+    background-color: #ededed;
+    padding: 1rem;
+}
+
+.svg img{
+    margin-left: 50px;
+    width: 80%;
+}
+.svg{
+    align-self: flex-end;
+    justify-self: flex-end;
+}
+.step-name {
+    margin: 10px;
+    justify-self: flex-start;
+    font-size: var(--fs-step-name);
+}
+
+.header {
+    background-color: #ededed;
+    display: flex;
+    height: 30%;
+    width: 100%;
+    align-items: center;
+}
+.about{
+    flex:0.7;
+    padding: 1rem;
+}
+strong{
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+.svg{
+    flex:0.3;
+}
+.path-flow {
+    height: 70%;
+background-color: #ededed;    
+flex: 0.25;
+   
+ }
+.step-icon img{
+    height: 30px;
+}   
+.path-content {
+    border-radius: 10px; 
+    /* border: 2px solid #F57F26; */
+    min-height: 70%;
+    background-color: #ededed;
+    flex: 0.75;
+    margin-left:1rem;
+    /* display: flex;
+    justify-content: center;
+    align-items: flex-start; */
+ }
+
+.parent {
+    position: relative;
+    height: 70%;
+    display: grid;
+    grid-template-columns: 20% auto 20%;
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.parent>* {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.parent div:nth-of-type(3n) {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    margin: auto;
+    font-weight: 600;
+    color: white;
+    z-index: 1; 
+    cursor: pointer;
+    background-color: #6F6F6F;
+    height: 30px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.div2, .div5, .div8, .div11, .div14{
+     cursor: pointer;
+}
+
+.progress-line{
+     position: absolute;
+    content: " ";
+    background-color: var( --reva-brand-color);
+    width: 3px;
+     height: 100%;
+     z-index: 1;
+     right: 10%;
+}
+.parent div:nth-of-type(3n)::before{
+    cursor: pointer;
+}
+
+.div1 {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.div2 {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.div3 {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.div4 {
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+.div5 {
+    grid-area: 2 / 2 / 3 / 3;
+}
+
+.div6 {
+    grid-area: 2 / 3 / 3 / 4;
+}
+
+.div7 {
+    grid-area: 3 / 1 / 4 / 2;
+}
+
+.div8 {
+    grid-area: 3 / 2 / 4 / 3;
+}
+
+.div9 {
+    grid-area: 3 / 3 / 4 / 4;
+}
+
+.div10 {
+    grid-area: 4 / 1 / 5 / 2;
+}
+
+.div11 {
+    grid-area: 4 / 2 / 5 / 3;
+}
+
+.div12 {
+    grid-area: 4 / 3 / 5 / 4;
+}
+
+.div13 {
+    grid-area: 5 / 1 / 6 / 2;
+}
+
+.div14 {
+    grid-area: 5 / 2 / 6 / 3;
+}
+
+.div15 {
+    grid-area: 5 / 3 / 6 / 4;
+}
+
+@media (max-width:900px) {
+
+    .container{
+        padding: 0rem;
+        align-content: flex-start;
+    }
+    .step-name {
+        margin: 5px;
+        text-align: center;
+        justify-self: center;
+        align-self: flex-end;
+        font-size: var(--fs-step-name);
+    }
+
+
+    .parent {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-column-gap: 10px;
+        grid-row-gap: 0px;
+    }
+.progress-line{
+     position: absolute;
+    content: " ";
+    background-color: var( --reva-brand-color);
+    height: 3px;
+     width: 100%;
+     z-index: 1;
+     left: 0%;
+     bottom: 15%;
+}
+    .div1 {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    .div2 {
+        grid-area: 2 / 1 / 3 / 2;
+    }
+
+    .div3 {
+        grid-area: 3 / 1 / 4 / 2;
+    }
+
+    .div4 {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+
+    .div5 {
+        grid-area: 2 / 2 / 3 / 3;
+    }
+
+    .div6 {
+        grid-area: 3 / 2 / 4 / 3;
+    }
+
+    .div7 {
+        grid-area: 1 / 3 / 2 / 4;
+    }
+
+    .div8 {
+        grid-area: 2 / 3 / 3 / 4;
+    }
+
+    .div9 {
+        grid-area: 3 / 3 / 4 / 4;
+    }
+
+    .div10 {
+        grid-area: 1 / 4 / 2 / 5;
+    }
+
+    .div11 {
+        grid-area: 2 / 4 / 3 / 5;
+    }
+
+    .div12 {
+        grid-area: 3 / 4 / 4 / 5;
+    }
+
+    .div13 {
+        grid-area: 1 / 5 / 2 / 6;
+    }
+
+    .div14 {
+        grid-area: 2 / 5 / 3 / 6;
+    }
+
+    .div15 {
+        grid-area: 3 / 5 / 4 / 6;
+    }
+
+    .side {
+        flex: 100%;
+    }
+
+    .path-content {
+        min-height: 80%;
+    }
+
+    .path-flow {
+        height: fit-content;
+        padding: 1rem;       
+    }
+
+    .header {
+        background-color: #ededed;
+        display: none;
+    }
+
+    .step-icon{
+        align-self: flex-end;
+        padding-bottom: 0.5rem;
+    }
+}
+@media(max-width:350px){
+    .path-flow{
+        overflow: auto;
+    }
+    .progress-line{
+     position: absolute;
+    content: " ";
+    background-color: var( --reva-brand-color);
+    height: 3px;
+     width: 130%;
+     z-index: 1;
+     left: 0%;
+     bottom: 15%;
+}
+}

@@ -1,0 +1,85 @@
+<apex:page controller="ASM_IAMarksEntry" renderAs="pdf" applyHtmlTag="false" showHeader="false" sidebar="false" contentType="application/pdf#IA_Marks_Report.pdf">
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                }
+                .title {
+                    font-size: 16px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                    text-align: center;
+                }
+                .course-info {
+                    font-size: 14px;
+                    margin-bottom: 5px;
+                    text-align: center;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 5px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #428bca; /* Salesforce blue */
+                    color: white;
+                    font-weight: bold;
+                }
+                .footer {
+                    font-size: 10px;
+                    position: running(footer);
+                    text-align: left;
+                }
+                @page {
+                    margin: 15mm;
+                    @bottom-left {
+                        content: element(footer);
+                    }
+                    @bottom-right {
+                        content: "Page " counter(page) " of " counter(pages);
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="title">IA Marks Report</div>
+            <div class="course-info">Course: {!courseName}</div>
+            <div class="course-info">Section: {!sectionName}</div>
+            <div class="course-info">IA Type: {!iaType}</div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl. No.</th>
+                        <th>Student Name (SRN)</th>                        
+                        <th>Total Marks (Max: {!totalMaxMarks})</th>
+                        <th>Acknowledged by Student</th>
+                        <th>Acknowledged by System Admin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!studentMarks}" var="student">
+                        <tr>
+                            <td>{!student.serialNumber}</td>
+                            <td>{!student.studentName} ({!student.srnNumber})</td>                            
+                            <td>{!student.totalMarks}</td>
+                            <td>{!student.acknowledgedByStudent}</td>
+                            <td>{!student.acknowledgedByAdmin}</td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+            
+            <div class="footer">
+                Generated on: <apex:outputText value="{0,date,dd-MM-yyyy}"><apex:param value="{!NOW()}"/></apex:outputText>
+            </div>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,120 @@
+<template>
+            <div class="combobox">
+                <lightning-combobox 
+                    name="course"
+                    label="Select IA Type"
+                    value={selectedIA}
+                    placeholder="Select IA"
+                    options={IAOptions}
+                    onchange={handleIATypeChange}
+                    class="custom-combobox-label">
+                    
+                </lightning-combobox>
+            </div>
+        <template if:true={DateFound}>
+            <div class="combobox">
+            <lightning-combobox
+            name="Date"
+            label="Select Date"
+            value={selectedDate}
+            placeholder="Select Date"
+            options={allotmentDates}
+            onchange={handleDateChange}
+            ></lightning-combobox>
+            </div>
+        </template>
+        <template if:true={DateNotFound}>
+                <br/>
+                <div class="slds-text-heading_medium slds-text-align_center" style="color:red">
+                    No Allotment Found for this IA
+                </div>
+        </template>
+
+        <template if:true={DateFound}>
+
+            <div class="combobox">
+            <lightning-combobox
+            name="Session"
+            label="Select Session"
+            value={selectedSession}
+            placeholder="Select Session"
+            options={session}
+            onchange={handleSessionChange}
+            >
+
+            </lightning-combobox>
+            </div>
+
+            <div class="combobox">
+                <lightning-combobox
+                    name="Session"
+                    label="Select StartTime"
+                    value={selectedSession}
+                    placeholder="Select Start Time"
+                    options={selectedSlots}
+                    onchange={handleSlotsChange}
+                >
+
+                </lightning-combobox>
+            </div>
+        </template><br/>
+        <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+        <template if:true={isAllocationEnable}>
+            <div class="slds-m-around_medium" style="width: 600px;">
+                    <div class="slds-m-around_medium table" >
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered" style="border: 1px solid #ccc;">
+                            <thead>
+                                <tr>
+                                    <th class="slds-text-align_center">SL.No</th>
+                                    <th class="slds-text-align_center">Room Number</th>
+                                    <th class="slds-text-align_center">Time</th>
+                                    <th>Invigilators</th>
+                                <!--  <th scope="col">Actions</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={invigilatorRecords} for:item="assignment" for:index="index">
+                                        <tr key={assignment.Id}>
+                                            <td class="slds-text-align_center" data-label="S.No">{assignment.sno}</td>
+                                            <td class="slds-text-align_center" data-label="Room Number">{assignment.Name}</td>
+                                            <td class="slds-text-align_center" data-label="Time">{assignment.rve_Exam_Time__c}</td>
+                                            <td data-label="Professor" style="position: relative;">
+                                                <lightning-record-picker
+                                                    data-index={index}
+                                                    data-id={assignment.Id}
+                                                    label="Choose a Record"
+                                                    placeholder="Search Record..."
+                                                    object-api-name={objectApiName}
+                                                    value={assignment.rve_Professor__c}
+                                                    filter={contactFilter}
+                                                    onchange={handleRecordChange}
+                                                    size="small"
+                                                    matching-info={matchingInfo}
+                                                    icon-name="standard:contact"
+                                                    variant="label-hidden"
+                                                    disabled={assignment.isEditable}
+                                                    >
+                                                </lightning-record-picker>
+                                            </td>
+                                        </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                <br/>
+                <template if:true={isCreateNew}>
+                    <div class="slds-text-align_center">
+                    <lightning-button label="Allocate Invigilator" variant="brand" onclick={handleAutoAllocation} disabled={disableAllocation}></lightning-button>
+                    </div>    
+                </template>
+                <template if:true={isUpdate}>
+                    <div class="slds-text-align_center">
+                    <lightning-button label="Update Invigilator Assignment" variant="brand" onclick={handleUpdateInvigilatorAssignment} disabled={disableUpdate}></lightning-button> 
+                    </div>
+                </template>
+            </div>
+        </template>
+    
+</template>

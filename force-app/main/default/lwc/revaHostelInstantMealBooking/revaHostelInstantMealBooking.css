@@ -1,0 +1,463 @@
+.meal-title,.book-button {
+    font-family: 'Glacial Indifference' !important; /* Removed specific font-face URL */
+}
+@font-face {
+    font-family: 'Glacial Indifference';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/GlacialIndifferenceFont/GlacialIndifference-Regular.otf') format('TrueType');
+}
+
+@font-face {
+    font-family: 'Jakatha Plus';
+    src: url('/sfsites/c/resource/SR_STUDENTPORTALASSETS/StudentPortalAssests/Fonts/Jakartha Plus/PlusJakartaSans-Regular.ttf') format('TrueType');
+}
+
+.date,
+.time,
+li {
+    font-family: 'Jakatha Plus' !important; /* Removed specific font-face URL */
+}
+
+
+.bx--row {
+    min-height: 50px;
+}
+.bx--col-lg-1 {
+    max-width: fit-content;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+@media (max-width: 930px) 
+.bx--tile {
+    width: 100%;
+}
+.timer-container {
+    flex: 1;
+    font-size: 1rem;
+    color: #333; /* or any other color you prefer */
+    text-align: left; /* Align text to the left */
+}
+.card .header p {
+    color: white;
+    text-decoration: none;
+    font-size: calc(var(--font-size) * 0.8);
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+.header-icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 12px;
+}
+.card .date {
+    margin-top: 5px;
+}
+/* .date img,
+.time img,
+.card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 10px;
+    min-width: 270px;
+    min-height: fit-content;
+    padding-bottom: 3px;
+    gap: 10px;
+    cursor: pointer;
+    background-color: white;
+} */
+.bx--tile {
+    cursor: pointer;
+    margin-bottom: 1rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    height: 135px;
+    width: 260px;
+}
+.bx--tile--selectable {
+    position: relative;
+    padding-right: 3rem;
+    border: 1px solid transparent;
+}
+.bx--tile {
+    display: block;
+    min-width: 8rem;
+    min-height: 4rem;
+    padding: 1rem;
+    background-color: #f4f4f4;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+}
+.bx--tile--clickable,
+.bx--tile--selectable,
+.bx--tile--expandable {
+    cursor: pointer;
+    -webkit-transition: 150ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition: 150ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+.bx--tile__checkmark {
+    top: 1rem;
+    right: 1rem;
+    height: 1rem;
+    opacity: 0;
+}
+.bx--tile__checkmark,
+.bx--tile__chevron {
+    position: absolute;
+    border: none;
+    background: transparent;
+    -webkit-transition: 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition: 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+.bx--tile-content {
+    width: 100%;
+    height: 100%;
+}
+.bx--tile-input {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    margin: -1px;
+    clip: rect(0, 0, 0, 0);
+    visibility: inherit;
+    white-space: nowrap;
+}
+.bx--tile--is-selected {
+    border: 2px solid #161616;
+}
+.bx--tile--is-selected .bx--tile__checkmark svg {
+    fill: #161616;
+}
+.bx--tile__checkmark svg {
+    border-radius: 50%;
+    fill: #525252;
+}
+.bx--tile--is-selected .bx--tile__checkmark {
+    opacity: 1;
+}
+.bx--tile--clickable:hover,
+.bx--tile--selectable:hover,
+.bx--tile--expandable:hover {
+    background: #e5e5e5;
+}
+.bx--tile:active {
+    border: 3px solid blue;
+}
+.bx--tile-content h2 {
+    font-size: 16px;
+    color: #4178be;
+    font-weight: 600;
+}
+h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.25;
+    letter-spacing: 0;
+}
+.displayFlex {
+    display: flex;
+    max-width: max-content;
+}
+
+.bookMealButton {
+    /*margin-right: calc(100% - 276px);
+    float: right;*/
+    text-align: center;
+
+}
+.lgc-bg {
+    background-color: rgb(242 242 242);
+}
+
+.lgc-bg-inverse {
+    background-color: rgb(22 50 92);
+}
+
+.disableTile {
+    pointer-events: none;
+}
+h2[data-attr='bookedWarning'] {
+    color: red;
+}
+.timerColor {
+    background-color: rgb(242 242 242);
+}
+.borderRight {
+    border-right: 3px solid;
+}
+.anchorClickable {
+    pointer-events: all;
+}
+.menu{
+    background-color:  #F07F07;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    color: white;
+    text-decoration: none;
+    font-size: calc(var(--font-size)* 0.8);
+    letter-spacing: 2px;
+    font-weight: 600;
+    line-height: 3.25;
+   
+    
+}
+.headingborder{
+    border:1px solid black;
+    border-radius: 10px;
+    max-width: 300px;
+        
+   
+}
+.dateformat{
+    text-align: left;
+    font-size: calc(var(--font-size) * 0.9);
+   /* margin-left: 20%;*/
+}
+.imgsize{
+   width: 10%; 
+   height: 10%;
+   margin-right: 10Px;
+
+}
+
+
+.slds-grid {
+    display: flex;
+    flex-wrap: wrap;
+    /* flex-direction: row; */
+    align-content: space-between;
+    justify-content: space-evenly;
+}
+
+.booked-meals-container {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.meal-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+
+}
+/* Meal Image */
+.meal-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    /* margin: -29px; */
+
+    position: relative;
+    display: flex;
+    left: 6px;
+    top: 46px; 
+}
+
+.meal-title {
+    font-size: 31px;
+    /* font-weight: bold; */
+    margin-bottom: 5px;
+    text-align: right;
+    padding-right: 40px;
+    font-variant: all-petite-caps;
+    color:  #F07F07;
+}
+
+.underline {
+    height: 3px;
+    background: #0d0d0d;
+    /* margin: 5px auto; */
+    margin-left: 50px;
+    margin-right: 40px;
+
+}
+
+.meal-boxconatinar {
+    padding-bottom: 10px;
+}
+
+.meal-data {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.meal-data,
+.menu-list {
+    margin-left: 30px;
+    margin-right: 10px;
+    width: auto;
+
+}
+.date img,
+.time img {
+    height: var(--img-size);
+    aspect-ratio: 1/1;
+
+}
+.menu-list {
+    background-color: #F07F07;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    height: 250px;
+    color: #faf8f9;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: flex-start;
+    align-items: flex-start;
+    font-size: 13px;
+}
+
+.item-scrol {
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+
+.item-scrol li::before {
+    content: '';    
+    display: inline-block; 
+    width: 8px;
+    height: 8px;
+    background-color: white; /* Circle color */
+    border-radius: 50%;        /* Ensures it's a circle */
+    margin-right: 8px;         /* Spacing between circle and text */
+}
+
+/* Button Container */
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding-bottom: 20px;
+    /* padding-left: 30px; */
+}
+:host {
+    --font-size: 16px;
+    --img-size: 22px;
+    --card-max-height: 30px;
+}
+
+.book-button {
+   
+    background-color:  #F07F07;
+        color: black;
+}
+
+.meal-data img {
+    margin-right: 0.6rem;
+    width: 30px; /* Adjust as needed */
+    height: 30px; /* Adjust as needed */
+}
+.menu-list ul {
+    list-style: circle;
+
+}
+
+@media screen and (max-width: 768px) {
+
+
+    .booked-meals-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .meal-data,
+    .menu-list {
+        font-size: larger;
+        width: auto;
+
+    }
+}
+
+
+
+@media screen and (max-width: 480px) {
+    .slds-small-size_1-of-2 {
+        max-width: 50%;
+        /* 1 tile per row on very small screens */
+    }
+    .btn-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-bottom: 20px;
+        /* padding-left: 30px; */
+    }
+
+    .meal-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+
+       
+
+    }
+
+    .meal-title {
+        font-size: 35px;
+        margin-bottom: 5px;
+        font-variant: all-petite-caps;
+        color:  #F07F07;
+    }
+
+    .underline {
+        height: 3px;
+        background: #0d0d0d;
+        margin-left: 36px;
+        margin-right: 36px;
+    }
+
+    .meal-boxconatinar {
+        padding-left: 28px;
+        padding-bottom: 10px;
+    }
+
+    .btn-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-bottom: 20px;
+        /* padding-left: 30px; */
+    }
+
+    .meal-card {
+
+        background: white;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        width: 96%;
+        padding-left: 15px;
+    }
+
+    .mainCardItem {
+        padding-left: 0px;
+        padding-right: opx;
+    }
+
+    .meal-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        left: 6px;
+        top: 33px;
+    }
+    .meal-data,
+    .menu-list {
+        margin-left: 0px;
+        width: auto;
+    }
+}

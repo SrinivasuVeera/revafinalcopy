@@ -1,0 +1,141 @@
+<!--
+  @description       : 
+  @author            : owais.ahanger@cloudodyssey.co
+  @group             : 
+  @last modified on  : 06-06-2024
+  @last modified by  : owais.ahanger@cloudodyssey.co
+-->
+<template>
+  <!-- <div style="min-width: 250px;"><img alt="Reva logo" src={REVA_LOGO} width="150px"/> -->
+  <!-- <div class="slds-box" style="border-color:#F07F07"><center style="font-size:15px"><b><u>REVA EXAMINATIONS</u></b></center></div> -->
+  <div class="transport-container">
+    <div class="heading">
+      <strong>EXAMINATION</strong>
+    </div>
+    <div class="details">
+      <div class="sub-heading">
+        <!-- slds-text-heading_small -->
+
+        <strong>{selectedTabValue} for {loginUserName} </strong>
+      </div>
+      <template if:true={showCourseData}>
+        <div class="course-data">
+          <div class="course-details"><b>Course Details :</b> {loginDetails.Program_Batch__r.Name}</div>
+          <div class="semester-details"><b>Semester : </b>{loginDetails.Active_Semester__r.Name}</div>
+          <!-- {loginDetails.RH_Current_Pursuing_Year_of_Student__c}
+          Course Details : {loginDetails.RH_Current_Pursuing_Year_of_Student__c}
+          {loginDetails.Active_Semester__r.Name}, {loginDetails.Program_Batch__r.Name} -->
+        </div>
+      </template>
+    </div>
+
+    <lightning-tabset class="tab-active" variant="scoped">
+      <!-- <lightning-tab label="Attendance" value="Attendance" onactive={handleTabActive}>
+        <c-rve_-view-attendance></c-rve_-view-attendance>
+      </lightning-tab>-->
+      <lightning-tab label="IA Time Table" value="viewIAMarks_TT" onactive={handleTabActive}>
+        <c-exam-schedule-display></c-exam-schedule-display>
+      </lightning-tab>
+      <lightning-tab label="IA Hall Ticket" value="viewIAMarks_HT" onactive={handleTabActive}>
+        <c-rve_-view-hall-ticket hall-type="hed_IA_Notification"></c-rve_-view-hall-ticket>
+      </lightning-tab>
+      <lightning-tab label="IA Marks" value="viewIAMarks" onactive={handleTabActive}>
+        <c-rve_-view-i-a-marks></c-rve_-view-i-a-marks>
+      </lightning-tab>
+      <lightning-tab label="Notifications" value="viewNotifications" onactive={handleTabActive}>
+        <c-reva-notification></c-reva-notification>
+      </lightning-tab>
+      <lightning-tab label="Exam Application" value="viewExamTab" onactive={handleTabActive}>
+        <c-rve_-view-exam-application-list-view></c-rve_-view-exam-application-list-view>
+      </lightning-tab>
+      <lightning-tab label="Exam Time Table" value="ExamTimeTable" onactive={handleTabActive}>
+        <c-rve_-semester-time-table></c-rve_-semester-time-table>
+      </lightning-tab>
+      <!--- <lightning-tab label="Exam Hall Ticket" value="viewHallTicket" onactive={handleTabActive}>
+        <c-rve_-view-hall-ticket hall-type="hed_Semester_Notification"></c-rve_-view-hall-ticket>
+      </lightning-tab> -->
+      <lightning-tab label="Results" value="viewResults" onactive={handleTabActive}>
+        <c-rve_-student-semester-result></c-rve_-student-semester-result>
+      </lightning-tab>
+      <!-- Added newly for examination 2nd phase by veera -->
+      <!-- <lightning-tab label="Photocopy/Revalution" value="Photocopy/Revalution" onactive={handleTabActive}>
+        <c-rve-photocopy-revalution></c-rve-photocopy-revalution>
+
+      </lightning-tab> -->
+      <template if:true={canShowPCandRVTab}>
+        <lightning-tab label="Photocopy/Revalution" value="Photocopy/Revalution" onactive={handleTabActive}>
+          <template if:true={isPGStudent}>
+            <p class="slds-text-color_error slds-text-align_center slds-m-top_medium">
+              For PG students, Revaluation and Photocopy options are not available.
+            </p>
+          </template>
+
+          <template if:false={isPGStudent}>
+            <c-rve-photocopy-revalution></c-rve-photocopy-revalution>
+          </template>
+        </lightning-tab>
+      </template>
+
+      <!-- Changed ended here -->
+    </lightning-tabset>
+
+    <!-- Another Approach -->
+
+    <!-- <div class="courseAssTab">
+            <div class="slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 PadAround">
+                <div class="slds-grid slds-wrap" style="border-bottom: 1px solid grey;">
+                    <div class={AttendanceClass} onclick={handleAttendanceClick} >
+                      Attendance
+                        <template if:true={Attendance}>
+
+                        </template>
+                    </div>
+                    <div class={IATimeTableClass} onclick={handleIATimeTableClick}>
+                      IATimeTable
+                       <template if:true={IATimeTable}>
+                          <c-exam-schedule-display></c-exam-schedule-display>
+                        </template>
+                    </div>
+                    <div class={IAHallTicketClass} onclick={handleIAHallTicketClick}>
+                      IAHallTicket
+                        <template if:true={IAHallTicket}>
+                            <c-rve_-view-hall-ticket hall-type="hed_IA_Notification"></c-rve_-view-hall-ticket>
+                        </template>
+                    </div>
+                    <div class={IAMarksClass} onclick={handleIAMarksClick}>
+                      IAMarks
+                       <template if:true={IAMarks}>
+                              <c-rve_-view-i-a-marks></c-rve_-view-i-a-marks>
+                        </template>
+                    </div>
+                    <div class={NotificationsClass} onclick={handleNotificationsClick}>
+                      Notifications
+                        <template if:true={Notifications}>
+                          <c-rve_-view-exam-application-list-view></c-rve_-view-exam-application-list-view>
+                        </template>
+                    </div>
+                    <div class={ExamApplicationClass} onclick={handleExamApplicationsClick}>
+                      ExamApplications
+                        <template if:true={ExamApplication}>
+                          <c-rve_-view-exam-application-list-view></c-rve_-view-exam-application-list-view>
+                        </template>
+                    </div>
+                    <div class={ExamTimeTableClass} onclick={handleExamTimeTableClick}>
+                      ExamTimeTable
+                       <template if:true={ExamTimeTable}>
+                            
+                        </template>
+                    </div>
+                    <div class={ExamHallTicketClass} onclick={handleExamHallTicketClick}>
+                      ExamHallTicket
+                        <template if:true={ExamHallTicket}>
+                          <c-rve_-view-hall-ticket hall-type="hed_Semester_Notification"></c-rve_-view-hall-ticket>
+                        </template>
+                    </div>
+                </div>
+            </div>
+    </div> -->
+
+  </div>
+
+</template>

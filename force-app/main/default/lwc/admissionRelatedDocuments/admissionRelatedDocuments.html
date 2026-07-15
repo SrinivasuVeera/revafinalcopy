@@ -1,0 +1,33 @@
+<template>
+    <div class="slds-m-around_x-small slds-m-bottom_large slds-p-bottom_small">
+        <div class="slds-grid slds-gutters">
+            <template if:true={interestApplication}>
+                <template if:true={appFeeStructureDefined}>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-button variant="brand" label="View Fee Structure" title="View Fee Structure"
+                            onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </template>
+
+                <template if:true={poViewStatus}>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-button variant="brand" label="View PO Letter" title="View PO Letter"
+                            onclick={onhandleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </template>
+
+                <template if:true={appPOFullySigned}>
+                    <template for:each={filesList} for:item="file">
+                        <div key={file.value} class="slds-col slds-size_3-of-12">
+
+                            <a href={file.url} class="download" download>
+                                <lightning-button variant="brand" label="Download PO Fully Signed"
+                                    title="Download"></lightning-button>
+                            </a>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>

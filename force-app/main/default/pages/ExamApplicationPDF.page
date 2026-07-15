@@ -1,0 +1,233 @@
+<apex:page renderAs="pdf" standardController="Contact" extensions="ExamApplicationPDF"  standardStylesheets="false"  applyBodyTag="false" applyHtmlTag="false" showHeader="false" >
+    <html>
+        <head>
+            <style type="text/css" media="print">
+                @page {
+                /* <!--size: 9.27in 12.69in;--> */
+                    padding-top: 40px;
+                    @top-center {
+                        content: element(header);
+                    }
+                    @bottom-left {
+                        content: element(footer);
+                    }
+                }
+                div.header {
+                    padding: 10px;
+                    position: running(header);
+                	text-Align:Center;
+                }
+                div.footer {
+                    display: block;
+                    padding: 5px;
+                    position: running(footer);
+                }
+                .pagenumber:before {
+                    content: counter(page);
+                }
+                .pagecount:before {
+                    content: counter(pages);
+                }
+                div.content {
+                	padding: 10px;
+                }
+                div.content .heading {
+                	margin-bottom: 10px;
+                }
+                div.content .profile-pic {
+                	margin-bottom: 10px;
+                }
+                div.content .content-footer {
+                	margin-bottom: 10px;
+                    padding: 10px;
+                    margin-top: 20px;
+                }
+                div.content .instruction {
+                	margin-top: 20px;
+                }
+            </style>
+        </head>
+        
+        <body style="font-family:sans-serif;font-size:13px;">
+            <div class="header">
+                <img src="{!$Resource.REVA_LOGO}" width="150px" height="60px"/><br/>                
+                <center style="font-size:15px">Rukmini Knowledge Park, Kattigenahalli Yelahanka, Bengaluru - 560064</center>               
+            </div>
+            <div class="footer">
+                <table width="100%">
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center;"><div>Page <span class="pagenumber"/> of <span class="pagecount"/></div></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="content">
+                <div class="heading">
+                    <center style="font-weight:700;font-size:16px">EXAM APPLICATION FOR</center> 
+                    <center style="font-weight:500;font-size:10px">{!examApplicationHeader}</center> 
+                </div>
+                <div style="display: flex;flex-wrap: nowrap;align-items: center;">
+                    <div style="width: 100%">
+                        <table width="100%" cellpadding="2">
+                            <tbody>
+                                <td width="70%">
+                                    <table width="100%" cellpadding="2" cellspacing ="2">
+                                        <tbody>
+                                            <apex:repeat value="{!examApplications}" var="examApplication">
+                                            <!--<tr class="slds-hint-parent">
+                                                <td style="width: 30%"><div class="slds-truncate"><b>Application No.</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td style="width: 30%">{!examApplication.Rve_Application_Number__c}</td>
+                                                <td style="width: 20%"><div class="slds-truncate"><b>Applied Date</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td><div class="slds-truncate">
+                                                    <apex:outputText value="{0,date,dd-MM-yyyy}">
+                                                        <apex:param value="{!examApplication.Rve_Applied_Date__c}" />
+                                                    </apex:outputText>
+                                                </div></td>
+                                            </tr>
+                                                <tr>
+                                                    <td>{!examApplication.Rve_Application_Number__c}</td>
+                                                </tr>
+                                            <tr class="slds-hint-parent">
+                                                <td><div class="slds-truncate"><b>Registration No.</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td colspan="4"><div class="">{!examApplication.Rve_Registration_Number__c}</div></td>
+                                            </tr>-->
+                                            <tr class="slds-hint-parent">
+                                                <td><div class="slds-truncate"><b> Student's Name</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td colspan="4"><div class="slds-truncate">{!student.Name}</div></td>
+                                            </tr>
+                                            <tr class="slds-hint-parent">
+                                                <td><div class="slds-truncate"><b>Category</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td colspan="4"><div class="slds-truncate">{!student.Select_Category__c}</div></td>
+                                            </tr>
+                                            <tr class="slds-hint-parent">
+                                                <td><div class="slds-truncate"><b>Father's Name</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td colspan="4"><div class="slds-truncate">{!student.Father_Name__c}</div></td>
+                                            </tr>
+                                            <tr class="slds-hint-parent">
+                                                <td><div class="slds-truncate"><b>Mother's Name</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td colspan="4"><div class="slds-truncate">{!student.Mother_Name1__c}</div></td>
+                                            </tr>
+                                            <tr class="slds-hint-parent">
+                                                <td><div class="slds-truncate"><b>Course</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td colspan="4"><div class="slds-truncate">{!student.Course__c}</div></td>
+                                            </tr>
+                                            <tr class="slds-hint-parent">
+                                                <td><div class="slds-truncate"><b>College / Dept.</b></div></td>
+                                                <td><div class="slds-truncate">:</div></td>
+                                                <td colspan="4"><div class="slds-truncate">{!student.School_Name__c}</div></td>
+                                            </tr>
+                                          </apex:repeat>
+                                        </tbody>   
+                                    </table>
+                                </td>
+                                <td width="30%" height="80%" align="right" style="margin-top: 20px;">
+                                    <table width="100%" cellpadding="2">
+                                        <tr>
+                                            <td align="right" width="80%" height="80%">
+                                                <div class="heading profile-pic">
+                                                    <img alt="Profile Photo" class="profile-pic" src="{!student.File_Passport_Size_Photo__c}" width="120px" height="180px"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tbody>                   
+                        </table>
+                    </div>   
+                </div>
+                <br/>   
+                <apex:variable var="count" value="{!0}"/>
+                <table  border="1" cellpadding ="2" cellspacing ="0" style ="width:100%;">                
+                    <tr>
+                        <th colspan="5" style="text-align: center;">
+                            <center style="font-weight:700;font-size:12px">Subject Appearing</center>
+                        </th>
+                    </tr>
+                    <tr style ="text-align: center;">
+                        <th>Sl.No</th>
+                        <th>Sem</th>
+                        <th>Course Code</th>
+                        <th>Subject Title</th>
+                        <th>QP Code</th>
+                    </tr>
+                    <apex:repeat value="{!lineItems}" var="item">
+                        <apex:variable var="count" value="{!count+1}"/>
+                        <tr>
+                            <td style="text-align:center;"> {!count}</td>
+                            <td>{!item.Rve_Semester__c}</td>
+                            <td>{!item.Course_Code__c}</td>
+                            <td>{!item.Rve_Subject__c}</td>
+                            <td>{!item.Rve_QP_Code__c}</td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+                <br/> 
+                 <table border="1" cellpadding="2" cellspacing="0" style="width: 100%;">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col" colspan="5" style="text-align: center;">
+                    <div class="slds-truncate" title="Opportunity Name">Payment Details</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="slds-hint-parent">
+                <td>
+                    <div class="slds-truncate">Total Fee</div>
+                </td>
+                <td>
+                    <div class="slds-truncate">{!StudentFeePayment.Amount__c}/-</div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Payment Date</div>
+                </td>
+                <td>
+                    <div class="slds-truncate">{!StudentFeePayment.Payment_Date__c}</div>
+                </td>
+            </tr>
+            <tr class="slds-hint-parent">
+                <td>
+                    <div class="slds-truncate">Payment Type</div>
+                </td>
+                <td>
+                    <div class="slds-truncate">{!StudentFeePayment.Mode_of_Payment__c}</div>
+                </td>
+                <td>
+                    <div class="slds-truncate">Payment Status</div>
+                </td>
+                <td>
+                    <div class="slds-truncate">{!StudentFeePayment.Line_Item_Payment_Status__c}</div>
+                </td>
+            </tr>
+            <tr class="slds-hint-parent">
+                <td>
+                    <div class="slds-truncate">Transaction ID</div>
+                </td>
+                <td colspan="3">
+                    <div class="slds-truncate">{!StudentFeePayment.SF_Transaction_ID__c}</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+                <div class="content-footer">
+                    <table cellpadding ="2" cellspacing ="0" style ="width:100%;">
+                        <tr>
+                            <td style="width: 33%;">Date: </td>
+                            <td style="width: 33%;text-align:right;">Signature of the Student</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </body>
+       
+    </html>
+</apex:page>

@@ -1,0 +1,39 @@
+<template>
+  <div class="slds-var-m-bottom_small">
+    <lightning-card title="Select School and Program">
+        <lightning-layout horizontal-align="center" multiple-rows>
+            <!-- Schools drop-down -->
+            <lightning-layout-item 
+                padding="around-small"
+                size="12">
+                <lightning-combobox 
+                    name="school"
+                    label="Select School" 
+                    variant="label-hidden" 
+                    options={schools} 
+                    value={selectedSchool}
+                    placeholder="Select a School"
+                    
+                    onchange={onSchoolChange} required> 
+                </lightning-combobox>
+            </lightning-layout-item>
+        
+            <!-- Programs drop-down -->
+            <lightning-layout-item 
+                padding="around-small"
+                size="12">
+                <lightning-combobox 
+                    name="programSelector" 
+                    label="Select Program" 
+                    variant="label-hidden" 
+                    value={selectedProgram} 
+                    placeholder="Select a Program" 
+                    options={programs}
+                    
+                    onchange={onProgramChange} required >
+                </lightning-combobox>
+            </lightning-layout-item>
+        </lightning-layout> 
+    </lightning-card>       
+</div>
+</template>

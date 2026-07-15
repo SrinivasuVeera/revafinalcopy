@@ -1,0 +1,24 @@
+.side-menu-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0rem 0rem;
+}
+
+.side-menu-btn-icons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.3125rem 0;
+    border-bottom: 0.125rem solid white;
+}
+
+.side-menu-btn-icons {
+    min-width: 1.875rem;
+}
+
+.side-menu-btn-icons img {
+    width: 1.875rem;
+    height: 1.875rem;
+    object-fit: contain;
+    cursor: pointer;
+}

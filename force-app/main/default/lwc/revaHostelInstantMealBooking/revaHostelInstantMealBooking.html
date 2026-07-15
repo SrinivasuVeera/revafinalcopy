@@ -1,0 +1,206 @@
+<template>
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="large"
+        variant="brand"></lightning-spinner>
+    <!-- <template lwc:if={apexCallDone}>
+        <template lwc:if={showTemplate}>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" padding="around-small">
+                    <template if:true={messBookingEndTime}>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6"> </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <div class="slds-clearfix">
+                                    <div class="slds-float_right">
+                                        <div style="padding-right: 4rem" if:true={timer}>Meal booking ends in:{timer}
+                                        </div>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                    <lightning-layout multiple-rows>
+                        <template for:each={messMenuList} for:item="menu" for:index="index">
+                            <lightning-layout-item key={menu.Id} size="12" padding="around-small">
+                                <div class="bx--col-lg-1" data-mealmenu={menu.Id}>
+
+                                </div>
+                                <div class="headingborder">
+                                    <h2></h2>
+                                    <h2 class="menu">&nbsp;&nbsp;&nbsp;{menu.Type__c}</h2>
+                                    <p style="text-align:left;margin-left:5%;margin-top:5px;">
+                                        <img src={calendarIcon} class="imgsize" />
+                                        <lightning-formatted-date-time
+                                            value={menu.Date__c}></lightning-formatted-date-time>
+                                    </p>
+
+
+
+                                    <p style="text-align: left; margin-left:5%;margin-bottom:5px;margin-top:5px;">
+                                        <img src={timeIcon} class="imgsize" />
+                                        <lightning-formatted-date-time value={menu.Start_Time__c} hour="2-digit"
+                                            minute="2-digit" time-zone={timeZone}></lightning-formatted-date-time>
+                                        &nbsp;-&nbsp;
+                                        <lightning-formatted-date-time value={menu.End_Time__c} hour="2-digit"
+                                            minute="2-digit" time-zone={timeZone}></lightning-formatted-date-time>
+                                    </p>
+
+                                    <div style="text-align: left; margin-left:5%"><a class="anchorClickable"
+                                            data-menuid={menu.Id} data-id={index} onclick={handleMealBooking}>Click to
+                                            Book Meal</a></div>
+                                    <div>&nbsp;</div>
+                                </div>
+
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+        <template lwc:else>
+            <c-banner-messages if:true={showError} error={strMessage}></c-banner-messages>
+            <c-banner-messages if:true={showWarning} warning={strMessage}></c-banner-messages>
+        </template>
+    </template> -->
+    <template lwc:if ={apexCallDone}>
+        <template lwc:if = {showTemplate}>
+            <lightning-layout multiple-rows="true" class="content">
+                <lightning-layout-item size="12" class="test">
+                    <div class="booked-meals-container">
+                        <!-- Meal Cards Grid -->
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <template for:each={messMenuList} for:item="menu" for:index="index">
+                                <div key={menu.Id}
+                                    class="slds-col slds-size_1-of-1 slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-p-around_x-small">
+    
+                                    <div class="meal-card">
+                                        <!-- Meal Image -->
+                                        <div class="meal-image">
+                                            <img src={menu.ImageURL} class="meal-img" alt="Meal Image" />
+                                        </div>
+    
+                                        <!-- Meal Type -->
+                                        <h3 class="meal-title">{menu.Type__c}</h3>
+                                        <div class="underline"></div>
+                                        <div class="meal-boxconatinar">
+                                            <!-- Meal Details -->
+                                            <div class="meal-data">
+                                                <div class="date" title="date">
+                                                    <img src={calendarIcon} />
+                                                    <lightning-formatted-date-time value={menu.Date__c}
+                                                        time-zone="UTC"></lightning-formatted-date-time>
+                                                </div>
+                                                <div class="time" title="time">
+                                                    <img src={timeIcon} />
+                                                    <lightning-formatted-date-time
+                                                        value={menu.Start_Time__c} hour="2-digit"
+                                                        minute="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                                                    -
+                                                    <lightning-formatted-date-time
+                                                        value={menu.End_Time__c} hour="2-digit"
+                                                        minute="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                                                </div>
+                                            </div>
+    
+                                            <!-- Menu List -->
+    
+                                            <div class="menu-list">
+                                                <ul>
+                                                    <div class ='item-scrol'>
+                                                        <template if:true={menu.messItemsList}>
+                                                            <template for:each={menu.messItemsList} for:item="menuItem">
+                                                                <li key={menuItem}>{menuItem}</li>
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                    
+                                                </ul>
+                                            </div>
+    
+                                            <!-- Buttons Below Each Card -->
+                                           
+                                                <div class="btn-container">
+                                                        <div class="btn-wrapper">
+                                                            <button
+                                                                class="book-button slds-button slds-button_neutral custom-button" 
+                                                                data-menuid={menu.Id} data-id={index} onclick={handleMealBooking}>
+                                                                Book Instant Meal
+                                                            </button>
+                                                        </div>
+                                                </div>
+                                        </div>
+    
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+        <template lwc:else>
+            <c-banner-messages if:true={showError} error={strMessage}></c-banner-messages>
+            <c-banner-messages if:true={showWarning} warning={strMessage}></c-banner-messages>
+        </template>
+    </template>
+    <template lwc:if={showBookingModal}>
+
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <lightning-button-icon class="slds-modal__close" variant="bare-inverse" size="large"
+                    icon-name="utility:close" alternative-text="Close Modal"
+                    onclick={closeModal}></lightning-button-icon>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Book Meal</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-record-edit-form object-api-name="Reva_Meal_Booking__c" onsubmit={handleSubmit}
+                        onsuccess={handleSuccess} onerror={handleError}>
+                        <!-- Display form errors using lightning-messages component -->
+                        <lightning-messages> </lightning-messages>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item lwc:if={forTeachingStaff} size="6" padding="around-small">
+                                <!-- <lightning-input-field field-name="Booking_For__c" required="true"> </lightning-input-field> -->
+                                <lightning-input-field field-name="Booking_For_User__c" required="true">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item lwc:else size="6" padding="around-small">
+                                <lightning-input-field field-name="Booking_For__c" required="true"
+                                    onchange={handleContactSelection}> </lightning-input-field>
+                            </lightning-layout-item>
+                            <!-- <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Reva_Mess_Menu__c" value={clickedMenu} required="true"> </lightning-input-field>
+                            </lightning-layout-item> -->
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Reva_Mess_Menu__c" value={clickedMenu}
+                                    disabled></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Reva_Meal_Booking_Date__c" value={todaysDate}
+                                    required="true" readonly> </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-input-field class="slds-hide" field-name="Reva_Meal_Booking_Status__c"
+                                value="Instant Meal" required="true" disabled> </lightning-input-field>
+                            <lightning-input-field class="slds-hide" field-name="Is_Instant_Meal_Availed__c"
+                                value={isInstantMealAvailed} disabled> </lightning-input-field>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows horizontal-align="spread">
+
+                            <lightning-layout-item size="12" padding="around-small">
+                                <div class="bookMealButton">
+                                    <lightning-button if:true={showBookMealButton} variant="brand" type="submit"
+                                        label="Book Meal" title="Book Meal" class="bookMealButton" onclick={bookMeals}
+                                        disabled={disableBookMeal}></lightning-button>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                    </lightning-record-edit-form>
+                </div>
+
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>

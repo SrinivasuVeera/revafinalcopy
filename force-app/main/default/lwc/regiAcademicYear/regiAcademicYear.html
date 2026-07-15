@@ -1,0 +1,49 @@
+<template>   
+    <div class="my-profile-wrapper">
+        <div class="my-profile-header">
+                <span>{cardTitle}</span>
+        </div>
+        <div class="my-profile-body">   
+        <div class="slds-p-around_medium">
+            <template lwc:if={showTermCond}>                 
+                    <p>Hereby, I will abide by the rules and regulations of REVA University and I will be informing the change in local address to university, if any, immediately.I am fully aware that ragging in any form is a criminal offence and that police action will be taken against me for getting involved into any form of ragging as per university policy. In case I am involved in ragging, I may be expelled from the university. </p><br>
+                    <p>I will clear my all fees as per schedule given by university. I will be regular and punctual to all the classes (theory/practical) and secure attendance of not less than 75% in each subject as stipulated by REVA University. I am fully aware that attendance less than 75% in any of the courses will make me loose one year.</p><br>
+                    <p>I will conduct myself in a highly disciplined and decent manner while in the classroom, labs, exams and in the campus, failing which suitable action may be taken against me as per the rules and regulations of the University.</p><br><br>
+                                        
+                    <input type="checkbox" id="term_cond" name="term_condition" onchange={handleCheckboxChange}>
+                    <label class="slds-p-right_small" for="term_condition">I declare that the information given above is true to the best of my knowledge.</label>
+
+                    <br><br>
+                    <div class="center">
+                        <button class="slds-button slds-button_brand" onclick={handleButtonClick} disabled={isButtonDisabled}>Register</button>                    
+                    </div>                    
+                
+            </template> 
+            <template lwc:if={showPayFeesMsg}>
+                        <h1>Pay Minimum 50% Fees to continue registration</h1></br>                      
+                        <a class="slds-button slds-button_brand" href="https://reva-university.my.site.com/StudentPortal/s/">Pay Fees</a>
+            </template>
+            <template lwc:if={showNotActivePage}>
+                <h1>Registration for the academic year is NOT Active</h1>               
+            </template>
+            <template lwc:if={showAlreadyReg}>
+                <h1>Dear student you are already registered for the Academic Year {acdemicYear}</h1> <br/>
+                <h2><u>You are agreed for the following guidelines</u></h2>
+                <p>Hereby, I will abide by the rules and regulations of REVA University and I will be informing the change in local address to university, if any, immediately.I am fully aware that ragging in any form is a criminal offence and that police action will be taken against me for getting involved into any form of ragging as per university policy. In case I am involved in ragging, I may be expelled from the university. </p><br>
+                <p>I will clear my all fees as per schedule given by university. I will be regular and punctual to all the classes (theory/practical) and secure attendance of not less than 75% in each subject as stipulated by REVA University. I am fully aware that attendance less than 75% in any of the courses will make me loose one year.</p><br>
+                <p>I will conduct myself in a highly disciplined and decent manner while in the classroom, labs, exams and in the campus, failing which suitable action may be taken against me as per the rules and regulations of the University.</p><br><br>
+              
+            </template>
+            <template lwc:if={showRegSuccessful}>
+                <h1>Dear student you have been successfully registered for the Academic Year {acdemicYear}</h1>               
+            </template>
+            <!-- SHOW SPINNER  -->
+            <template if:true={showSpinner}>
+                <div class="slds-m-top_medium">
+                    <lightning-spinner alternative-text="Processing..." size="small"></lightning-spinner>
+                </div>
+            </template>
+        </div>   
+        </div>
+     </div>
+</template>

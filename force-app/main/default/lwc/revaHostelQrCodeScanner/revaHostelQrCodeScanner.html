@@ -1,0 +1,21 @@
+<template>
+    <div class="slds-m-around_medium slds-text-align_center">
+        <lightning-card>
+            <h1 class="slds-text-heading_large slds-text-align_center">Scan Barcode To Update Meal Status.</h1>
+            <div class="slds-m-around_medium">
+                <lightning-button label="Scan Now !!" variant="brand" onclick={handleBarcodeClick}></lightning-button>
+            </div>
+            <!-- <p>{barcode}</p>
+           <strong>{recordId}</strong> -->
+            <!-- <strong>{error}</strong> -->
+        </lightning-card>
+    </div>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+</template>

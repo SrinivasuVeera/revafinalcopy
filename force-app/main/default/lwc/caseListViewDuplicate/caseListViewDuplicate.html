@@ -1,0 +1,228 @@
+<template>
+    <div class="container slds-box">
+        <div class="slds-page-header">
+            <div class="slds-grid">
+                <div class="slds-col slds-align-middle">
+                    <h1 class="slds-page-header__title">Branding Cases</h1>
+                    <div>Recently Viewed <lightning-helptext content="Recently viewed cases"></lightning-helptext></div>
+                    <p>5 items - Updated a few seconds ago</p>
+                </div>
+                <div class="slds-col slds-no-flex">
+                    <lightning-button variant="brand" label="New" onclick={createCase} class="slds-m-left_x-small"></lightning-button>                   
+                </div>
+            </div>
+            <!-- <lightning-input type="search" placeholder="Search this list..." class="slds-m-top_x-small"></lightning-input> -->
+        </div>
+        <template if:true={cases}>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col"><input type="checkbox" /></th>
+                        <th scope="col"><div class="slds-truncate" title="Case Number">Case Number</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Subject">Subject</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Description">Description</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Case Type">Case Type</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Status">Status</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Category">Category</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Sub Category">Sub Category</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={cases} for:item="caseRecord">
+                        <tr key={caseRecord.Id} data-id={caseRecord.Id} onclick={handleRecordClick} class="slds-hint-parent">
+                            <td><input type="checkbox" /></td>
+                            <td class="name-cell">{caseRecord.Name}</td>
+                            <td>{caseRecord.Subject__c}</td>
+                            <td>{caseRecord.Description__c}</td>
+                            <td>{caseRecord.Case_Type__c}</td>
+                            <td>{caseRecord.Status__c}</td>
+                            <td>{caseRecord.Category__c}</td>
+                            <td>{caseRecord.Sub_Category__c}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:true={error}>
+            <p>Error loading cases: {error.body.message}</p>
+        </template>
+
+        <!-- Spinner -->
+        <template if:true={isSpinner}>
+            <div class="slds-is-relative">
+                <section class="slds-modal slds-fade-in-open">
+                    <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height: 50%; margin: auto"></div>
+            </div>
+        </template>
+
+        <!-- Modal for creating new case -->
+        <template if:true={openModalForCreateCase}>
+            <div class="">
+                <div class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <strong>Department Branding Request Detail</strong>
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={handleModalClose}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                    size="small">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                        </div>
+                        <div class="modal-container" style="max-height: 80vh; overflow: auto;">
+                            <lightning-record-edit-form object-api-name="Branding_Case__c" record-type-id={facultyRecordTypeId}
+                                onerror={handleCreateError} onsuccess={handleCreateSuccess}>
+                                <lightning-layout multiple-rows="">
+                                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" padding="horizontal-small">
+                                        <div class="custom-box">
+                                            <lightning-input-field required field-name="Category__c"
+                                                class="field-value create-input" onchange={handleCategoryChange}>
+                                            </lightning-input-field>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" padding="horizontal-small">
+                                        <div class="custom-box">
+                                            <lightning-input-field required field-name="Sub_Category__c"
+                                                class="field-value create-input" onchange={handleSubCategoryChange}>
+                                            </lightning-input-field>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+
+                                <!-- Goodies Request Fields -->
+                                <template if:true={showGoodiesFields}>
+                                    <lightning-layout multiple-rows="">
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="School_Department_Goodies__c"
+                                                    class="field-value create-input" readonly>
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="Goodies_Count__c"
+                                                    class="field-value create-input">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+
+                                <!-- Studio Services Fields -->
+                                <template if:true={showStudioFields}>
+                                    <lightning-layout multiple-rows="">
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="Service_Type__c"
+                                                    class="field-value create-input">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="Venue__c"
+                                                    class="field-value create-input">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+
+                                <!-- Routine Services Fields -->
+                                <template if:true={showRoutineFields}>
+                                    <lightning-layout multiple-rows="">
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="Service_Time__c"
+                                                    class="field-value create-input">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="From_Time__c"
+                                                    class="field-value create-input">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="To_Time__c"
+                                                    class="field-value create-input">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+
+                                <lightning-layout multiple-rows="">
+                                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" padding="horizontal-small">
+                                        <div class="custom-box">
+                                            <lightning-input-field required field-name="Subject__c"
+                                                class="field-value create-input" onchange={handleSubjectChange}>
+                                            </lightning-input-field>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <template if:true={showOldCaseNumber}>
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                            large-device-size="6" padding="horizontal-small">
+                                            <div class="custom-box">
+                                                <lightning-input-field field-name="Old_Case_Number__c"
+                                                    class="field-value create-input">
+                                                </lightning-input-field>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </template>
+                                </lightning-layout>
+                                <lightning-layout multiple-rows="">
+                                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" padding="horizontal-small">
+                                        <div class="custom-box">
+                                            <lightning-input-field field-name="Description__c"
+                                                class="field-value create-input">
+                                            </lightning-input-field>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <lightning-layout multiple-rows="">
+                                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" padding="horizontal-small">
+                                        <div class="custom-box">
+                                            <lightning-input-field field-name="Case_Attachment__c"
+                                                class="field-value create-input">
+                                            </lightning-input-field>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <div class="button-container">
+                                    <lightning-button class="slds-m-top_small" variant="brand" onclick={handleSave}
+                                        label="Create Case">
+                                    </lightning-button>
+                                    <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="save"
+                                        lwc:ref="save" label="Create Cases" style="display: none;">
+                                    </lightning-button>
+                                </div>
+                            </lightning-record-edit-form>
+                        </div>
+                        <footer class="slds-modal__footer"></footer>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
+    </div>
+</template>

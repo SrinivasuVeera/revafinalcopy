@@ -1,0 +1,16 @@
+.form-container {
+    border: 2px solid orange;
+    background-color: #d3d3d3;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Style for each individual item with spacing */
+.item-container {
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border: 1px solid orange;
+    border-radius: 5px;
+    background-color: white;
+}

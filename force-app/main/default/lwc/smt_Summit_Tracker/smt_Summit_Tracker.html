@@ -1,0 +1,149 @@
+<template>
+    <template lwc:if={showSummitTracker}>
+        <lightning-card>
+            <h4 class="smt-heading">SUMMIT TRACKERS</h4>
+            <section>
+                <!-- slds-text-body_small -->
+                <table class="slds-text-body_regular">
+                    <thead>
+                        <tr>
+                            <th> Summit Tracker</th>
+                            <th> Year </th>
+                            <th> Percentage Completed</th>
+                            <th> Summit Section</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={summitTrackers} for:item="summitTracker">
+                            <tr key={summitTracker.Id}>
+                                <td data-cell="Summit Tracker">
+                                    <strong>{summitTracker.Name}</strong>
+                                </td>
+                                <td data-cell="Batch">
+                                    <strong>{summitTracker.smt_Year__c}</strong>
+                                </td>
+                                <td data-cell="Percentage Completed">
+                                    <lightning-badge label={summitTracker.weightageAchieved}
+                                        style={summitTracker.badgeStyle}></lightning-badge>
+                                </td>
+                                <td data-cell="Summit Section">
+                                    <lightning-button label="View" variant="brand" data-id={summitTracker.Id}
+                                        onclick={handleGetSections} alternative-text="Close window">
+                                    </lightning-button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+
+            </section>
+        </lightning-card>
+    </template>
+    <template lwc:if={showUnAvailabilityOfSummitTracker}>
+        <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+            <p class="slds-text-heading_large slds-text-color_error">No Summit Tracker Found</p>
+
+        </div>
+    </template>
+    <template lwc:if={showSections}>
+        <lightning-card>
+            <h4 class="smt-heading">SUMMIT SECTIONS</h4>
+            <section>
+                <table class="slds-text-body_regular">
+                    <thead>
+                        <tr>
+                            <th> Category Name </th>
+                            <th> Section Name </th>
+                            <th> Total Particulars </th>
+                            <!-- <th> Updated Particulars </th> -->
+                            <th> Target Weightage (%)</th>
+                            <th> Weightage Achieved (%)</th>
+                            <th> Particulars </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={summitSectionRecords} for:item="summitSection">
+                            <tr key={summitSection.Id} class={summitSection.rowClass}>
+
+                                <!-- Category Column (Shown Once Per Group) -->
+                                <template if:true={summitSection.showCategory}>
+                                    <td rowspan={summitSection.rowSpan}
+                                        class="slds-align-middle slds-text-align_center slds-text-title_bold">
+                                    {summitSection.categoryName}
+                                    </td>
+                                </template>
+
+                                <td data-cell="Section Name">
+                                    <strong>{summitSection.Name}</strong>
+                                </td>
+
+                                <td data-cell="Total Particulars">
+                                    <strong>{summitSection.smt_Number_Of_Particulars__c}</strong>
+                                </td>
+
+                                <td data-cell="Target Weightage (%)">
+                                    <strong>{summitSection.weightage}</strong>
+                                </td>
+
+                                <td data-cell="Weightage Achieved (%)">
+                                    <lightning-badge
+                                    label={summitSection.percentageCompleted}
+                                    style={summitSection.badgeStyle}>
+                                    </lightning-badge>
+                                </td>
+
+                                <td data-cell="Particulars">
+                                    <template lwc:if={summitSection.isOddandEvenSeparated}>
+                                    <lightning-button label="Odd"
+                                        variant="brand"
+                                        data-id={summitSection.Id}
+                                        data-sectionname={summitSection.Name}
+                                        data-semester="Odd"
+                                        onclick={handleGetParticulars}
+                                        class="slds-m-right_x-small">
+                                    </lightning-button>
+
+                                    <lightning-button label="Even"
+                                        variant="brand"
+                                        data-semester="Even"
+                                        data-id={summitSection.Id}
+                                        onclick={handleGetParticulars}
+                                        data-sectionname={summitSection.Name}>
+                                    </lightning-button>
+                                    </template>
+
+                                    <template lwc:else>
+                                    <lightning-button label="View"
+                                        variant="brand"
+                                        data-id={summitSection.Id}
+                                        data-semester="Even"
+                                        onclick={handleGetParticulars}
+                                        data-sectionname={summitSection.Name}>
+                                    </lightning-button>
+                                    </template>
+                                </td>
+
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <lightning-button label="Back" onclick={handleBackClick} variant="brand"
+                    style="float: right;margin-block: 1rem;margin-right: 0.5rem;"></lightning-button>
+            </section>
+        </lightning-card>
+    </template> 
+    <template lwc:if={showParticulars}>
+        <c-smt_-summit_-particular summit-section-id={summitSectionId} semester={semester} section-name={sectionName}
+            onclickback={handleClickBackFromParticulars} summit-type-academic={summitTypeAcademic}></c-smt_-summit_-particular>
+    </template>
+
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+</template>

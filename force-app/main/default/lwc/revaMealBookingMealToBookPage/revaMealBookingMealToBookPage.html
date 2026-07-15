@@ -1,0 +1,165 @@
+<template>
+    <lightning-layout multiple-rows="false" class="title-container">
+        <lightning-layout-item class="slds-p-left_medium slds-text-heading_small" size="12" small-device-size="12"
+            medium-device-size="6" large-device-size="6">
+            <template if:false={showBanner}>
+                <template lwc:if={timerRunning}>
+                    <div class="timer-container">
+                        <strong>Meal Booking Ends in: {timeRemaining}</strong>
+                    </div>
+                    <div class="timer-container">
+                        <!-- <strong>Missed Meal Count : {missedMealCount}</strong> -->
+                        <strong class="missed-meal">
+                            Missed Meal Count: {missedMealCount}
+                        </strong>
+                    </div>
+                </template>
+            </template>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6">
+            <h1 class="title1">MEAL BOOKING</h1>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <template if:false={showBanner}>
+        <lightning-layout multiple-rows="true" size="12" class="content">
+            <lightning-layout-item size="12" class="selectmeal-item slds-var-p-around_medium">
+                <h2 class="meal-heading">
+                    Select and Book the Meals
+                </h2>
+                <!-- <h3 class="meal-heading">Meal To Book</h3> -->
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="7"
+                padding="around-small">
+                <template if:true={isMealsToBook}>
+                    <div class="contener right-section">
+                        <div class="slds-grid slds-wrap slds-gutters slds-p-bottom_medium">
+                            <template lwc:if={mealsToBook} for:each={mealsToBook} for:item="menu" for:index="index">
+                                <div key={menu.Id}
+                                    class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_x-small">
+                                    <div class="memberCard">
+                                        <div class="detailes">
+                                            <div class="img-wrap">
+                                                <img src={menu.ImageURL} class="slds-align_absolute-center carImage"
+                                                    name={menu} alt="Meal Image" onload={imageHanddler} />
+                                            </div>
+                                            <div class="userdetailes">
+                                                <ul class="menuitem-ul">
+                                                    <div class='item-scrol'>
+                                                        <template if:true={menu.messItemsList}>
+                                                            <template for:each={menu.messItemsList} for:item="menuItem">
+                                                                <li key={menuItem}>{menuItem}</li>
+                                                            </template>
+                                                        </template>
+                                                    </div>
+
+                                                </ul>
+                                            </div>
+                                            <div class="mealData">
+                                                <ul>
+                                                    <li>
+                                                        <span class="label">Meal Date:</span>
+                                                        <lightning-formatted-date-time value={menu.Date__c}
+                                                            time-zone="UTC"></lightning-formatted-date-time>
+                                                    </li>
+                                                    <li>
+                                                        <span class="label">Meal Time:</span>
+                                                        <span>
+                                                            <lightning-formatted-date-time value={menu.Start_Time__c}
+                                                                hour="2-digit" minute="2-digit"
+                                                                time-zone="UTC"></lightning-formatted-date-time>
+                                                            &nbsp; - &nbsp;
+                                                            <lightning-formatted-date-time
+                                                                value={menu.Display_End_Time__c} hour="2-digit"
+                                                                minute="2-digit"
+                                                                time-zone="UTC"></lightning-formatted-date-time>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                                <p class="title">
+                                                    {menu.Type__c}
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                        <div class="btn-container ">
+                                            <button class="selectmealbtn slds-button slds-button_neutral"
+                                                data-id={menu.Id} onclick={handleMealSelection}>
+                                                {menu.buttonLabel}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <template lwc:if={isMealsToBook}>
+                            <template if:false={isAfterNinePM}>
+                                <div class="bookbtn-container slds-text-align_center">
+                                    <lightning-button label="Book Meal" disabled={disableBookMeal} variant="brand"
+                                        onclick={handleBokkMeal}></lightning-button>
+                                </div>
+                            </template>
+                        </template>
+
+                    </div>
+                </template>
+                <template if:false={isMealsToBook}>
+                    <template if:false={isTomorrowMealBooked}>
+                        <c-banner-messages warning={noCreatedMealsMessage}></c-banner-messages>
+                    </template>
+                    <template if:true={isTomorrowMealBooked}>
+                        <!-- <h3 class="nomenu-list">MEAL IS ALREADY BOOKED FOR TOMORROW</h3> -->
+                        <c-banner-messages warning={alredyBookedMealsMessgae}></c-banner-messages>
+                    </template>
+
+                </template>
+
+            </lightning-layout-item>
+            <template if:true={isMealsToBook}>
+                <lightning-layout-item class="left-item" size="12" small-device-size="12" medium-device-size="12"
+                    large-device-size="5" padding="around-small">
+                    <div class="left-section">
+
+                        <div class="meal-info-container">
+                            <div class="meal-section booked-meal">
+                                <h4>Booked Meal</h4>
+                                <p>Once the meal is booked. It cannot be modified.</p>
+                            </div>
+                            <div class="meal-section cancellation-policy">
+                                <h4>Cancellation Policy</h4>
+                                <p>To be cancelled on or before 6 hours of the meal start time.</p>
+                            </div>
+                            <div class="meal-section feedback-submission">
+                                <h4>Feedback Submission</h4>
+                                <p>To be given within 24 hours of Meal end time</p>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </template>
+
+
+        </lightning-layout>
+    </template>
+
+
+    <template lwc:if={showBanner}>
+        <c-banner-messages warning={strBannerMessage}></c-banner-messages>
+        <br />
+        <template lwc:if={isNonteachingOrProfessor}>
+            <lightning-button label="Pay Now" onclick={handlePenaltyFee} variant="brand" data-type="Normal"
+                style="float: right;margin: 10px;"></lightning-button>
+        </template>
+
+    </template>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height: 50%; margin: auto"></div>
+        </div>
+    </template>
+</template>

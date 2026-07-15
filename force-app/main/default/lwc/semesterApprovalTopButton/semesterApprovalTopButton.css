@@ -1,0 +1,12 @@
+.lightning-studio{
+	color : blue;
+}
+/* Make table scrollable horizontally on small screens */
+:host {
+    --slds-c-table-scroll-horizontal-width: 100%;
+}
+
+/* Optional: Zebra striping */
+.slds-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}

@@ -1,0 +1,25 @@
+<template>
+    <div class="tabs">
+        <div class="tab" tabindex="0" data-step="1" onclick={handleStepClick}>DETAILS</div>
+        <div class="tab" tabindex="0" data-step="2" onclick={handleStepClick}>ATTACHMENTS</div>
+        <div class="tab" tabindex="0" data-step="3" onclick={handleStepClick}>APPROVAL HISTORY</div>
+    </div>
+    <div class="child-container">
+        <lightning-card>
+            <template lwc:if={showDetails}>
+                <c-reva-hostel-leave-request-detail record-id={recordId}
+                    onclickback={handleClickBack}></c-reva-hostel-leave-request-detail>
+            </template>
+            <template lwc:elseif={showAttachments}>
+                <c-reva-hostel-leave-request-attachments record-id={recordId}></c-reva-hostel-leave-request-attachments>
+            </template>
+            <template lwc:elseif={showApprovalHistory}>
+                <c-reva-hostel-leave-req-approval-history
+                    record-id={recordId}></c-reva-hostel-leave-req-approval-history>
+            </template>
+            <div class="btn-container" style="padding-top: 10px; padding-left:10px">
+                <lightning-button label="Back" variant="brand" onclick={handleBackClick}></lightning-button>
+            </div>
+        </lightning-card>
+    </div>
+</template>

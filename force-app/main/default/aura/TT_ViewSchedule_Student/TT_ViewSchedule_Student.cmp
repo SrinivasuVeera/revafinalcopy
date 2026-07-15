@@ -1,0 +1,179 @@
+<!--
+  @description       : 
+  @author            : owais.ahanger@cloudodyssey.co
+  @group             : 
+  @last modified on  : 05-20-2024
+  @last modified by  : owais.ahanger@cloudodyssey.co
+-->
+<aura:component controller="TT_ViewSchedule_StudentCls" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="ScheduleWrpList" type="List"/>
+    <aura:attribute name="filteredCourseList" type="List"/>
+    <aura:attribute name="programName" type="String"/>
+    <aura:attribute name="schoolName" type="String"/>
+    <aura:attribute name="semName" type="String"/>
+    <aura:attribute name="secName" type="String"/>
+    <aura:attribute name="slotMap" type="Map"/>
+    <aura:attribute name="acaYear" type="String"/>
+    <aura:attribute name="timeSlot" type="List"/>
+    <aura:attribute name="profs" type="List"/>
+    <aura:attribute name="facilityNames" type="List"/>
+    <aura:attribute name="allCourseDetails" type="Object[]" />
+    <aura:attribute name="courseNames" type="String[]" />
+    <aura:attribute name="selectedCourseName" type="String"/>
+    <aura:attribute name="DayTimeVar" type="List"/>
+    <aura:attribute name="dateOptions" type="List" />
+    <aura:attribute name="selectedDate" type="String" />
+    <aura:attribute name="isVisible" type="Boolean" default="true" />
+    <aura:attribute name="scheduleData" type="List" />
+    <aura:attribute name="courseData" type="List" />
+    <aura:attribute name="deviceType" type="Boolean" />
+    <aura:attribute name="openMobile" type="Boolean" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+   
+<aura:if isTrue="{!v.deviceType != 'mobile'}">
+    <div style="box-shadow: 2px 4px 9px -4px #6e6e6e; border: 1px solid #f57f26; padding: 5px; border-radius: 10px;">
+        <div class="slds-box" style="background-color: #c7c7c7; color: black; border: 0px;">
+            <div style="font-size: large; font-weight: bold;">Time Table</div>
+        </div>
+        <div class="title">
+            <div class="title-year">Academic Year: {!v.acaYear}</div>
+            <div class="title-info">Course Details: {!v.programName}</div>
+            <div class="title-info">
+                <b>Section:</b> {!v.secName}
+                <b>Semester:</b> {!v.semName}
+            </div>
+        </div>
+        <lightning:tabset selectedTabId="TimeTable" class="tab-active" variant="scoped">
+            <lightning:tab label="Time Table" id="TimeTable">
+                <aura:if isTrue="{!v.ScheduleWrpList.length > 0}">
+                    <section>
+                    <table class="slds-table slds-table--bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color: grey; color: white; height: 3vw;">Day/Time</th>
+                                <aura:iteration items="{!v.timeSlot}" var="t" indexVar="index">
+                                    <th colspan="1" style="background-color: grey; color: white; text-align: center;">{!t.sTime} - {!t.eTime}</th>
+                                </aura:iteration>
+                            </tr>
+                        </thead>
+                        
+                        <tbody class="CustomColumnText">
+                            <aura:iteration items="{!v.ScheduleWrpList}" var="schList" indexVar="i">
+                                <tr>
+                                    <td colspan="1" class="slds-is-resizable" style="background-color: grey; color: white; height: 3vw; text-align: center;"><b>{!schList.dayName}</b></td>
+                                    <aura:iteration items="{!schList.lst_Slots}" var="slotsList" indexVar="index">
+                                        <td colspan="1" class="slds-is-resizable" style="{!slotsList.courseNames == 'Break' ? 'background-color: rgb(254 147 57 / 46%); white-space: pre-wrap; text-align: center;' : 'white-space: pre-wrap; text-align: center; height: 3vw; color: black; background-color: #D3D3D3;'}">
+                                            {!slotsList.courseNames}
+                                        </td>
+                                    </aura:iteration>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                        
+                    </table>
+                        </section>
+                </aura:if>
+                <aura:if isTrue="{!v.ScheduleWrpList.length == 0}">
+                    No Schedule to show
+                </aura:if>
+            </lightning:tab>
+
+            <lightning:tab label="Course Details">
+                <lightning:select name="courseSelect" label="Select Course" aura:id="courseSelect" onchange="{!c.handleCourseSelection}">
+                    <option value="">--Select a Course--</option>
+                    <aura:iteration items="{!v.courseNames}" var="courseName">
+                        <option value="{!courseName}">{!courseName}</option>
+                    </aura:iteration>
+                </lightning:select>
+                
+                <aura:if isTrue="{!not(empty(v.selectedCourseName))}">
+                    <br/><br/>
+                    <!-- Table to display course details -->
+                    <section>
+                    <table class="slds-table slds-table--bordered">
+                        <thead>
+                            <!-- Add table headers for course details -->
+                            <tr style="background-color: grey;">
+                                <th style="text-align: center; background-color: grey; color: white; width: 10rem; height: 3vw;">Sr. No</th>
+                                <th style="text-align: center; background-color: grey; color: white; width: 15rem; height: 3vw;">Course Code</th>
+                                <th style="background-color: grey; color: white; height: 3vw;">Course Name</th>
+                                <th style="background-color: grey; color: white; height: 3vw;">Name of the faculty</th>
+                                <th style="background-color: grey; color: white; height: 3vw;">Facility Name</th>
+                                <th style="background-color: grey; color: white; height: 3vw;">Day/Time</th>
+                                <!-- Add more headers if required -->
+                            </tr>
+                        </thead>
+                        <tbody class="CustomColumnText">
+                            <!-- Iterate over course details -->
+                            <aura:iteration items="{!v.profs}" var="courseDetail" indexVar="index">
+                                <tr>
+                                    <!-- Display course details in table cells -->
+                                    <td colspan="1" class="slds-is-resizable" style="text-align: center; width: 10rem; height: 3vw; color: black; background-color: #D3D3D3;">{!index + 1}</td>
+                                    <td colspan="1" class="slds-is-resizable" style="text-align: center; width: 15rem; height: 3vw; color: black; background-color: #D3D3D3;">{!courseDetail.courseCode}</td>
+                                    <td colspan="1" class="slds-is-resizable" style="height: 3vw; color: black; background-color: #D3D3D3;">{!courseDetail.coursename}</td>
+                                    <td colspan="1" class="slds-is-resizable" style="height: 3vw; color: black; background-color: #D3D3D3;">{!courseDetail.facultyName}</td>
+                                    <td colspan="1" class="slds-is-resizable" style="height: 3vw; color: black; background-color: #D3D3D3;">{!courseDetail.facilityName}</td>
+                                    <td colspan="1" class="slds-is-resizable" style="height: 3vw; color: black; background-color: #D3D3D3;">
+                <aura:iteration items="{!courseDetail.dayAndTime}" var="dt" indexVar="idx">
+                    {!dt}
+                    <!-- Add a comma if it's not the last item -->
+                  
+                </aura:iteration>
+            </td>
+                                    
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                        </section>
+                </aura:if>
+            </lightning:tab>
+        </lightning:tabset>
+    </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.deviceType == 'mobile'}">
+
+    <lightning:card title="Select Date with Day" iconName="utility:date_input">
+        <div class="slds-m-around_medium">
+            <!-- Dropdown to select date -->
+            <lightning:combobox
+                name="dateDropdown"
+                label="Choose a Date"
+                placeholder="Select Date"
+                options="{!v.dateOptions}"
+                value="{!v.selectedDate}"
+                onchange="{!c.handleDateChange}">
+            </lightning:combobox>
+        </div>
+    </lightning:card>
+    
+   <aura:if isTrue="{!v.openMobile}">     
+   <aura:if isTrue="{!v.courseData.length > 0}">
+    <div class="schedule-container">
+        <aura:iteration items="{!v.courseData}" var="session" indexVar="index">
+        <div class="schedule-item" style="{!'background-color:' + session.color}">
+            <tr> 
+                <td>
+            <div class="schedule-time">
+                    <div>{!session.startTime} - {!session.endTime}</div>
+                </div>
+                </td>
+                <td>
+                <div class="schedule-details">
+                    <div class="subject-name">{!session.courseCode}</div>
+                    </div></td>
+            </tr>
+       
+            </div>
+        </aura:iteration>        
+    </div>
+    </aura:if>
+      <aura:if isTrue="{!v.courseData.length == 0}">
+         No Schedule to show
+    </aura:if>
+    </aura:if>
+    </aura:if>
+   </aura:component>

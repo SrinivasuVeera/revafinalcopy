@@ -1,0 +1,27 @@
+.row {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 15px;
+    border: none;
+}
+.row-heading {
+    background-color: #123e56;
+    color: white;
+}
+.heading {
+    background-color: #184e74;
+    color: white;
+}
+.pdf-container, .outer-container{
+    border : 2px solid #F07F07;
+}
+.slds-table{
+    border : 2px solid;
+}
+
+.errorMsg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}

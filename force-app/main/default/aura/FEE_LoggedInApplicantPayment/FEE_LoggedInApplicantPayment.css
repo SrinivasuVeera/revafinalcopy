@@ -1,0 +1,529 @@
+.THIS slds-tabs--default__nav li.slds-active {
+    background: black;
+}
+
+.THIS tab-active {
+    --sds-c-tabs-scoped-color-text-active: red;
+}
+    
+.THIS .banner {
+    width: 100%;
+    height: 100%;
+}
+
+.THIS .progressBar {
+    background-color: white;
+    vertical-align: middle;
+    text-align: center;
+    height: 70px;
+    padding: 10px 0;
+}
+
+.THIS .backgroundImagePC {
+    position: relative;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    z-index: 0;
+}
+
+.THIS .backgroundImageMobile {
+    display: none;
+}
+
+.THIS .formHeader {
+    font-family: sans-serif;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: large;
+    background: linear-gradient(0deg, rgba(255, 115, 0, 1) 0%, rgba(253, 187, 45, 1) 100%);
+    color: white;
+    padding: 5px;
+
+    text-align: center;
+    /* border-bottom:4px solid rgb(255,149,0); */
+    margin-bottom: -2px;
+}
+
+/*.THIS .paymentTable {
+      background-color: #f6f6f6;
+      position: absolute;
+      padding-top: 0;
+      left: 2%;
+      right: 40%;
+      width: 45%; 
+      height :10%;
+      margin-top: 1%;
+      margin-bottom: 50%;
+      margin-top: 1%;
+      margin-bottom: 30%;
+      z-index: 2;
+    border-bottom: 4px solid rgb(255,149,0);
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+}*/
+.THIS .paymentTable,
+.THIS .table {
+  table-layout: fixed;
+}
+
+.THIS .table thead th {
+  background: #f6f6f6;
+  text-align: left;
+  color: black;
+  padding: 12px 0px;
+  font-size: 12px;
+}
+
+.THIS .table tbody td {
+  background: #f6f6f6;
+  text-align: left;
+  color: black;
+  padding: 8px 0px;
+  font-size: 12px;
+  white-space: normal;
+  word-wrap: break-word;
+
+}
+.THIS .footerButton {
+  text-align: right;
+  padding: 5px;
+}
+
+
+
+
+
+/* @media only screen and (min-width:321px) and (max-width: 500px) {
+    .THIS .backgroundImageMobile {
+        position: relative;
+        object-fit: cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 5px;
+        z-index: 0;
+    }
+
+    .THIS .backgroundImagePC {
+        display: none;
+    }
+
+} */
+
+
+/*Keval*/
+.THIS .banner {
+    width: 100%;
+    height: 100%;
+}
+
+.THIS .progressBar {
+    background-color: white;
+    vertical-align: middle;
+    text-align: center;
+    height: 70px;
+    padding: 10px 0;
+}
+
+.THIS .backgroundImagePC {
+    position: relative;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    z-index: 0;
+}
+
+.THIS .backgroundImageMobile {
+    display: none;
+}
+
+.THIS .formHeader {
+    font-size: 16px;
+    font-weight: 700;
+    color: #00679A;
+    padding: 10px;
+}
+
+.THIS .footerButton {
+    text-align: right;
+    padding: 5px;
+    border-top: 1px dotted #00679A;
+
+}
+
+.THIS .slds-radio [type=radio]:checked .slds-radio__label .slds-radio_faux:after {
+    width: 0.5rem;
+    height: 0.5rem;
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    border-radius: var(--lwc-borderRadiusCircle, 50%);
+    background: none;
+    background-color: #00679A !important;
+    /* background-color: var(--slds-c-radio-mark-color-foreground, var(--sds-c-radio-mark-color-foreground, var(--lwc-brandAccessible,rgb(249, 131, 0)))); */
+}
+
+.THIS .paymentTable {
+    /* position: absolute;
+padding-top: 0;
+left: 2%;
+right: 40%;
+width: 45%; 
+height :10%;
+margin-top: 1%;
+margin-bottom: 50%;
+margin-top: 1%;
+margin-bottom: 30%; */
+    z-index: 2;
+    /*border-bottom: 4px solid rgb(255,149,0);*/
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.THIS .slds-button {
+    background-color: #00679A;
+    border: 1px solid #00679A;
+    color: white;
+}
+            
+/*AddedbyRajshekar*/
+.THIS .enable-class {
+    background-color: lightgrey;
+    color: revert-layer;
+ }
+    
+.THIS .disable-class {
+     background-color: #00679a; 
+     color: White;
+ }
+
+/*Main Theme Code Desktop Version*/
+/* .THIS.registration-from-wrapper {
+
+    border: 1px solid #9EC5E4;
+    background-color: #CDEAF8;
+    border-radius: 10px;
+    padding: 12px 12px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+    gap: 10px;
+}
+
+.THIS .text-section .heading {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 10px;
+
+}
+
+
+.THIS .text-section .content {
+    font-size: 13px;
+}
+
+.THIS .registration-info-section {
+    display: flex;
+    gap: 30px;
+}
+
+.THIS .registration-icon {
+    min-width: 150px;
+}
+
+.THIS .registration-icon img {
+    height: 130px;
+    width: 150px;
+    object-fit: contain;
+}
+
+.THIS .registration-from-section {
+    display: flex;
+    gap: 20px;
+
+}
+
+.THIS .status-content-tracker-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 185px;
+    min-width: 185px;
+}
+
+.THIS .status-content-tracker {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.THIS .status-icons {
+    min-width: 35px;
+}
+
+.THIS .status-icons img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.THIS .status-icons-fee {
+    min-width: 35px;
+}
+
+.THIS .status-icons-fee img {
+    width: 35px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.THIS .status-number-tracker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.THIS .status-element {
+    position: relative;
+    text-align: center;
+    flex: 1;
+}
+
+.THIS .status-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #6F6F6F;
+    color: white;
+    line-height: 30px;
+    z-index: 1;
+}
+
+.THIS .status-circle.active {
+    background-color: #00679A;
+}
+
+.THIS .status-circle.inactive {
+    background-color: #6F6F6F;
+}
+
+.THIS .status-line {
+    position: absolute;
+    left: 50%;
+    top: 30px;
+    width: 1px;
+    height: 40px;
+    background-color: #00679A;
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+
+.THIS .component-section-wrapper {
+    border: 1px solid #00679A;
+    border-radius: 10px;
+    flex: 1;
+    background-color: #F6F6F6;
+    height: max-content;
+    padding: 12px 30px 30px 30px;
+} */
+
+.THIS .paymentTable,
+.THIS .table {
+    table-layout: fixed;
+}
+
+.THIS .table thead th {
+    background: #f6f6f6;
+    text-align: left;
+    color: black;
+    padding: 12px 0px;
+    font-size: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.THIS .table tbody td {
+    background: #f6f6f6;
+    text-align: left;
+    color: black;
+    padding: 8px 0px;
+    font-size: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+
+}
+.THIS .slds-tabs_scoped__content{
+    padding:0px !important;
+}
+
+/*Main theme code mobile version */
+@media only screen and (max-width:767px) {
+
+    .THIS .make-payment {
+        line-height: 20px;
+        padding: 0 8px !important;
+     
+      }
+
+    .THIS .table thead th {
+        padding: 8px 0px;
+        font-size: 12px;
+    }
+
+    .THIS .table tbody td {
+        padding: 5px 0px;
+        font-size: 12px;
+
+    }
+    .THIS .app-number{
+        display:none;
+    }
+}
+
+    /* 
+    .THIS .component-section-wrapper {
+        padding: 5px;
+    }
+
+    .THIS .make-payment {
+        line-height: 20px;
+    }
+
+    .THIS .paymentBox {
+        background-color: transparent !important;
+        border: none !Important;
+
+    }
+
+    .THIS .registration-from-wrapper {
+        gap: 40px;
+    }
+
+    .THIS .registration-info-section {
+        justify-content: center;
+    }
+
+    .THIS .text-section .heading {
+        font-size: 14px;
+        align-items: center;
+    }
+
+    .THIS .text-section .content {
+        display: none;
+    }
+
+    .THIS .image-section {
+        display: none;
+
+    }
+
+    .THIS .registration-from-section {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .THIS .status-content-tracker-wrapper {
+        flex-direction: row;
+        width: 100%;
+        gap: 0;
+        justify-content: space-around;
+    }
+
+    .THIS .status-content-tracker {
+        flex-direction: column;
+        width: 60px;
+    }
+
+    .THIS .status-icons {
+        min-width: 25px;
+    }
+
+    .THIS .status-icons img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .THIS .status-icons-fee {
+        min-width: 25px;
+    }
+
+    .THIS .status-icons-fee img {
+        width: 25px;
+        height: 30px;
+
+    }
+
+    .THIS .status-icons-text {
+        font-size: 10px;
+    }
+
+
+    .THIS .status-number-tracker {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        gap: 0;
+    }
+
+    .THIS .status-element {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+
+    }
+
+    .THIS .status-circle {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+
+    }
+
+    .THIS .status-circle+.status-line {
+        width: 100%;
+        height: 1px;
+        left: 100%;
+        top: 12.5px;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+
+    .THIS .logged-payment-details-receipt-number,
+    .THIS .logged-payment-details-fee-type {
+        display: none;
+    }
+
+}
+
+.THIS .slds-table--bordered {
+    border-collapse: separate;
+    border-top: none !important;
+
+}
+
+.THIS .paymentBox {
+    background-color: #CDEAF8;
+    border: 1px solid #00679A;
+    border-radius: 10px;
+    margin-top: 30px;
+    padding: 5px;
+}
+
+.THIS .chosePay {
+    font-size: 16px;
+    font-weight: 700;
+    color: #00679A;
+    padding: 10px;
+}
+
+.THIS .container {
+    background-color: PInk;
+} */

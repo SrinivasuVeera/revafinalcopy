@@ -1,0 +1,361 @@
+<aura:component controller="MSTR_StudentSectionAllocation_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    
+    <aura:attribute name="allocations" type="Map"/>
+    <aura:attribute name="sectionWrp" type="Map"/>
+    <aura:attribute name="termSections" type="Map"/>
+    <aura:attribute name="termSectionDetails" type="Map"/>
+    <aura:attribute name="allocationType" type="String"/>
+    <aura:attribute name="sectionType" type="String"/>
+    <aura:attribute name="selectedTab" type="String" default="1"/>
+    <aura:attribute type="hed__Term__c" name="objTerm"/>
+    <aura:attribute name="lstUnassigned" type="List"/>
+    <aura:attribute name="unassignedSize" type="Integer"/>
+    <aura:attribute name="disableInputs" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="openModel" type="boolean" default="false"/>
+    
+   
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-theme_default">  
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:avatar" alternativeText="Student Section Allocation" title="Student Section Allocation" /> &nbsp;
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Student Section Allocation">Student Section Allocation for the <br/>
+                                            Program Batch {!v.objTerm.Program_Batch__r.Name} <br/>
+                                            of Semester {!v.objTerm.Name}</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="slds-float_right">
+                                <lightning:button class="slds-button slds-button_brand" disabled="{!v.disableInputs}" onclick="{!c.getSectionDetails}"> Allocate </lightning:button>
+                                <lightning:button variant="brand-outline" label="Clear" title="Clear" onclick="{!c.clearDetails}"/>
+                            </div>
+                            <p class="slds-text-body_small"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-theme_default slds-p-top_x-small">
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">Total No of Provisionally Admitted Students</label>
+                 <br/>
+                {!v.objTerm.Program_Batch__r.Provisionally_Admitted_Students__c}
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <label class="slds-form-element__label" for="unique-id-of-input">No of Sections</label> <br/>
+                {!v.objTerm.No_Of_Sections__c}
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <lightning:input aura:id="auraInputId" type="number" name="StudentsPerSection" label="No of Students per Section" disabled="{!v.disableInputs}"
+                                 value="{!v.objTerm.Actual_Students_Per_Section__c}" required="true" onblur="{!c.studPerSection}"/>
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                <lightning:combobox aura:id="auraInputId" label="Allocate Based on" name="allocationsOptions" 
+                                    placeholder="Select Allocation" disabled="{!v.disableInputs}"
+                                    value="{!v.allocationType}" options="{!v.allocations}" required="true"/>
+            </div>
+        </div>
+        <aura:if isTrue="{!not(empty(v.lstUnassigned)) || not(empty(v.sectionWrp))}">
+            <lightning:tabset selectedTabId="{!v.selectedTab}">
+                <aura:if isTrue="{!not(empty(v.lstUnassigned))}" >
+                    <lightning:tab label="{!'Unassigned ('+ v.unassignedSize +')'}" aura:id="tabId">
+                        <div class="slds-form_horizontal slds-form slds-grid slds-wrap">
+                            <table class="slds-table slds-table--bordered slds-table_cell-buffer " style="overflow: visible;">
+                                <thead>
+                                    <tr class="slds-text-heading--label">
+                                        <!--<th class="slds-is-resizable" scope="col" >
+                                            <b> Select </b>    
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox">
+                                                        <ui:inputCheckbox aura:id="selectAllId"
+                                                                          change="{!c.selectAllCheckbox}"/>
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>-->
+                                        <th class="slds-is-resizable" scope="col" >
+                                            <b> Sl.No </b>    
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col" >
+                                            <b> Student Name </b>
+                                        </th>
+                                        <th class="slds-is-resizable" scope="col" >
+                                            <b> Application Number </b>
+                                        </th> 
+                                        <th class="slds-is-resizable" scope="col" >
+                                            <b> Student Type </b>
+                                        </th> 
+                                        <!--<th class="slds-is-resizable" scope="col" >
+                                            <b> Program Enrollment Status </b>
+                                        </th> -->	
+                                        <th class="slds-is-resizable" scope="col" >
+                                            <b> SRN Number </b>
+                                        </th> 
+                                        <th class="slds-is-resizable " scope="col" > 
+                                            <div class="slds-align_absolute-center "><b> Move To </b></div>                    
+                                        </th> 
+                                    </tr>
+                                </thead>  
+                                <aura:iteration items="{!v.lstUnassigned}" var="progEnroll" indexVar="index">
+                                    <tr class="slds-hint-parent">
+                                        <!--<td class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox">
+                                                        <ui:inputCheckbox text="{!progEnroll.progEnrollId}"
+                                                                          value="{!progEnroll.isChecked}"
+                                                                          />
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label text"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </td>-->
+                                        <td data-label="Sl. No" class="slds-cell-wrap" scope="col">
+                                            <div class="slds-truncate" style="white-space:normal;">
+                                                {!index + 1}
+                                            </div>
+                                        </td>
+                                        <td data-label="Student Name" class="slds-cell-wrap" scope="col">
+                                            <div class="slds-truncate" style="white-space:normal;">
+                                                {!progEnroll.studentName}
+                                            </div>
+                                        </td>  
+                                        <td data-label="Application Number" class="slds-cell-wrap" scope="col">
+                                            <div class="slds-truncate" style="white-space:normal;">
+                                                {!progEnroll.appNumber}
+                                            </div>
+                                        </td>
+                                        <td data-label="Student Type" class="slds-cell-wrap" scope="col">
+                                            <div class="slds-truncate" style="white-space:normal;">
+                                                {!progEnroll.studType}
+                                            </div>
+                                        </td>
+                                        <td data-label="SRN Number" class="slds-cell-wrap" scope="col">
+                                            <div class="slds-truncate" style="white-space:normal;">		
+                                                {!progEnroll.srnNumber}
+                                            </div>							
+                                        </td>	
+                                        <td data-label="Move" class="slds-cell-wrap" scope="col">
+                                                <!--<lightning:select aura:id="sectionId" variant ="label-hidden" name="sectionOptions" value="{!progEnroll.sectionNo}">
+                                                    <option value="">None</option>
+                                                    <aura:iteration items="{!v.termSections}" var="val" >
+                                                        <option value="{!val.value}"> {!val.label}</option>
+                                                    </aura:iteration>
+                                                </lightning:select>-->
+                                            <lightning:combobox aura:id="sectionId" variant ="label-hidden" name="{!index}" placeholder="Select Section"
+                                                                value="{!progEnroll.sectionNo}" options="{!v.termSections}" onchange="{!c.changeUnAssignSection}"/>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </table>
+                        </div>
+                        <aura:if isTrue="{!v.lstUnassigned.length >0}">
+                            <div class="slds-align_absolute-center slds-p-top_xx-small">
+                                <lightning:button aura:id="confimStudSRN"
+                                                  variant="brand"
+                                                  label="Save"
+                                                  title="Save"
+                                                  onclick="{!c.saveStudSection}"/>
+                                
+                                <!--<lightning:button aura:id="confimStudSRN"
+                                  variant="brand"
+                                  label="Save &amp; Submit"
+                                  title="Save &amp; Submit"/>-->
+                                
+                                <lightning:button variant="brand-outline"
+                                                  label="Cancel"
+                                                  title="Cancel"
+                                                  onclick="{!c.cancelStudSection}"/>
+                            </div>
+                        </aura:if>
+                    </lightning:tab>
+                </aura:if>
+                <aura:if isTrue="{!not(empty(v.sectionWrp))}">
+                    <aura:iteration items="{!v.sectionWrp}" var="item" indexVar="indexSection">
+                        <lightning:tab label="{!item.value.sectionName+' ('+ item.value.totalRecords+')'}" id="{!item.value.sectionNo}">
+                            <div class="slds-form_horizontal slds-form slds-grid slds-wrap">
+                                <table class="slds-table slds-table--bordered slds-table_cell-buffer" style="overflow: visible;">
+                                    <thead>
+                                        <tr class="slds-text-heading--label">
+                                            <!--<th class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <label class="slds-checkbox">
+                                                            <ui:inputCheckbox aura:id="selectAllId"
+                                                                              text="{!item.value.sectionNo}"
+                                                                              change="{!c.selectAllCheckbox}"/>
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-form-element__label"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> Select </b>    
+                                            </th>-->
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> Sl.No </b>    
+                                            </th>
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> Student Name </b>
+                                            </th>
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> Application Number </b>
+                                            </th> 
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> Student Type </b>
+                                            </th>  	
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> SRN Number </b>
+                                            </th> 
+                                            <th class="slds-is-resizable" scope="col">
+                                                <div class="slds-align_absolute-center "><b> Move To </b> </div>
+                                            </th> 
+                                        </tr>
+                                    </thead>  
+                                    <aura:iteration items="{!item.value.lstProgEnroll}" var="progEnroll" indexVar="indexProg">
+                                        <tr class="slds-hint-parent">
+                                            <!--<td class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <label class="slds-checkbox">
+                                                            <ui:inputCheckbox text="{!progEnroll.progEnrollId}"
+                                                                              value="{!progEnroll.isChecked}"
+                                                                              />
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-form-element__label text"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </td>-->
+                                            <td data-label="Sl. No" class="slds-cell-wrap" scope="col">
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    {!indexProg + 1}
+                                                </div>
+                                            </td>
+                                            <td data-label="Student Name" class="slds-cell-wrap" scope="col">
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    {!progEnroll.studentName}
+                                                </div>
+                                            </td>  
+                                            <td data-label="Application Number" class="slds-cell-wrap" scope="col">
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    {!progEnroll.appNumber}
+                                                </div>
+                                            </td>
+                                            <td data-label="Student Type" class="slds-cell-wrap" scope="col">
+                                                <div class="slds-truncate" style="white-space:normal;">
+                                                    {!progEnroll.studType}
+                                                </div>
+                                            </td>
+                                            <td data-label="SRN Number" class="slds-cell-wrap" scope="col">
+                                                <div class="slds-truncate" style="white-space:normal;">		
+                                                    {!progEnroll.srnNumber}
+                                                </div>							
+                                            </td>
+                                            <td data-label="Move" class="slds-cell-wrap" scope="col">
+                                                    <!--<lightning:select aura:id="sectionId" variant ="label-hidden" name="{!indexSection+'_'+indexProg}" value="{!progEnroll.sectionNo}" onchange="{!c.changeSection}">
+                                                        <option value="">None</option>
+                                                        <aura:iteration items="{!v.termSections}" var="val" >
+                                                            <option value="{!val.value}"> {!val.label}</option>
+                                                        </aura:iteration>
+                                                    </lightning:select>-->
+                                                <lightning:combobox aura:id="sectionId" variant ="label-hidden" name="{!indexSection+'_'+indexProg}" placeholder="Select Section"
+                                                                    value="{!progEnroll.sectionNo}" options="{!v.termSections}" onchange="{!c.changeSection}"/>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </table>
+                            </div>
+                            <aura:if isTrue="{!item.value.lstProgEnroll.length >0}">
+                                <div class="slds-align_absolute-center slds-p-top_xx-small">
+                                    <lightning:button aura:id="confimStudSRN"
+                                                      variant="brand"
+                                                      label="Save"
+                                                      title="Save"
+                                                      onclick="{!c.saveStudSection}"/>
+                                    
+                                    <!--<lightning:button aura:id="confimStudSRN"
+                                  variant="brand"
+                                  label="Save &amp; Submit"
+                                  title="Save &amp; Submit"/>-->
+                                    
+                                    <lightning:button variant="brand-outline"
+                                                      label="Cancel"
+                                                      title="Cancel"
+                                                      onclick="{!c.cancelStudSection}"/>
+                                </div>
+                            </aura:if>
+                        </lightning:tab>
+                    </aura:iteration>
+                </aura:if>
+            </lightning:tabset>
+            <!--<div class="slds-form__row">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                        <label class="slds-form-element__label" for="single-form-element-id-03"><b>Move To</b></label>
+                        <div class="slds-form-element__control">
+                            <lightning:combobox aura:id="sectionId" variant ="label-hidden" name="sectionOptions" placeholder="Select Section"
+                                                value="{!v.sectionType}" options="{!v.termSections}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing">
+                        
+                    </div>
+                </div>
+            </div>-->
+            <aura:if isTrue="{!v.openModel}">
+                <div role="dialog" class="slds-modal slds-fade-in-open ">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h1 class="slds-text-heading--medium">Student Section Allocation</h1>
+                        </header>
+                        
+                        <div class="slds-modal__content slds-p-around--medium">
+                            <center><b>Are you sure you want to Allocate Sections?</b></center>
+                        </div>
+                        
+                        <footer class="slds-modal__footer">
+                            <lightning:button name='No' label='No' onclick='{!c.cancelAssignSection}'/>
+                            <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.assignSections}'/>
+                        </footer>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>            
+            </aura:if>
+        </aura:if>
+    </div>
+</aura:component>

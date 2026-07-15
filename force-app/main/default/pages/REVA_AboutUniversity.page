@@ -1,0 +1,81 @@
+<apex:page showHeader="false" standardStylesheets="false" >
+    <apex:form >
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/bootstrap.min.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/bootstrap.min.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/scss/inner.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/scss/style.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/media_screen.scss/responsive.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/owl.carousel.css"/>
+        <apex:stylesheet value="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+        <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/frontend/css/aos.css"/>
+        <apex:stylesheet value="https://www.reva.edu.in/assets/demo/default/media/img/logo/favicon-32x32.png"/>  
+        <apex:stylesheet value="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+        
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <div class="img-container">
+            <div class="home-about-university">
+                <div class="container">
+                    <div class="home-about">
+                        <div class="home-about1">
+                            <div class="home-abt-title">
+                                <h2 >ABOUT</h2>
+                                <h3 >UNIVERSITY</h3>
+                            </div>
+                            <p  >Established in 2004 as REVA Group of Institutions, in less than a decade, the Government of Karnataka granted University status to REVA in 2013.   </p>
+                            <div class="read-more"><a href="https://www.reva.edu.in/about-university"><i class="fa fa-angle-right" aria-hidden="true"></i></a></div>
+                        </div>
+                        <div class="home-about2"  >
+                            <h4><a href="https://www.reva.edu.in/awards">Memberships and Recognition</a></h4>
+                            <ul>
+                                <li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/uploads/logo/1638772927_df7617a304eaf1a63e22.jpg" alt="logo-0" class="img-fluid"/></li>
+                                <li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/uploads/logo/1638772949_926a58e1e1aea5dd5452.jpg" alt="logo-1" class="img-fluid"/></li>
+                                <li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/uploads/logo/1638772963_587e232086e1635c40d2.jpg" alt="logo-2" class="img-fluid"/></li>
+                                
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="student-campus">
+                        
+                        <div class="box-camp" >
+                            <div class="student-campus-slider ">
+                                <div>
+                                    <marquee>
+                                        
+                                        <h2>15,000+   &nbsp;4000+   &nbsp;&nbsp;&nbsp;&nbsp;600+ &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 450+ &nbsp;&nbsp;&nbsp;&nbsp;45+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;36</h2>
+                                        <p style="font-size:12pt;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Student Mix on Campus &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            Students Reside in the Campus &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                            Highly Qualified Faculty 
+                                            Members &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+                                            Recruiting Partners &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            Acres of Lush Green Campus &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            LPA </p>
+                                    </marquee>                                    
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class="tour-panel" data-aos="fade-up">
+                            <!--<ul>
+<li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/video-icon.svg" class="img-fluid"><a href="javascript:void(0)">Watch Campus Life Video Tour <i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+<li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/assets/frontend/images/tour-icon.svg" class="img-fluid"><a href="javascript:void(0)">Virtual Campus <br> Tour <i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+</ul>
+-->
+                            <div class="home-about2 d-none" data-aos="fade-up">
+                                <h4>Memberships and Recognition</h4>
+                                <ul>
+                                    <li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/uploads/logo/1638772927_df7617a304eaf1a63e22.jpg" alt="logo-0" class="img-fluid"/></li>
+                                    <li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/uploads/logo/1638772949_926a58e1e1aea5dd5452.jpg" alt="logo-1" class="img-fluid"/></li>
+                                    <li><img loading="lazy" src="https://revaeduin.s3.ap-south-1.amazonaws.com/uploads/logo/1638772963_587e232086e1635c40d2.jpg" alt="logo-2" class="img-fluid"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,46 @@
+<template>
+    <lightning-card>
+        <template if:true={filesList}>
+            <main class="table" id="customers_table">
+                <section class="table__header">
+                    <h1 class="slds-text-align_center slds-text-title_caps">Approval Documents</h1>
+                </section>
+                <section class="table__body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Document Name</th>
+                                <th> Marks</th>
+                                <th> Preview</th>
+                                <th> Approve</th>
+                                <th> Reject</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={filesList} for:item="file">
+                                <tr key={file.id}>
+                                    <td data-cell="Document Name"><strong>{file.label}</strong></td>
+                                    <td data-cell="Mark"><strong>{file.value}</strong></td>
+                                    <td data-cell="Preview"><lightning-button class="slds-text-body_small"
+                                            label="Preview" variant="brand" data-id={file.id}
+                                            disabled={file.previewDisabled} onclick={previewHandler}></lightning-button>
+                                    </td>
+                                    <td data-cell="Approve">
+                                        <lightning-button class="slds-text-body_small" label={file.approveLabel}
+                                            variant={file.approveBrand} data-id={file.id}
+                                            onclick={approveHandler}></lightning-button>
+                                    </td>
+                                    <td data-cell="Reject">
+                                        <lightning-button class="slds-text-body_small" label={file.rejectLabel}
+                                            variant={file.rejectBrand} data-id={file.id}
+                                            onclick={rejectHandler}></lightning-button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+        </template>
+    </lightning-card>
+</template>

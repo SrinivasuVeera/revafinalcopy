@@ -1,0 +1,198 @@
+<template>
+    <template if:true={eventDetailsFormatted.StartDateTimeFormatted}>
+        <div class="slds-card slds-theme_success">
+            <div class="slds-p-around_medium">
+                <strong>Appointment Start Date and Time</strong> - {eventDetailsFormatted.StartDateTimeFormatted}
+            </div>
+        </div>
+    </template>
+    <template if:true={eventDetailsFormatted.EndDateTimeFormatted}>
+        <div class="slds-card slds-m-bottom_small slds-theme_success">
+            <div class="slds-p-around_medium">
+                <strong>Appointment End Date and Time</strong> - {eventDetailsFormatted.EndDateTimeFormatted}
+            </div>
+        </div>
+    </template>
+
+
+    <div class="slds-m-top_x-small">
+        <lightning-card title="Appointment Details" style="border-radius: 0;">
+            <div class="slds-p-around_medium">
+                
+                <lightning-record-edit-form object-api-name="Case">
+                    
+
+                    <div class="slds-grid slds-wrap">
+                        <div
+                            class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <label class="custom-label">*Severity</label>
+                            <div class="input-container">
+                                <select required onchange={handleSeverity} class="custom-dropdown">
+                                    <option disabled selected>Select an option</option>
+                                    <option value="Immediate">Immediate</option>
+                                    <option value="Emergency">Emergency</option>
+                                    <option value="Urgent">Urgent</option>
+                                    <option value="Semi Urgent">Semi Urgent</option>
+                                    <option value="Not So Urgent">Not So Urgent</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <label class="custom-label">*Mode of Counselling</label>
+                            <select required onchange={handlemode} class="custom-dropdown">
+                                <option disabled selected>Select an option</option>
+                                <option value="Online">Online</option>
+                                <option value="Phone Call">Phone Call</option>
+                                <option value="Face to Face">Face to Face</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <label class="custom-label">Preferred Language</label>
+                            <select onchange={handleLanguage} class="custom-dropdown">
+                                <option disabled selected>Select an option</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="English">English</option>
+                                <option value="Tamil">Tamil</option>
+                                <option value="Telugu">Telugu</option>
+                                <option value="Kannada">Kannada</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        <div
+                            class="slds-col slds-col-bump-bottom slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <label class="custom-label">Description</label>
+                            <textarea onchange={handleKeyUp} class="custom-dropdown" rows="4"></textarea>
+                        </div>
+
+
+
+                        <div
+                            class="slds-col  slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <label class="custom-label">Presenting Problem</label>
+                            <select onchange={handleProblem} class="custom-dropdown">
+                                <option disabled selected>Select an option</option>
+                                <option value="Sleep issues">Sleep issues</option>
+                                <option value="Eating issues">Eating issues</option>
+                                <option value="Family">Family</option>
+                                <option value="Academic">Academic</option>
+                                <option value="Friends">Friends</option>
+                                <option value="Addictions">Addictions</option>
+                                <option value="Physical illness">Physical illness</option>
+                                <option value="Social">Social</option>
+                                <option value="Emotional">Emotional</option>
+                                <option value="Anxiety">Anxiety</option>
+                                <option value="Stress">Stress</option>
+                                <option value="Depression">Depression</option>
+                                <option value="Relationship Issue">Relationship Issue</option>
+                                <option value="Others">Others</option>
+                                
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        <div lwc:if={showOtherPresentingProblem}
+                            class="slds-col slds-col-bump-bottom slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <label class="custom-label">Other Presenting Problem</label>
+                            <textarea onchange={handleOtherPresentingProblemChange} class="custom-dropdown" rows="4"  lwc:ref="otherPresentingProblem"></textarea>
+                        </div>
+                    
+
+
+                    </div>
+
+                    <div class="slds-grid slds-wrap">
+                        <div
+                            class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <label class="custom-label">How Am I Feeling Today?</label>
+                            <label class="custom-label">(Pick whatever is appropriate to you)</label>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-wrap">
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Angry:</strong> {Angry} <input type="range" min="0" max="10" value={Angry}
+                                        oninput={handleSliderChangeForAngry} /></p>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Stressed:</strong> {Stressed} <input type="range" min="0" max="10"
+                                        value={Stressed} oninput={handleSliderChangeStressed} /></p>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Sad:</strong> {Sad} <input type="range" min="0" max="10" value={Sad}
+                                        oninput={handleSliderChangeSad} /></p>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Lonely:</strong> {Lonely} <input type="range" min="0" max="10" value={Lonely}
+                                        oninput={handleSliderChangeLonely} /></p>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Hurt:</strong> {Hurt} <input type="range" min="0" max="10" value={Hurt}
+                                        oninput={handleSliderChangeHurt} /></p>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Confused:</strong> {Confused} <input type="range" min="0" max="10"
+                                        value={Confused} oninput={handleSliderChangeConfused} /></p>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Frightened:</strong> {Frightened} <input type="range" min="0" max="10"
+                                        value={Frightened} oninput={handleSliderChangeFrightened} /></p>
+                            </div>
+                        </div>
+                        <div
+                            class="slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_6-of-12 custom-sec">
+                            <div class="slider-container">
+                                <p><strong>Anxious:</strong> {Anxious} <input type="range" min="0" max="10"
+                                        value={Anxious} oninput={handleSliderChangeAnxious} /></p>
+                            
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- <a href={pdfUrl} target="_blank">Read</a> -->
+                    <template if:true={showReferralDiv}>
+                        <div class="slds-m-top_medium">
+                            <div class="acknowledgement-container">
+                                <lightning-input type="checkbox" checked={isChecked}
+                                    onchange={handleCheckboxChange}></lightning-input>
+                                <lightning-formatted-rich-text
+                                    value={formattedLabelText}></lightning-formatted-rich-text>
+                            </div>
+                            <!-- <lightning-input type="checkbox" label="I have reviewed this Professional Counselling Informed Consent Agreement. I accept this agreement and consent to counselling." onchange={handleCheckboxChange}></lightning-input> -->
+                        </div>
+                    </template>
+                    <div class="slds-m-top_medium">
+                        <lightning-button type="submit" variant="neutral" label="Create Appointment"
+                            onclick={handleSubmit} disabled={isButtonDisabled}></lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </div>
+        </lightning-card>
+    </div>
+</template>

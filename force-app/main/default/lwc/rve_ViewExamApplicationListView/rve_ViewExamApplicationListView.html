@@ -1,0 +1,236 @@
+<template>
+    <template if:true={boolShowSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <div class="outer-container">
+         <template if:true={showTable}>
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <td class="row-heading" scope="col" colspan="100%">
+                            Exam Applications
+                        </td>
+                    </tr>
+                    <tr class="slds-line-height_reset">
+                        <th class="heading" scope="col">
+                          <div class="slds-truncate" title="Sl. No">Sl. No</div>
+                        </th>
+                        <th class="heading" scope="col">
+                          <div class="slds-truncate" title="Registration No.">Registration No.</div>
+                        </th>
+                        <th class="heading" scope="col">
+                          <div class="slds-truncate" title="Payment Type">Payment Type</div>
+                        </th>
+                        <th class="heading" scope="col">
+                          <div class="slds-truncate" title="Application No">Application No.</div>
+                        </th>
+                        <th class="heading" scope="col">
+                          <div class="slds-truncate" title="Applied Date">Applied Date</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Payment Date">Payment Date</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Amount">Amount</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Status">Payment Status</div>
+                        </th>
+                        <th class="heading" scope="col">
+                            <div class="slds-truncate" title="Action">Action</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={examApplicationList}>
+                        <template for:each={examApplicationList} for:item="item">
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate">{item.SN}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Registration_Number__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Type__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Application_Number__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Applied_Date__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Date__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Amount__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Status__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate" style="border-color:#F07F07"><button class="slds-button slds-button_brand" onclick={openSelectedApplication} data-id={item.Id}>View Application</button></div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+    
+        <template if:true={isMobile}>
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                   
+                    <template for:each={examApplicationList} for:item="item">
+                         <tr key={item.Id} class="slds-line-height_reset">
+                        <td class="row-heading" scope="col" colspan="100%">
+                            Exam Applications
+                        </td>
+                    </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate" title="Sl. No">Sl. No</div>
+                                </td>
+
+                                <td align="center">
+                                    <div class="slds-truncate">{item.SN}</div>
+                                </td>
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate" title="Registration No.">Registration No.</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Registration_Number__c}</div>
+                                </td>
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                  <div class="slds-truncate" title="Payment Type">Payment Type</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Type__c}</div>
+                                </td>
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate" title="Application No">Application No.</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Application_Number__c}</div>
+                                </td>
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate" title="Applied Date">Applied Date</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Applied_Date__c}</div>
+                                </td>
+                                
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate" title="Payment Date">Payment Date</div>
+
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Date__c}</div>
+                                </td>
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate" title="Amount">Amount</div>
+
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Amount__c}</div>
+                                </td>
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                 <td align="center">
+                                    <div class="slds-truncate" title="Status">Payment Status</div>
+
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Status__c}</div>
+                                </td>
+                            </tr>
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate" title="Action">Action</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate" style="border-color:#F07F07"><button class="slds-button slds-button_brand" onclick={openSelectedApplication} data-id={item.Id}>View Application</button></div>
+                                </td>
+                            </tr>
+                        </template>
+               <!--     <tr class="slds-line-height_reset">
+                          <td></td>
+                          <td></td>
+                        
+
+                        <th class="heading" scope="col">
+                        </th>
+                        <th class="heading" scope="col">
+                        </th>
+                        <th class="heading" scope="col">
+                        </th>
+                        <th class="heading" scope="col">
+                        </th>
+                        <th class="heading" scope="col">
+                        </th>
+                        <th class="heading" scope="col">
+                        </th>
+                        <th class="heading" scope="col">
+                        </th>
+                        <th class="heading" scope="col">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={examApplicationList}>
+                        <template for:each={examApplicationList} for:item="item">
+                            <tr key={item.Id} class="slds-hint-parent">
+                                <td align="center">
+                                    <div class="slds-truncate">{item.SN}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Registration_Number__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Type__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Application_Number__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Applied_Date__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Date__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Amount__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{item.Rve_Payment_Status__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate" style="border-color:#F07F07"><button class="slds-button slds-button_brand" onclick={openSelectedApplication} data-id={item.Id}>View Application</button></div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>-->
+            </table>
+        </template>
+        <template if:true={showSelectedExamApplication}>
+            <div class="pdf-container">
+                <c-rve_-view-exam-application application-id={selectedId} onback={showListOnBack}></c-rve_-view-exam-application>
+            </div>
+        </template>
+    </div>
+    
+</template>

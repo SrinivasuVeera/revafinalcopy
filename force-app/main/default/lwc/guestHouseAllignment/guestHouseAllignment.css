@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align contents */
+    justify-content: center;
+    padding: 20px; /* Add padding around the container */
+}
+
+.completion-message {
+    background-color: #f9f9f9; /* Light background for the message */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 15px; /* Padding for the message area */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    text-align: center; /* Center text */
+}
+
+.close-button {
+    margin-top: 10px; /* Space above the button */
+    background-color: #ff7f50; /* Coral background for the button */
+    color: white; /* White text color */
+    font-weight: bold; /* Bold text */
+}

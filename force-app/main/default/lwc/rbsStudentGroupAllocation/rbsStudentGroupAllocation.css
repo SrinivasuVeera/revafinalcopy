@@ -1,0 +1,22 @@
+.modal-container {
+    width: 90%;
+    max-width: 1500px;
+    min-width: 600px;
+}
+
+/* .slds-modal__container {
+    height: 100%;
+    width: 90%;
+    max-width: 90rem;
+} */
+
+/* Scrollable Modal Content */
+.slds-modal__content {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+.slds-modal__container{
+    width: 90% !important;
+    max-width: 90% !important;
+    
+}

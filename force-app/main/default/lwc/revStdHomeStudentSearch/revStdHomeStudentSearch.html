@@ -1,0 +1,20 @@
+<!--
+  @description       : 
+  @author            : owais.ahanger@cloudodyssey.co
+  @group             : 
+  @last modified on  : 06-04-2024
+  @last modified by  : owais.ahanger@cloudodyssey.co
+-->
+<template>
+    <div><input type="text" class="slds-input search-input" placeholder="Search..." oninput={searchDataHandler}
+            onfocus={searchFocusHandler} onblur={searchBlurHandler} onkeyup={handleSearchKeyUp} />
+        <div class="search-icon"></div>
+    </div>
+    <template lwc:if={showSearch}>
+        <div class="flyout">
+            <ul>
+                <li><a onclick={navigateToSearchPage}>{inputValue}</a></li>
+            </ul>
+        </div>
+    </template>
+</template>

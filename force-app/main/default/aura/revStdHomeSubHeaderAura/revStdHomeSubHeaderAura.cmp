@@ -1,0 +1,19 @@
+<!--
+  @description       : 
+  @author            : owais.ahanger@cloudodyssey.co
+  @group             : 
+  @last modified on  : 06-04-2024
+  @last modified by  : owais.ahanger@cloudodyssey.co
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+    controller="SP_FetchStudentDetailsController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isGuest" type="Boolean" default="false" />
+
+    <aura:if isTrue="{!v.isGuest}">
+        <c:revStdHomeGuestSubHeader />
+        <aura:set attribute="else">
+            <c:revStdHomeStudentSubHeaderAura />
+        </aura:set>
+    </aura:if>
+</aura:component>

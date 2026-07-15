@@ -1,0 +1,61 @@
+.transport-container {
+    box-shadow: 2px 4px 9px -4px #6e6e6e;
+    border: 1px solid var(--reva-brand-color);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.heading {
+    background-color: var(--reva-component-heading-background-color);
+    width: 100%;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.sub-heading {
+    font-size: 13px;
+}
+
+.details {
+    padding: 10px 0px;
+}
+
+.details .course-data {
+    font-size: 13px;
+    color: #2323b1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+@media only screen and (max-width:600px){
+
+    .slds-dropdown__item {
+    background-color: #F0DBC8 !important;  /* Change dropdown background color */
+    border-top: 1px solid #ccc;
+    }
+
+           .slds-tabs--default__item.slds-active{
+     background: blue;
+      }
+
+    /* .slds-tabs_default__item.slds-is-active a {
+    border-bottom: 2px solid #0070d2; /* Customize the underline color */
+     
+
+    .slds-tabs_default__item.slds-is-active{
+        background-color: red !important;
+    }
+
+.slds-active a {
+    background-color: red !important;
+    color: white;
+}
+
+    }
+/*.slds-is-active .slds-tabs_scoped__link {
+    background-color: #F07F07 !important;
+    color: white !important;
+}*/

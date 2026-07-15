@@ -1,0 +1,58 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+
+    <div class="survey-wrapper">
+        <div class="survey-heading">
+            <b>SURVEY</b>
+        </div>
+
+        <lightning:tabset selectedTabId="FeedbackONCurriculam" class="tab-active" variant="scoped">
+
+            <lightning:tab label="Feedback on Curriculum" id="FeedbackONCurriculam">
+                <div class="slds-grid slds-grid_vertical padd">
+                    <div class="slds-col firstColumn">
+                        <span class="curriText" onclick="{!c.redirectToSurveyPage}">Write Feedback on Curriculum</span>
+                    </div>
+                    <div class="slds-col">
+                        <div class="instHead">Instructions :</div>
+                        1. Please answer all the questions<br />
+                        2. Survey can be only submitted once<br />
+                        3. Click on next to take the survey
+                    </div>
+                    <div class="slds-col">
+                        <div class="slds-clearfix">
+                            <div class="slds-float_right">
+                                <lightning:button variant="brand" class="slds-button backColor" name="{!index}"
+                                    label="Proceed" onclick="{!c.redirectToSurveyPage}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning:tab>
+
+            <lightning:tab label="Feedback on Mentor" id="FeedbackONMentor">
+                <div class="slds-grid slds-grid_vertical padd">
+                    <div class="slds-col firstColumn">
+                        <span class="curriText" onclick="{!c.redirectToSurveyPage}">Write Feedback on Mentor</span>
+                    </div>
+                    <div class="slds-col">
+                        <div class="instHead">Instructions :</div>
+                        1. Please answer all the questions<br />
+                        2. Survey can be only submitted once<br />
+                        3. Click on next to take the survey
+                    </div>
+                    <div class="slds-col">
+                        <div class="slds-clearfix">
+                            <div class="slds-float_right">
+                                <lightning:button variant="brand" class="slds-button backColor" name="{!index}"
+                                    label="Proceed" onclick="{!c.redirectToSurveyMentorPage}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning:tab>
+        </lightning:tabset>
+    </div>
+
+</aura:component>

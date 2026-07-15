@@ -1,0 +1,188 @@
+<template>
+    <template if:true={boolShowSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <div >
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="doctype:image" alternative-text="Hall Ticket" title="Hall Ticket"></lightning-icon> &nbsp;
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Hall Ticket">Hall Ticket</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="slds-float_right">
+                               
+                            </div>
+                            <p class="slds-text-body_small"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <template if:true={showErrorMsg}>
+            <div class="slds-text-title_caps errorMsg">
+                <center><h1>No Hall Ticket is found.</h1></center>
+            </div>
+        </template>
+
+        <div class="row slds-box slds-scrollable">
+            <template if:true={showPendingSurveyTable}>
+                <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <td class="row-heading" scope="col" colspan="100%">
+                                Pending Survey
+                            </td>
+                        </tr>
+                        <tr class="slds-line-height_reset">
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Survey Name">Survey Name</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template if:true={lstSurveyPending}>
+                            <template for:each={lstSurveyPending} for:item="item">
+                                <tr key={item.SurveyName} class="slds-hint-parent">
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.SurveyName}</div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+
+            <template if:true={showAttendanceTable}>
+                <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <td class="row-heading" scope="col" colspan="100%">
+                                Attendance
+                            </td>
+                        </tr>
+                        <tr class="slds-line-height_reset">
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Sl. No">Course</div>
+                            </th>
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Registration No.">Total Classes</div>
+                            </th>
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Payment Type">Total Attended Classes</div>
+                            </th>
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Application No">Class Attended %</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template if:true={lst_Attendance}>
+                            <template for:each={lst_Attendance} for:item="item">
+                                <tr key={item.CourseName} class="slds-hint-parent">
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.CourseName}</div>
+                                    </td>
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.Total_Classes}</div>
+                                    </td>
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.Attended_Classes}</div>
+                                    </td>
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.TotalPercentAttend}</div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+
+            <template if:true={showStudentFeeTable}>
+                <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Exam Applications">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <td class="row-heading" scope="col" colspan="100%">
+                                Pending Fee Payments
+                            </td>
+                        </tr>
+                        <tr class="slds-line-height_reset">
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Fee Type">Fee Type</div>
+                            </th>
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Registration No.">Due Date</div>
+                            </th>
+                            <th class="heading" scope="col">
+                              <div class="slds-truncate" title="Payment Type">Pending Amount</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template if:true={lst_StudentFee}>
+                            <template for:each={lst_StudentFee} for:item="item">
+                                <tr key={item.FeeName} class="slds-hint-parent">
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.FeeName}</div>
+                                    </td>
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.DueDate}</div>
+                                    </td>
+                                    <td align="center">
+                                        <div class="slds-truncate">{item.PendingAmount}</div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+
+            <template if:true={IAHallTicketEnabled}>
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title  slds-align_absolute-center">
+                        <div class="slds-align_absolute-center">                                                                                                                                                                                  
+                            <div class="slds-align_absolute-center" >                              
+                                <lightning-button label="Download" icon-name="utility:download" variant="brand" icon-position="left" onclick={downloadHallTicket} disabled={isPrintDisabled}></lightning-button> 
+                            </div>
+                        </div>
+                    </h3>
+                </div> 
+            </template>
+            <template if:true={showIaErrorMsg}>
+            <div class="slds-text-title_caps errorMsg">
+                <h1>No IA Hall Ticket is found.</h1>
+            </div>
+        </template>
+            <template if:true={HallTicketEnabled}>
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title  slds-align_absolute-center">
+                        <div class="slds-align_absolute-center">                                                                                                                                                                                  
+                            <div class="slds-align_absolute-center" >                              
+                                <lightning-button label="Download" icon-name="utility:download" variant="brand" icon-position="left" onclick={downloadHallTicket} disabled={isPrintDisabled}></lightning-button> 
+                            </div>
+                        </div>
+                    </h3>
+                </div> 
+            </template>
+            <template if:true={showSemErrorMsg}>
+            <div class="slds-text-title_caps errorMsg" style="text-align: center;">
+                <h1>No Semester Hall Ticket is found.</h1>
+            </div>
+        </template>
+        </div>
+
+    </div>
+</template>

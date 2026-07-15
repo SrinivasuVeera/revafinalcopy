@@ -1,0 +1,381 @@
+<template>
+    <article class="slds-card">
+       <div class="slds-card__header slds-grid">
+         <header class="slds-media slds-media_center slds-has-flexi-truncate">
+           <div class="slds-media__figure">
+             <span class="slds-icon_container slds-icon-standard-visits" title="visits">
+               <div class="slds-icon slds-icon_small" aria-hidden="true">
+                   <lightning-icon icon-name='standard:visits' alternative-text='visits' size='small' title='visits'></lightning-icon>
+               </div>
+               <span class="slds-assistive-text">Seating Arrangement</span>
+             </span>
+           </div>
+           <div class="slds-media__body">
+           
+           </div>
+         </header>
+       </div>
+       <div class="slds-card__body slds-card__body_inner">
+           <div class="container">
+               <div class="picklists">
+                   <div class="row">
+                       <div class="picklist slds-align_absolute-center">
+                           <lightning-combobox
+                               name="Program Batch"
+                               label="Program Batch"
+                               placeholder="Select Program Batch"
+                               options={ProgramOption}
+                               onchange={getSemester}
+                               
+                               required
+                           ></lightning-combobox>
+                       </div>
+                   </div>  
+                   </div>
+                   </div><br/>
+                   <template if:true={EnableSem}>
+                    <div class="slds-align_absolute-center" style="width:50%">
+                   <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Class Rooms">
+                    <thead>
+                       
+                        <tr class="slds-line-height_reset">
+                         <th class="" scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="SL.No">SL.No</div>
+                              </th>
+                         <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Semester Name">Semester Name</div>
+                           </th>                         
+
+                           <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Frozen By Exam Vertical Head">Verified By Exam Vertical Head</div>
+                           </th>
+                           <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Frozen By Exam Vertical Head">Remarks</div>
+                           </th>
+                           <th class="" scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="EVH Status">Action</div>
+                            </th>
+                           <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Last Date">Last Date</div>
+                           </th>
+                           <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="View/Edit IA Marks">View IA Marks</div>
+                           </th>
+                           <th class="" scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="Freeze IA Marks">Freeze School Director</div>
+                            </th>
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                     <template for:each={SemesterOption} for:item="entry">
+                         <tr key={entry.id} class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate slds-text-align_center" title="SL.No">{entry.index}</div>
+                            </td>
+                             <td>
+                                 <div class="slds-truncate slds-text-align_center" title="Semester Name">{entry.name}</div>
+                             </td>
+                            <td>
+                                <div class="slds-truncate slds-text-align_center" title="Freeze IA Marks">
+                                <lightning-input type="checkbox" data-id={entry.id} checked={entry.evhStatus} disabled="true" ></lightning-input>
+                            </div>
+                            </td>                           
+                            <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Last Date">{entry.isAcknowledgedBy}</div>
+                            </td> 
+                            <td>
+                                <div class="slds-text-align_center" style="white-space: nowrap; min-width: 200px;">                                    
+                                    <template if:true={entry.evhStatus}>
+                                        <lightning-button 
+                                            variant="destructive" 
+                                            label="Unfreeze IA Marks For EVH"
+                                            data-id={entry.id} 
+                                            data-field="EVH"
+                                            data-status="true"
+                                            onclick={handleToggleFreeze}
+                                            disabled={entry.evhDisabled}>
+                                        </lightning-button>
+                                    </template>
+                                    <template if:false={entry.evhStatus}>
+                                        <span class="slds-text-color_weak">Not Frozen by EVH</span>
+                                    </template>
+                                </div>
+                            </td>                           
+                            <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Last Date">{entry.lastdate}</div>
+                            </td>
+                             <td>
+                                 <div class="slds-truncate slds-text-align_center" title="View IA Marks">
+
+                                  <lightning-button variant="brand" data-id={entry.id} label="View" onclick={getCourses} disabled={entry.checkstatus}></lightning-button>
+                                 </div>
+                             </td>
+                             <td>
+                                <div class="slds-truncate slds-text-align_center">
+                                    <lightning-button 
+                                        variant={entry.sdVariant} 
+                                        label={entry.sdLabel}
+                                        data-id={entry.id} 
+                                        data-field="SchoolDirector"
+                                        data-status={entry.sdStatus}
+                                        onclick={handleToggleFreeze} 
+                                        disabled={entry.sdDisabled}>
+                                    </lightning-button>
+                                </div>
+                            </td>
+                            </tr>
+                         </template>
+                    </tbody>
+          </table>
+                    </div>
+                   </template>
+                   <br/>
+                   <template if:true={DisableSem}>
+                    <div>
+                        <span class="slds-text-heading_medium">No Active Semester Available</span>
+                    </div>
+                   </template>
+            
+                   <template if:true={EnableCourse}>
+                    <div class="slds-align_absolute-center" style="width: 50%;">
+                   <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Class Rooms">
+                    <thead>
+                        
+                        <tr class="slds-line-height_reset">
+                         <th class="" scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="Total Students">SL.No</div>
+                            </th>
+                         <th class="" scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="Total Students">Course Code</div>
+                              </th>
+                         <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Total Students">Course Name</div>
+                           </th>
+                            <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Total Students">Section Name</div>
+                           </th>
+                         <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Total Students">Faculty</div>
+                           </th>
+                        <!-- <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Total Students">Edit IA Marks</div>
+                           </th> -->
+                         <th class="" scope="col">
+                             <div class="slds-truncate slds-text-align_center" title="Selected Seats">View IA Marks</div>
+
+                           </th>
+                         
+                        </tr>
+                    </thead>
+                    <tbody>
+                     <template for:each={CourseOption} for:item="entry">
+                         <tr key={entry.id} class="slds-hint-parent">
+                            <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Block">{entry.index}</div>
+                            </td>
+                            <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Block">{entry.coursecode}</div>
+                            </td>
+                             <td>
+                                 <div class="slds-truncate slds-text-align_center" title="Block">{entry.course}</div>
+                             </td>
+                              <td>
+                                 <div class="slds-truncate slds-text-align_center" title="Block">{entry.section}</div>
+                             </td>
+                             <td>
+                                 <div class="slds-truncate slds-text-align_center" title="Block">{entry.faculty}</div>
+                             </td>
+                            <!-- <td>
+                                <div class="slds-truncate slds-text-align_center" title="Block">
+                                <lightning-button variant="brand" data-id={entry.id} label="Edit IA Marks" onclick={EditStudentMarks}></lightning-button>
+                             </div> 
+                            </td> -->
+                             <td>
+                                    <div class="slds-truncate slds-text-align_center">
+                                    <lightning-button variant="brand" data-id={entry.id} label="View IA Marks" onclick={handleViewMarks}></lightning-button>
+                                    </div>
+                             </td>
+                            
+                            </tr>
+                         </template>
+                    </tbody>
+          </table>
+                    </div>
+                   </template>
+
+                   <template if:true={DisableCourse}>
+                    <div class="slds-text-align_center">
+                        <span class="slds-text-heading_medium">No Courses Available</span>
+                    </div>
+                   </template>
+
+                   
+
+                   <template if:true={EnableIA}>
+                    <div class="slds-align_absolute-center" style="width: 30%;">
+                    <lightning-combobox 
+                            name="IA Type"
+                            label="IA Type"
+                            placeholder="Select IA Type"
+                            options={GetIATypeOption}
+                            onchange={updateIAType}
+                            required
+                        ></lightning-combobox>
+                    </div><br/>
+                   </template>
+
+                    <template if:true={hasCourses}>
+
+                        
+                        <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" style="overflow: visible;" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="slds-text-align_center" style="width:10%;">SL.No</th>
+              
+                                    <th class="slds-text-align_center" style="width:10%;">Course Name</th>
+                                    <th class="slds-text-align_center" style="width:10%;">Program Batch</th>
+                                    <th class="slds-text-align_center" style="width:10%;">Semester</th>
+                                    <th class="slds-text-align_center" style="width:10%;">Section/Batch/Group</th>
+                                    <th class="slds-text-align_center" style="width:10%;">Last Date</th>
+                                    <th class="slds-text-align_center" style="width:10%;">Frozen By ExamVerticalHead</th>
+                                    <th class="slds-text-align_center" style="width:10%;">Update IA Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={courseList} for:item="crs" for:index="index">
+                                    <tr key={crs.Id}>
+                                        <td><div class="slds-truncate slds-text-align_center">{crs.rowIndex}</div></td>
+                                        <td>
+                                            <div class="slds-truncate slds-text-align_center">
+                                            {crs.courseName}</div></td>
+                                        <td><div class="slds-truncate slds-text-align_center">{crs.Program__c}</div></td>
+                                        <td><div class="slds-truncate slds-text-align_center">{crs.semester}</div></td>
+                                        <td><div class="slds-truncate slds-text-align_center">{crs.Section_Batch_Group__c}</div></td>
+                                        <td><div class="slds-truncate slds-text-align_center">{crs.IA_Allowed_End_Date__c}</div></td>
+                                        <td>
+                                            <div class="slds-align_absolute-center">
+                                            <lightning-input type="checkbox" disabled="true" checked={crs.isAcknowledgedByExamHead}></lightning-input>
+                                            </div>
+                                        </td>
+                                            <td>
+                                            <div class="slds-align_absolute-center">
+                                            <lightning-button
+                                                data-id={crs.Id}
+                                                label="Update IA Marks"
+                                                onclick={updateIaMarks}
+                                                disabled={isFreezed}
+                                                variant="base">
+                                            </lightning-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template if:true={NoCourses}>
+                        
+                    <div class="slds-text-align_center">
+                      <span class="slds-text-heading_medium">{IAType} marks entry not allowed at this moment
+                      </span>
+                    </div> 
+                        
+                    </template>
+       </div>
+                    <template if:true={isShowModal}>
+
+                        <!--
+                            I Used SLDS for this code
+                            Here is link https://www.lightningdesignsystem.com/components/modals/
+                        --> 
+            
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                   <div class="slds-modal__container">
+                    <!-- modal header start -->
+                      <header class="slds-modal__header">
+                         <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                            <lightning-icon icon-name="utility:close"
+                               alternative-text="close"
+                               variant="inverse"
+                               size="small" ></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                         </button>
+                      </header>
+                  
+                      <!-- modal body start -->
+                      <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <c-rve-view-freeze-i-a-marks course={course}></c-rve-view-freeze-i-a-marks>
+                      </div>
+            
+                      <!-- modal footer start-->
+                      <footer class="slds-modal__footer">
+                         <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                      </footer>
+                   
+                   </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+             </template>
+
+             <template if:true={isShowModalFreeze}>
+                <!--
+                    I Used SLDS for this code
+                    Here is link https://www.lightningdesignsystem.com/components/modals/
+                -->
+
+             <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                 <!-- modal header start -->
+                   <header class="slds-modal__header">
+                      <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox2}>
+                         <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                         <span class="slds-assistive-text">Close</span>
+                      </button>
+                   </header>
+               
+                   <!-- modal body start -->
+                   <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                    <div class="slds-text-heading_medium slds-text-align_center">
+                        <h2>Are you sure you want to Freeze Editing of IA Marks?
+                        </h2>
+                    <!-- <span class="slds-text-heading_medium">Warning</span>-->
+                     </div> 
+                    </div>
+         
+                   <!-- modal footer start-->
+                   <footer class="slds-modal__footer">
+                      <button class="slds-button slds-button_brand" onclick={Unfreeze}>Yes</button>
+                      <button class="slds-button slds-button_neutral" onclick={hideModalBox2}>No</button>
+                   </footer>
+                
+                </div>
+             </section>
+             <div class="slds-backdrop slds-backdrop_open"></div>
+             
+             </template>
+
+
+                    <template if:true={isSelected}>
+                        <p>No Data..</p>
+                    </template>
+                    <template if:true={theory}>
+                        <c-rve-asm-ia-marks-entry ontoast={handleToast} onbacktolist={DisableStudentList}
+                         course-name={courseName} section-name={section}
+                         prof-id={profid} ia-type={IAType}></c-rve-asm-ia-marks-entry>
+                    </template>
+                    <template if:true={practical}>
+                        <c-rve-asm-proj-ia-marks-entry onbacktolist={DisableStudentList}
+                         course-name={courseName} section-name={section}
+                         prof-id={profid} ia-type={IAType}></c-rve-asm-proj-ia-marks-entry>
+                    </template>
+                    <template if:true={project}>
+                        <c-rve-asm-lab-ia-marks-entry onbacktolist={DisableStudentList}
+                         course-name={courseName} section-name={section}
+                         prof-id={profid} ia-type={IAType}></c-rve-asm-lab-ia-marks-entry>
+                    </template>
+            </article>
+</template>

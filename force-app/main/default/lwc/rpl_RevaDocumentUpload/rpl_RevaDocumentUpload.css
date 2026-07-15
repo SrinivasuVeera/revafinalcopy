@@ -1,0 +1,143 @@
+.container{
+    min-height: 100%;
+    background-color: #f5f5f5;
+    /* padding : 1rem; */
+    border: 2px solid var( --reva-brand-color);
+    border-radius: 10px;
+    width: 100%
+}
+img{
+    height: 2rem;
+}
+.status-icon{
+    height: 30px;
+    aspect-ratio: 1/1;
+}
+h1{
+    padding: 1rem;
+    color: var( --reva-brand-color);
+    font-weight: bolder;
+    font-size: small;    
+    padding-bottom: 10px;
+}
+strong{
+    font-size: 14px;
+}
+table {
+    width: 100%;
+    background-color: white;
+    font-size: 12px;
+}
+
+
+table, th, td {
+    border-collapse: collapse;
+    padding: 1rem;
+    text-align: left;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: #646263;
+    cursor: pointer;
+    color: white;
+}
+
+tbody tr:nth-of-type(2n-1) {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #FEF3EA;
+    }
+    tbody tr:nth-of-type(2n) {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+    }
+
+.upload-preview{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.reva-brand-button{
+    background-color: var(--reva-brand-color);
+    border:  var(--reva-brand-color);
+    color: white;
+    font-weight: 700;
+}
+.prev-next-btn{
+    padding: 0.25rem;
+    width: 150px;
+    font-size: 1.05rem;
+}
+.next-prev-button-section{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+    justify-content: flex-end;
+    margin:2rem 1rem;
+}
+
+@media (max-width:600px){
+    .prev-next-btn{
+    width: 30vw;
+    padding: 0.45rem;
+    font-size: 12px;
+}
+}
+@media (max-width:1200){
+   
+    .prev-next-btn{
+    width: 120px;
+    padding: 0.45rem;
+     font-size: 14px;
+}
+}
+@media (max-width: 650px) {
+    strong{
+    font-size: 0.8rem;
+}
+
+    td{
+        display: grid;
+        grid-template-columns: 21ch auto;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;
+    }
+    .mar-bottom{
+        margin-bottom: 4px;
+    }
+
+    td:first-child{
+        display: none;
+    }
+    td:nth-child(2){
+        padding-top: 2rem;
+        
+    }
+    td:nth-child(4){
+        padding-bottom: 2rem;
+    }
+    th{
+        display: none;
+    }
+    td::before{
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    
+     .upload-preview{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        align-items: center;
+    } 
+}

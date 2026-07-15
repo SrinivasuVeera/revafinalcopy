@@ -1,0 +1,68 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute type="List" name="iaMarks" default="[]"/>
+    
+    <div class="slds-box slds-scrollable">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Course Name">Course Name</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Knowledge of Exercise">Knowledge of Exercise <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Knowledge_of_Exercise_Max_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Execution of Exercise">Execution of Exercise <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Execution_of_Exercise_Max_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Description of Experiment">Description of Experiment <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Description_of_Experiment_Max_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Viva voce">Viva Voce <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Viva_Voce_Practical_Max_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Punctuality">Punctuality <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Punctuality_Max_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Results">Results <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Results_Max_Marks__c}</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Total">Total <br/> Max: {!v.iaMarks[0].Course_Offering__r.hed__Course__r.Maximum_Internal_Marks__c}</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.iaMarks}" var="iam">
+                    <tr class="slds-hint-parent">
+                        <td data-label="Course">
+                            <div class="slds-truncate" title="{!iam.Course_Offering__r.hed__Course__r.Name}">{!iam.Course_Offering__r.hed__Course__r.Name}</div>
+                        </td>
+                        <td data-label="Knowledge">
+                            <div class="slds-truncate" title="{!iam.Knowledge_of_Exercise_Secured_Marks__c}">{!iam.Knowledge_of_Exercise_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Execution">
+                            <div class="slds-truncate" title="{!iam.Execution_of_Exercise_Secured_Marks__c}">{!iam.Execution_of_Exercise_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Description">
+                            <div class="slds-truncate" title="{!iam.Description_of_Experiment_Secured_Mark__c}">{!iam.Description_of_Experiment_Secured_Mark__c}</div>
+                        </td>
+                        <td data-label="Viva voce">
+                            <div class="slds-truncate" title="{!iam.Viva_Voce_Practical_Secured_Marks__c}">{!iam.Viva_Voce_Practical_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Punctuality">
+                            <div class="slds-truncate" title="{!iam.Punctuality_Secured_Marks__c}">{!iam.Punctuality_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Results">
+                            <div class="slds-truncate" title="{!iam.Results_Secured_Marks__c}">{!iam.Results_Secured_Marks__c}</div>
+                        </td>
+                        <td data-label="Total">
+                            <div class="slds-truncate">
+                                {!iam.Knowledge_of_Exercise_Secured_Marks__c+iam.Execution_of_Exercise_Secured_Marks__c+iam.Description_of_Experiment_Secured_Mark__c+iam.Viva_Voce_Practical_Secured_Marks__c+iam.Punctuality_Secured_Marks__c+iam.Results_Secured_Marks__c}
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

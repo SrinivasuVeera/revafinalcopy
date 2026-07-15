@@ -1,0 +1,277 @@
+<aura:component controller="MSTR_CreateProgramPlan_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="MapFacultyName" type="Map"/>
+    <aura:attribute name="Map_ProgramType" type="Map"/>
+    <aura:attribute name="List_Account" type="List"/>
+    <aura:attribute name="List_ProgramPlan" type="List"/>
+    <aura:attribute name="List_NewProgramPlan" type="List"/>
+    
+    <aura:attribute name="SelectedFacultyId" type="string"/> 
+    <aura:attribute name="SelectedProgramTypeId" type="string"/>
+    <aura:attribute name="SelectedStDate" type="Integer"/> 
+    <aura:attribute name="StartDate" type="Integer"/> 
+    <aura:attribute name="ErrorMessage" type="string"/>
+    <aura:attribute name="showNextTable" type="boolean" default="false" />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="hideparam" type="boolean" default="true"/>
+    <aura:attribute name="HideSave" type="boolean" default="false"/>
+    
+    <aura:attribute name="selectedCount" type="integer" default="0"
+                    description="selected Records Count"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="standard:planogram" alternativeText="Create Program Batch" title="Create Program Batch"/>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Create Program Batch">Create Program Batch</span>
+                                </h1>
+                            </div>
+                        </div> 
+                        <div class="slds-float_right">
+                            <aura:if isTrue="{!v.showNextTable}">
+                                <lightning:button variant="brand" label="Next" onclick="{!c.NextAction}" /> 
+                                <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeAction}"/>  
+                            </aura:if>
+                            <aura:if isTrue="{!not(empty(v.List_ProgramPlan))}">
+                                    <lightning:button type="button" variant="brand" label="Save and Confirm" onclick="{!c.OnSave}" disabled="{!v.HideSave}"/>
+                                    <lightning:button type="button" variant="brand" label="Previous" onclick="{!c.OnPrevious}"/>
+                                    <lightning:button type="button" variant="neutral" label="Cancel" onclick="{!c.closeAction}"/>                                    
+                            </aura:if>
+                            <aura:if isTrue="{!v.isModalOpen}">
+                                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header">
+                                            <lightning:buttonIcon iconName="utility:close"
+                                                                  onclick="{!c.closeModel}"
+                                                                  alternativeText="close"
+                                                                  variant="bare-inverse"
+                                                                  class="slds-modal__close"/>
+                                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirmation</h2>
+                                        </header>
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                            <p>Are You Sure Want To Save and Confirm?  </p>
+                                        </div>
+                                        <footer class="slds-modal__footer">
+                                            <lightning:button variant="neutral"
+                                                              label="Cancel"
+                                                              title="Cancel"
+                                                              onclick="{!c.closeModel}"/>
+                                            <lightning:button variant="brand"
+                                                              label="Confirm"
+                                                              title="Confirm"
+                                                              onclick="{!c.submitDetails}"/>
+                                        </footer>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </aura:if>  
+                        </div>
+                        <p class="slds-text-body_small"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+    
+    <div class="slds-scrollable_y">
+        <div class="slds-theme_default">
+            <aura:if isTrue="{!v.hideparam}">
+                <div class="demo-only demo-only--sizing slds-grid slds-wrap">        
+                    <div class="slds-box slds-size_1-of-3">
+                        <lightning:select label="Faculty" name="AccFacultyname" value="{!v.SelectedFacultyId}" onchange="{!c.changeFaculty}">  
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.MapFacultyName}" var="s" indexVar="key">
+                                <option  value="{!s.key}"> {!s.value}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-box slds-size_1-of-3">
+                        <aura:if isTrue="{!not(empty(v.SelectedFacultyId))}">
+                            <lightning:select name="AccProgramType"  label="Program Type" value="{!v.SelectedProgramTypeId}" onchange="{!c.ChangeProgramPlan}">
+                                <option value="">--None--</option>
+                                <aura:iteration items="{!v.Map_ProgramType}" var="val" >
+                                    <option value="{!val.key}"> {!val.value}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </aura:if>
+                    </div>
+                    <div class="slds-box slds-size_1-of-3">
+                        <aura:if isTrue="{!not(empty(v.SelectedProgramTypeId))}">
+                            <aura:if isTrue="{!(empty(v.List_ProgramPlan))}"> 
+                                <aura:if isTrue="{!not(empty(v.List_Account))}">
+                                    <lightning:input pattern="[0-9]{4}" name="input1" label="Enter Start Year" maxlength="4" value="{!v.SelectedStDate}"  onchange="{!c.OnchangeStartDate}"/>                    
+                                </aura:if>
+                            </aura:if>
+                        </aura:if>
+                    </div>
+                </div> 
+            </aura:if>
+            <br/>
+            <aura:if isTrue="{!not(empty(v.SelectedProgramTypeId))}">
+                <aura:if isTrue="{!(empty(v.List_ProgramPlan))}">  
+                    <aura:if isTrue="{!not(empty(v.List_Account))}">
+                        <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped" style="overflow: visible;width=80%">
+                            <thead>
+                                <tr class="slds-text-heading--label">
+                                    <th class="slds-is-resizable" scope="col" >
+                                        <b style="text-align:center;width:25%;"> Program Name</b>    
+                                    </th>
+                                    <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                        <b style="width:15%;"> No of Years</b>    
+                                    </th>
+                                    <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                        <b style="width:15%;"> No of Semesters</b>    
+                                    </th>
+                                    <th class="slds-is-resizable" scope="col"  style="text-align:center;">
+                                        <b style="width:10%;"> Intake</b>    
+                                    </th>
+                                    <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                        <b style="width:15%;"> Intake Per Section</b>    
+                                    </th>
+                                    <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                        <b style="width:20%;"> Batch per Section</b>    
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.List_Account}" var="Acc" indexVar="index">
+                                    <tr>
+                                        <td class="slds-is-resizable" scope="col" >
+                                            {!Acc.Name}    
+                                        </td>
+                                        <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                            {!Acc.No_of_Years__c}    
+                                        </td>
+                                        <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                            {!Acc.Number_of_Semesters__c}    
+                                        </td>
+                                        <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                            {!Acc.Intake__c} 
+                                        </td>
+                                        <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                            {!Acc.Intake_Per_Section__c} 
+                                        </td>
+                                        <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                            {!Acc.Number_of_Batches__c} 
+                                        </td>
+                                    </tr>    
+                                </aura:iteration>    
+                            </tbody>
+                        </table><br/>
+                        <br/>                     
+                        <aura:set attribute="else">
+                            <div style="text-align:center;color:red;">
+                                No Records Found..!
+                            </div>
+                        </aura:set>
+                    </aura:if>
+                </aura:if>
+            </aura:if><br/>       
+            <div>              
+                <aura:if isTrue="{!not(empty(v.List_ProgramPlan))}">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <th class="slds-is-resizable" scope="col" >
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox aura:id="selectAllId" 
+                                                                  change="{!c.selectAllCheckbox}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="slds-is-resizable" scope="col" >
+                                    <b style="text-align:center;width:30%;"> Program Name</b>    
+                                </th>
+                                <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                    <b style="width:10%;"> No of Years</b>    
+                                </th>
+                                <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                    <b style="width:10%;"> No of Semesters</b>    
+                                </th>
+                                <th class="slds-is-resizable" scope="col"  style="text-align:center;">
+                                    <b style="width:10%;"> Intake</b>    
+                                </th>
+                                <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                    <b style="width:10%;"> Intake Per Section</b>    
+                                </th>
+                                <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                    <b style="width:15%;"> Batches per Section</b>    
+                                </th>
+                                <th class="slds-is-resizable" scope="col" style="text-align:center;">
+                                    <b style="width:15%;"> Start Date</b>    
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>                           
+                            <aura:iteration items="{!v.List_ProgramPlan}" var="objPrgPlan" indexVar="index">
+                                <tr>
+                                    <td class="slds-is-resizable" scope="col" >
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <label class="slds-checkbox">
+                                                    <ui:inputCheckbox text="{!objPrgPlan.Id}" value="{!objPrgPlan.isChecked}"/>
+                                                    <span class="slds-checkbox_faux"></span>
+                                                    <span class="slds-form-element__label text"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="width:30%;">
+                                        {!objPrgPlan.obj_ProgPlan.Name}    
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:center;width:10%;">
+                                        {!objPrgPlan.obj_ProgPlan.Number_of_Years__c}    
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:center;width:10%;">
+                                        {!objPrgPlan.obj_ProgPlan.No_of_Semesters__c}    
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:center;width:10%;">
+                                        <lightning:input type="number" aura:id="auraInputId" name="{!index}" label="" value="{!objPrgPlan.obj_ProgPlan.Intake__c}" class="myCustomClass" onchange="{!c.onchangeIntake}"/> 
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:center;width:10%;">
+                                        <lightning:input type="number" aura:id="auraInputId" name="{!index}" label="" value="{!objPrgPlan.obj_ProgPlan.Intake_Per_Section__c}" class="myCustomClass" onchange="{!c.onchangeIntakePerSec}"/> 
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:center;width:10%;">
+                                        <lightning:input type="number" aura:id="auraInputId" name="{!index}" label="" value="{!objPrgPlan.obj_ProgPlan.Batches_Per_Section__c}" class="myCustomClass" onchange="{!c.onchangePerSection}"/> 
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:center;width:15%;">
+                                        <lightning:input type="date" aura:id="auraInputId" name="{!index}" label=""  value="{!objPrgPlan.obj_ProgPlan.hed__Start_Date__c}" onchange="{!c.onchangeSelectDate}"/> 
+                                    </td>
+                                </tr>    
+                            </aura:iteration>    
+                        </tbody>
+                    </table><br/>
+                    <div style="margin-left:1%">
+                        <b>Note:</b><br/>
+                        Once saved, the action cannot be reversed. This would create Program Batch, Semester, Sections and Batches.<br/>
+                        Please ensure the values are correct before Saving.
+                    </div>                    
+                </aura:if>
+            </div>
+        </div>
+    </div>    
+</aura:component>

@@ -1,0 +1,40 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 class="slds-text-heading_medium">Initiate Partial Payment</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium">
+                <lightning-input label="Payment Amount" type="number" value={paymentAmount} onchange={handleInputChange} data-id="amount"></lightning-input>
+                <template if:true={studentFee}>
+                    <div class="slds-grid slds-wrap slds-m-top_medium">
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <p><strong>Fee Type:</strong> {studentFee.Fee_Type__c}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <p><strong>Payment Type:</strong> {studentFee.Payment_Type__c}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <p><strong>Total Amount:</strong> {totalAmount}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <p><strong>Paid Amount:</strong> {paidAmount}</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <p><strong>Pending Amount:</strong> {pendingAmount}</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <footer class="slds-modal__footer">
+                <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>&nbsp;&nbsp;
+                <lightning-button variant="brand" label="Create Payment" onclick={createPayment} disabled={isPaymentValid}></lightning-button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

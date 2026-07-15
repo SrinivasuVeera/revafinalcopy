@@ -1,0 +1,156 @@
+<apex:page renderAs="pdf" standardController="Student_Payment__c" extensions="FEE_FeeReceipt_Ext" standardStylesheets="false"  applyBodyTag="false" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/css" >
+                @page {
+                margin-left:1 cm; 
+                margin-right:1 cm;
+                margin-top:5cm; 
+                margin-bottom:2cm;
+                @top-Left{
+                content: element(header);
+                }
+                @bottom-Left{
+                content: element(footer);
+                }
+                }                
+                div.footer {
+                display: block;
+                padding: 10px;
+                position: running(footer);                
+                text-align:Left;
+                }              
+                div.header {
+                display: block;
+                position: running(header);
+                text-Align:Center;
+                }
+            </style>
+        </head>
+        
+        <body style = "font-family:sans-serif;font-size:13px;">
+            <div class="header">
+                <img src="{!$Resource.REVA_LOGO}" width="350px"/><br/>                
+                <center style = "color:#808080;font-size:18px">Rukmini Knowledge Park, Kattigenahalli Yelahanka, Bengaluru - 560064</center>               
+            </div>
+            <div class="footer">
+                <table width="100%">
+                    <tr>
+                        <td style = "font-size :13px;color:#FF8C00;">
+                            Rukmini Educational<br/> 
+                            Charitable Trust
+                        </td>
+                        <td style = "font-size :13px;color:#FF8C00;text-align:right;">www.reva.edu.in</td>
+                    </tr>
+                </table>
+            </div>
+            <table style = "width:100%;font-size:18px;" >
+                <tr>
+                    <td style="text-align:left;" valign="top">________________________</td>
+                    <td style="background-color:#e68128;font-size:30px;color:white;padding:5px;" ><center>Fee Receipt</center></td>
+                    <td style="text-align:right;" valign="top">________________________</td>
+                </tr>
+            </table>
+            <br/>
+            <table width="100%">
+                <tr>
+                    <td> <span style="border:1px solid Black;padding:6px;">Receipt No.: {!ReceiptNo}</span></td>
+                    <td style="text-align:right;">
+                        <span style="border:1px solid Black;padding:6px;">
+                            Date:<apex:outputText value="{0,date, dd-MMMM-yyyy}"><apex:param value="{!Student_Payment__c.Payment_Date_Time__c}" /> </apex:outputText>
+                        </span> 
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <table width="100%" cellpadding="4">
+                <tr>
+                    <td> <b>Student Name</b></td>
+                    <td>:</td>
+                    <td>{!Student_Payment__c.Contact__r.name}</td>
+                </tr>
+                <tr>
+                    <td><b> Program Name</b></td>
+                    <td>:</td>
+                    <td>{!Student_Payment__c.Contact__r.Primary_Academic_Program__r.name}</td>
+                </tr>
+                <tr>
+                    <td><b>Student SRN Number</b></td>
+                    <td>:</td>
+                    <td>{!Student_Payment__c.Contact__r.SRN_Number__c}</td>
+                </tr>
+                <tr>
+                    <td> <b>Student Application Number</b></td>
+                    <td>:</td>
+                    <td>{!Student_Payment__c.Contact__r.Application_Number__c}</td>
+                </tr>
+                <tr>
+                    <td><b> Semester</b></td>
+                    <td>:</td>
+                    <td>{!Student_Payment__c.Contact__r.Active_Semester__r.name}</td>
+                </tr>
+                <tr>
+                    <td><b> Section</b></td>
+                    <td>:</td>
+                    <td>{!Student_Payment__c.Contact__r.Active_Section__r.name}</td>
+                </tr>
+            </table>
+            <br/>    
+            <apex:variable var="count" value="{!0}"/>
+            <table  border="1" cellpadding ="3" cellspacing ="0" style ="width:100%;">                
+                <tr style ="text-align: center;">
+                    <th style="background-color:#e68128;color: white;">Sl.No</th>
+                    <th style="background-color:#e68128;color: white;">Particulars</th>
+                    <th style="background-color:#e68128;color: white;">Amount</th>
+                </tr>
+                <apex:repeat value="{!StuFee}" var="stu">
+                    <apex:variable var="count" value="{!count+1}"/>
+                    <tr  style="{!IF(MOD(count,2)==1, 'background-color:#edc5c9;','')}">
+                        <td style="text-align:center;"> {!count}</td>
+                        <td >{!stu.Student_Fee__r.Name}</td>
+                        <td style="text-align:right;"><apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!stu.Amount__c}"/> </apex:outputText></td>
+                    </tr>
+                </apex:repeat>
+                <tr style="background-color:#edc5c9;">
+                    <td></td>
+                    <td style="text-align:right;padding-right:8px;"><b>Total</b></td>
+                    <td style="text-align:right;"><b><apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!Total}"/> </apex:outputText></b></td>
+                </tr>
+            </table>
+            <br/>
+            <div>
+                <b>Amount in Words</b> &nbsp;&nbsp; :Rupees {!TotalInWords} Only.
+                <br/>
+                <br/>
+                <b>Mode of Payment</b> &nbsp;&nbsp;&nbsp;: {!Student_Payment__c.Mode_of_Payment__c} 
+                <apex:panelGroup rendered="{!Student_Payment__c.Mode_of_Payment__c == 'Online'}"> - {!Student_Payment__c.Payment_Gateway__c} - {!Student_Payment__c.Payment_Mode_Type__c}</apex:panelGroup>
+                <br/>
+                <br/>
+                <b>Transaction Id</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {!Student_Payment__c.Transaction_ID__c} 
+                <br/>
+                <br/>
+                <b>Transaction Status</b> &nbsp;: {!Student_Payment__c.Payment_Status__c}
+            </div>
+            <br/>
+            <br/>            
+            <apex:panelGroup rendered="{!Student_Payment__c.Mode_of_Payment__c == 'Offline'}">
+                <table width ="100%">
+                    <tr>
+                        <td style="text-align: left">Receipt generated on</td>
+                        <td style="text-align: right">Receipt generated by</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left"><apex:outputText value="{0,date,dd-MMMM-yyyy}">
+                            <apex:param value="{!Student_Payment__c.Receipt_Generated_on__c}" />
+                            </apex:outputText></td>
+                        <td style="text-align: right">{!Student_Payment__c.Receipt_Generated_by__c}</td>
+                    </tr>
+                </table>
+            </apex:panelGroup>
+            <br/>            
+            <p >
+                <b><i>Disclaimer: This is a computer generated fee receipt hence signature is not required.</i></b> 
+            </p>            
+        </body>
+    </html>
+</apex:page>

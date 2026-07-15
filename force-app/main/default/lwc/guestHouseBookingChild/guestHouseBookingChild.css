@@ -1,0 +1,115 @@
+.header {
+  font-size: 1.2rem;
+  /*color: #FF7F00;*/
+  color: black;
+  text-align: center;
+  margin-bottom: 1rem;
+}.header1{
+  font-size: 0.8rem;
+  color: #080807;
+  text-align: center;
+  margin-bottom: 6px;;
+}
+.custom-link {
+  color: black;
+  text-align: left;
+  display: block; 
+  text-decoration: none; 
+  padding: 4px 0; 
+}
+
+.custom-link:hover {
+  color: orange; 
+}
+
+.slds-box {
+  border: none;
+  padding: 0;
+  text-align: center;
+  height: auto;
+}
+.slds-box .slds-form-element__label {
+  text-align: left !important;
+  font-weight: bold;
+  height: auto;
+}
+
+
+
+
+
+
+/*
+
+[data-id="input-cstm"]::part(input) {
+  background-color: black;
+}
+.slds-input ::part(input) {
+  
+}
+
+.slds-combobox__input-slds-input_faux-fix-slds-input_faux{
+  background-color: #fef1e8;
+}
+
+
+.slds-form-element__label::part(input) {
+  background-color: #fef1e8 !important; 
+}
+
+
+.slds-box .slds-form-element__label .slds-form-element .slds-form-element__control .slds-combobox_container{
+  background-color: #fef1e8 !important; 
+}
+
+.custom-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-label {
+    flex-basis: 40%;
+    text-align: left;
+    padding-right: 10px;
+    color: var(--reva-brand-color);
+    font-weight: bold;
+}
+
+.custom-input {
+    flex-basis: 60%; 
+    text-align: right;
+}
+
+.container-fluid {
+    padding: 0 15px;
+  }
+ 
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-4 {
+    margin-top: 1.5rem;
+  }
+.custom-combobox-container {
+  width: 100%; 
+  max-width: 400px; 
+  margin: 0 auto; 
+}
+
+.custom-combobox .slds-combobox {
+  background-color: #b8744f; 
+}
+
+.custom-combobox .slds-form-element__label {
+  color: orange; 
+}
+.row-spacing {
+  margin-bottom: 1rem;
+}
+
+.slds-form-element {
+  margin-bottom: 1rem;
+}
+  */

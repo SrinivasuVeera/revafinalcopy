@@ -1,0 +1,42 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global" controller="FetchCampusRecData">
+
+    <aura:attribute name="cases" type="Case[]" />
+    <aura:attribute name="userId" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <table class="slds-table slds-table--bordered support-request-case-detail">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th scope="col">CASE NUMBER</th>
+                <th scope="col">CASE STATUS</th>
+                <!-- <th scope="col" style="background-color:grey; color:white;">Subject</th> -->
+                <!-- <th scope="col" style="background-color:grey; color:white;height:3vw;">Contact Name</th> -->
+                <th scope="col">CASE TYPE</th>
+
+                <th scope="col">CATEGORY</th>
+            </tr>
+        </thead>
+        <tbody class="slds-table--bordered">
+            <aura:iteration items="{!v.cases}" var="caseItem">
+                <tr>
+                    <td class="slds-is-resizable slds-table--bordered" scope="col">
+                        <a onclick="{!c.navigateToCase}" data-value="{!caseItem.Id}">
+                            {!caseItem.CaseNumber}
+                        </a>
+                    </td>
+                    <td class="slds-is-resizable slds-table--bordered" scope="col">{!caseItem.Status}</td>
+                    <!-- <td>{!caseItem.Subject}</td> -->
+                    <td class="slds-is-resizable slds-table--bordered" scope="col">{!caseItem.Case_Status__c}</td>
+                    <!-- <td>{!caseItem.Mentor_Name__c}</td> -->
+
+                    <td class="slds-is-resizable slds-table--bordered" scope="col">{!caseItem.Category__c}</td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+
+    <lightning:navigation aura:id="navigationService" />
+</aura:component>

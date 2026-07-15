@@ -1,0 +1,143 @@
+<aura:component Controller="MSTR_StudentSemesterPromotion_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithOutHeader" access="global" >
+    <aura:html tag="style">
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    
+    <aura:attribute name="strTerm" type="String"/>
+    <aura:attribute name="progEnrllWrp" type="Map"/>
+    <aura:attribute name="listProgramEnrollments" type="List" />
+    <aura:attribute name="showMovesemesters" type="boolean" default="false"/>
+    <aura:attribute name="selectall" type="boolean" default="true"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-theme_default">  
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:avatar" alternativeText="Student Semester Promotion" title="Student Semester Promotion" /> &nbsp;
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Student Semester Promotion"> Student Semester Promotion of Semester {!v.strTerm} </span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="slds-float_right">
+                                <lightning:button variant="brand" label="Promote Students" onclick="{!c.generatedialog}" disabled="{!v.listProgramEnrollments.length == 0}"/> 
+                                <lightning:button variant="neutral" label="Cancel" onclick="{!c.onclickCancel}"/> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br/><br/>
+    <aura:if isTrue="{!not(empty(v.listProgramEnrollments))}">
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+            <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col" style="background-color:#efefef !important;">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label class="slds-checkbox">
+                                    <ui:inputCheckbox aura:id="selectAllId" 
+                                                      change="{!c.selectAllCheckbox}"
+                                                      value="{!v.selectall}"/>
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </th>
+                    <th scope="col" style="background-color:#efefef !important;">
+                        <div class="slds-truncate" title="SRN">SRN</div>
+                    </th>
+                    <th scope="col" style="background-color:#efefef !important;">
+                        <div class="slds-truncate" title="Student Name"> Student Name </div>
+                    </th>
+                    <th scope="col" style="background-color:#efefef !important;">
+                        <div class="slds-truncate" title="Application Number">Application Number</div>
+                    </th>
+                    <th scope="col" style="background-color:#efefef !important;">
+                        <div class="slds-truncate" title="Section">Section</div>
+                    </th>
+                    <th scope="col" style="background-color:#efefef !important;">
+                        <div class="slds-truncate" title="Lab Batch">Lab Batch</div>
+                    </th>
+                </tr>
+            </thead>   
+            <tbody>      
+                <aura:iteration items="{!v.listProgramEnrollments}" var="objPrgEnrll" indexVar="index">
+                    <tr>
+                        <td> 
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <label class="slds-checkbox">
+                                        <ui:inputCheckbox text="{!objPrgEnrll.Id}" 
+                                                          value="{!objPrgEnrll.isChecked}"
+                                                          change="{!c.selectCheckbox}"/>
+                                        <span class="slds-checkbox_faux"></span>
+                                        <span class="slds-form-element__label text"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {!objPrgEnrll.objProgEnroll.SRN_Number__c}
+                        </td>
+                        <td>
+                            {!objPrgEnrll.objProgEnroll.hed__Contact__r.Student_Full_Name__c}
+                        </td>
+                        <td>
+                            {!objPrgEnrll.objProgEnroll.hed__Contact__r.Application_Number__c}
+                        </td>
+                        <td>
+                            {!objPrgEnrll.objProgEnroll.Section__r.Name}
+                        </td> 
+                        <td>
+                            {!objPrgEnrll.objProgEnroll.Batch__r.Name} 
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+        <aura:set attribute="else">
+            No Records Found..!
+        </aura:set>
+    </aura:if>
+    <aura:if isTrue="{!v.showMovesemesters}">
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Students Promotion</h1>
+                </header>                    
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center><b>Are you sure you want to promote the students to next Semester?</b></center>
+                </div>                    
+                <footer class="slds-modal__footer">
+                    <lightning:button name='No' label='No' onclick='{!c.handleConfirmNo}'/>
+                    <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleConfirmYes}'/>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>
+</aura:component>

@@ -1,0 +1,13 @@
+<!--
+  @description       : 
+  @author            : owais.ahanger@cloudodyssey.co
+  @group             : 
+  @last modified on  : 05-31-2024
+  @last modified by  : owais.ahanger@cloudodyssey.co
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <div class="main-header">
+        <c:revStdHeader />
+        <c:revStdHomeSubHeaderAura />
+    </div>
+</aura:component>

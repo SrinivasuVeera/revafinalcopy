@@ -1,0 +1,169 @@
+<template>
+    <lightning-card title={cardTitle} icon-name={currentCardIcon}>
+        <div slot="actions" class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
+            <span class="slds-text-body_small slds-text-color_weak slds-m-right_x-small">
+                {lastUpdatedLabel}
+            </span>
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refresh"
+                onclick={handleRefresh}
+                disabled={isLoading}>
+            </lightning-button-icon>
+        </div>
+
+        <!-- Summary tiles -->
+        <template if:true={showSummary}>
+            <template if:true={hasEvents}>
+                <div class="slds-grid slds-gutters slds-p-horizontal_medium slds-p-bottom_small">
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="slds-box slds-box_x-small slds-text-align_center">
+                            <p class="slds-text-title slds-text-color_weak">Sends</p>
+                            <p class="slds-text-heading_medium">{sendsCount}</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="slds-box slds-box_x-small slds-text-align_center">
+                            <p class="slds-text-title slds-text-color_weak">Opens</p>
+                            <p class="slds-text-heading_medium">{opensCount}</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="slds-box slds-box_x-small slds-text-align_center">
+                            <p class="slds-text-title slds-text-color_weak">Clicks</p>
+                            <p class="slds-text-heading_medium">{clicksCount}</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <div class="slds-box slds-box_x-small slds-text-align_center">
+                            <p class="slds-text-title slds-text-color_weak">Bounces</p>
+                            <p class="slds-text-heading_medium">{bouncesCount}</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </template>
+
+        <!-- Filter chip -->
+        <template if:true={filterLabel}>
+            <div class="slds-p-horizontal_medium slds-p-bottom_x-small">
+                <span class="slds-pill">
+                    <lightning-icon icon-name="utility:filter" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                    <span class="slds-pill__label">{filterLabel}</span>
+                </span>
+            </div>
+        </template>
+
+        <!-- Channel pills + Date Range, side-by-side (wraps on narrow widths) -->
+        <div class="slds-grid slds-wrap slds-gutters_small slds-grid_vertical-align-end slds-p-horizontal_medium slds-p-bottom_small mc-filters">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                <lightning-radio-group
+                    label="Channel"
+                    name="mcChannelGroup"
+                    options={channelOptions}
+                    value={selectedChannel}
+                    onchange={handleChannelChange}
+                    type="button"
+                    disabled={isLoading}>
+                </lightning-radio-group>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                <lightning-combobox
+                    label="Date Range"
+                    value={selectedDateRange}
+                    options={dateRangeOptions}
+                    onchange={handleDateRangeChange}
+                    variant="label-stacked"
+                    disabled={isLoading}>
+                </lightning-combobox>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error -->
+        <template if:true={error}>
+            <div class="slds-p-around_medium slds-text-color_error">{error}</div>
+        </template>
+
+        <!-- Empty -->
+        <template if:true={isEmpty}>
+            <div class="slds-p-around_medium slds-text-color_weak slds-align_absolute-center">
+                <template if:true={identifier}>
+                    No {selectedChannel} events found for {identifier} in this date range.
+                </template>
+                <template if:false={identifier}>
+                    No {currentIdentifierType} found on this record.
+                </template>
+            </div>
+        </template>
+
+        <!-- Rows -->
+        <template if:true={hasEvents}>
+            <div class="mc-events-scroll">
+            <ul class="slds-has-dividers_around-space">
+                <template for:each={decoratedEvents} for:item="evt">
+                    <li key={evt.key} class="slds-item slds-p-around_x-small mc-row">
+                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-start">
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <lightning-icon
+                                    icon-name={evt.icon}
+                                    size="small"
+                                    class="slds-m-right_small">
+                                </lightning-icon>
+                                <div>
+                                    <p class="slds-text-body_regular slds-text-title_bold">
+                                        {evt.title}
+                                    </p>
+                                    <template if:true={evt.subtitle}>
+                                        <p class="slds-text-body_small slds-text-color_weak">
+                                            {evt.subtitle}
+                                        </p>
+                                    </template>
+                                    <template if:true={evt.bounceReason}>
+                                        <p class="slds-text-body_small slds-text-color_error">
+                                            Reason: {evt.bounceReason}
+                                        </p>
+                                    </template>
+                                    <template if:true={evt.smtpBounceReason}>
+                                        <p class="slds-text-body_small slds-text-color_error">
+                                            SMTP Bounce Reason: {evt.smtpBounceReason}
+                                        </p>
+                                    </template>
+                                    <template if:true={evt.hasWhatsAppDetails}>
+                                        <dl class="mc-whatsapp-details">
+                                            <template for:each={evt.whatsAppDetails} for:item="detail">
+                                                <div key={detail.label} class="mc-whatsapp-detail">
+                                                    <dt>{detail.label}</dt>
+                                                    <dd>{detail.value}</dd>
+                                                </div>
+                                            </template>
+                                        </dl>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="slds-text-align_right slds-shrink-none slds-m-left_small">
+                                <span class={evt.badgeClass}>{evt.eventType}</span>
+                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                    <template if:true={evt.eventDate}>
+                                        <lightning-formatted-date-time
+                                            value={evt.eventDate}
+                                            year="numeric" month="short" day="2-digit"
+                                            hour="2-digit" minute="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </template>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+            </div>
+        </template>
+    </lightning-card>
+</template>

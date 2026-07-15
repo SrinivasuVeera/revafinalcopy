@@ -1,0 +1,6 @@
+/* Modal Layout */
+.modal-container {
+    width: 90%;
+    max-width: 1500px;
+    min-width: 600px;
+}

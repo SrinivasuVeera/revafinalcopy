@@ -1,0 +1,61 @@
+.THIS .slds-tabs_scoped__item{
+    position: relative !important;
+    margin-bottom: calc(-1 * var(--lwc-borderWidthThin,1px))!important;
+}
+.THIS.assesment-wrapper {
+    box-shadow: 2px 4px 9px -4px #6e6e6e;
+    border: 1px solid var(--reva-brand-color);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.THIS .assesment-heading {
+    display: flex;
+    background-color: var(--reva-component-heading-background-color);
+    color: black;
+    border: 0px;
+    font-size: 15px;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.THIS .Heading{
+    background-color: grey;
+    border-radius: 10px;
+    height: 40px;
+    color: white;
+    margin: 2px;     
+        }
+
+.THIS .slds-tabs_scoped__link,
+.THIS .slds-tabs--scoped__link {
+    font-size:14px;                            
+}
+
+
+.THIS .slds-is-active .slds-tabs_scoped__link{
+    background-color:#f57f26 !important;
+    color:white !important;
+    font-weight:600 !important;
+    text-decoration: none !important;
+}
+.THIS .slds-tabs_scoped__nav {
+    display: flex;
+    align-items: flex-start;
+    /* background-color:#E9E9E9 !important; */
+    border:0px solid white !important;
+    }
+
+.cRevaStdAssesmentCombine .slds-tabs_scoped__nav {/*Orange tabset background*/
+    display: flex;
+    align-items: flex-start;
+    border: 0 solid white!important;
+    background-color: transparent !important;
+}
+.THIS .slds-tabs_scoped__content {
+    padding: 7px 1px 5px 0px!important;
+    border: 0px solid white !important;
+    padding-top:5px !important;     
+    padding: 7px 1px 5px 0px!important; 
+    background-color: transparent;
+    }

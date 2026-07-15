@@ -1,0 +1,11 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<template>
+    <h1 class="required-field"> Exam Date</h1>\n
+    <input class="slds-input" value={dateVal} onchange={changedate} placeholder="Select a exam date" type="date"
+        id="datemin" name="datemin" min={minDate} max={maxDate} required>
+    <template if:true={error}>
+            <p class="error-message"> {error}</p>
+    </template>
+
+</template>

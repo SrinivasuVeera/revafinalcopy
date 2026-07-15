@@ -1,0 +1,14 @@
+.THIS .enter-ia-btn {
+    background-color: #e70808; /* red */
+    color: white;
+}
+
+.THIS .edit-ia-btn {
+    background-color: #ffc800; /* yellow */
+    color: black;
+}
+
+.THIS .view-ia-btn {
+    background-color: #206e41; /* green */
+    color: white;
+}

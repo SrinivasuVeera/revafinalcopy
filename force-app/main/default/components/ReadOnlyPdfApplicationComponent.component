@@ -1,0 +1,667 @@
+<apex:component controller="ReadOnlyApplicationController"> 
+    
+    <html>
+        
+        <head>
+            <style type="text/CSS">
+                <!--    table{
+                    table-layout: fixed;
+                    width: 100%;
+                    }
+                    td{
+                    width: 25%;
+                    word-break: break-all;
+                    } -->
+            </style>
+        </head>
+        
+        <body style = "font-family:sans-serif;font-size:13px;">
+            <div class="header" style="margin:5px; padding-left:10px; padding-top:0px; padding-bottom:2px; ">                
+                <h1 style = "font:serif;color:#060606;font-size:20px; text-align:center;padding-bottom:4px; margin-top:5px; margin-bottom:0px;"><b>Application Information</b></h1>               
+            </div>
+            <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                <apex:repeat value="{!fieldsInfo['application']}"  var="f">
+                    <tr style="border:1px solid black;">
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <b><apex:outputText value="{!f.label1}" /></b>
+                           
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black; padding-left: 10px;">
+                            <!-- <apex:outputText value="{!application[f.apiName1]}" rendered="{!f.label1 == 'Applying To'}" /> -->
+                            <apex:outputText value="{!primaryAcademicProgram}" rendered="{!f.label1 == 'Applying To'}" />
+                            <apex:outputText value="{!applicationNumber}" rendered="{!f.label1 == 'Application Number'}" />
+                            <apex:outputText value="{!applyCET}" rendered="{!f.label1 == 'Applying For REVA CET?'}"/>    
+                            <apex:outputText value="{!examType}" rendered="{!f.label1 == 'Exam Type'}" /> 
+                            <apex:param value="{!application[f.apiName1]}" />
+                          
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <b><apex:outputText value="{!f.label2}"/></b>
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <!-- <apex:outputText value="{!application[f.apiName2]}" /> -->
+                            <apex:outputText value="{!application[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                            <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                <apex:param value="{!application[f.apiName2]}" />
+                            </apex:outputText>
+                           
+                        </td>
+                        
+                    </tr> 
+                </apex:repeat>
+            </table>
+            
+            <table>
+                <div class="header" style="margin:5px; padding-left:10px; color:white; padding-top:0px; padding-bottom:0px; ">  
+                    <h1 style = "color:#060606;font-size:20px; text-align:center; margin-top:5px; margin-bottom:0px;  width:100%;"><b>Applicant Information</b></h1> 
+                </div>
+            
+            </table>
+            
+            <div>
+                <h1 style = "font-size:18px; margin:10px 0px; padding-left:10px; color:white; background-color:gray; width:98.7%;"><b>Personal Information</b></h1>               
+            </div>
+            <table style = "table-layout:auto; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                <apex:repeat value="{!fieldsInfo['personalInformation']}"  var="f">
+                    <tr style="border:1px solid black;">
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <b><apex:outputText value="{!f.label1}" /></b>
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black; padding-left: 10px;">
+                            <!--  <apex:outputText value="{!applicantEmail}" rendered="{!f.label1 == 'Alert Email'}" /> -->
+                            <apex:outputText value="{!applicant[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                            <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                                <apex:param value="{!applicant[f.apiName1]}" />
+                            </apex:outputText>
+                            
+                        </td>
+                        
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <b><apex:outputText value="{!f.label2}" /></b>
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <apex:outputText value="{!applicant[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                            <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                <apex:param value="{!applicant[f.apiName2]}" />
+                            </apex:outputText>
+                        </td>
+                    </tr> 
+                </apex:repeat>
+                
+            </table>
+            
+            <apex:outputPanel rendered="{!passportNumber != null}"> 
+                <div style="padding-top: 5px;padding-bottom: 5px; ">
+                    <h1 style = "font-size:18px;padding-left:10px; margin:10px 0px;color:white; background-color:Gray; width:98.7%;"><b>Passport Information</b></h1>   
+                </div>
+                
+                
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['passportInformation']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%; word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!applicant[f.apiName1]}" /> -->
+                                <apex:outputText value="{!applicant[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                                    <apex:param value="{!applicant[f.apiName1]}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!applicant[f.apiName2]}" /> -->
+                                <apex:outputText value="{!applicant[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                    <apex:param value="{!applicant[f.apiName2]}" />
+                                </apex:outputText>
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                    
+                </table>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!cetAdmissionMode != 'UQ'}"> 
+                <div style="padding-top: 5px;padding-bottom: 5px; ">
+                    <h1 style = "font-size:18px;padding-left:10px; margin:10px 0px;color:white; background-color:Gray; width:98.7%;"><b>CET Information</b></h1>   
+                </div>
+                
+                
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['cetInformation']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%; word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <apex:outputText value="{!applicant[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date,dd-mm-YYYY}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                                    <apex:param value="{!applicant[f.apiName1]}" />
+                                </apex:outputText>
+                                
+                                    
+                                
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                              <apex:outputText value="{!applicant[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date,dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                    <apex:param value="{!applicant[f.apiName2]}" />
+                                </apex:outputText>
+                             </td>
+                            
+                        </tr> 
+                        
+                    </apex:repeat>
+                    
+                </table>
+            </apex:outputPanel>
+            
+            <table>
+                <div class="header" style="margin:5px; padding-left:10px; padding-top:0px; padding-bottom:0px; ">  
+                    <h1 style = "color:#060606;font-size:20px; text-align:center;  margin-bottom:0px;  width:100%;"><b>Parent And Guardian Information</b></h1> 
+                </div>
+            </table>
+            <apex:outputPanel rendered="{!father != null}">
+                <h1 style = "font-size:18px; margin:10px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>Father Information</b></h1>               
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['parentInformation']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <apex:outputText value="{!father[f.apiName1]}" />
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                
+                                <apex:outputText value="{!father[f.apiName2]}" />
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                    
+                </table>
+            </apex:outputPanel>
+            
+            
+            <apex:outputPanel rendered="{!mother != null}">
+                <h1 style = "font-size:18px; margin:10px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>Mother Information</b></h1>               
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['parentInformation']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <apex:outputText value="{!mother[f.apiName1]}" /> 
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <apex:outputText value="{!mother[f.apiName2]}" />
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                </table>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!guardian != null}">
+                <h1 style = "font-size:18px; margin:10px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;" ><b>Guardian Information</b></h1>
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['parentInformation']}"  var="f" >
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <apex:outputText value="{!guardian[f.apiName1]}" />
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all;border:1px solid black;padding-left: 10px;">
+                                <apex:outputText value="{!guardian[f.apiName2]}" />
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                    
+                </table>
+            </apex:outputPanel>
+            
+            <table cellpadding="10px" style="margin-top:20px;">
+                <div class="header" style=" margin-top:50px margin-bottom:2px; padding-left:10px; padding-top:0px; padding-bottom:0px; ">  
+                    <h1 style = "color:#060606; font-size:20px; text-align:center; margin-top:5px; margin-bottom:0px;  width:100%;"><b>Address Information</b></h1> 
+                </div>
+            </table>
+            <apex:outputPanel rendered="{!permanentAddress != null}">
+                <h1 style = "font-size:18px; margin:10px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>Permanent Address</b></h1>            
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['addressInformation']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;  border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <apex:outputText value="{!permanentAddress[f.apiName1]}" />
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <apex:outputText value="{!permanentAddress[f.apiName2]}" />
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                    
+                </table>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!mailingAddress != null}">
+                
+                <h1 style = "font-size:18px; margin:10px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>Mailing Address</b></h1>               
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">  
+                    <apex:repeat value="{!fieldsInfo['addressInformation']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <apex:outputText value="{!mailingAddress[f.apiName1]}" />
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <apex:outputText value="{!mailingAddress[f.apiName2]}" />
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                    
+                </table>
+            </apex:outputPanel>
+			
+			<!--Start -->
+            <table cellpadding="10px" style="margin-top:20px;">
+                <div class="header" style=" margin-top:50px margin-bottom:2px; padding-left:10px; padding-top:0px; padding-bottom:0px; ">  
+                    <h1 style = "color:#060606; font-size:20px; text-align:center; margin-top:5px; margin-bottom:0px;  width:100%;"><b>Entrance Exam</b></h1> 
+                </div>
+            </table>
+            
+            <apex:outputPanel rendered="{!NOT(ISNULL(entranceExams))}">
+    <h1 style="font-size:18px; margin:5px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;">
+        <b>Entrance Exam</b>
+    </h1>
+
+    <table style="table-layout: fixed; width: 100%; border: 1px solid black; border-collapse: collapse; padding-left: 10px;">
+        <apex:repeat value="{!entranceExams}" var="exam">
+            <tr>
+                <td colspan="4" style="background-color: #f2f2f2; font-weight: bold; padding: 5px; border: 1px solid black;">
+                    Exam Name: <apex:outputText value="{!exam.Name}" />
+                </td>
+            </tr>
+            <apex:repeat value="{!fieldsInfo['entranceExam']}" var="f">
+                <tr style="border:1px solid black;">
+                    <td style="width: 25%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                        <b><apex:outputText value="{!f.label1}" /></b>
+                    </td>
+                    <td style="width: 25%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                        <apex:outputText value="{!exam[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                        <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                            <apex:param value="{!exam[f.apiName1]}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="width: 25%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                        <b><apex:outputText value="{!f.label2}" /></b>
+                    </td>
+                    <td style="width: 25%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                        <apex:outputText value="{!exam[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                        <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                            <apex:param value="{!exam[f.apiName2]}" />
+                        </apex:outputText>
+                    </td>
+                </tr>
+            </apex:repeat>
+        </apex:repeat>
+    </table>
+</apex:outputPanel>
+
+            
+            <!--End -->
+            
+            
+            <table cellpadding="10px" >
+                <div class="header" style="margin:5px; padding-left:10px; padding-top:0px; padding-bottom:0px; ">  
+                    <h1 style = "color:#060606;font-size:20px; text-align:center; margin-top:0px; margin-bottom:0px;width:100%;"><b>Education History Information</b></h1> 
+                </div>
+            </table>
+            
+            <apex:outputPanel rendered="{!tenth != null}">
+                
+                <h1 style = "font-size:18px; margin:5px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>10th Board / Equivalent</b></h1>               
+                <table style = "table-layout: fixed; width: 100%; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                    <apex:repeat value="{!fieldsInfo['education10th']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <apex:outputText value="{!tenth[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                                    <apex:param value="{!tenth[f.apiName1]}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!tenth[f.apiName2]}" /> -->
+                                <apex:outputText value="{!tenth[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                    <apex:param value="{!tenth[f.apiName2]}" />
+                                </apex:outputText>
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                </table>
+            </apex:outputPanel>
+            
+            
+            
+            <apex:outputPanel rendered="{!Twelfth != null}">
+                
+                <h1 style = "font-size:18px; margin:5px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>12th Board / Equivalent</b></h1>               
+                <table style = "table-layout: fixed; width: 100%; border: 1px solid black;border-collapse: collapse;"> 
+                    <apex:repeat value="{!fieldsInfo['education12th']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <apex:outputText value="{!Twelfth[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                                    <apex:param value="{!Twelfth[f.apiName1]}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!Twelfth[f.apiName2]}" /> -->
+                                <apex:outputText value="{!Twelfth[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                    <apex:param value="{!Twelfth[f.apiName2]}" />
+                                </apex:outputText>
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                </table>
+            </apex:outputPanel>
+            
+            
+            
+            <apex:outputPanel rendered="{!ug != null}">
+                
+                <h1 style = "font-size:18px; margin:5px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>Under Graduate Degree</b></h1>               
+                <table style = "table-layout: fixed; width: 100%; border: 1px solid black;border-collapse: collapse;"> 
+                    <apex:repeat value="{!fieldsInfo['educationUG']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!ug[f.apiName1]}" /> -->
+                                <apex:outputText value="{!ug[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                                    <apex:param value="{!ug[f.apiName1]}" />
+                                </apex:outputText>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!ug[f.apiName2]}" /> -->
+                                <apex:outputText value="{!ug[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                    <apex:param value="{!ug[f.apiName2]}" />
+                                </apex:outputText>
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                </table>
+            </apex:outputPanel>
+            
+            
+            
+            <apex:outputPanel rendered="{!pg != null}">
+                
+                <h1 style = "font-size:18px; margin:10px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>Post Graduate Degree</b></h1>               
+                <table style = "table-layout: fixed; width: 100%; border: 1px solid black;border-collapse: collapse;">  
+                    <apex:repeat value="{!fieldsInfo['educationPG']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!pg[f.apiName1]}" /> -->
+                                <apex:outputText value="{!pg[f.apiName1]}" rendered="{!f.fieldType1 != 'DATE' && f.fieldType1 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType1 == 'DATE' || f.fieldType1 == 'DATETIME'}">
+                                    <apex:param value="{!pg[f.apiName1]}" />
+                                </apex:outputText>
+                                
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label2}" /></b>
+                            </td>
+                            <td style="width: 25%;word-break: break-all; border: 1px solid black;border-collapse: collapse;padding-left: 10px;">
+                                <!-- <apex:outputText value="{!pg[f.apiName2]}" /> -->
+                                <apex:outputText value="{!pg[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                                <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                    <apex:param value="{!pg[f.apiName2]}" />
+                                </apex:outputText>
+                            </td>
+                        </tr> 
+                    </apex:repeat>
+                </table>
+            </apex:outputPanel>
+            
+             <h1 style = "font-size:18px; margin:30px 10px 10px 0px; padding-left:10px; color:white; background-color:Gray; width:98.7%;"><b>Declaration</b></h1>               
+             <div style=" margin-bottom:15px;">
+        <img src="{!$Resource.Check_Box}" width="12px"/> 
+            I declare that, I have clearly read, understood and accepted the rules and regulations of the University. I am fully aware that my admission and candidature for the award of Degree is and will be strictly governed by the guidelines of REVA University and the guidelines/rules and regulations of UGC, New Delhi.
+    </div>
+  	
+   <!-- <tr style="text-align:left">
+        <td> Date : </td>
+        <td>
+            <apex:outputText value="{0,date, d-MMM-yyyy}">
+                <apex:param value="{!NOW()}"></apex:param>
+            </apex:outputText>
+        </td> 
+        
+    </tr> -->
+           
+            <apex:outputPanel rendered="{!cetAdmissionMode != 'UQ'}">
+                     <div style="page-break-after:always;"> </div>
+                <div class="header" style="margin:5px; padding-left:10px; padding-top:5px; padding-bottom:10px; ">                
+                <h1 style = "font:serif;color:#060606;font-size:18px; text-align:center;padding-bottom:4px; margin-top:5px; margin-bottom:0px;"><b>ACKNOWLEDGMENT-UNIVERSITY COPY</b></h1>               
+            </div>
+            <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                <apex:repeat value="{!fieldsInfo['application']}"  var="f">
+                    <tr style="border:1px solid black;">
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 6px;">
+                            <b><apex:outputText value="{!f.label1}" /></b>
+                           
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black; padding-left: 10px;">
+                            <!-- <apex:outputText value="{!application[f.apiName1]}" rendered="{!f.label1 == 'Applying To'}" /> -->
+                            <apex:outputText value="{!primaryAcademicProgram}" rendered="{!f.label1 == 'Applying To'}" />
+                            <apex:outputText value="{!applicationNumber}" rendered="{!f.label1 == 'Application Number'}" />
+                            <apex:outputText value="{!applyCET}" rendered="{!f.label1 == 'Applying For REVA CET?'}"/>    
+                            <apex:outputText value="{!examType}" rendered="{!f.label1 == 'Exam Type'}" /> 
+                            <apex:param value="{!application[f.apiName1]}" />
+                          
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <b><apex:outputText value="{!f.label2}"/></b>
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <!-- <apex:outputText value="{!application[f.apiName2]}" /> -->
+                            <apex:outputText value="{!application[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                            <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                <apex:param value="{!application[f.apiName2]}" />
+                            </apex:outputText>
+                          
+                        </td> 
+                        
+                        
+                    </tr> 
+                </apex:repeat>
+            </table>
+                <h1 style = "font-size:14px;"> This is to certify that Mr./Ms./Mrs.___________________________<br> has taken provisional admission and submitted the following certificates to the University.</br></h1>
+                <div style="padding-top: 5px;padding-bottom: 5px;margin-top:5px; ">
+                    <h1 style = "font-size:16px;padding-left:10px; margin:10px 0px;color:white; background-color:Gray; width:98.7%;"><b>Document Checklist Information</b></h1>   
+                </div>
+               
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['documentChecklist']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                                 
+                            </td>
+                         <td style="width: 25%; word-break: break-all;border: 1px solid black;padding-left: 6px;">
+                              <apex:outputField value="{!application[f.apiName1]}" /> 
+                                   <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATE'}">
+                                <apex:param value="{!application[f.apiName2]}" />
+                            </apex:outputText>
+                            </td> 
+                             
+                     <!--  <td style="width: 50%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                             <b><apex:outputText value="{!f.label2}" /></b>
+                           </td> 
+                            <td style="width: 25%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                              <apex:outputField value="{!application[f.apiName2]}" rendered="{!f.fieldType2 == 'BOOLEAN'}" />
+                              <apex:outputText value="" rendered="{!f.fieldType2 != 'BOOLEAN'}" />
+                          
+                               </td> -->
+
+                        </tr> 
+                    </apex:repeat>
+                    
+                </table>
+                <table style="margin-top:50px;" >
+                <tr>
+                <td><b>Signature Of REVA Team</b></td>
+                <td style="padding-left:390px;"><b>Signature Of Candidate</b></td>
+                </tr>
+            </table>
+             <tr style="text-align:left">
+        <td> Date : </td>
+        <td>
+            <apex:outputText value="{0,date, d-MMM-yyyy}">
+                <apex:param value="{!NOW()}"></apex:param>
+            </apex:outputText>
+        </td>
+        
+    </tr> 
+                
+                <div style="page-break-after:always;"> </div> 
+                <div class="header" style="margin:5px; padding-left:10px; padding-top:5px; padding-bottom:10px; ">                
+                <h1 style = "font:serif;color:#060606;font-size:20px; text-align:center;padding-bottom:4px; margin-top:5px; margin-bottom:0px;"><b>ACKNOWLEDGMENT-STUDENT COPY</b></h1>               
+            </div>
+            <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                <apex:repeat value="{!fieldsInfo['application']}"  var="f">
+                    <tr style="border:1px solid black;">
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <b><apex:outputText value="{!f.label1}" /></b>
+                           
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black; padding-left: 10px;">
+                            <!-- <apex:outputText value="{!application[f.apiName1]}" rendered="{!f.label1 == 'Applying To'}" /> -->
+                            <apex:outputText value="{!primaryAcademicProgram}" rendered="{!f.label1 == 'Applying To'}" />
+                            <apex:outputText value="{!applicationNumber}" rendered="{!f.label1 == 'Application Number'}" />
+                            <apex:outputText value="{!applyCET}" rendered="{!f.label1 == 'Applying For REVA CET?'}"/>    
+                            <apex:outputText value="{!examType}" rendered="{!f.label1 == 'Exam Type'}" /> 
+                            <apex:param value="{!application[f.apiName1]}" />
+                          
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <b><apex:outputText value="{!f.label2}"/></b>
+                        </td>
+                        <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                            <!-- <apex:outputText value="{!application[f.apiName2]}" /> -->
+                            <apex:outputText value="{!application[f.apiName2]}" rendered="{!f.fieldType2 != 'DATE' && f.fieldType2 != 'DATETIME'}"/>
+                            <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATETIME'}">
+                                <apex:param value="{!application[f.apiName2]}" />
+                            </apex:outputText>
+                           
+                        </td>
+                        
+                    </tr> 
+                </apex:repeat>
+            </table>
+            <h1 style = "font-size:16px;"> This is to certify that Mr./Ms./Mrs.___________________________<br> has taken provisional admission and submitted the following certificates to the University.</br></h1>
+                <div style="padding-top: 5px;padding-bottom: 5px;margin-top:5px; ">
+                    <h1 style = "font-size:10px;padding-left:10px; margin:10px 0px;color:white; background-color:Gray; width:98.7%;"><b>Document Checklist Information</b></h1>   
+                </div>
+               
+                <table style = "table-layout: fixed; width: 100%;  border: 1px solid black;border-collapse: collapse;">
+                    <apex:repeat value="{!fieldsInfo['documentChecklist']}"  var="f">
+                        <tr style="border:1px solid black;">
+                            <td style="width: 25%;word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                                <b><apex:outputText value="{!f.label1}" /></b>
+                                 
+                            </td>
+                         <td style="width: 25%; word-break: break-all;border: 1px solid black;padding-left: 10px;">
+                              <apex:outputField value="{!application[f.apiName1]}" /> 
+                              <apex:outputText value="{0, Date, dd-MMM-yyyy}" rendered="{!f.fieldType2 == 'DATE' || f.fieldType2 == 'DATE'}">
+                                <apex:param value="{!application[f.apiName2]}" />
+                            </apex:outputText>
+                            </td> 
+                             
+                       <!-- <td style="width: 25%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                             <b><apex:outputText value="{!f.label2}" /></b>
+                           </td> 
+                            <td style="width: 25%; word-break: break-all; border: 1px solid black; padding-left: 10px;">
+                              <apex:outputField value="{!application[f.apiName2]}" rendered="{!f.fieldType2 == 'BOOLEAN'}" />
+                              <apex:outputText value="" rendered="{!f.fieldType2 != 'BOOLEAN'}" />
+                               
+                               </td> -->
+
+                        </tr> 
+                    </apex:repeat>
+                    
+                </table>
+          </apex:outputPanel> 
+            <table style="margin-top:50px;" >
+                <tr>
+                <td><b>Signature Of REVA Team</b></td>
+                <td style="padding-left:390px;"><b>Signature Of Candidate</b></td>
+                </tr>
+            </table>
+             <tr style="text-align:left">
+        <td> Date : </td>
+        <td>
+            <apex:outputText value="{0,date, d-MMM-yyyy}">
+                <apex:param value="{!NOW()}"></apex:param>
+            </apex:outputText>
+        </td>
+        
+    </tr> 
+            
+           
+    </body>
+    
+</html>
+
+
+</apex:component>

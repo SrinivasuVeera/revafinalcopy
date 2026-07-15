@@ -1,0 +1,50 @@
+<template>
+    <div class={dropClass}>
+        <label class="slds-form-element__label">
+            <template if:true={required}>
+                <abbr class="slds-required" title="required">*</abbr>
+            </template>
+            {label}
+        </label>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+                     aria-expanded={isOpen} aria-haspopup="listbox" role="combobox">
+
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                         role="none" onclick={toggleDropdown}>
+                        <input type="text"
+                               class="slds-input slds-combobox__input"
+                               readonly
+                               value={selLabel}
+                               placeholder={placeholder} />
+                        <span class="slds-icon_container slds-input__icon slds-input__icon_right">
+                            <lightning-icon icon-name="utility:chevronup" size="x-small"></lightning-icon>
+                        </span>
+                    </div>
+
+                    <template if:true={isOpen}>
+                        <div class="slds-dropdown slds-dropdown_fluid dropdown-up" role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <template for:each={optList} for:item="opt">
+                                    <li key={opt.value}
+                                        role="presentation"
+                                        class="slds-listbox__item"
+                                        data-value={opt.value}
+                                        onclick={handleSelect}>
+                                        <span class={opt.cls} role="option">
+                                            <span class="slds-media__body">
+                                                <span class="slds-truncate">{opt.label}</span>
+                                            </span>
+                                        </span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

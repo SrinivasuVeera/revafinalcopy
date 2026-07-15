@@ -1,0 +1,225 @@
+<aura:component controller="HallTicketDownloadController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global">
+    <aura:attribute name="universityList" type="List" />
+    <aura:attribute name="facultyList" type="List" />
+    <aura:attribute name="schoolList" type="List" />
+    <aura:attribute name="programList" type="List" />
+    <aura:attribute name="programBatchList" type="List" />
+    <aura:attribute name="semesterList" type="List" />
+    <aura:attribute name="eligibilityList" type="List" />
+    <aura:attribute name="iaTypeList" type="List" />
+    
+    <aura:attribute name="selectedUniversity" type="String" />
+    <aura:attribute name="selectedFaculty" type="String" />
+    <aura:attribute name="selectedSchool" type="String" />
+    <aura:attribute name="selectedProgram" type="String" />
+    <aura:attribute name="selectedProgramBatch" type="String" />
+    <aura:attribute name="selectedSemester" type="String" />
+    <aura:attribute name="selectedEligibility" type="String" />
+    <aura:attribute name="selectedIAType" type="String" />
+    <aura:attribute name="studentList" type="List" default="[]"/>
+    <aura:attribute name="showModal"   type="Boolean" default="false"/>
+    <aura:attribute name="tableColumns"      type="List" default="[]"/>
+    <aura:attribute name="selectedStudentIds" type="String[]" default="[]"/>
+    <aura:attribute name="searchKey" type="String" default=""/>
+    <aura:attribute name="filteredStudentList" type="List" default="[]"/>
+    <aura:attribute name="isDownloading" type="Boolean" default="false" />
+    <aura:attribute name="useCustomBatch" type="Boolean" default="false" />
+	<aura:attribute name="customBatchSize" type="Integer" default="20" />
+    
+    <aura:attribute name="freeSch" type="Boolean" default="false" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <div class="slds-grid slds-theme_default slds-wrap">
+        <!-- University -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="university" label="University" aura:id="universityId" variant="label-inline" value="{!v.selectedUniversity}" disabled="true">
+                <aura:iteration items="{!v.universityList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="true"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <!-- Faculty -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="faculty" label="Faculty" aura:id="facultyId" variant="label-inline" value="{!v.selectedFaculty}" onchange="{!c.onFacultyChange}" disabled="{!v.freeSch}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.facultyList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <!-- School -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="school" label="School" aura:id="schoolId" variant="label-inline" value="{!v.selectedSchool}" onchange="{!c.onSchoolChange}" disabled="{!v.freeSch}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.schoolList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <!-- Program -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="program" label="Program" aura:id="programId" variant="label-inline" value="{!v.selectedProgram}" onchange="{!c.onProgramChange}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.programList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <!-- Program Batch -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="programBatch" label="Program Batch" aura:id="programBatchId" variant="label-inline" value="{!v.selectedProgramBatch}" onchange="{!c.onProgramBatchChange}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.programBatchList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <!-- Semester -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="semester" label="Semester" aura:id="semesterId" variant="label-inline" value="{!v.selectedSemester}" onchange="{!c.onSemesterChange}">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.semesterList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <!-- Eligibility -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="eligibility" label="Eligibility" aura:id="eligibilityId" variant="label-inline" value="{!v.selectedEligibility}" required="true">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.eligibilityList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <!-- IA Type -->
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_1-of-4 slds-p-around_xxx-small"/>
+        <div class="slds-col slds-size_2-of-4 slds-p-around_xxx-small">
+            <lightning:select name="iaType" label="IA Type" aura:id="iaTypeId" variant="label-inline" value="{!v.selectedIAType}" required="true">
+                <option text="None" value=""/>
+                <aura:iteration items="{!v.iaTypeList}" var="item">
+                    <option text="{!item.label}" value="{!item.value}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+    </div>
+    
+    <!-- Loading Spinner -->
+    <aura:if isTrue="{!v.isLoading}">
+        <div class="slds-align_absolute-center">
+            <lightning:spinner alternativeText="Loading..." size="large"/>
+        </div>
+    </aura:if>
+    
+    <!-- Download Button -->
+    <div style="text-align:center; margin-top: 20px;">
+        <lightning:button label="Next" variant="brand" onclick="{!c.onNext}" disabled="{!v.isLoading}"/>
+        <lightning:button label="Cancel" title="Cancel" onclick="{!c.onCancel}"/>
+    </div>
+    <aura:if isTrue="{!v.showModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading"
+                 aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading" class="slds-text-heading_medium">Eligible Students</h2>
+                    <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeModal}" class="slds-modal__close"/>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" style="max-height:60vh;overflow:auto;">
+                    <div>
+           
+            <lightning:input type="toggle"
+                             label="Download in Batches?"
+                             checked="{!v.useCustomBatch}"
+                             onchange="{!c.toggleBatchMode}"
+                             messageToggleActive="ON"
+                             messageToggleInactive="OFF"
+                             class="slds-m-right_x-small"/>
+            
+            <aura:if isTrue="{!v.useCustomBatch}">
+                <div class="slds-form-element">
+                    <lightning:input type="number"
+                                     label="Students per PDF"
+                                     value="{!v.customBatchSize}"
+                                     min="5"
+                                     max="100"
+                                     step="5"
+                                     placeholder="e.g. 25"
+                                     onchange="{!c.updateBatchSize}"
+                                     aura:id="batchSizeInput"/>
+                    <p class="slds-text-body_small slds-text-color_weak">
+                        Default: 20 | Max: 100
+                    </p>
+                </div>
+            </aura:if>
+        </div>
+                    <div class="slds-form-element slds-m-bottom_small">
+        <lightning:input 
+            type="search" 
+            label="Search by SRN" 
+            placeholder="Enter SRN..." 
+            value="{!v.searchKey}"
+            onchange="{!c.doSearch}"
+            aura:id="searchInput"/>
+    </div>
+                    
+                    <lightning:datatable
+                                         aura:id="studentTable"
+                                         keyField="Id"
+                                         data="{!v.filteredStudentList}"
+                                         columns="{!v.tableColumns}"
+                                         onrowselection="{!c.handleRowSelection}"
+                                         hideCheckboxColumn="false"
+                                         selectedRows="{!v.selectedStudentIds}"
+                                         />
+                </div>
+                
+                <footer class="slds-modal__footer">
+                    <div class="slds-grid slds-grid_align-spread">
+                    <!--    <div>
+                            <lightning:button label="Select All" onclick="{!c.selectAll}" variant="neutral"/>
+                            <lightning:button label="Deselect All" onclick="{!c.deselectAll}" variant="neutral" class="slds-m-left_x-small"/>
+                        </div> -->
+                        <div>
+                            <lightning:button 
+                label="{! 'Download Selected (' + v.selectedStudentIds.length + ')' }"
+                variant="brand"
+                onclick="{!c.onDownloadSelected}"
+                disabled="{!v.isDownloading || v.selectedStudentIds.length == 0}"/>                        
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <!-- Loading spinner (unchanged) -->
+    <aura:if isTrue="{!v.isLoading}">
+        <div class="slds-align_absolute-center">
+            <lightning:spinner alternativeText="Loading..." size="large"/>
+        </div>
+    </aura:if>
+</aura:component>

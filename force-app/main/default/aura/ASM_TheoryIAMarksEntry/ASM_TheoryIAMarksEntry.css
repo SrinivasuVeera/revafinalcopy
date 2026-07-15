@@ -1,0 +1,14 @@
+.THIS .qtyDK {
+    width : 70px;
+}
+.THIS .mainTH {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color:gray;
+    width: 90px;
+}
+.THIS .allTD{
+    text-align: center;
+    border: 1px solid #fff;
+}

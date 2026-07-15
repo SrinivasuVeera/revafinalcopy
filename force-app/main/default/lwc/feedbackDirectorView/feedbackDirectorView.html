@@ -1,0 +1,244 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+    </template>
+    <div class="slds-card__body slds-card__body_inner">        
+        <!-- <div class="container">
+            <div class="picklists">
+                <div class="row">
+                    <div class="picklist slds-align_absolute-center">
+                        <lightning-combobox
+                            name="Program Batch"
+                            label="Program Batch"
+                            placeholder="Select Program Batch"
+                            options={ProgramOption}
+                            onchange={getSemester}
+                            
+                            required
+                        ></lightning-combobox>
+                    </div>
+                </div>  
+            </div>
+        </div><br/> -->
+        <template if:true={EnableSem}>
+           <div class="slds-align_absolute-center" style="width:50%">
+                <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Class Rooms">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="SL.No">SL.No</div>
+                                    </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate slds-text-align_center" title="Semester Name">Semester Name</div>
+                                </th>                   
+                                <th class="" scope="col">
+                                    <div class="slds-truncate slds-text-align_center" title="Action">Action</div>
+                                </th>                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={SemesterOption} for:item="entry">
+                                <tr key={entry.id} class="slds-hint-parent">
+                                    <td>
+                                         <div class="slds-truncate slds-text-align_center" title="SL.No">{entry.index}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate slds-text-align_center" title="Semester Name">{entry.name}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate slds-text-align_center" title="Action">
+                                            <lightning-button variant="brand" data-id={entry.id} label="View Faculty" onclick={getCourses}></lightning-button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                </table>
+            </div>
+        </template>
+        <br/>
+        <template if:true={DisableSem}>
+            <div>
+                <span class="slds-text-heading_medium">No Active Semester Available</span>
+            </div>     
+        </template>  
+        
+           
+        
+        
+        <!-- <lightning-button label="Download Analysis" onclick={handleBulkPdfDownload}></lightning-button> -->
+        <template if:true={EnableCourse}>
+            <div class="slds-align_absolute-center" style="width: 50%;">
+                <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Class Rooms">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="SL.No">SL.No</div>
+                            </th>
+                        <th class="" scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="Course Code">Course Code</div>
+                            </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate slds-text-align_center" title="Course Name">Course Name</div>
+                        </th>
+                            <th class="" scope="col">
+                            <div class="slds-truncate slds-text-align_center" title="Section Name">Section Name</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate slds-text-align_center" title="Faculty">Faculty</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate slds-text-align_center" title="Remark Done">Remark Done</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate slds-text-align_center" title="Action">Action</div>
+                        </th>                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={CourseOption} for:item="entry">
+                            <tr key={entry.id} class="slds-hint-parent">
+                                <td>
+                                        <div class="slds-truncate slds-text-align_center" title="Block">{entry.index}</div>
+                                </td>
+                                <td>
+                                        <div class="slds-truncate slds-text-align_center" title="Block">{entry.coursecode}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Block">{entry.course}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Block">{entry.section}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Block">{entry.faculty}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate slds-text-align_center" title="Block">
+                                        <template if:true={entry.directorRemarkStatus}>                                        
+                                            <span class="slds-text-color_success slds-text-title_bold">✔️</span>
+                                        </template>
+                                        <template if:false={entry.directorRemarkStatus}>
+                                            <span class="slds-text-color_success slds-text-title_bold">❌</span>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td>
+                                        <div class="slds-truncate slds-text-align_center">
+                                        <lightning-button variant="brand" data-id={entry.id} data-co={entry.courseoffering} 
+                                              data-secid={entry.sectionid} data-remarkval={entry.directorRemark} 
+                                              data-facname={entry.faculty} data-secname={entry.section}
+                                              label="View Feedback" onclick={handleViewFeedback}>
+                                        </lightning-button>
+                                        </div>
+                                </td>
+                                
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+             </div>
+             <div class="slds-align_absolute-center slds-p-around_medium">
+                <lightning-button label="Download Analysis" onclick={handleBulkPdfDownload} disabled={isLoading}></lightning-button> 
+                <!-- <template if:true={isLoading}>
+                        <lightning-spinner alternative-text="PDF downloading..." size="medium"></lightning-spinner>
+                </template> -->
+            </div>
+        </template>
+        
+        <template if:true={DisableCourse}>
+            <div class="slds-text-align_center">
+                <span class="slds-text-heading_medium">No Courses Available</span>
+            </div>
+        </template>
+        <template if:true={isShowModal}>
+            <!--
+                I Used SLDS for this code
+                Here is link https://www.lightningdesignsystem.com/components/modals/
+            --> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- modal header start -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                            <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                
+                    <!-- modal body start -->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <!-- <c-rve-view-freeze-i-a-marks course={course}></c-rve-view-freeze-i-a-marks> -->
+                        <template if:true={feedbackDataFaculty.length}>
+                            <lightning-card title="Feedback on faculty">
+                                <div class="slds-p-horizontal_small slds-p-vertical_x-small slds-text-body_medium slds-text-color_weak">
+                                    <p><span class="slds-text-title_bold">Total Number of Students: {studentCount}   ||  Faculty Feedback Submitted Students : {studentFeedbackCount} </span> </p>
+                                    <p><span class="slds-text-title_bold">Faculty Name : {modelFacName}   ||  Section : {modelSectionName}</span></p>
+                                </div>
+                                <div class="slds-m-top_medium">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <!-- <th scope="col">Course Offering ID</th>
+                                                <th scope="col">Template ID</th> -->
+                                                <th scope="col">Serial no.</th>
+                                                <th scope="col">Question</th>
+                                                <th scope="col">Average</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={feedbackDataFaculty} for:item="item" for:index="index">
+                                                <tr key={item.qId}>
+                                                    <!-- <td>{item.courseOfferingId}</td>
+                                                    <td>{item.templateId}</td> -->
+                                                    <!-- <td>{item.qId}</td> -->
+                                                    <td>{index+1}</td>
+                                                    <td>{item.question}</td>
+                                                    <td>{item.averageResponse}</td>
+                                                </tr>
+                                            </template>
+                                            <tr class="slds-text-title_bold">
+                                                <td colspan="2" class="slds-text-align_right">Total Average</td>
+                                                <td>{totalAverageFaculty}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="slds-m-top_medium">
+                                    <lightning-textarea 
+                                        name="remark" 
+                                        label="Enter Your Remark on Faculty" 
+                                        type="text" 
+                                        placeholder="Enter Your Remark"  
+                                        value={remark}                                      
+                                        onchange={handleRemarkChange}
+                                        message-when-value-missing="Remark is required"
+                                        required
+                                        data-id="remarkInput">  
+                                   </lightning-textarea> 
+                                </div>
+                                <!-- <lightning-button name="facultyPdf" label="Download PDF" onclick={handleDownload} class="slds-m-bottom_medium"></lightning-button> -->
+                            </lightning-card>
+                        </template>
+                        <template if:false={feedbackDataFaculty.length}>
+                            <div class="slds-text-align_center slds-p-around_medium slds-text-heading_medium"> Data Not Available !!
+                            </div>    
+                        </template>    
+                    </div>
+
+                    <!-- modal footer start-->
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                        <template if:true={feedbackDataFaculty.length}>
+                            <button class="slds-button slds-button_neutral" onclick={handleSubmitRemark}>Submit Remark</button>
+                        </template>                        
+                    </footer>                
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

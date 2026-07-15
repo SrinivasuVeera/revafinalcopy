@@ -1,0 +1,37 @@
+.horizontal-block-container {
+                display: flex;
+                }
+                .horizontal-block {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ccc;
+                margin-right: 13px;
+                margin-left:13px;
+                }
+                .horizontal-block:last-child {
+                margin-right: 1;
+                }
+                .inline-route{
+                display: flex;
+                justify-content:space-between;
+                width: 80%;
+                }
+
+                table {
+                width:60%;
+                height:50px;
+                border-collapse: collapse;
+                }
+                
+                th, td {
+                text-align:center;
+                border: 1px solid;
+                }
+                tr{
+                border:none;
+                height:20px;
+                }
+@page {
+    size: A4; /* Set the page size to A4 or another desired size */
+    margin: 1cm; /* Set margins as needed */
+}

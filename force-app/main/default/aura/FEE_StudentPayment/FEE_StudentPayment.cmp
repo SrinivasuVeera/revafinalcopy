@@ -1,0 +1,1096 @@
+<aura:component controller="FEE_StudentPayment_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="Studentname" type="string"/>
+    <aura:attribute name="AppNumber" type="string"/>
+    <aura:attribute name="SrnNumber" type="string"/>
+    <aura:attribute name="feetypestudent" type="string"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="lstPendingFee" type="List"/>
+    <aura:attribute name="lstPaidFee" type="List"/>
+    <aura:attribute name="lstStuPaymentFee" type="List"/>
+    <aura:attribute name="lstStuFeePayment" type="List"/>
+    <aura:attribute name="lstStuPaymtRec" type="List"/>
+    <aura:attribute name="MultiSelectList" type="List"/>
+    <aura:attribute name="selectedCount" type="Integer" default ="0"/>
+    <aura:attribute name="totalRecordsCount" type="Integer"/>
+    <aura:attribute name="EnteredAmount" type="Integer"/>
+    <aura:attribute name="NumberofInstallmentsPaid" type="Integer"/>
+    <aura:attribute name="paymentType" type="string"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="ChangeFeePayment" type="boolean" default="false"/>
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="InstallMentNo" type="Date" />
+    <aura:attribute name="PaymentGateway" type="string"/>
+    <aura:attribute name="openModel" type="boolean" default="false"/>
+    <aura:attribute name="openMultiModel" type="boolean" default="false"/>
+    <aura:attribute name="selcRecords" type="List" />
+    <aura:attribute name="totalAmount" type="Integer"/>
+    <aura:attribute name="pendingAmounts" type="Integer"/>
+    <aura:attribute name="PaymentMap" type="Map"/>
+    <aura:attribute name="MultiPaymentMap" type="Map"/>
+    <aura:attribute name="DisablePayNow" type="string" default="false"/>
+    
+    <aura:attribute name="totalStuAmount" type="Integer"/>
+    <aura:attribute name="totalStuPenAmount" type="Integer"/>
+    <aura:attribute name="totalStuPaidAmount" type="Integer"/>
+    <aura:attribute name="ModelSpinner" type="boolean" default="false"/>
+    <aura:attribute name="gqEmiAmount" type="Decimal" default="0"/>
+    
+    <aura:attribute name="SelectedRecId" type="string" />
+    <aura:attribute name="SelectedDueDate" type="date" />
+    <aura:attribute name="SelectedConId" type="string" />
+    
+    <aura:attribute name="SelectedRecLst" type="list" />
+    <aura:attribute name="lstMultipleRecords" type="list" />
+    <aura:attribute name="ErrMessage" type="string" />
+    <aura:attribute name="optionChoosenRadio" type="String" default=""/>
+    <aura:attribute name="paytmUrl" type="string" default=""/>
+    <aura:attribute name="paytmResponse" type="sobject"/>
+    <aura:attribute name="paytmConfirm" type="boolean" default="false"/>
+    <aura:attribute name="isamountReadonly" type="boolean" default="false"/>
+    <aura:attribute name="billDeskUrl" type="String"/>
+    
+    <aura:attribute name="checkCautionFee" type="boolean" default="false"/>
+    <!--<aura:attribute name="checkHostelPenaltyFee" type="boolean" default="false"/>-->
+    <aura:attribute name="SplitOnContact" type="Boolean" default="false"/>
+    <aura:attribute name="StuFeeRecMutiplePayments" type="List"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <!-- <div class="slds-theme_default slds-form-element slds-align-center">          -->
+        <div class="fees-payments-wrapper">
+            <div class="fees-payments-heading">
+                <b>FEES AND PAYMENT</b>
+             </div>
+
+        <div class="payment-container">
+            <div class="title-amount-wrapper">
+            <div class="title-amount">
+               <div class="total-amount">
+                <span class="title-amount-heading">TOTAL AMOUNT</span> <br />
+                <ui:outputCurrency aura:id="curr" value="{!v.totalStuAmount}" format="₹##,##,###,###.00"/>
+            </div>
+            <div class="total-paid-amount">
+                <span class="title-amount-heading">TOTAL PAID AMOUNT</span><br />
+                <ui:outputCurrency aura:id="curr" value="{!v.totalStuPaidAmount}" format="₹##,##,###,###.00"/>
+            </div>
+            <div class="total-pending-amount">
+                <span class="title-amount-heading">TOTAL PENDING AMOUNT </span><br />
+                <ui:outputCurrency aura:id="curr" value="{!v.totalStuPenAmount}" format="₹##,##,###,###.00"/> 
+            </div>
+        </div>
+ 
+        </div>
+        <lightning:tabset selectedTabId="PendingFeeDetails" class="tab-active" variant="scoped">
+            <lightning:tab label="Pending Fee Details" id="PendingFeeDetails">
+                <aura:if isTrue="{!not(empty(v.lstPendingFee))}">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped">
+                        <thead>
+                            <tr style="background-color: white;">
+                                <td>
+                                    <div class="slds-float_left">
+                                        <!--AddedbyRajashekar -->
+                                        <aura:if isTrue="{!v.SplitOnContact == false}">
+                                        <span style="color:rgb(38, 38, 124);font-weight:700;"> Pay Multiples </span>
+                                        <lightning:input  onchange="{!c.MultipleFeeSelect}" type="toggle"  label="" messageToggleActive="" messageToggleInactive="" aura:id="tglListviewbtn" name="input1"/>
+                                        </aura:if>
+                                    </div>
+                                </td>
+                                
+                                <td>
+                                    <div class="slds-float_right">
+                                        <aura:if isTrue="{!v.ChangeFeePayment==true}">
+                                            <lightning:button variant="brand" name="{!index}" label="Make Payment" onclick="{!c.onMultiplePayNow}" class="makepaymentbutton"/> 
+                                        </aura:if>                                        
+                                    </div>
+                                </td>
+                            </tr>                            
+                        </thead>
+                    </table>
+                    
+                    <table class="slds-table slds-table--bordered pending-fee-details">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <aura:if isTrue="{!v.ChangeFeePayment==True}">
+                                    <th style="width:10%" class="slds-text-align_center">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <label class="slds-checkbox">
+                                                    <ui:inputCheckbox aura:id="selectAllId"
+                                                                      change="{!c.selectAllCheckbox}"/>
+                                                    <span class="slds-checkbox_faux"></span>
+                                                    <span class="slds-form-element__label"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </aura:if>
+                                <th class="slds-is-resizable pending-fee-name" scope="col">
+                                    <b>FEE NAME</b>
+                                 </th>
+                                 <th class="slds-is-resizable pending-fee-type" scope="col">
+                                    <b>FEE TYPE</b>
+                                 </th>
+                                <!-- <th class="slds-is-resizable" style="text-align:center;color:blue;" scope="col">
+                                    <b>Description</b>   
+                                </th> -->
+                                <th class="slds-is-resizable pending-fee-due-date" scope="col">
+                                    <b>DUE DATE </b>
+                                 </th>
+                                <th class="slds-is-resizable pending-fee-due-date" scope="col">
+                                        <b>SPLIT PAYMENTS LEFT</b>
+                                    </th>
+                                 <th class="slds-is-resizable pending-fee-total-amount" scope="col">
+                                    AMOUNT
+                                 </th>
+                                <!-- <aura:if isTrue="{!v.ChangeFeePayment==false}">  -->
+                                    <th class="slds-is-resizable pending-fee-amount-paid" scope="col">
+                                        AMOUNT PAID
+                                     </th>
+                                <!-- </aura:if> -->
+                                <!-- <aura:if isTrue="{!v.ChangeFeePayment==false}"> -->
+                                    <th class="slds-is-resizable pending-fee-amount-pending" scope="col">
+                                        AMOUNT PENDING 
+                                     </th>
+                                <!--  </aura:if> -->
+                                <aura:if isTrue="{!v.ChangeFeePayment==false}"> 
+                                    <th class="slds-is-resizable pending-fee-action" scope="col">
+                                        ACTION
+                                     </th>
+                                </aura:if> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.lstPendingFee}" var="FeePending" indexVar="index">
+                                <tr>
+                                    <aura:if isTrue="{!v.ChangeFeePayment==true}">
+                                        <td scope="row" class="slds-text-align_center" style="width:10%">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox">
+                                                        <ui:inputCheckbox name="{!index}" value="{!FeePending.isChecked}"
+                                                                          change="{!c.checkboxSelect}" />
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label text"></span>
+                                                    </label>
+                                                </div>
+                                            </div>                                        
+                                        </td>
+                                    </aura:if>
+                                    <td class="slds-is-resizable pending-fee-name" scope="col">
+                                        {!FeePending.ObjStuFeeDeatils.Name}    
+                                    </td>
+                                    <td class="slds-is-resizable pending-fee-type" scope="col">
+                                        {!FeePending.ObjStuFeeDeatils.Fee_Type__c}    
+                                    </td>
+                                    <!-- <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                        {!FeePending.ObjStuFeeDeatils.Description__c}    
+                                    </td> -->
+                                    <td class="slds-is-resizable" scope="col">
+                                        <aura:if isTrue="{!lessthanorequal(FeePending.ObjStuFeeDeatils.Due_Date__c,v.today)}">
+                                            <div style="color:black;">
+                                                <b>  <ui:outputDate format="DD-MM-YYYY " value="{!FeePending.ObjStuFeeDeatils.Due_Date__c}">                                            
+                                                    </ui:outputDate></b>
+                                            </div>    
+                                            <aura:set attribute="else">
+                                                <ui:outputDate format="DD-MM-YYYY " value="{!FeePending.ObjStuFeeDeatils.Due_Date__c}">                                            
+                                                </ui:outputDate>                                                    
+                                            </aura:set>
+                                        </aura:if>                                                
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col">
+                                            <!-- Calculate remaining installments and display -->
+                                             {!IF(FeePending.ObjStuFeeDeatils.Number_of_Installments__c > 1, FeePending.ObjStuFeeDeatils.Number_of_Installments__c - 1, 0)}
+                                        </td>
+                                    <td class="slds-is-resizable pending-fee-total-amount" scope="col">
+                                        <ui:outputCurrency aura:id="curr" value="{!FeePending.ObjStuFeeDeatils.Amount__c}" format="₹##,##,###,###.00"/>
+                                    </td>
+                                    <!--  <aura:if isTrue="{!v.ChangeFeePayment==false}"> -->
+                                    <td class="slds-is-resizable pending-fee-amount-paid" scope="col">
+                                        <ui:outputCurrency aura:id="curr" value="{!FeePending.ObjStuFeeDeatils.Amount_Paid__c}" format="₹##,##,###,###.00"/>
+                                    </td>
+                                    <!-- </aura:if> -->
+                                    <!--   <aura:if isTrue="{!v.ChangeFeePayment==false}"> -->
+                                    <td class="slds-is-resizable pending-fee-amount-pending" scope="col">
+                                        <ui:outputCurrency aura:id="curr" value="{!FeePending.ObjStuFeeDeatils.Amount_Pending__c}" format="₹##,##,###,###.00"/>
+                                    </td>
+                                    <!--  </aura:if> -->
+                                    <aura:if isTrue="{!v.ChangeFeePayment==false}"> 
+                                        <td style="text-align:center;">
+                                            <lightning:button variant="brand" class="slds-button make-payment-btn"  name="{!index}" label="Make Payment" onclick="{!c.onPayNow}" />
+                                        </td>
+                                    </aura:if>
+                                </tr>                                  
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                     <aura:if isTrue="{!v.checkCautionFee==true}"> 
+                        <div class="depositclass"><span class="noteClass">Note</span>: Caution Deposit should be paid for the Room allocation</div>
+                     </aura:if>
+                    
+                    <!--<aura:if isTrue="{!v.checkHostelPenaltyFee==true}"> 
+                        <lightning:input type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                     </aura:if> -->
+                    
+                    <aura:set attribute="else">
+                        <div style="text-align:center;color:red;">
+                            There Are No Pending Fees To be Paid
+                        </div>
+                    </aura:set>
+                </aura:if>
+                <aura:if isTrue="{!v.openModel}">                  
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">                 
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <lightning:buttonIcon iconName="utility:close"
+                                                      onclick="{!c.closeModel}"
+                                                      alternativeText="close"
+                                                      variant="bare-inverse"
+                                                      class="slds-modal__close"/>                                
+                            </header>
+                            
+                            <div class="slds-modal__content slds-p-around_large payment-gateway-modal" id="modal-content-id-1">
+                                <aura:if isTrue="{!v.ModelSpinner}">
+                                    <div aura:id="molspinnerId" class="slds-spinner_container">
+                                        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                            <span class="slds-assistive-text">Loading</span>
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!not(empty(v.lstStuFeePayment))}">
+                                    <table class="slds-table slds-table--bordered payment-gateway-table">
+                                        <thead>
+                                            <tr class="slds-text-heading--label">
+                                                
+                                                <aura:iteration items="{!v.lstStuFeePayment}" var="stufee" indexVar="index">
+                                                    <aura:if isTrue="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Split_Booking_Fee__c == true}">
+                                                        <th>
+                                                        </th>
+                                                    </aura:if>
+                                                </aura:iteration>  
+                                                
+                                                <th class="slds-is-resizable"
+                                                    scope="col">
+                                                    FEE NAME
+                                                </th>
+                                                <th class="slds-is-resizable payment-gateway-table-fee-type" scope="col">
+                                                    FEE TYPE
+                                                </th>
+                                                <th class="slds-is-resizable payment-gateway-table-fee-description" scope="col">
+                                                    DESCRIPTION
+                                                </th>
+                                                <th class="slds-is-resizable" scope="col">
+                                                    DUE DATE
+                                                </th>
+                                                <th class="slds-is-resizable" scope="col">
+                                                    AMOUNT PENDING 
+                                                </th>
+                                                <!--AddedByRajashekar-->
+                                                <aura:if isTrue="{!AND(v.SplitOnContact == true,v.NumberofInstallmentsPaid == 2)}">
+                                                    <th class="slds-is-resizable" scope="col">
+                                                        AMOUNT TO PAY
+                                                    </th>
+                                                    <!--Endshere -->
+                                                    <aura:set attribute="else">
+                                                        <aura:if isTrue="{!greaterthan(v.InstallMentNo,0)}">
+                                                            <th class="slds-is-resizable" scope="col">
+                                                                AMOUNT TO PAY
+                                                            </th>
+                                                        </aura:if>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           <aura:iteration items="{!v.lstStuFeePayment}" var="stufee" indexVar="index">
+                                                <!-- Added by Rajashekar 24 July 2023 -->
+                                                 <!--
+                           <aura:iteration items="{!stufee.Student_Fee_Payments__r}" var="stufeePaymnts" indexVar="index">
+                                                       <tr>
+                                                           <td class="slds-is-resizable" scope="col">
+                                                               <lightning:input type="checkbox" label="" name="input1" aura:id="PartialCB"  onchange="{!c.partialChecked}"/>
+                                                           </td>
+                                                           <td class="slds-is-resizable" scope="col">
+                                                               {!stufee.Name}
+                                                           </td>
+                                                           <td class="slds-is-resizable" scope="col" >
+                                                               {!stufee.Fee_Type__c}
+                                                           </td>
+                                                           <td class="slds-is-resizable" scope="col">
+                                                               {!stufee.Description__c}
+                                                           </td>
+                                                           <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                                               <aura:if isTrue="{!lessthanorequal(stufee.Due_Date__c,v.today)}">
+                                                                   <div style="color:red;">
+                                                                       <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                       </ui:outputDate>
+                                                                   </div>
+                                                                   <aura:set attribute="else">
+                                                                       <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                       </ui:outputDate>
+                                                                   </aura:set>
+                                                               </aura:if>                                                            
+                                                           </td>
+                                                           <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                               <ui:outputCurrency aura:id="curr" value="{!stufeePaymnts.Student_Payment__r.Amount__c}" format="₹##,##,###,###.00"/>
+                                                           </td>
+                                                           
+                                                           <aura:if isTrue="{!greaterthan(v.InstallMentNo,1)}">
+                                                               <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                   <aura:if isTrue="{!v.NumberofInstallmentsPaid != 1}">
+                                                                       
+                                                                       <aura:if isTrue="{!v.paymentType == 'Hostel Fee'}">
+                                                                           
+                                                                           <lightning:input type="number" name="comments" value="{!stufeePaymnts.Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                       </aura:if>
+                                                                       <aura:if isTrue="{!v.paymentType != 'Hostel Fee'}">
+                                                                           <aura:if isTrue="{!v.paymentType == 'Mess Penalty Fees'}">
+                                                                               <lightning:input type="number" name="comments" value="{!stufeePaymnts.Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                               <aura:set attribute="else">
+                                                                                   <lightning:input type="number" name="comments" value="{!stufeePaymnts.Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}"/>
+                                                                               </aura:set>
+                                                                           </aura:if>
+                                                                       </aura:if>
+                                                                   </aura:if>
+                                                                   <aura:if isTrue="{!v.NumberofInstallmentsPaid == 1}">
+                                                                       <lightning:input type="number" name="comments" value="{!stufeePaymnts.Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true"/>
+                                                                   </aura:if>
+                                                               </td>
+                                                           </aura:if>  
+                                                       </tr>
+                                                   </aura:iteration>            
+                          -->
+                                                <aura:if isTrue="{!AND(stufee.Student_Fee_Payments__r != null, stufee.Student_Fee_Payments__r[0].Student_Payment__r.Split_Booking_Fee__c == true)}">
+                                                   
+                                                    <!--If split is checked -->
+                                                   <aura:if isTrue="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Split_Booking_Fee__c == true}">
+                                                    <tr>
+                                                        <td class="slds-is-resizable" scope="col">
+                                                           <lightning:input type="checkbox" label="" name="input1" aura:id="PartialCB"  onchange="{!c.partialChecked}"/>
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col">
+                                                            {!stufee.Name}
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col" >
+                                                            {!stufee.Fee_Type__c}
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col">
+                                                            {!stufee.Description__c}
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                                            <aura:if isTrue="{!lessthanorequal(stufee.Due_Date__c,v.today)}">
+                                                                <div style="color:red;">
+                                                                    <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                    </ui:outputDate>
+                                                                </div>
+                                                                <aura:set attribute="else">
+                                                                    <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                    </ui:outputDate>
+                                                                </aura:set>
+                                                            </aura:if>                                                            
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                         <!--   <ui:outputCurrency aura:id="curr" value="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Partial_Booking_Fee__c}" format="₹##,##,###,###.00"/> -->
+                                                             <ui:outputCurrency aura:id="curr" value="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Amount__c}" format="₹##,##,###,###.00"/>
+                                                        </td>
+                                                        
+                                                        <!--*********--> 
+                                                        
+                                                        
+                                                        <!--*********-->  
+                                                        <aura:if isTrue="{!greaterthan(v.InstallMentNo,1)}">
+                                                            <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                <aura:if isTrue="{!v.NumberofInstallmentsPaid != 1}">
+                                                                    
+                                                                    <aura:if isTrue="{!v.paymentType == 'Hostel Fee'}">
+                                                                        
+                                                                        <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                    </aura:if>
+                                                                    <aura:if isTrue="{!v.paymentType != 'Hostel Fee'}">
+                                                                        <aura:if isTrue="{!v.paymentType == 'Mess Penalty Fees'}">
+                                                                            <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                            <aura:set attribute="else">
+                                                                                <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}"/>
+                                                                            </aura:set>
+                                                                        </aura:if>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!v.NumberofInstallmentsPaid == 1}">
+                                                                    <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true"/>
+                                                                </aura:if>
+                                                            </td>
+                                                        </aura:if>  
+                                                        
+                                                        
+                                                        <!-- <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                    <lightning:input  type="number" name="comments" read-only="{!v.isamountReadonly}" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"  />
+                
+                                                          <lightning:input id="enteramount" type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"  />
+            
+                                                    </td> -->
+                                                        
+                                                    </tr>
+                                                    </aura:if>   
+                                                   
+                                                    <aura:if isTrue="{!stufee.Student_Fee_Payments__r[1].Student_Payment__r.Split_Booking_Fee__c == true}">
+                                                    <tr>
+                                                        <td class="slds-is-resizable" scope="col">
+                                                           <lightning:input type="checkbox" label="" name="input1" aura:id="PendingCB" onchange="{!c.pendingChecked}"/>
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col">
+                                                            {!stufee.Name}
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col" >
+                                                            {!stufee.Fee_Type__c}
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col">
+                                                            {!stufee.Description__c}
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                                            <aura:if isTrue="{!lessthanorequal(stufee.Due_Date__c,v.today)}">
+                                                                <div style="color:red;">
+                                                                    <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                    </ui:outputDate>
+                                                                </div>
+                                                                <aura:set attribute="else">
+                                                                    <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                    </ui:outputDate>
+                                                                </aura:set>
+                                                            </aura:if>                                                            
+                                                        </td>
+                                                        <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                           <!-- <ui:outputCurrency aura:id="curr" value="{!stufee.Student_Fee_Payments__r[0].Student_Payment__r.Pending_Booking_Fee__c}" format="₹##,##,###,###.00"/> -->
+                                                             <ui:outputCurrency aura:id="curr" value="{!stufee.Student_Fee_Payments__r[1].Student_Payment__r.Amount__c}" format="₹##,##,###,###.00"/>
+                                                        </td>
+                                                        
+                                                        <!--*********--> 
+                                                        
+                                                        
+                                                        <!--*********-->  
+                                                        <aura:if isTrue="{!greaterthan(v.InstallMentNo,1)}">
+                                                            <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                <aura:if isTrue="{!v.NumberofInstallmentsPaid != 1}">
+                                                                    
+                                                                    <aura:if isTrue="{!v.paymentType == 'Hostel Fee'}">
+                                                                        <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[1].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                    </aura:if>
+                                                                    <aura:if isTrue="{!v.paymentType != 'Hostel Fee'}">
+                                                                        <aura:if isTrue="{!v.paymentType == 'Mess Penalty Fees'}">
+                                                                            <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[1].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                            <aura:set attribute="else">
+                                                                                <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[1].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}"/>
+                                                                            </aura:set>
+                                                                        </aura:if>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!v.NumberofInstallmentsPaid == 1}">
+                                                                    <lightning:input type="number" name="comments" value="{!stufee.Student_Fee_Payments__r[1].Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}"/>
+                                                                </aura:if>
+                                                            </td>
+                                                        </aura:if> 
+                                                        
+                                                        
+                                                        <!-- <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                    <lightning:input  type="number" name="comments" read-only="{!v.isamountReadonly}" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"  />
+                
+                                                          <lightning:input id="enteramount" type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"  />
+            
+                                                    </td> -->
+                                                        
+                                                    </tr>
+                                                   </aura:if> 
+                                                    <!-- split checked ends here -->
+                                                    <aura:set attribute="else">
+                                                        <tr>
+                                                            <td class="slds-is-resizable" scope="col">
+                                                                {!stufee.Name} 
+                                                            </td>
+                                                            <td class="slds-is-resizable payment-gateway-table-fee-type" scope="col" >
+                                                                {!stufee.Fee_Type__c}
+                                                            </td>
+                                                        
+                                                            <td class="slds-is-resizable payment-gateway-table-fee-description" scope="col">
+                                                                {!stufee.Description__c}
+                                                            </td>
+                                                            <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                                                <aura:if isTrue="{!lessthanorequal(stufee.Due_Date__c,v.today)}">
+                                                                    <div style="color:red;">
+                                                                        <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                        </ui:outputDate>
+                                                                    </div>
+                                                                    <aura:set attribute="else">
+                                                                        <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                        </ui:outputDate>
+                                                                    </aura:set>
+                                                                </aura:if>                                                            
+                                                            </td>
+                                                            <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                <ui:outputCurrency aura:id="curr" value="{!stufee.Amount_Pending__c}" format="₹##,##,###,###.00"/>
+                                                                
+                                                            </td>
+                                                            
+                                                            <!--*********--> 
+                                                            
+                                                            
+                                                            <!--*********--> 
+                                                            <!--AddedByRajashekar for making 3rd installment editable in case if student splits the first amount-->
+                                                            <aura:if isTrue="{!AND(v.SplitOnContact == true,v.NumberofInstallmentsPaid == 2)}">
+                                                                <td> <lightning:input type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}" /> </td>
+                                                                <!--Endshere -->
+                                                                <aura:set attribute="else">
+                                                                    <aura:if isTrue="{!greaterthan(v.InstallMentNo,0)}">
+                                                                        <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                            <aura:if isTrue="{!v.NumberofInstallmentsPaid == 0}">
+                                                                                <aura:if isTrue="{!v.paymentType == 'Hostel Fee'}">
+                                                                                    <lightning:input type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                                </aura:if>
+                                                                                <aura:if isTrue="{!v.paymentType != 'Hostel Fee'}">
+                                                                                    <aura:if isTrue="{!v.paymentType == 'Mess Penalty Fees'}">
+                                                                                        <lightning:input type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                                        <aura:set attribute="else">
+                                                                                            <lightning:input type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"/>
+                                                                                        </aura:set>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:if>
+                                                                            <aura:if isTrue="{!v.NumberofInstallmentsPaid >= 1}">
+                                                                                <lightning:input type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"/>
+                                                                            </aura:if>
+                                                                            
+                                                                        </td>
+                                                                    </aura:if> 
+                                                                </aura:set>
+                                                            </aura:if>
+                                                            
+                                                            <!-- <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                    <lightning:input  type="number" name="comments" read-only="{!v.isamountReadonly}" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"  />
+                
+                                                          <lightning:input id="enteramount" type="number" name="comments" value="{!v.EnteredAmount}" class="slds-float_center" onchange="{!c.ChangeAmount}"  />
+            
+                                                    </td> -->
+                                                            
+                                                        </tr>
+                                                    </aura:set>
+                                                </aura:if>   
+                                                <!-- ends here -->
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>                                   
+                                    <div class="slds-p-top_medium slds-align_absolute-center">                                           
+                                        <fieldset class="slds-form-element">
+                                            <legend class="slds-align_absolute-center"><b>Choose Payment Gateway</b></legend>
+                                            <div class="slds-form-element__control" id="rates">
+                                                <Lightning:layout verticalAlign="center"> 
+                                                    <aura:iteration items="{!v.PaymentMap}" var="s" indexVar="key"> 
+                                                        <div id="rates">
+                                                            <Lightning:layoutItem padding="around-small">   </Lightning:layoutItem>
+                                                            
+                                                            <aura:if isTrue="{!s.value == 'RazorPay'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-66" value="RazorPay" name="default" checked=""/>
+                                                                        <label class="slds-radio__label" for="radio-66">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"> <img src="{!$Resource.RazorPay}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />   </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!s.value == 'PayTM'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-67" value="PayTM" name="default" />
+                                                                        <label class="slds-radio__label" for="radio-67">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"> <img src="{!$Resource.payTm}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />   </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!s.value == 'GrayQuest'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">                                                                
+                                                                        <input type="radio" id="radio-GQ-single" value="GrayQuest" name="default" />
+                                                                        <label class="slds-radio__label" for="radio-GQ-single">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label">
+                                                                                <img src="{!$Resource.GrayQuestLogo}" alt="GrayQuest" width="150" height="80" />
+                                                                                <aura:if isTrue="{!v.gqEmiAmount > 0}">
+                                                                                    <div style="color: #666; font-size: 11px; margin-top: 5px; text-align: center;">
+                                                                                        Pay as low as <b>Rs. {!v.gqEmiAmount}</b> /month
+                                                                                    </div>
+                                                                                </aura:if>
+                                                                            </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!s.value == 'EazyPay'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-68" value="EazyPay" name="default" />
+                                                                        <label class="slds-radio__label" for="radio-68">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"> <img src="{!$Resource.ezeepay}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />   </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!s.value == 'BillDesk'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-65" value="BillDesk" name="default" checked="" />
+                                                                        <label class="slds-radio__label" for="radio-65">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"><img src="{!$Resource.BillDesk}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />  </span>
+                                                                        </label>
+                                                                    </span>
+                                                                    
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                        </div>
+                                                    </aura:iteration>
+                                                </Lightning:layout>
+                                            </div>
+                                        </fieldset>                                        
+                                    </div>
+                                    <div class="payment-gateway-buttons">
+                                        <lightning:button variant="brand" name="{!index}" label="Pay Now" onclick="{!c.AfterPaynow}" disabled="{!v.DisablePayNow}"/>
+                                        <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closeModel}"/>
+                                    </div>
+                                    </aura:if>    
+                                    <aura:set attribute="else">
+                                        <div style="text-align:center;color:black;">
+                                            There Is No Fee Type Matched
+                                        </div>
+                                    </aura:set>                                            
+                            </div>                                
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </aura:if>
+                <aura:if isTrue="{!v.openMultiModel}">                         
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <lightning:buttonIcon iconName="utility:close"
+                                                      onclick="{!c.closeMultiModel}"
+                                                      alternativeText="close"
+                                                      variant="bare-inverse"
+                                                      class="slds-modal__close"/>                               
+                            </header>                                
+                            <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">                                    
+                                <aura:if isTrue="{!v.ErrMessage == 'Success'}">
+                                    <aura:if isTrue="{!not(empty(v.lstMultipleRecords))}">
+                                        <table class="slds-table slds-table--bordered payment-gateway-table">
+                                            <thead>
+                                                <tr class="slds-text-heading--label">
+                                                    <th class="slds-is-resizable payment-gateway-table-fee-name"
+                                                        scope="col">
+                                                        FEE NAME
+                                                    </th>
+                                                    <th class="slds-is-resizable" scope="col">
+                                                        FEE TYPE
+                                                     </th>
+                                                     <th class="slds-is-resizable payment-gateway-table-fee-description"
+                                                     scope="col">
+                                                        DESCRIPTION
+                                                    </th>
+                                                    <th class="slds-is-resizable" scope="col">
+                                                        DUE DATE
+                                                     </th>
+                                                     <th class="slds-is-resizable" scope="col">
+                                                        AMOUNT PENDING 
+                                                     </th>
+                                                    <th class="slds-is-resizable" scope="col">
+                                                            AMOUNT TO PAY
+                                                        </th>
+                                                    <!--AddedbyRajashekar ifPartialPayment Amount will be displayed -->
+                                                 <!--   <aura:if isTrue="{!v.SplitOnContact == true}">
+                                                        <th class="slds-is-resizable" scope="col">
+                                                            AMOUNT
+                                                        </th>
+                                                    </aura:if> -->
+                                                    <!--ends here-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!v.lstMultipleRecords}" var="stufee" indexVar="index">
+                                                    
+                                                    <!--AddedbyRajashekarAug072024-->
+                                                  <!--  <aura:if isTrue="{!AND(stufee.Contact__r.Split_Booking_Fee__c == true,stufee.Student_Fee_Payments__r != null)}">
+                                                        <aura:iteration items="{!stufee.Student_Fee_Payments__r}" var="stufeepayments" indexVar="index">
+                                                            <tr>
+                                                                <td class="slds-is-resizable payment-gateway-table-fee-name" scope="col">
+                                                                    {!stufee.Name}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!stufee.Fee_Type__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable payment-gateway-table-fee-description"
+                                                                    scope="col">
+                                                                    {!stufee.Description__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                                                    <aura:if isTrue="{!lessthanorequal(stufee.Due_Date__c,v.today)}">
+                                                                        <div style="color:red;background:#DaDaDa;height:3vw;">
+                                                                            <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                            </ui:outputDate>
+                                                                        </div>
+                                                                        <aura:set attribute="else">
+                                                                            <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                            </ui:outputDate>
+                                                                        </aura:set>
+                                                                    </aura:if>                                                            
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                    <ui:outputCurrency aura:id="curr" value="{!stufee.Amount__c}" format="₹##,##,###,###.00"/>
+                                                                </td>
+                                                                <td>
+                                                                    <aura:if isTrue="{!stufeepayments.Student_Payment__r != null}">
+                                                                            <lightning:input type="number" name="comments" value="{!stufeepayments.Student_Payment__r.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" />
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:input type="number" name="comments" value="{!stufee.Amount__c}" class="slds-float_center" onchange="{!c.ChangeAmount}" disabled="true" /> 
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                        <aura:set attribute="else"> -->
+                                                            <!--old code for full payment--> 
+                                                            <tr>
+                                                                <td class="slds-is-resizable payment-gateway-table-fee-name" scope="col">
+                                                                    {!stufee.Name}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col">
+                                                                    {!stufee.Fee_Type__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable payment-gateway-table-fee-description"
+                                                                    scope="col">
+                                                                    {!stufee.Description__c}
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                                                    <aura:if isTrue="{!lessthanorequal(stufee.Due_Date__c,v.today)}">
+                                                                        <div style="color:red;background:#DaDaDa;height:3vw;">
+                                                                            <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                            </ui:outputDate>
+                                                                        </div>
+                                                                        <aura:set attribute="else">
+                                                                            <ui:outputDate format="DD-MM-YYYY " value="{!stufee.Due_Date__c}">                                            
+                                                                            </ui:outputDate>
+                                                                        </aura:set>
+                                                                    </aura:if>                                                            
+                                                                </td>
+                                                                <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                <aura:if isTrue="{!stufee.Fee_Type__c == 'Tuition Fee'}">
+                                                                    <ui:outputCurrency aura:id="curr" value="{!v.pendingAmounts}" format="₹##,##,###,###.00"/>
+                                                                    <aura:set attribute="else">
+                                                                        <!-- For non-Tuition Fee, display the pending amount as it is -->
+                                                                        {!stufee.Amount_Pending__c}
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </td>
+                                                                <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                                                
+                                                                <aura:if isTrue="{!and(stufee.Fee_Type__c == 'Tuition Fee',(stufee.Number_of_Installments__c - 1) > 0)}">
+                                                                    
+                                                                    <lightning:input type="number" name="{!index}" value="{!stufee.Amount_Pending__c}" 
+                                                                                     class="slds-float_center" 
+                                                                                     onchange="{!c.handleAmountChange}" 
+                                                                                     style="margin-bottom: 20px !important;text-align:center !important" 
+                                                                                     />
+                                                                    <aura:set attribute="else">
+                                                                        
+                                                                        {!stufee.Amount_Pending__c}
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </td>
+                                                                
+                                                            </tr>
+                                                      <!--  </aura:set>
+                                                    </aura:if> -->
+                                                    <!---endshere-->
+                                                </aura:iteration>
+                                                <tr>
+                                                    <td class="payment-gateway-table-fee-description"></td>
+                                                        <td></td><td></td>
+                                                        <td class="payment-gateway-table-fee-description"></td>
+                                                        <td>
+                                                            <b>TOTAL</b>
+                                                        </td>
+                                                        <td>
+                                                        <ui:outputCurrency aura:id="curr" value="{!v.totalAmount}" format="₹##,##,###,###.00"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>                                        
+                                        <div class="slds-p-top_medium slds-align_absolute-center">                         
+                                            <fieldset class="slds-form-element">
+                                                <legend class="slds-align_absolute-center">Choose Payment Gateway</legend>
+                                                <div class="slds-form-element__control" id="rates">
+                                                    <Lightning:layout verticalAlign="start">  
+                                                        <aura:iteration items="{!v.MultiPaymentMap}" var="s" indexVar="key">
+                                                            <Lightning:layoutItem padding="around-small">   </Lightning:layoutItem>                                                            
+                                                            <aura:if isTrue="{!s.value == 'RazorPay'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-66" value="RazorPay" name="default" checked=""/>
+                                                                        <label class="slds-radio__label" for="radio-66">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"> <img src="{!$Resource.RazorPay}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />   </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                             <aura:if isTrue="{!s.value == 'PayTM'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-67" value="PayTM" name="default" checked=""/>
+                                                                        <label class="slds-radio__label" for="radio-67">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"> <img src="{!$Resource.payTm}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />   </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!s.value == 'EazyPay'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-68" value="EazyPay" name="default" checked=""/>
+                                                                        <label class="slds-radio__label" for="radio-68">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"> <img src="{!$Resource.ezeepay}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />   </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!s.value == 'BillDesk'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">
+                                                                        <input type="radio" id="radio-65" value="BillDesk" name="default" checked="" />
+                                                                        <label class="slds-radio__label" for="radio-65">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label"><img src="{!$Resource.BillDesk}" alt="Smiley face" width="100" height="80" value="{!v.PaymentGateway}" />  </span>
+                                                                        </label>
+                                                                    </span>                                                            
+                                                                </Lightning:layoutItem>
+                                                            </aura:if> 
+                                                            <aura:if isTrue="{!s.value == 'GrayQuest'}">
+                                                                <Lightning:layoutItem padding="around-small"> 
+                                                                    <span class="slds-radio">                                                                
+                                                                        <input type="radio" id="radio-GQ-multi" value="GrayQuest" name="default" />
+                                                                        <label class="slds-radio__label" for="radio-GQ-multi">
+                                                                            <span class="slds-radio_faux"></span>
+                                                                            <span class="slds-form-element__label">
+                                                                                <img src="{!$Resource.GrayQuestLogo}" alt="GrayQuest" width="150" height="80" />
+                                                                                <aura:if isTrue="{!v.gqEmiAmount > 0}">
+                                                                                    <div style="color: #666; font-size: 11px; margin-top: 5px; text-align: center;">
+                                                                                        Pay as low as <b>Rs. {!v.gqEmiAmount}</b> /month
+                                                                                    </div>
+                                                                                </aura:if>
+                                                                            </span>
+                                                                        </label>
+                                                                    </span>
+                                                                </Lightning:layoutItem>
+                                                            </aura:if>
+                                                        </aura:iteration>
+                                                    </Lightning:layout>
+                                                </div>
+                                            </fieldset>                                        
+                                        </div>
+                                    <div class="payment-gateway-buttons">
+                                        <lightning:button variant="brand" name="{!index}" label="Pay Now" onclick="{!c.MultipleAfterPayNow}" disabled="{!!v.DisablePayNow}"/>
+                                        <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closeMultiModel}"/>
+                                    </div>
+                                        <aura:set attribute="else">
+                                            <div style="text-align:center;color:black;">
+                                                There Is No Fee Type Matched
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                    <aura:set attribute="else">
+                                        <div style="text-align:center;color:red;">
+                                            <b>This fee payment combination is not available. Kindly choose another
+                                            combination or make individual fee payments.</b>
+                                         </div>
+                                    </aura:set>
+                                </aura:if>
+                                
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </aura:if>
+            </lightning:tab>
+            
+            <lightning:tab label="Paid Fee Details" id="PaidFeeDetails">
+                <aura:if isTrue="{!not(empty(v.lstPaidFee))}">
+                    <table class="slds-table slds-table--bordered paid-fee-details">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <th class="slds-is-resizable" scope="col">
+                                    FEE NAME
+                                 </th>
+                                 <th class="slds-is-resizable" scope="col">
+                                    FEE TYPE
+                                 </th>
+                                 <th class="slds-is-resizable paid-fee-details-description" scope="col">
+                                    DESCRIPTION
+                                 </th>
+                               
+                                 <th class="slds-is-resizable" scope="col">
+                                    PAID AMOUNT
+                                 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.lstPaidFee}" var="StuFee" indexVar="index">
+                                <tr>
+                                    <td class="slds-is-resizable" scope="col">
+                                        {!StuFee.Name}    
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col">
+                                        {!StuFee.Fee_Type__c}    
+                                    </td>
+                                    <td class="slds-is-resizable paid-fee-details-description" scope="col">
+                                        {!StuFee.Description__c}    
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col">
+                                        <ui:outputCurrency aura:id="curr" value="{!StuFee.Amount_Paid__c}" format="₹##,##,###,###.00"/>
+                                        
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <aura:set attribute="else">
+                        <div style="text-align:center;color:red;">
+                            No Records to Display
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </lightning:tab>
+            <lightning:tab class="tabColor" label="Payment Details" id="PaymentDetails">
+                <aura:if isTrue="{!not(empty(v.lstStuPaymentFee))}">
+                    <table class="slds-table slds-table--bordered payment-details">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <th class="slds-is-resizable payment-details-receipt-number" scope="col">
+                                    RECEIPT NUMBER
+                                 </th>
+                                 <th class="slds-is-resizable " scope="col">
+                                    RECEIPT DATE
+                                 </th>
+                                 <th class="slds-is-resizable payment-details-mode-of-payment" scope="col">
+                                    MODE OF PAYMENT
+                                 </th>
+                                 <th class="slds-is-resizable payment-details-transaction-id" scope="col">
+                                    TRANSACTION ID
+                                 </th>
+                                <!-- <th class="slds-is-resizable" scope="col" style="text-align:center;color:blue;">                                    
+                                    Transaction Date Time
+                                </th> -->
+                                <th class="slds-is-resizable" scope="col">
+                                    STATUS
+                                 </th>
+                                 <th class="slds-is-resizable" scope="col">
+                                    AMOUNT
+                                 </th>
+                                 <th class="slds-is-resizable" scope="col">
+                                    RECEIPT PDF
+                                 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.lstStuPaymentFee}" var="StuFee" indexVar="index">
+                                <tr>
+                                    <td class="slds-is-resizable payment-details-receipt-number" scope="col">
+                                        <aura:if isTrue="{!StuFee.Offline_Receipt_Number__c != null}">
+                                            {!StuFee.Offline_Receipt_Number__c}   
+                                        </aura:if>
+                                        <aura:if isTrue="{!StuFee.Online_Receipt_Number1__c != null}">
+                                            {!StuFee.Online_Receipt_Number1__c}   
+                                        </aura:if>
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col">
+                                        <ui:outputDate format="DD-MM-YYYY " value="{!StuFee.Payment_Date_Time__c}">                                            
+                                        </ui:outputDate>                                          
+                                    </td>
+                                    <td class="slds-is-resizable payment-details-mode-of-payment" scope="col">
+                                        {!StuFee.Mode_of_Payment__c} - {!StuFee.Payment_Gateway__c} 
+                                    </td>
+                                    <td class="slds-is-resizable payment-details-transaction-id" scope="col">
+                                        {!StuFee.Transaction_ID__c} 
+                                    </td>
+                                    <!-- <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                        {!StuFee.Payment_Date_Time__c} 
+                                    </td>                                     -->
+                                    <td class="slds-is-resizable" scope="col">
+                                        {!StuFee.Payment_Status__c}
+                                     </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:right;">
+                                        <ui:outputCurrency aura:id="curr" value="{!StuFee.Amount__c}" format="₹##,##,###,###.00"/>                                         
+                                    </td>
+                                    <td class="slds-is-resizable" scope="col" style="text-align:center;">
+                                        <aura:if isTrue="{!StuFee.Payment_Status__c == 'Success'}">
+                                            <!--<lightning:buttonIcon size="large" iconName="utility:pdf" variant="bare" name="{!index}" alternativeText="" title="" onclick="{!c.view}"/>-->
+                                            <!-- <lightning:button name="{!index}" iconName="action:preview" label="" onclick="{!c.view}"/>-->
+                                            <button name="pdf" class="slds-button">
+                                                <span data-value="{!index}" onclick="{!c.view}">
+                                                    <lightning:icon iconName="doctype:pdf" size="small"/>
+                                                </span>
+                                            </button>
+                                        </aura:if>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <aura:set attribute="else">
+                        <div style="text-align:center;color:red;">
+                            No Records to Display
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </lightning:tab>
+        </lightning:tabset>
+        <aura:if isTrue="{!v.paytmConfirm}">                         
+  <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" 
+                 aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+    <div class="slds-modal__container">
+      <header class="slds-modal__header">
+        <lightning:buttonIcon iconName="utility:close"
+                    onclick="{!c.closeMultiModel}"
+                    alternativeText="close"
+                    variant="bare-inverse"
+                    class="slds-modal__close"/>                               
+      </header>                                
+      <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+        <h1><b>Please Click on Confirm to Proceed to Payment</b></h1>
+        <form name="paymentForm" aura:id="paymentForm" action="{!v.paytmUrl}" method="POST">
+          <input type="hidden" name="mid" value="{!v.paytmResponse.id}" />
+          <input type="hidden" name="orderId" value="{!v.paytmResponse.status}" />
+          <input type="hidden" name="txnToken" value="{!v.paytmResponse.reference_id}" />
+          <div style="text-align:center;">
+            <lightning:button variant="brand" name="{!index}" label="Confirm" onclick="{!c.paytmRedirect}" />
+            <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closeModel}"/>
+          </div>
+        </form>
+      </div>    
+    </div>
+  </section>
+  <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:if>
+    </div>
+    </div>
+</aura:component>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Marketing Cloud Communications</masterLabel>
+    <description>Live engagement timeline pulled from SFMC Data Cloud DLOs (Email / SMS / WhatsApp + All). Built-in channel + date range pickers, summary tiles, filter chip.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>IndividualApplication</object>
+                <object>hed__Application__c</object>
+                <object>Contact</object>
+                <object>Lead</object>
+                <object>Account</object>
+            </objects>
+            <property name="defaultChannel" type="String"
+                      label="Default Channel"
+                      default="Email"
+                      datasource="All Channels,Email,SMS,WhatsApp"
+                      description="Channel selected when the page loads."/>
+            <property name="defaultDateRange" type="String"
+                      label="Default Date Range"
+                      default="30d"
+                      datasource="7d,30d,90d,all"
+                      description="Date range applied to the initial query."/>
+            <property name="cardTitle" type="String"
+                      label="Card Title"
+                      default="Marketing Cloud Communications"/>
+            <property name="rowLimit" type="Integer"
+                      label="Row Limit"
+                      default="200"
+                      min="1" max="1000"
+                      description="Maximum rows to retrieve per query."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

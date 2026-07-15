@@ -1,0 +1,40 @@
+<template>
+    <template lwc:if={guestUser}>
+        <div class="login-wrapper">
+            <a href={loginUrl}>LOGIN</a>
+        </div>
+    </template>
+
+    <template lwc:else>
+        <div class="navigation-wrapper">
+            <div class="sub-header Notification">
+                <div class="img-container">
+                    <a aria-haspopup="true" aria-expanded={showNotifications} onclick={toggleNotificationHandler}><img
+                            src={notificationImageUrl} alt="Notifications" title="Notifications"></a>
+                    <template lwc:if={showNotifications}>
+                        <div role="menu" class="menu">
+                            <ul role="presentation">
+                                <template lwc:if={tasks} for:each={tasks} for:item="task" for:index="index">
+                                    <li role="presentation" key={task.Id}><a data-id={task.Id}
+                                            onclick={navigateToNotificationDetailHandler} role="menuitem"
+                                            aria-disabled="false" tabindex="0" title={task.Subject}>{task.Subject}</a>
+                                    </li>
+                                </template>
+                                <template lwc:else>
+
+                                    <li class="slds-m-around_medium" role="presentation"> No New Notifications !</li>
+
+                                </template>
+                            </ul>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="sub-header Logout">
+                <div class="img-container">
+                    <a href={logOutPageUrl}><img src={logOutImageUrl} alt="Log Out" title="Log out"></a>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,78 @@
+.table-headers-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-header {
+    text-align: center;
+    padding: 5px;
+}
+td:first-child {
+  text-align: right;
+  pointer-events: none;
+  width: 22.5%;
+  font-size:small;
+}
+.non-editable {
+    pointer-events: none;
+}
+td:last-child {
+   pointer-events: none;
+   padding: 0px 16px 0px 0px;
+   fill: white;
+   
+  }
+  .Header{
+    font-weight: bold;
+  }
+  .alert {
+    background-color: #f44336;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  .Error{
+    border: 1px solid #f00;
+    border-radius: 5px;
+    margin: 10px 0px;
+    padding: 5px 25px; 
+    background-position: 5px center;
+    color: #000000;
+    background-color: #fee;
+    display: flex;
+    align-items: center;
+	
+    
+  }
+  .Error2{
+    color: #D8000C;
+  }
+
+  .error-message {
+    border: 1px solid #f00;
+    border-radius: 5px;
+    background-color: #fee;
+    padding: 10px 50px;
+    margin: 10px 0;
+  
+  }
+  .warning-message {
+    border: 1px solid #ffc717;
+    border-radius: 5px;
+    background-color: #f7b217;
+    padding: 10px 50px;
+    margin: 10px 0;
+  
+  }
+  
+  .error-icon {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #f00;
+    border-radius: 5px;
+    background-color: #fee;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }

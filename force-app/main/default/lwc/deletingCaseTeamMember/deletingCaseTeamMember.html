@@ -1,0 +1,64 @@
+<template>
+    <lightning-card title="Case Team Members">
+        <!-- Display Case Team Members in a Table -->
+        <template if:true={caseTeamMembers}>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <lightning-input type="checkbox" label="Select All" onchange={handleSelectAll}></lightning-input>
+                        </th>
+                        <th scope="col">Member Name</th>
+                        <th scope="col">Student Status</th>
+                        <th scope="col">SRN Number</th>
+                        <th scope="col">Attendance %</th>
+                        <th scope="col">Mentee Profile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={caseTeamMembers} for:item="member">
+                        <tr key={member.memberId}>
+                            <td>
+                                <lightning-input type="checkbox" 
+                                                 data-id={member.memberId} 
+                                                 checked={member.selected} 
+                                                 onchange={handleCheckboxChange}></lightning-input>
+                            </td>
+                            <td>{member.memberName}</td>
+                            <td>{member.studentStatus}</td>
+                            <td>{member.srnNumber}</td>
+                            <td>{member.Attendance}</td>
+                            <template if:true={member.userId}>
+                                <lightning-button
+                                    variant="brand-outline"
+                                    label="View Profile"
+                                    data-url={member.loginUrl}
+                                    
+                                    onclick={handleLoginAsUser}>
+                                </lightning-button>
+                            </template>
+
+                            <template if:false={member.userId}>
+                                <span style="color: gray;">No User</span>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:false={caseTeamMembers}>
+            <p>No case team members found.</p>
+        </template>
+
+        <!-- Buttons -->
+        <div class="slds-m-top_medium">
+           <!-- <lightning-button variant="brand" label="Select All" onclick={handleSelectAll}></lightning-button> -->
+            <lightning-button variant="destructive" label="Delete" onclick={handleDelete} class="slds-m-left_small"></lightning-button>
+        </div>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <p class="slds-text-color_destructive">{error}</p>
+        </template>
+    </lightning-card>
+</template>

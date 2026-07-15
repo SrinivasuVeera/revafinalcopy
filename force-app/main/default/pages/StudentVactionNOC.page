@@ -1,0 +1,115 @@
+<apex:page controller="StudentVacationNOCController" renderAs="pdf">
+    <div style="text-align:center;">
+        <apex:image url="{!$Resource.REVA_LOGO}" width="200" height="100" />
+        <h2>RUKMINI KNOWLEDGE PARK,</h2>
+        <h3>Kattigenahalli Yelahanka, Bangalore 560064</h3>
+    </div>
+    <apex:outputPanel rendered="{!NOT(ISNULL(RevaHostelRequests))}">
+        <table style="width:100%; border-collapse: collapse; border: 0.5px solid black;">
+            <tr style="text-align: center;">
+                <td style="border: 0.5px solid black;">
+                    <h3>REVA Hostel - Vacating Form</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    Student Name: {!ConList[0].Student_Full_Name__c}
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    Block and Room No: {!RevaHostelRequests[0].Block__c} - {!RevaHostelRequests[0].Room_Number__c}
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    SRN and Course: {!ConList[0].SRN_Number__c} - {!ConList[0].Course__c}
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    Mobile Number: {!ConList[0].MobilePhone}
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    <div style="width:45%; display: inline-block">
+                        Date of Joining: 
+                        <apex:outputText value="{0,date,dd/MM/yyyy}">
+                            <apex:param value="{!RevaHostelRequests[0].Reva_Hostel_JoiningDate__c}" />
+                        </apex:outputText>
+                    </div>
+                    <div style="width:30%; display: inline-block">
+                        Date of vacating: 
+                        <apex:outputText value="{0,date,dd/MM/yyyy}">
+                            <apex:param value="{!RevaHostelRequests[0].RevaHostelVacatingDate__c}" />
+                        </apex:outputText>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    <div style="width:40%; display: inline-block">
+                        Fees fixed: {!RevaHostelRequests[0].Student_Fee__r.Amount__c}
+                    </div>
+                    <div style="width:30%; display: inline-block">
+                        Fees Paid: {!RevaHostelRequests[0].Student_Fee__r.Amount_Paid__c}
+                    </div>
+                    <div style="display: inline-block">
+                        Fees Balance: {!RevaHostelRequests[0].Student_Fee__r.Amount_Pending__c}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    <div style="width:50%; display: inline-block">
+                        Laundry and mess card received:
+                    </div>
+                    <div style="display: inline-block">
+                        if not fine:
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black; height: 50px; vertical-align: top;">
+                    Any damages, if yes:
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black; height:70px; vertical-align: top;">
+                    Reason for vacating Hostel:
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black;">
+                    <div style="text-align: right; padding-right: 10px;">
+                        Student Sign
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 0.5px solid black; height: 90px; vertical-align: bottom;">
+                    <div style="width:35%; display: inline-block;">
+                      Warden
+                      <apex:outputText rendered="{!RevaHostelRequests[0].Approved_by_warden__c}" value=" - Approved" />
+                    </div>
+                    <div style="width:40%; display: inline-block;">
+                        Chief Warden
+                     <apex:outputText rendered="{!RevaHostelRequests[0].Approved_by_ChiefWarden__c}" value=" - Approved" />                       
+                    </div>
+                    <div style="width:20%; display: inline-block;">
+                        Admin
+                         <apex:outputText rendered="{!RevaHostelRequests[0].Approved_by_Admin__c}" value=" -  Approved" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4 style="text-align: left;">
+                        Note: Any fee due will be intimated later
+                    </h4>
+                </td>
+            </tr>
+        </table>
+    </apex:outputPanel>
+</apex:page>

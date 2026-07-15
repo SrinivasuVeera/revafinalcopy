@@ -1,0 +1,274 @@
+<template>
+    <div class="outer-container">
+    <div class="form-container">
+ <lightning-card>
+
+    <!-- ✅ Custom Centered Title -->
+    <div class="slds-text-align_center slds-text-heading_medium slds-m-bottom_medium">
+        One Semester Plan / Flexible Stay
+    </div>
+  <div class="slds-p-around_medium">
+
+
+<div class="slds-grid slds-wrap slds-gutters">
+
+    <!-- Smaller Input -->
+    <div class="slds-col slds-size_1-of-2">
+        <lightning-input 
+            label="Application/SRN Number"
+            value={srnInput}
+            onchange={handleSRNChange}>
+        </lightning-input>
+    </div>
+
+    <!-- Button -->
+    <div class="slds-col slds-size_1-of-6 slds-align-bottom">
+        <lightning-button 
+            label="Fetch Details"
+            variant="brand"
+            onclick={handleFetchStudent}
+            disabled={isFetchDisabled}>
+        </lightning-button>
+    </div>
+    </div>
+
+            <!-- SHOW FORM ONLY AFTER FETCH -->
+            <template if:true={showForm}>
+
+                <!-- Student Details -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium">
+
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input 
+                            label="Student Name"
+                            value={studentName}
+                            readonly>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input 
+                            label="Program Batch"
+                            value={programBatch}
+                            readonly>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input 
+                            label="Gender"
+                            value={gender}
+                            readonly>
+                        </lightning-input>
+                    </div>
+
+                </div>
+
+                <!-- Form Fields -->
+               <!-- Premium + Sharing Section -->
+
+
+    <!-- Premium Checkbox -->
+    <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+        <lightning-input 
+            type="checkbox"
+            label="Premium Room"
+            checked={isPremium}
+            onchange={handlePremiumCheckboxChange}>
+        </lightning-input>
+    </div>
+
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium">
+                         <!-- Plan Type -->
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-combobox
+                                label="Plan Type"
+                                value={planType}
+                                options={planOptions}
+                                onchange={handleChangePlanType}
+                                required>
+                            </lightning-combobox>
+                        </div>
+
+                        <!-- Preferred Room Sharing -->
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-combobox
+                                label="Preferred Room Sharing"
+                                value={sharingType}
+                                options={sharingOptions}
+                                onchange={handleChangeShareType}
+                                required>
+                            </lightning-combobox>
+                        </div>
+
+                     <template if:true={isOneSemester}>
+                        <div class="slds-col slds-size_1-of-3">
+                          <lightning-combobox
+                            label="Academic Year "
+                            value={academicYear}
+                            options={academicYearOptions}
+                            onchange={handleChangeAcademicYear}
+                            data-field="academicYear"
+                            required>
+                          </lightning-combobox>
+                        </div>
+                       <div class="slds-col slds-size_1-of-3">
+                             <lightning-combobox
+                                label="Payment Type"
+                                value={selectPaymentType}
+                                 options={paymentTypeOptions} 
+                                 onchange={handlePaymentTypeChange}
+                                data-field="PaymentType"
+                                required>
+                             </lightning-combobox>
+                        </div>
+                     </template>
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input 
+                            type="date"
+                            label="Start Date"
+                            value={startDate}
+                            onchange={handleChangeStartDate}
+                            data-field="startDate"
+                            required>
+                        </lightning-input>
+                    </div>
+
+                    <!-- End Date (only if Flexible) -->
+                     <!-- <template if:true={isFlexible}>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                type="date"
+                                label="End Date"
+                                value={endDate}
+                                onchange={handleChangeEndDate}
+                                data-field="endDate"
+                                required>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                type="number"
+                                label="Enter Amount(Per Day)"
+                                formatter="currency"
+                                value={perDayAmount}
+                                onchange={handleManualAmountChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                          <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                             type="number"
+                            label="Concession "
+                            formatter="currency"
+                            value={concession}
+                            onchange={handleConcessionAmount}
+                            required>
+                            </lightning-input>
+                        </div>
+                    </template> -->
+                    <template if:true={isFlexibleManual}>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                type="date"
+                                label="End Date"
+                                value={endDate}
+                                onchange={handleChangeEndDate}
+                                data-field="endDate"
+                                required>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                type="number"
+                                label="Enter Amount"
+                                formatter="currency"
+                                value={perDayAmount}
+                                onchange={handleManualAmountChange}
+                                required>
+                            </lightning-input>
+                        </div>
+
+                          <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                             type="number"
+                            label="Concession "
+                            formatter="currency"
+                            value={concession}
+                            onchange={handleConcessionAmount}
+                            required>
+                            </lightning-input>
+                        </div>
+                    </template>
+                         <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                             type="text"
+                            label="Comments "
+                            onchange={handleComments}
+                            required>
+                            </lightning-input>
+                        </div>
+                </div>
+                 <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium">
+
+    <!-- Total Fee -->
+    <div class="slds-col slds-size_1-of-3">
+        <div class="custom-box">
+            <strong>Total Fee :</strong><br/>
+            <span class="total-fee">₹ {totalHostelFee}</span>
+        </div>
+    </div>
+
+    <!-- Caution Fee -->
+    <template if:true={isOneSemester}>
+        <div class="slds-col slds-size_1-of-3">
+            <div class="custom-box">
+                <strong>Caution Fee :</strong><br/>
+                <span class="total-fee">₹ {cautionFee}</span>
+            </div>
+        </div>
+    </template>
+
+    <!-- Booking Amount -->
+    <template if:true={showBookingAmount}>
+         <template if:true={isOneSemester}>
+        <div class="slds-col slds-size_1-of-3">
+            <div class="custom-box">
+                <strong>Booking Amount :</strong><br/>
+                <span class="booking-amount">₹ {bookingAmount}</span>
+            </div>
+        </div>
+    </template>
+    </template>
+
+</div>
+
+                <!-- Register Button -->
+                <!-- Buttons -->
+            <div class="slds-m-top_large slds-grid slds-grid_align-center">
+                
+                <lightning-button 
+                    label="Register" 
+                    variant="brand" 
+                    onclick={handleSubmitEvent}
+                    disabled={isSubmitting}>
+                </lightning-button>
+
+                <div class="slds-m-left_medium">
+                    <lightning-button 
+                        label="Clear" 
+                        variant="neutral" 
+                        onclick={handleClearEvent}>
+                    </lightning-button>
+                </div>
+
+            </div>
+
+            </template>
+  </div>
+             </lightning-card>
+    </div>
+        </div>
+   
+</template>

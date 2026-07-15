@@ -1,0 +1,13 @@
+<template>
+            <lightning-layout class="coupon" padding="around-medium">
+                <lightning-layout-item >
+                    <lightning-input type="text" label="Enter if you have a Coupon Code" value={enteredCouponCode} onchange={handleCouponCodeChange}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item class="buttons">
+                    <lightning-button label="V"  class="validate" onclick={validateCoupon} tooltip="Validate Coupon" disabled={disableValidate} ></lightning-button>
+                    <lightning-button label="A" class="apply" onclick={applyCoupon} disabled={disableApply}></lightning-button> 
+                    <div class="slds-m-top_medium">{validationMessage} </div>
+                    {applyMessage} 
+                </lightning-layout-item>
+            </lightning-layout>
+</template>

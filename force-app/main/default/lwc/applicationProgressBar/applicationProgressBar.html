@@ -1,0 +1,39 @@
+<template>   
+    <div class="slds-path custom-standard-container">
+        <div class="slds-grid slds-path__track">            
+            <div class="slds-grid slds-path__scroller-container">
+                <div class="slds-path__scroller">
+                    <div class="slds-path__scroller_inner">
+                        <lightning-progress-indicator 
+                            current-step={currentStatus} 
+                            type="path" 
+                            variant="base">
+                            <template for:each={displaySteps} for:item="step">
+                                <lightning-progress-step 
+                                    key={step.label} 
+                                    label={step.label} 
+                                    value={step.value}
+                                    onclick={handleStepClick}>
+                                </lightning-progress-step>
+                            </template>
+                        </lightning-progress-indicator>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-path__action">
+                <button 
+                    class="slds-button custom-orange-button" 
+                    onclick={handleUpdateStatus} 
+                    disabled={isButtonDisabled}>
+                    <lightning-icon 
+                        icon-name="utility:check" 
+                        size="x-small" 
+                        variant="inverse" 
+                        class="slds-m-right_x-small">
+                    </lightning-icon>
+                    Mark Application Status as Complete
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

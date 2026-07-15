@@ -1,0 +1,8 @@
+.combobox{
+    width:40%
+}
+.custom-combobox-label {
+    --lwc-colorTextLabel: red; 
+    color: --lwc-colorTextLabel,rgb(225, 74, 74);
+   
+}

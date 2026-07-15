@@ -1,0 +1,50 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global" controller="FetchCampusRecData">
+
+    <aura:attribute name="cases" type="Case[]" />
+    <aura:attribute name="userId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div class="mentee-wrapper">
+
+        <div class="mentee-heading">
+            <b>MENTEE</b>
+        </div>
+
+        <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped case-details">
+            <thead>
+                <tr>
+                    <!-- <th scope="col" style="background-color:grey; color:white;">Case Number</th> -->
+                    <th class="case-subject" scope="col">SUBJECT</th>
+                    <th class="contact-name" scope="col">CONTACT NAME</th>
+                    <th class="your-mentor" scope="col">YOUR MENTOR</th>
+                    <th class="your-mentor programme-batch" scope="col">MENTOR MOBILE</th>
+                    <!-- <th class="programme-batch" scope="col">Programme Batch</th> -->
+
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.cases}" var="caseItem">
+                    <tr>
+                        <td class="slds-is-resizable case-subject">
+                            <a onclick="{!c.navigateToCase}" data-value="{!caseItem.Id}">
+                                <!-- {!caseItem.CaseNumber} -->
+                                {!caseItem.Subject}
+                            </a>
+                        </td>
+
+                        <td class="slds-is-resizable contact-name">{!caseItem.Contact.Name}</td>
+                        <td class="slds-is-resizable your-mentor">{!caseItem.Mentor_Name__c}</td>
+                        <td class="slds-is-resizable your-mentor programme-batch">{!caseItem.Mentor_Mobile__c}</td>
+
+                        <!-- <td class="slds-is-resizable programme-batch">{!caseItem.Program_Batch__c}</td> -->
+
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+
+    <lightning:navigation aura:id="navigationService" />
+</aura:component>

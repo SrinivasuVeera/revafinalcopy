@@ -1,0 +1,73 @@
+<template>
+
+    <lightning-card title="Login History Report" icon-name="custom:custom63">
+        <p class="slds-p-horizontal_small slds-text-heading_medium">Select a profile to view login history.</p>
+
+        <div class="slds-grid slds-gutters slds-wrap">
+         <div class="slds-col slds-size_1-of-3">
+          <lightning-combobox 
+                name="profileSelect"
+                label="Select Profile"
+                 placeholder="Choose profile(s)"    
+                options={profileOptions}
+                value={selectedProfiles}
+                onchange={handleProfileChange}>
+            </lightning-combobox>
+        </div>
+
+                   <!-- Start Date -->
+        <div class="slds-col">
+            <lightning-input
+                type="date"
+                label="Start Date"
+                value={startDate}
+                onchange={handleStartDateChange}>
+            </lightning-input>
+        </div>
+        
+        <!-- End Date -->
+        <div class="slds-col">
+            <lightning-input
+                type="date"
+                label="End Date (Today)"
+                value={endDate}
+                onchange={handleEndDateChange}>
+            </lightning-input>
+        </div>
+    </div>
+    <div class="slds-m-top_medium">
+        <lightning-button
+            label="Generate Report"
+            variant="brand"
+            onclick={generateReport}>
+        </lightning-button>
+    </div>
+
+        <template if:true={loginData}>
+           
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Profile Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Login Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={loginData} for:item="user">
+                        <tr key={user.username}>
+                            <td>{user.username}</td>
+                            <td>{user.profileName}</td>
+                            <td>{user.department}</td>
+                            <td>{user.loginCount}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:true={error}>
+            <p class="slds-text-color_error">{error}</p>
+        </template>
+    </lightning-card>
+</template>

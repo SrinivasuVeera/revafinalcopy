@@ -1,0 +1,170 @@
+<apex:page standardController="hed__Application__c" extensions="POLetter_Extension" showHeader="false" readOnly="true">
+    <html>
+    <p>
+        <center>
+            <apex:pageBlock title="Application Details" rendered="{!applicationStatus == 'Interested'}">
+                <table border="1" cellpadding="7" cellspacing="0" style="width:90%;">
+                    <tr style="text-align: center; font-family: Arial; font-size: 14px;">
+                        <td><b>Application Number</b></td>
+                        <td>{!applicationNumber}</td>
+                        <td><b>School</b></td>
+                        <td>{!schoolApplied}</td>
+                    </tr>
+                    <tr style="text-align: center; font-family: Arial; font-size: 14px;">
+                        <td><b>Scholarship Category</b></td>
+                        <td>{!scholarshipCategory}</td>
+                        <td><b>Program</b></td>
+                        <td>{!programApplied}</td>
+                    </tr>
+                </table>
+            </apex:pageBlock>
+            <apex:pageBlock title="Fee Details" rendered="{!applicationStatus == 'Interested'}">
+                <apex:outputText rendered="{!PAFStatus == true}">
+                    <p style="text-align: left; font-size: 16px; margin: 10px;"><b>Provisional Admission Fee Status:  Paid</b></p>
+                </apex:outputText>
+                <apex:outputText rendered="{!PAFStatus == false}">
+                    <p style="text-align: left; font-size: 16px; margin: 10px;"><b>Provisional Admission Fee Status:  Not Paid</b></p>
+                </apex:outputText>
+                <table border="1" cellpadding="7" cellspacing="0" style="width:90%;">
+                    <tr style="text-align: center; font-family: Arial; font-size: 14px;">
+                        <th>
+                            <b>Particulars</b>
+                        </th>
+                        <th>
+                            <b>1st Year</b>
+                        </th>
+                        <th>
+                            <b>2nd Year</b>
+                        </th>
+                        <th>
+                            <b>3rd Year</b>
+                        </th>
+                        <th>
+                            <b>4th Year</b>
+                        </th>
+                        <th>
+                            <b>5th Year</b>
+                        </th>
+                        <th>
+                            <b>Total</b>
+                        </th>
+                    </tr>
+                    <tbody style="font-family: Arial; font-size: 14px;">
+                        <tr>
+                            <td><b>Annual Fee</b></td>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td>{!firstYearAnnualFee}</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td>{!secondYearAnnualFee}</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td>{!thirdYearAnnualFee}</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td>{!fourthYearAnnualFee}</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td>{!fifthYearAnnualFee}</td></apex:outputText>
+                            <td>{!totalAnnualFee}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 200px;"><b>Provisional Admission Fee</b></td>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td>{!firstPayment}</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td>0</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td>0</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td>0</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td>0</td></apex:outputText>
+                            <td>{!firstPayment}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Scholarship</b></td>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td>{!firstYearScholarship}</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td>{!secondYearScholarship}</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td>{!thirdYearScholarship}</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td>{!fourthYearScholarship}</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td>{!fifthYearScholarship}</td></apex:outputText>
+                            <td>{!totalScholarship}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Concession</b></td>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td>{!firstYearConcession}</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td>{!secondYearConcession}</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td>{!thirdYearConcession}</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td>{!fourthYearConcession}</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td>{!fifthYearConcession}</td></apex:outputText>
+                            <td>{!totalConcession}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Balance</b></td>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td>{!firstYearBalance}</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td>{!secondYearBalance}</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td>{!thirdYearBalance}</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td>{!fourthYearBalance}</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td>{!fifthYearBalance}</td></apex:outputText>
+                            <td>{!totalBalance}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </apex:pageBlock>
+            <apex:pageBlock title="Concession Details" rendered="{!concessionStatus == 'Initiated' || concessionStatus == 'Under Approval'
+                                                                     || concessionStatus == 'Approved' || concessionStatus == 'Rejected'}">
+                <table border="1" cellpadding="7" cellspacing="0" style="width:90%;">
+                    <tr style="text-align: center; font-family: Arial; font-size: 14px;">
+                        <th> <b>Particulars</b></th>
+                        <th><b>1st Year</b></th>
+                        <th><b>2nd Year</b></th>
+                        <th><b>3rd Year</b></th>
+                        <th><b>4th Year</b></th>
+                        <th><b>5th Year</b></th>
+                    </tr>
+                    <tbody style="font-family: Arial; font-size: 14px;">
+                        <tr>
+                            <td style="width: 200px;"><b>Concession</b></td>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td>{!concessionFirstYear}</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td>{!concessionsecondYear}</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td>{!concessionthirdYear}</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td>{!concessionfourthYear}</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td>{!concessionfifthYear}</td></apex:outputText>
+                        </tr>
+                        <tr>
+                            <td><b>Concession Status</b></td>
+                            <apex:outputText rendered="{!concessionFirstYear == '0' || concessionFirstYear == null}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionFirstYear != '0'}"><td>{!concessionStatus}</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionsecondYear == '0' || concessionsecondYear == null}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionsecondYear != '0'}"><td>{!concessionStatus}</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionthirdYear == '0' || concessionthirdYear == null }"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionthirdYear != '0'}"><td>{!concessionStatus}</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionfourthYear == '0' || concessionfourthYear == null}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionfourthYear != '0'}"><td>{!concessionStatus}</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionfifthYear == '0' || concessionfifthYear == null}"><td>N/A</td></apex:outputText>
+                            <apex:outputText rendered="{!concessionfifthYear != '0'}"><td>{!concessionStatus}</td></apex:outputText>
+                        </tr>
+                    </tbody>
+                </table>
+            </apex:pageBlock>
+        </center>
+    </p>
+    </html>
+</apex:page>

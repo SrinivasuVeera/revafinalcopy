@@ -1,0 +1,86 @@
+<template>
+    <lightning-card title="Approval History">
+        <!-- Top Right Orange Approve Button -->
+        <div slot="actions" class="slds-align_absolute-center">
+            <template if:true={showApproveButton}>
+                <lightning-button
+                    label="Approve"
+                    variant="brand"
+                    onclick={handleApproveClick}
+                    style="background-color: #f26b2a; border-color: #f26b2a; color: white;">
+                </lightning-button>
+            </template>
+        </div>
+
+        <!-- Custom Approval History Table -->
+        <div class="slds-p-around_medium">
+            <div class="slds-box slds-p-around_none" style="border-radius: 0;">
+            <lightning-datatable
+                key-field="id"
+                data={history}
+                columns={historyColumns}
+                hide-checkbox-column>
+            </lightning-datatable>
+        </div>
+        </div>
+    </lightning-card>
+
+    <!-- Loading Spinner -->
+    <template if:true={isLoading}>
+        <div class="slds-spinner_container">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Course Offering Popup -->
+    <template if:true={showPopup}>
+        <section role="dialog" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2>Review Course Offerings</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-datatable
+                        key-field="id"
+                        data={courses}
+                        columns={courseColumns}
+                        hide-checkbox-column                        
+                        max-row-selection="0"
+                        wrap-text-max-lines="2"
+                        class="slds-table_fixed-layout">
+                    </lightning-datatable>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={handlePopupCancel} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Reject" onclick={handlePopupReject} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Approve" variant="brand" onclick={handlePopupApprove}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Comment Modal -->
+    <template if:true={showCommentModal}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2>{actionType} Confirmation</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-textarea
+                        label="Comments (optional)"
+                        value={comment}
+                        onchange={handleCommentChange}
+                        placeholder="Enter your comments...">
+                    </lightning-textarea>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={handleCommentCancel} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label={actionType} variant="brand" onclick={handleFinalSubmit}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

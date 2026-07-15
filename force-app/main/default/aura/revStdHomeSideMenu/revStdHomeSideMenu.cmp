@@ -1,0 +1,104 @@
+<!--
+  @description       : 
+  @author            : owais.ahanger@cloudodyssey.co
+  @group             : 
+  @last modified on  : 07-01-2024
+  @last modified by  : owais.ahanger@cloudodyssey.co
+-->
+
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="SP_SideMenuController">
+
+    <!-- Attribute to hold the navigation menu items -->
+    <aura:attribute name="navigationMenuItems" type="NavigationMenuItem[]" />
+
+    <!-- Attribute to hold the URL of the static resource -->
+    <aura:attribute name="baseResourceURL" type="String"
+        default="{!$Resource.SR_STUDENTPORTALASSETS + '/StudentPortalAssests/Icons/Navigation-Icons/'}" />
+
+    <!-- Handler to initiate the Apex call when the component is initialized -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+
+    <aura:attribute name="selectedMenuLabel" type="String" default="Fees &amp; Payments" />
+    <aura:attribute name="isMenuButtonActive" type="Boolean" default="false" />
+
+
+    <div class="side-menu-wrapper">
+        <div class="side-menu-btn-icons-container">
+
+            <aura:iteration items="{!v.navigationMenuItems}" var="navItem">
+                <div class="{!'sub-menu-btn-container ' + (navItem.isActive ? 'btn-active' : '')}">
+                    <div class="sub-menu-btns" onclick="{!c.handleButtonClick}" data-value="{!navItem.Label}"
+                        title="{!navItem.Label}">
+
+
+                        <img src="{!navItem.imageUrl}" alt="{!navItem.Label}" />
+
+                    </div>
+                </div>
+            </aura:iteration>
+
+        </div>
+
+        <div class="side-menu-tabs-container">
+
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Fees &amp; Payments'}">
+                <c:FEE_StudentPayment />
+            </aura:if>
+
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Mentor/Mentee'}">
+                <c:revaStdMentorMentee />
+            </aura:if>
+
+            <aura:if isTrue="{!v.selectedMenuLabel =='Academics'}">
+                <c:ACM_StudentAcademics />
+            </aura:if>
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Time Table'}">
+                <c:TT_ViewSchedule_Student />
+            </aura:if>
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Attendance'}">
+                <c:ATT_StudentAttendance />
+            </aura:if>
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Elective Preference'}">
+                <c:STOB_DefineStudentCoursePreferenceV1 />
+            </aura:if>
+            
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Examination'}">
+                <c:examinationPortalTab />
+            </aura:if>
+          <!--  <aura:if isTrue="{!v.selectedMenuLabel == 'Assessment'}">
+                <c:revaStdAssesmentCombine />
+            </aura:if>-->
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Survey'}">
+                <!-- <c:revaStdSurveys /> -->
+                <c:revaFeedbackMain />
+            </aura:if>
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Support Request'}">
+                <c:revaStdSupportReq />
+
+            </aura:if>
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Placement'}">
+                <c:rpl_RevaTrainingAndPlacementContainer />
+            </aura:if>
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Manodhaara'}">
+                <c:revaSWcaseDetails />
+            </aura:if>
+
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Transport'}">
+                <c:revaTransport />
+            </aura:if>
+
+            
+
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Hostel'}">
+                <c:revaHostelRegistrationForStudents />
+            </aura:if>
+            <aura:if isTrue="{!v.selectedMenuLabel == 'Guest House Booking'}">
+                <c:revaGuestHouseBooking />
+            </aura:if>
+
+
+        </div>
+
+    </div>
+</aura:component>

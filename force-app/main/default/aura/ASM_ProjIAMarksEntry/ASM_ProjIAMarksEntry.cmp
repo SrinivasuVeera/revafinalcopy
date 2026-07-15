@@ -1,0 +1,360 @@
+<aura:component controller="ASM_IAMarksEntry" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="profCrsConId" type="String"/>
+    <aura:attribute name="crsConnection" type="hed__Course_Enrollment__c" default="{'sobjectType':'hed__Course_Enrollment__c'}"/>
+    <aura:attribute name="studentList" type="List"/>
+    <aura:attribute name="iaType" type="String" default=""/>
+    <aura:attribute name="isReadOnly" type="Boolean" default="false"/>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+     <aura:attribute name="AcknowledgedByStudent" type="boolean" default="false"/>
+    <aura:attribute name="AcknowledgedByAdmin" type="boolean" default="false"/>
+    <aura:registerEvent name="ASM_RefreshProfView" type="c:ASM_RefreshProfView"/>
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div>
+        <div class="slds-form slds-box" role="list">
+            <div class="slds-form__row">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-is-editing">
+                        <label class="slds-form-element__label" for="single-form-element-id-02">Course Name:</label>
+                        <div class="slds-form-element__control">
+                            <b>{!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Name}</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-is-editing">
+                        <label class="slds-form-element__label" for="single-form-element-id-03">Section:</label>
+                        <div class="slds-form-element__control">
+                            <b>{!v.crsConnection.Section__r.Name}</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-is-editing">
+                        <label class="slds-form-element__label" for="single-form-element-id-03">Review:</label>
+                        <div class="slds-form-element__control">
+                            <b>
+                                <aura:if isTrue="{!v.iaType == 'IA1'}">
+                                    Review 1
+                                    <aura:set attribute="else">
+                                        Review 2
+                                    </aura:set>
+                                </aura:if>
+                            </b>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" role="listitem">
+                </div>
+            </div>
+        </div>
+        <div>{!not(empty(v.studentList))}</div>
+        <aura:if isTrue="{!not(empty(v.studentList))}">
+            <div class="slds-table--header-fixed_container" style="height:450px;">
+                <div class="slds-scrollable_y" style="height:100%;">
+                    <table class="slds-table slds-table--bordered slds-table_col-bordered slds-max-medium-table--stacked slds-table--header-fixed" style="overflow: visible;" width="100%">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:5%;}">
+                                        <div class="slds-truncate slds-cell-fixed">SL.No</div>
+                                    </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;}">
+                                    <div class="slds-truncate slds-cell-fixed">Student Name</div>
+                                </th>
+                              <!--  <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Selection of Topic<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Selection_of_Topic_Max_marks__c}
+                                    </div>
+                                </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Analysis &amp; Synthesis<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Analysis_and_Synthesis_Max_Marks__c}
+                                    </div>
+                                </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Literature Survey<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Literature_Survey_Max_Marks__c}
+                                    </div>
+                                </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Ethical Attitude<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Ethical_Attitude_Max_Marks__c}
+                                    </div>
+                                </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Independent Learning<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Independent_Learning_Max_Marks__c}
+                                    </div>
+                                </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Oral Presentation<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Oral_Presentation_Max_Marks__c}
+                                    </div>
+                                </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Report Writing<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Report_Writing_Max_Marks__c}
+                                    </div>
+                                </th> -->
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                        <div class="slds-truncate slds-cell-fixed">
+                                            Theory Marks<br/> 
+                                            Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Theory_Maximum_Marks__c}
+                                        </div>
+                                    </th>
+                                    <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                        <div class="slds-truncate slds-cell-fixed">
+                                            Assignment Marks<br/> 
+                                            Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Assignment_Max_Marks__c}
+                                        </div>
+                                    </th>
+                                    <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                        <div class="slds-truncate slds-cell-fixed">
+                                            Seminar Marks<br/> 
+                                            Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Seminar_Maximum_Marks__c}
+                                        </div>
+                                    </th>
+                                    <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                        <div class="slds-truncate slds-cell-fixed">
+                                            Quiz Marks<br/> 
+                                            Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Quiz_Maximum_Marks__c}
+                                        </div>
+                                    </th>
+                                    <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                        <div class="slds-truncate slds-cell-fixed">
+                                            Practical Marks<br/> 
+                                            Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Results_Max_Marks__c}
+                                        </div>
+                                    </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">
+                                        Project IA Marks<br/> 
+                                        Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Continuous_Learning_Max_Marks__c}
+                                    </div>
+                                </th>
+                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                    <div class="slds-truncate slds-cell-fixed">Total<br/> Max: {!v.crsConnection.hed__Course_Offering__r.hed__Course__r.Maximum_Internal_Marks__c}</div>
+                                </th>
+                                <aura:if isTrue="{!v.iaType=='IA2'}"> 
+                                 <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                        <div class="slds-truncate slds-cell-fixed">
+                                            Ack<br/> 
+                                            by Student  
+                                        </div>
+                                    </th>
+                                     <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;}">
+                                        <div class="slds-truncate slds-cell-fixed">
+                                            Ack<br/> 
+                                            by System Admin
+                                        </div>
+                                    </th>
+                                    </aura:if>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.studentList}" var="crs" indexVar="crsIndex">
+                                <tr>
+                                    <td data-label="Student" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                            {!crsIndex+1}
+                                    </td>
+                                    <td data-label="Student" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        {!crs.crsConn.hed__Contact__r.Name}<br/>{!crs.crsConn.hed__Contact__r.SRN_Number__c}
+                                    </td>
+                                <!--    <td data-label="Selection of Topic" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                                 value="{!crs.iaMark.Selection_of_Topic_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Selection_of_Topic_Max_marks__c}"/>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Analysis &amp; Synthesis" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                                 value="{!crs.iaMark.Analysis_and_Synthesis_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Analysis_and_Synthesis_Max_Marks__c}"/>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Literature Survey" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        <span>
+                                            <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                             value="{!crs.iaMark.Literature_Survey_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                             max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Literature_Survey_Max_Marks__c}"/>
+                                        </span>
+                                    </td>
+                                    <td data-label="Ethical Attitude" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                                 value="{!crs.iaMark.Ethical_Attitude_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Ethical_Attitude_Max_Marks__c}"/>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Independent Learning" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                                 value="{!crs.iaMark.Independent_Learning_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Independent_Learning_Max_Marks__c}"/>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Oral Presentation" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                        <span>
+                                            <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                             value="{!crs.iaMark.Oral_Presentation_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                             max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Oral_Presentation_Max_Marks__c}"/>
+                                        </span>
+                                    </td>
+                                    <td data-label="Report Writing" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                                 value="{!crs.iaMark.Report_Writing_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Report_Writing_Max_Marks__c}"/>
+                                            </span>
+                                        </div>
+                                    </td>  -->
+                                    <td data-label="Theory" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                            <div class="slds-col">
+                                                <span>
+                                                    <aura:if isTrue="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Theory_Maximum_Marks__c == 0}">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" value="0" variant="label-hidden" disabled="true"/>
+                                                    <aura:set attribute="else">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" step="0.1" required="true"
+                                                                     value="{!crs.iaMark.Theory_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                     max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Theory_Maximum_Marks__c}" disabled="{!v.isReadOnly}"/>
+                                                        </aura:set>
+												</aura:if>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td data-label="Assignment" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                            <div class="slds-col">
+                                                <span>
+                                                    <aura:if isTrue="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Assignment_Max_Marks__c == 0}">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" value="0" variant="label-hidden" disabled="true"/>
+                                                    <aura:set attribute="else">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" step="0.1" required="true"
+                                                                     value="{!crs.iaMark.Assignment_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                     max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Assignment_Max_Marks__c}" disabled="{!v.isReadOnly}"/>
+                                                        </aura:set>
+												</aura:if>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td data-label="Seminar" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                            <div class="slds-col">
+                                                <span>
+                                                    <aura:if isTrue="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Seminar_Maximum_Marks__c == 0}">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" value="0" variant="label-hidden" disabled="true"/>
+                                                    <aura:set attribute="else">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" step="0.1" required="true" 
+                                                                     value="{!crs.iaMark.Seminar_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                     max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Seminar_Maximum_Marks__c}" disabled="{!v.isReadOnly}"/>
+                                                        </aura:set>
+												</aura:if>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td data-label="Quiz" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                            <span>
+                                                <aura:if isTrue="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Quiz_Maximum_Marks__c == 0}">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" value="0" variant="label-hidden" disabled="true"/>
+                                                    <aura:set attribute="else">
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" step="0.1" required="true"
+                                                                 value="{!crs.iaMark.Quiz_Secured_marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Quiz_Maximum_Marks__c}" disabled="{!v.isReadOnly}"/>
+                                                        </aura:set>
+												</aura:if>
+                                            </span>
+                                        </td>
+                                        <td data-label="Practical" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                            <span>
+                                                <aura:if isTrue="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Results_Max_Marks__c == 0}">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" value="0" variant="label-hidden" disabled="true"/>
+                                                    <aura:set attribute="else">
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" step="0.1" required="true"
+                                                                 value="{!crs.iaMark.Results_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Results_Max_Marks__c}" disabled="{!v.isReadOnly}"/>
+                                                        </aura:set>
+												</aura:if>
+                                            </span>
+                                        </td>
+                                    <td data-label="Project" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}" >
+                                        <div class="slds-col">
+                                            <span>
+                                                <aura:if isTrue="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Continuous_Learning_Max_Marks__c == 0}">
+                                                    <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" value="0" variant="label-hidden" disabled="true"/>
+                                                    <aura:set attribute="else">
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="number" min="-1" required="true"
+                                                                 value="{!crs.iaMark.Continuous_Learning_Secured_Marks__c}" variant="label-hidden" onchange="{!c.calcTotal}"
+                                                                 max="{!crs.crsConn.hed__Course_Offering__r.hed__Course__r.Continuous_Learning_Max_Marks__c}" disabled="{!v.isReadOnly}"/>
+                                                        </aura:set>
+												</aura:if>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Total" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                       {!crs.iaMark.Total_Secured_Marks_New__c} 
+                                    </td>
+                                     <aura:if isTrue="{!v.iaType=='IA2'}"> 
+                                     <td data-label="Quiz" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                            <span>
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="checkbox" min="-1" step="0.1"
+                                                                  variant="label-hidden" checked="{!crs.iaMark.AcknowledgedByStudent}" disabled="true"/>
+                                                                 
+                                            </span>
+                                        </td>
+                                        <td data-label="Quiz" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;}">
+                                            <span>
+                                                <lightning:input aura:id="inputReq" class="qtyDK" name="{!crsIndex}" type="checkbox" min="-1" step="0.1"
+                                                                 variant="label-hidden" checked="{!crs.iaMark.AcknowledgedByAdmin}" disabled="true"/>
+                                                                
+                                            </span>
+                                        </td>
+                                         </aura:if>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <center>
+                <aura:if isTrue="{!!v.isReadOnly}">
+                <lightning:button label="Update IA Marks" onclick="{!c.saveIaMarks}" variant="brand"/>
+                </aura:if>
+                <aura:if isTrue="{!v.isReadOnly}">
+                <lightning:button label="Download as PDF" onclick="{!c.downloadAsPDF}" variant="brand"/>
+                </aura:if>
+                <lightning:button label="Back to List" onclick="{!c.backToList}"/>
+            </center>
+            <aura:set attribute="else">
+                No students enrolled for this Course &amp; Section.
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

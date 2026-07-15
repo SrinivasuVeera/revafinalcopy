@@ -1,0 +1,86 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-04-2024
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+  <template if:false={isEmailVerified}>
+    <div class="maincontainer">
+      <div>
+        <h1>{placementRegistrationText}</h1>
+      </div>
+      <p class="slds-p-vertical_x-small">
+        Dear {fullName}, </p><br>
+      <p>
+        An OTP has been sent to your Email Id : <strong>{studentRegform.Rpl_Personal_Mail_ID__c}</strong> and is valid
+        for: &nbsp;
+        <strong> {countDownTime}</strong>
+      </p>
+      <hr>
+      <div class="slds-m-bottom_x-small">
+        <label>
+          <abbr class="slds-required" title="required">*</abbr>Enter OTP</label>
+      </div>
+      <div class="otp-verify-container slds-p-bottom_x-small slds-m_bottom-medium">
+        <div class="slds-form-element__control">
+          <input type="email" id="Email_01" placeholder="--OTP--" required class="slds-input-01"
+            onchange={handleEmailInput} />
+        </div>
+
+        <template if:false={showEmailResendButton}>
+          <lightning-button label="VERIFY" variant="brand" onclick={handleVerifyEmail}
+            class="reva-brand-button slds-m-left_small"></lightning-button>
+        </template>
+        <template if:true={showEmailResendButton}>
+          <lightning-button label="RESEND" variant="brand" onclick={handleResendEmail}
+            class="reva-brand-button slds-m-left_small"></lightning-button>
+        </template>
+      </div>
+    </div>
+  </template>
+  <template if:true={isEmailVerified}>
+    <div class="maincontainer">
+      <div>
+        <h1>{placementRegistrationText}</h1>
+      </div>
+      <p class="slds-p-vertical_x-small">
+        Dear {fullName}, </p><br>
+      <p>
+        An OTP has been sent to your Mobile Number : <strong>{studentRegform.Rpl_Contact_No__c}</strong> and is
+        valid
+        for &nbsp; : &nbsp;
+        <strong>{countDownTime}</strong>
+      </p>
+      <hr>
+      <div class="slds-m-bottom_x-small">
+        <label>
+          <abbr class="slds-required" title="required">*</abbr>Enter OTP</label>
+      </div>
+      <div class="otp-verify-container slds-p-bottom_x-small slds-m_bottom-medium">
+        <div class="slds-form-element__control">
+          <input type="email" placeholder="--OTP--" required class="slds-input-01" onchange={handleSmsInput} />
+        </div>
+
+        <template if:false={showEmailResendButton}>
+          <lightning-button label="VERIFY" variant="brand" onclick={handleVerifySms}
+            class="reva-brand-button slds-m-left_small"></lightning-button>
+        </template>
+        <template if:true={showEmailResendButton}>
+          <lightning-button label="RESEND" variant="brand" onclick={handleResendSms}
+            class="reva-brand-button slds-m-left_small"></lightning-button>
+        </template>
+      </div>
+    </div>
+
+  </template>
+  <template if:true={isSpinner}>
+    <div class="slds-is-relative">
+      <section class="slds-modal slds-fade-in-open">
+        <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+    </div>
+  </template>
+</template>

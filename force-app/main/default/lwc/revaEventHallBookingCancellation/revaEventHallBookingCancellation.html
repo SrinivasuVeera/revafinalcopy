@@ -1,0 +1,82 @@
+<template>
+    <lightning-card >
+        <div class="slds-card__header-title slds-m-bottom_small slds-m-left_small slds-m-right_small slds-box slds-box_x-small backgroundCol">
+      Event Hall Booking form
+    </div>
+        <div class="slds-m-around_medium">
+            <!-- Tabs -->
+            <div class="slds-align_absolute-center slds-m-bottom_medium">
+                <lightning-button-group>
+                    <lightning-button
+                        label="My Bookings"
+                        variant={currentVariant}
+                        onclick={handleShowCurrent}>
+                    </lightning-button>
+
+                    <lightning-button
+                        label="My Booking History"
+                        variant={completedVariant}
+                        onclick={handleShowCompleted}>
+                    </lightning-button>
+                </lightning-button-group>
+
+                <div class="slds-m-left_medium">
+        <lightning-button 
+            label="New Booking"
+            variant="brand"
+            onclick={handleNewClick}>
+        </lightning-button>
+    </div>
+            </div>
+
+            <!-- Table -->
+            <template if:true={filteredRequests}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={filteredRequests}
+                    columns={columns}
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+
+            <template if:true={noData}>
+                <div class="slds-text-align_center slds-text-color_weak slds-m-top_medium">
+                    No records found.
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+
+    <!-- Cancel Confirmation Modal -->
+    <template if:true={showCancelModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Cancel Booking</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p class="slds-m-bottom_small">
+                        Please provide a reason for cancelling this booking:
+                    </p>
+                   <!-- label="Reason for Cancellation" -->
+                    <lightning-textarea
+                        
+                        value={cancelReason}
+                        onchange={handleReasonChange}
+                        placeholder="Enter reason..."
+                        maxlength="255"
+                        class="slds-m-bottom_medium">
+                    </lightning-textarea>
+                </div>
+
+                <footer class="slds-modal__footer button-footer">
+                    <lightning-button variant="neutral" label="Close" onclick={closeCancelModal}></lightning-button>
+                    <lightning-button variant="brand" label="Confirm Cancellation" onclick={confirmCancel}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

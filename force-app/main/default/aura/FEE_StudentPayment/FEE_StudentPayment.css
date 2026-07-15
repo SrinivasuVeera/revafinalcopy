@@ -1,0 +1,521 @@
+.THIS .payment-image {
+   width: 100px;  /* Set desired width */
+   height: 80px;  /* Set desired height */
+   object-fit: contain;  /* Ensures the aspect ratio is maintained */
+}
+
+.THIS .slds-radio {
+   display: flex;  /* Use flexbox to align items */
+   align-items: center;  /* Center items vertically */
+}
+
+.THIS .custom-radio .slds-radio_faux {
+   border-color: #333333; /* Darker border */
+}
+
+.THIS .custom-radio input:checked + .slds-radio_faux {
+   background-color: #333333; /* Darker when selected */
+}
+
+.THIS slds-tabs--default__nav li.slds-active{
+    background: black;
+}
+.THIS tab-active {
+   --sds-c-tabs-scoped-color-text-active: red;
+}
+.THIS .noteClass{
+       color:red;
+   }
+.THIS .depositclass{
+       display:flex;
+       justify-content:center;
+   }
+/*Added Keval*/
+
+.THIS.fees-payments-wrapper {
+   box-shadow: 2px 4px 9px -4px #6e6e6e;
+   border: 1px solid var(--reva-brand-color);
+   padding: 5px;
+   border-radius: 10px;
+}
+
+.THIS .fees-payments-heading {
+   display: flex;
+   background-color: var(--reva-component-heading-background-color);
+   color: black;
+   border: 0px;
+   font-size: 15px;
+   padding: 10px;
+   border-top-right-radius: 5px;
+   border-top-left-radius: 5px;
+}
+
+
+.THIS .title-amount-wrapper {
+   display: flex;
+   justify-content: flex-end;
+}
+
+.THIS .title-amount {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   flex-wrap: wrap;
+   padding: 0;
+   box-sizing: border-box;
+   background-color: white;
+}
+
+.THIS .total-amount {
+   color: #0068B1;
+   padding: 5px 50px 5px 5px;
+   border-right: 1px dotted #0068B1;
+}
+
+.THIS .total-paid-amount {
+   color: #008D35;
+   padding: 5px 50px 5px 5px;
+   border-right: 1px dotted #0068B1;
+
+}
+
+.THIS .total-pending-amount {
+   color: #E84C19;
+   padding: 5px 50px 5px 5px;
+
+}
+
+.THIS .title-amount-heading {
+   font-size: 13px;
+   font-weight: 700;
+   /* min-width: 135px; */
+}
+
+.THIS .title-amount-value {
+   font-size: 14px;
+   font-weight: 700;
+}
+
+.THIS .pay-multiple {
+   color: red;
+}
+
+.THIS slds-tabs--default__nav li.slds-active {
+   background: black;
+}
+
+.THIS .title {
+   display: flex;
+   flex-direction: column;
+}
+
+.THIS .title-name {
+   font-size: large;
+   font-weight: bold;
+}
+
+.THIS .title-info {
+   font-weight: bold;
+   color: #4F73A3;
+}
+
+.THIS .payment {
+   display: flex;
+   padding: 10px;
+   gap: 60px;
+   background-color: white !important;
+}
+
+.THIS .backColor {
+   background-color: var(--reva-brand-color);
+   border: 1px solid white;
+}
+
+
+.THIS .payMultiple {
+   width: 15%;
+   padding: 10px;
+   font-size: 14px;
+   font-weight: 600;
+}
+
+.THIS .orgButton {
+   background-color: var(--reva-brand-color) !important;
+   color: white !important;
+   font-weight: 700 !important;
+}
+
+/* Overrides styling for three tabs in fees and payments
+   1. Pending fee details
+   2. Paid fee details
+   3.Payment details
+   */
+
+/*
+       Overrides styling for tables in each tab
+       
+
+       1.Table pending fee details
+       2.Table paid-fee-details
+       */
+.THIS .pending-fee-details,
+.THIS .payment-gateway-table,
+.THIS .paid-fee-details,
+.THIS .payment-details {
+   table-layout: fixed;
+}
+
+.THIS .pending-fee-details thead th,
+.THIS .payment-gateway-table thead th,
+.THIS .paid-fee-details thead th,
+.THIS .payment-details thead th {
+   text-align: center !important;
+   background-color: var(--reva-table-heading-background-color);
+   color: white;
+   padding: 8px !important;
+   font-size: 13px;
+   white-space: normal;
+   word-wrap: break-word;
+
+}
+
+.THIS .pending-fee-details tbody tr:focus,
+.THIS .payment-gateway-table tbody tr:focus,
+.THIS .paid-fee-details tbody tr:focus,
+.THIS .payment-details tbody tr:focus {
+   background: var(--reva-table-row-background-color) !important;
+
+}
+
+.THIS .pending-fee-details tbody tr:hover,
+.THIS .payment-gateway-table tbody tr:hover,
+.THIS .paid-fee-details tbody tr:hover,
+.THIS .payment-details tbody tr:hover {
+   background: var(--reva-table-row-background-color) !important;
+
+}
+
+.THIS .pending-fee-details tbody td,
+.THIS .payment-gateway-table tbody td,
+.THIS .paid-fee-details tbody td,
+.THIS .payment-details tbody td {
+   text-align: center !important;
+   color: black;
+   background: var(--reva-table-row-background-color) !important;
+   padding: 8px !important;
+   font-size: 13px;
+   white-space: normal;
+   word-wrap: break-word;
+}
+
+.THIS .make-payment-btn {
+   background-color: transparent !important;
+   color: white !important;
+   line-height: 10px !important;
+}
+
+/*Sub Table in pending fee details that is
+  payment gateway
+
+/*
+       2.Table model paid fee details
+       */
+.THIS .payment-gateway-buttons {
+   text-align: center;
+}
+
+.THIS .payment-gateway-buttons button {
+   background-color: var(--reva-brand-color) !important;
+   color: white !important;
+   font-weight: 700;
+   text-align: center;
+}
+
+
+
+
+/*make payment buttono*/
+.THIS .slds-button_brand {
+   --slds-c-button-spacing-inline-start: var(--slds-c-button-brand-spacing-inline-start, var(--sds-c-button-brand-spacing-inline-start, var(--lwc-spacingMedium, 1rem)));
+   --slds-c-button-spacing-inline-end: var(--slds-c-button-brand-spacing-inline-end, var(--sds-c-button-brand-spacing-inline-end, var(--lwc-spacingMedium, 1rem)));
+   text-align: center;
+   justify-content: center;
+   transition: border .15s linear;
+   /* --slds-c-button-color-background: var(--slds-c-button-brand-color-background, var(--sds-c-button-brand-color-background, var(--lwc-brandAccessible,rgb(15, 134, 237)))); */
+   --slds-c-button-color-border: var(--slds-c-button-brand-color-border, var(--sds-c-button-brand-color-border, var(--lwc-brandAccessible, rgb(15, 134, 237))));
+   --slds-c-button-text-color: var(--slds-c-button-brand-text-color, var(--sds-c-button-brand-text-color, var(--slds-g-color-neutral-base-100, var(--lwc-colorTextBrandPrimary, rgb(255, 255, 255)))));
+   background-color: var(--reva-table-row-background-color);
+   border: none;
+   color: #4F73A3;
+   font-weight: 600;
+}
+
+.THIS .slds-button {
+   /* position: relative; */
+   display: inline-flex;
+   align-items: center;
+   padding-top: var(--slds-c-button-spacing-block-start, var(--sds-c-button-spacing-block-start, 0));
+   padding-right: var(--slds-c-button-spacing-inline-end, var(--sds-c-button-spacing-inline-end, 0));
+   padding-bottom: var(--slds-c-button-spacing-block-end, var(--sds-c-button-spacing-block-end, 0));
+   padding-left: var(--slds-c-button-spacing-inline-start, var(--sds-c-button-spacing-inline-start, 0));
+   background-clip: border-box;
+   border-color: var(--slds-c-button-color-border, var(--sds-c-button-color-border, transparent));
+   border-style: solid;
+   border-width: var(--slds-c-button-sizing-border, var(--sds-c-button-sizing-border, var(--lwc-borderWidthThin, 1px)));
+   border-radius: var(--slds-c-button-radius-border, var(--sds-c-button-radius-border, var(--lwc-buttonBorderRadius, .25rem)));
+   box-shadow: var(--slds-c-button-shadow, var(--sds-c-button-shadow));
+   line-height: var(--slds-c-button-line-height, var(--sds-c-button-line-height, var(--lwc-lineHeightButton, 1.875rem)));
+   text-decoration: none;
+   -webkit-appearance: none;
+   white-space: normal;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+   background-color: #F0DBC8 !important;
+   border: none;
+   color: black !important;
+   font-weight: 600;
+   padding: 5px;
+}
+
+.THIS.pdf-button{
+   fill: rgb(142, 3, 15);
+}
+
+.THIS .slds-checkbox_toggle .slds-checkbox_faux .slds-checkbox_toggle .slds-checkbox--faux .slds-checkbox--toggle .slds-checkbox_faux .slds-checkbox--toggle .slds-checkbox--faux {
+   display: block;
+   position: relative;
+   width: var(--lwc-widthToggle, 3rem);
+   height: var(--lwc-heightToggle, 1.5rem);
+   border-width: var(--lwc-borderWidthThin, 1px);
+   border-style: solid;
+   border-color: var(--slds-c-checkbox-toggle-color-border, var(--sds-c-checkbox-toggle-color-border, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle, rgb(174, 174, 174)))));
+   padding: var(--lwc-spacingXxxSmall, 0.125rem);
+   /* background-color: var(--slds-c-checkbox-toggle-color-background, var(--sds-c-checkbox-toggle-color-background, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle,rgb(174, 174, 174))))); */
+   border-radius: var(--slds-c-checkbox-toggle-radius-border, var(--sds-c-checkbox-toggle-radius-border, var(--lwc-borderRadiusPill, 15rem)));
+   box-shadow: var(--slds-c-checkbox-toggle-shadow, var(--sds-c-checkbox-toggle-shadow));
+   transition: background-color .2s cubic-bezier(0.75, 0, 0.08, 1);
+   background-color: var(--reva-brand-color) !important;
+}
+
+.THIS .slds-checkbox_toggle .slds-checkbox_faux {
+   display: block;
+   position: relative;
+   width: var(--lwc-widthToggle, 3rem);
+   height: var(--lwc-heightToggle, 1.5rem);
+   border-width: var(--lwc-borderWidthThin, 1px);
+   border-style: solid;
+   border-color: var(--slds-c-checkbox-toggle-color-border, var(--sds-c-checkbox-toggle-color-border, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle, rgb(174, 174, 174)))));
+   padding: var(--lwc-spacingXxxSmall, 0.125rem);
+   /* background-color: var(--slds-c-checkbox-toggle-color-background, var(--sds-c-checkbox-toggle-color-background, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle,rgb(174, 174, 174))))); */
+   border-radius: var(--slds-c-checkbox-toggle-radius-border, var(--sds-c-checkbox-toggle-radius-border, var(--lwc-borderRadiusPill, 15rem)));
+   box-shadow: var(--slds-c-checkbox-toggle-shadow, var(--sds-c-checkbox-toggle-shadow));
+   transition: background-color .2s cubic-bezier(0.75, 0, 0.08, 1);
+   background-color: var(--reva-brand-color) !important;
+}
+
+
+.THIS .slds-tabs_scoped__item .slds-tabs_scoped__item {
+   background-color: #F0DBC8 !important;
+   margin: 0px 2px 0px 0px !important;
+}
+
+.THIS .slds-tabs_scoped__nav {
+
+   border: none;
+}
+
+.cFEE_StudentPayment .slds-tabs_scoped__nav {
+   border: none !important;
+   background-color: transparent !important;
+}
+
+.THIS.slds-button{
+   background-color: var(--reva-brand-color) !important;
+   color: white;
+}
+
+
+
+.THIS .slds-tabs_scoped__link {
+   max-width: 100%;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   display: block;
+   cursor: pointer;
+   height: var(--lwc-lineHeightTab, 2.5rem);
+   line-height: var(--lwc-lineHeightTab, 2.5rem);
+   padding: 0 0.625rem;
+   font-size: 0.8125rem;
+   border: none !important;
+
+}
+
+
+
+.THIS .slds-is-active .slds-tabs_scoped__link {
+   background-color: var(--reva-brand-color) !important;
+   color: white !important;
+   font-weight: 700 !important;
+   text-decoration: none !important;
+
+}
+
+.THIS .slds-tabs_scoped__content {
+   border: 0 solid white !important;
+   padding-top: 5px !important;
+   padding: 3px 1px 3px 0 !important;
+}
+
+.THIS .slds-tabs_scoped__item+.slds-tabs_scoped__item {
+   background-color: #F0DBC8 !important;
+}
+
+
+
+.THIS .slds-table--bordered {
+   border-collapse: separate !important;
+   border-top: white !important;
+   border-bottom: white !important;
+   border: 1px solid white !important;
+}
+
+.THIS .slds-table_bordered {
+   border-collapse: separate !important;
+   border-top: white !important;
+   border-bottom: white !important;
+   border: 1px solid white !important;
+}
+
+.THIS .slds-table {
+   font-size: inherit !important;
+   background-color: #c7c7c7 !important;
+}
+
+.THIS .slds-table--bordered tbody td .slds-table--bordered tbody th {
+
+   border-top: 4px solid white !important;
+}
+
+.THIS .slds-table--bordered tbody td {
+
+   border-top: 4px solid white !important;
+}
+
+
+
+@media only screen and (max-width:767px) {
+
+    .THIS.input-amount {
+        width: 100% !important;
+        text-align: center !important;
+        margin: 0 auto;
+    }
+
+    /* Align buttons on mobile for consistency */
+    .THIS.slds-is-resizable {
+        text-align: right !important;
+        padding-right: 10px;
+    }
+
+   /*Overrides  fees and payments component styling on mobile*/
+   .THIS.fees-payments-wrapper {
+       box-shadow: none;
+       border: none;
+       padding: 0;
+       border-radius: 0;
+       margin: 0;
+   }
+
+   /* Overrides styling title amount section having total amount,total paid amount and total pending amount*/
+   .THIS .title-amount-wrapper {
+
+       justify-content: flex-start;
+   }
+
+   .THIS .title-amount {
+       flex-direction: column;
+       align-items: start;
+       background-color: transparent;
+       gap: 5px;
+       flex: 1;
+       margin-bottom: 5px;
+   }
+
+   .THIS .total-amount,
+   .THIS .total-paid-amount,
+   .THIS .total-pending-amount {
+       border: none;
+       display: flex;
+       padding: 0;
+       width: 100%;
+       justify-content: space-between;
+   }
+
+
+   /* Overrides styling for three tabs in fees and payments
+   1. Pending fee details
+   2. Paid fee details
+   3.Payment details
+   */
+   .THIS .ltng-tabset .slds-button {
+       color: black;
+       font-weight: 700;
+       background: transparent;
+       padding: 5px;
+   }
+
+   .THIS .slds-dropdown__item > a {
+    background-color: #F0DBC8 !important;  /* Change dropdown background color */
+    color: black !important;           /* Change dropdown text color */
+    border-top: 1px solid #ccc;
+    }
+
+.THIS .slds-tabs_default__item .slds-dropdown-trigger_click .slds-button_icon {
+    color: white !important;  /* Force the text color to black */
+}
+
+   /*
+   Overrides styling for tables in each tab
+   */
+   /*
+       1.Table pending fee details
+       */
+   .THIS .pending-fee-details thead th,
+   .THIS .payment-gateway-table thead th,
+   .THIS .paid-fee-details thead th,
+   .THIS .payment-details thead th {
+       padding: 5px !important;
+       font-size: 11px;
+   }
+
+   .THIS .pending-fee-details tbody td,
+   .THIS .payment-gateway-table tbody td,
+   .THIS .paid-fee-details tbody td,
+   .THIS .payment-details tbody td {
+       padding: 5px !important;
+       font-size: 12px;
+   }
+
+   .THIS .pending-fee-name,
+   .THIS .pending-fee-description,
+   .THIS .pending-fee-total-amount,
+   .THIS .pending-fee-amount-paid,
+   .THIS .payment-gateway-table-fee-description,
+   .THIS .payment-gateway-table-fee-type,
+   .THIS .paid-fee-details-description,
+   .THIS .payment-details-receipt-number,
+   .THIS .payment-details-receipt-date,
+   .THIS .payment-details-mode-of-payment,
+   .THIS .payment-details-transaction-id {
+       display: none;
+   }
+
+   .THIS .payment-gateway-modal {
+       padding: 5px !important
+   }
+                                                                                                                                                                                                                                                                                                                                                                                               
+
+}

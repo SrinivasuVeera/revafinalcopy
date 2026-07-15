@@ -1,0 +1,180 @@
+<template>
+    <template if:true={showAlertMsg}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-label="Meaningful description of the modal content" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Cancel and close</span>
+              </button>
+              <div class="slds-modal__content slds-p-around_medium slds-modal__content_headless" id="modal-content-id-1">
+                <p>{alertMsg}</p>
+              </div>
+              <div class="slds-modal__footer">
+                <a href="/StudentPortal/s/student-fee" class="custom-link"><button class="slds-button slds-button_neutral" aria-label="OK">OK</button></a>
+              </div>
+            </div>
+          </section>
+          <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+    <div class="examAppllicationContainer">
+        <template if:true={showLoader}>
+            <div class="spinnerClass">
+                <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+            </div>
+        </template>
+        <div class="row slds-table slds-scrollable">
+            <!-- Current sem courses -->
+            <div class="table">
+                <table style="width: 100%;" class="slds-table slds-table_cell-buffer slds-table_bordered slds-table-subject slds-no-row-hover" aria-label="Exam Applications">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <td class="row-heading" data-cell="Exam Application" scope="col" colspan="100%">
+                                <p style="position:absolute-center">Exam Application</p>
+                            </td>
+                        </tr></br>
+                        <tr class="slds-line-height_reset">
+                            <th class="heading" style="background-color:#d7d4d4" scope="col">
+                                <div class="slds-truncate" title="Sl. No">Sl. No</div>
+                            </th>
+                            <th class="heading" style="background-color:#d7d4d4" scope="col">
+                                <div class="slds-truncate" title="Sub Code">Sub Code</div>
+                            </th>
+                            <th class="heading" style="background-color:#d7d4d4" scope="col">
+                                <div class="slds-truncate" title="Sub Name">Sub Name</div>
+                            </th>
+                            <th class="heading" style="background-color:#d7d4d4" scope="col">
+                                <div class="slds-truncate" title="Select">Select</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={courses} for:item="course">
+                            <tr key={course.Id}>
+                                <td align="center" data-cell="Sl. No">
+                                    <div class="slds-truncate">{course.SN}</div>
+                                </td>
+                                <td align="center" data-cell="Sub Code">
+                                    <div class="slds-truncate">{course.hed__Course_Offering__r.hed__Course__r.hed__Course_ID__c}</div>
+                                </td>
+                                <td align="center" data-cell="Sub Name">
+                                    <div class="slds-truncate">{course.hed__Course_Offering__r.hed__Course__r.Name}</div>
+                                </td>
+                                <td align="center" data-cell="Select">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="checkbox" variant="label-hidden" label="Selected" checked={course.selected} disabled={course.readonly}></lightning-input>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                            
+                </table>  
+            </div>
+    
+            <!-- Backlogs -->
+            <div class="table">
+                <table style="width: 100%;" class="slds-table slds-table_cell-buffer slds-table_bordered slds-table-subject slds-no-row-hover" aria-label="Exam Applications">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <td class="backlog" scope="col" colspan="100%">
+                                <p style="position:absolute-center">Backlogs</p>
+                            </td>
+                        </tr> 
+                        <tr class="slds-line-height_reset">
+                            <th class="heading" scope="col" >
+                                <div class="slds-truncate"  title="Sl. No">Sl. No</div>
+                            </th>
+                            <th class="heading" scope="col" >
+                                <div class="slds-truncate"  title="Sub Code">Sub Code</div>
+                            </th>
+                            <th class="heading" scope="col" >
+                                <div class="slds-truncate"  title="Sub Name">Sub Name</div>
+                            </th>
+                            <th class="heading" scope="col" >
+                                <div class="slds-truncate"  title="Select">Select</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={backlogs} for:item="course">
+                            <tr key={course.Id}>
+                                <td align="center">
+                                    <div class="slds-truncate">{course.SN}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{course.hed__Course_Offering__r.hed__Course__r.hed__Course_ID__c}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{course.hed__Course_Offering__r.hed__Course__r.Name}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="checkbox" variant="label-hidden" label="Selected" checked={course.selected} disabled={course.readonly} data-id={course.Id} onchange={handleSelect}></lightning-input>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>  
+            </div>
+    
+            <!-- Fee Details -->
+            <div class="table">
+                <table style="width:100%;background-color:#787474" class="slds-table slds-table_cell-buffer slds-table_bordered slds-table-subject slds-no-row-hover" aria-label="Fee Details">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <td class="row-heading" scope="col" colspan="100%">
+                                <p style="position:absolute-center">Fee Detail</p>
+                            </td>
+                        </tr> 
+                        <tr class="slds-line-height_reset">
+                            <th class="heading" scope="col">
+                                <div class="slds-truncate"  title="Sl. No">Sl. No</div>
+                            </th>
+                            <th class="heading" scope="col" >
+                                <div class="slds-truncate"  title="Fee Head">Fee Head</div>
+                            </th>
+                            <th class="heading" scope="col" >
+                                <div class="slds-truncate" title="Amount">Amount</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={feeDetails} for:item="fee">
+                            <tr key={fee.SN}>
+                                <td align="center">
+                                    <div class="slds-truncate">{fee.SN}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{fee.FeeHead}</div>
+                                </td>
+                                <td align="center">
+                                    <div class="slds-truncate">{fee.Amount}</div>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr>
+                            <td class="heading" colspan="2" align="center">
+                                <div class="slds-truncate"><b>Total</b></div>
+                            </td>
+                            <td class="heading" align="center">
+                                <div class="slds-truncate">{totalAmount}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    
+            <div class="table">
+                <div class="slds-clearfix">
+                <div class="buttons slds-float_right">
+                    <lightning-button variant="destructive-text" label="Cancel" title="Cancel" onclick={handleCancel} style="padding-right: 10px;"></lightning-button>
+                    <lightning-button variant="brand" label="Apply" title="Apply Application Form" onclick={handleApply}></lightning-button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,74 @@
+.my-profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--reva-brand-color);
+    border-radius: 0.625rem;
+    padding: 0.3125rem;
+}
+
+.my-profile-header {
+    display: flex;
+    justify-content: space-between;
+    background: var(--reva-table-heading-background-color);
+    border-top-left-radius: 0.625rem;
+    border-top-right-radius: 0.625rem;
+    padding: 0.9375rem 0.625rem;
+    margin-bottom: 0.1875rem;
+    color: white;
+}
+
+.my-profile-header>span {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.my-profile-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 15px;
+}
+
+.my-profile-section {
+    padding: 0.625rem;
+    background: var(--reva-table-heading-background-color);
+    color: white;
+    margin-bottom: 0.1875rem;
+    font-weight: 700;
+
+}
+
+.my-profile-content {
+    display: flex;
+    width: 100%;
+    padding: 0.625rem;
+    margin-bottom: 0.1875rem;
+    background: var(--reva-table-row-background-color);
+}
+
+.label {
+    font-weight: bold;
+    margin-right: 0.75rem;
+    min-width: 10rem;
+}
+
+.value {
+    flex-grow: 1;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+@media only screen and (max-width:47.9375rem) {
+    .my-profile-content {
+        flex-direction: column;
+    }
+
+    .my-profile-header>span {
+        font-size: 14px;
+    }
+
+    .my-profile-body {
+        font-size: 13px;
+    }
+}

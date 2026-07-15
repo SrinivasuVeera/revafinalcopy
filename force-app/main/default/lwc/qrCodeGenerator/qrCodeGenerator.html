@@ -1,0 +1,410 @@
+<template>
+    <!-- <div class="slds-m-around_xxx-small">               
+        <lightning-card title="QR Code Scanner101">
+            <div class="slds-p-around_small">
+            <lightning-button label="Scan QR Code" onclick={scanQRCode} class="slds-m-around_medium"></lightning-button>                       
+            </div>
+        </lightning-card>
+    
+        <template if:true={resultMessage}>
+            <p class="slds-text-color_success slds-text-heading_small slds-m-around_medium">{resultMessage}</p>
+            
+            <p class="slds-text-color_success slds-text-heading_small slds-m-around_medium">{scanResult}</p>
+        </template>
+            
+        <template if:true={errorMessage}>
+            <p class="slds-text-color_error slds-text-heading_small slds-m-around_medium">{errorMessage}</p>
+        </template>
+        
+        <lightning-card>
+                <template if:true={isSuccess}>
+                    
+                    <div class="header-section">
+                        <div class="photo-wrapper">
+                            <img src={studentData.photoUrl} alt="Student Photo" class="student-photo" />
+                        </div>
+                        <h2 class="student-name">{studentData.name}</h2>
+                        <p class="student-srn">SRN: {studentData.srn}</p>
+                    </div>
+        
+                   
+                    <div class="info-container slds-p-around_medium">
+                        <lightning-layout multiple-rows vertical-align="start">
+        
+                            <lightning-layout-item size="12" medium-device-size="6" class="info-item">
+                                <p class="label">School</p>
+                                <p class="value">{studentData.schoolPortal}</p>
+                            </lightning-layout-item>
+        
+                            <lightning-layout-item size="12" medium-device-size="6" class="info-item">
+                                <p class="label">Program</p>
+                                <p class="value">{studentData.programName}</p>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" medium-device-size="6" class="info-item">
+                                <p class="label">Semester</p>
+                                <p class="value">{studentData.semester}</p>
+                            </lightning-layout-item>
+        
+                        </lightning-layout>
+                    </div>
+                    <template if:true={isSuccess}>
+                  
+                        <div class="responsive-table slds-m-top_medium">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        
+                                        <th scope="col">Course Name</th>
+                                        <th scope="col">Course Code</th>
+                                        <th scope="col">Sem</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Start Time</th>
+                                        <th scope="col">End Time</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={processedLineItems} for:item="item">
+                                        <tr key={item.key}>
+                                            
+                                            <td data-label="Course Name">{item.courseName}</td>
+                                            <td data-label="Course Code">{item.courseCode}</td>
+                                            <td data-label="Sem">{item.sem}</td>
+                                            <td data-label="Date">{item.date}</td>
+                                            <td data-label="Start Time">{item.startTime}</td>
+                                            <td data-label="End Time">{item.endTime}</td>
+                                           
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <div class="slds-m-top_medium slds-grid slds-grid_align-center" style="flex-wrap: nowrap;">
+                                <lightning-button
+                                    label="Invalid Student"
+                                    class="slds-m-right_small"
+                                    variant="destructive">
+                                </lightning-button>
+                                
+                                <lightning-button
+                                    label="Valid Student"
+                                    variant="success"                                            
+                                    onclick={handleValidStudent}>
+                                </lightning-button>
+        
+                                
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={error}>
+                        <div class="slds-text-color_error slds-p-around_medium">
+                            Error loading student data: {error}
+                        </div>
+                    </template>
+
+                    <template if:true={isLoadingqr}>
+                        <div class="slds-is-relative slds-p-around_medium">
+                            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                        </div>
+                    </template>
+                </template>
+        
+                <template if:true={error}>
+                    <div class="slds-text-color_error slds-p-around_medium">
+                        Error loading student data: {error.body.message}
+                    </div>
+                </template>
+
+                
+                <template if:true={isFailure}>
+                    <div class="slds-box slds-theme_error slds-m-top_medium">
+                        <p><b>{studentData.message}</b></p>
+                    </div>
+                </template>      
+        </lightning-card>      
+    </div> -->
+
+    <!-- Screen 1 -->
+    <template if:true={showScreen1}>
+        <div class="slds-p-around_small">
+            <h2 class="slds-text-heading_small slds-m-bottom_small">
+                Attendance Co-ordinator Assignments
+            </h2>
+
+            <template for:each={assignments} for:item="item">
+                <div key={item.recordId} class="slds-card slds-p-around_x-small slds-m-bottom_x-small">
+
+                    <div><strong>Professor:</strong> {item.professorName}</div>
+                    <div><strong>Room:</strong> {item.assignmentName}</div>
+                    <div><strong>Date:</strong> {item.formattedDate}</div>
+                    <div><strong>Start:</strong> {item.formattedStart}</div>
+                    <div><strong>End:</strong> {item.formattedEnd}</div>
+                    <div><strong>Block:</strong> {item.blockName}</div>
+
+                    <button
+                        class="slds-button slds-button_brand slds-size_full slds-m-top_x-small"
+                        data-id={item.recordId}
+                        onclick={openDetails}>
+                        View Details
+                    </button>
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <!-- Screen 2 -->
+    <template if:true={showScreen2}>
+        <div class="slds-p-around_small">
+            <h2 class="slds-text-heading_small slds-m-bottom_small">
+                Room Details
+            </h2>
+
+            <!-- Capacity Card -->
+            <lightning-card>
+                <div class="slds-p-around_x-small">
+                    <div><strong>Room :  {selected.assignmentName}</strong></div>
+                    <div><strong>Capacity : {selected.capacity}</strong></div>
+                    <div><strong>Total Students : {selected.totalStudents}</strong></div>
+                    <!-- <div><strong>Remaining:</strong> {selected.remainingCapacity}</div> -->
+                    <div><strong>Final Attendance Submitted Status : {selected.qrAttendanceUpdate}</strong></div>
+                </div>
+            </lightning-card>
+
+            <!-- Buttons Row -->
+            <div class="slds-p-around_small">                
+                    <!-- <button
+                        class="slds-button slds-button_brand slds-size_full"
+                        disabled={isLoadingqr} onclick={markAttendance}>
+                        Scan Now
+                    </button>onclick={scanQRCode} -->
+                    <button
+                        class="slds-button slds-button_brand slds-size_full"
+                         onclick={scanQRCode}>
+                        Scan Now
+                    </button>
+            </div>
+
+            <lightning-card>
+                <template if:true={isSuccess}>
+                    <!-- <template if:true={showStudentDetails}> -->
+                        <!-- Header section with gradient and photo -->
+                        <div class="header-section">
+                            <div class="photo-wrapper">
+                                <img src={studentData.photoUrl} alt="Student Photo" class="student-photo" />
+                            </div>
+                            <h2 class="student-name">{studentData.name}</h2>
+                            <p class="student-srn">SRN: {studentData.srn}</p>
+                        </div>
+            
+                        <!-- Info section -->
+                        <div class="info-container slds-p-around_medium">
+                            <lightning-layout multiple-rows vertical-align="start">
+            
+                                <lightning-layout-item size="12" medium-device-size="6" class="info-item">
+                                    <p class="label">School</p>
+                                    <p class="value">{studentData.schoolPortal}</p>
+                                </lightning-layout-item>
+            
+                                <lightning-layout-item size="12" medium-device-size="6" class="info-item">
+                                    <p class="label">Program</p>
+                                    <p class="value">{studentData.programName}</p>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" medium-device-size="6" class="info-item">
+                                    <p class="label">Semester</p>
+                                    <p class="value">{studentData.semester}</p>
+                                </lightning-layout-item>
+            
+                            </lightning-layout>
+                        </div>
+                        <template if:true={isSuccess}>
+                        <!-- Table Section -->
+                            <div class="responsive-table slds-m-top_medium">
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <!-- <th scope="col">Sl.No.</th> -->
+                                            <th scope="col">Course Name</th>
+                                            <th scope="col">Course Code</th>
+                                            <th scope="col">Sem</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Start Time</th>
+                                            <th scope="col">End Time</th>
+                                            <!-- <th scope="col">Invigilator Sign</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={processedLineItems} for:item="item">
+                                            <tr key={item.key}>
+                                                <!-- <td data-label="Sl.No.">{item.slNo}</td> -->
+                                                <td data-label="Course Name">{item.courseName}</td>
+                                                <td data-label="Course Code">{item.courseCode}</td>
+                                                <td data-label="Sem">{item.sem}</td>
+                                                <td data-label="Date">{item.date}</td>
+                                                <td data-label="Start Time">{item.startTime}</td>
+                                                <td data-label="End Time">{item.endTime}</td>
+                                                <!-- <td data-label="Invigilator Sign"></td> -->
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                                <div class="slds-m-top_medium slds-grid slds-grid_align-center" style="flex-wrap: nowrap;">
+                                    <lightning-button
+                                        label="Invalid Student"
+                                        class="slds-m-right_small"
+                                        variant="destructive"
+                                        onclick={handleInValidStudent}>
+                                    </lightning-button>
+                                    
+                                    <lightning-button
+                                        label="Valid Student"
+                                        variant="success"                                            
+                                        onclick={markAttendance}>
+                                    </lightning-button>
+                                    <!-- onclick={handleValidStudent}> -->
+                                    
+                                </div>
+                            </div>
+                        </template>                        
+                    <!-- </template> -->
+                    <template if:true={error}>
+                        <div class="slds-text-color_error slds-p-around_medium">
+                            Error loading student data: {error}
+                        </div>
+                    </template>
+
+                    <template if:true={isLoading}>
+                        <div class="slds-is-relative slds-p-around_medium">
+                            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                        </div>
+                    </template>    
+                </template>
+        
+                <template if:true={error}>
+                    <div class="slds-text-color_error slds-p-around_medium">
+                        Error loading student data: {error.body.message}
+                    </div>
+                </template>
+
+                <!-- Failure Message -->
+                <template if:true={isFailure}>
+                    <div class="slds-box slds-theme_error slds-m-top_medium">
+                        <!-- <p><b>{studentData.message}</b></p> -->
+                        <p><b>{statusMessage}</b></p>
+                    </div>
+                </template>
+
+                <template if:true={resultMessage}>
+                    <p class="slds-text-color_success slds-text-heading_small slds-m-around_medium">{resultMessage}</p>
+                    
+                    <p class="slds-text-color_success slds-text-heading_small slds-m-around_medium">{scanResult}</p>
+                </template>
+                    
+                <template if:true={errorMessage}>
+                    <p class="slds-text-color_error slds-text-heading_small slds-m-around_medium">{errorMessage}</p>
+                </template>
+                <!-- <template if:true={mesg}>
+                    <p class="slds-text-color_error slds-text-heading_small slds-m-around_medium">{mesg}</p>
+                </template> -->
+            </lightning-card>
+
+            <div class="slds-p-around_small">         
+                    <button
+                        class="slds-button slds-button_neutral slds-size_full"
+                        onclick={toggleStudents}
+                        disabled={isLoading}>
+                        {toggleButtonLabel}
+                    </button>
+            </div>
+
+            <!-- Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner size="small" alternative-text="Loading"></lightning-spinner>
+            </template>
+           
+            <!-- Student Table -->            
+            <template if:true={showStudents}>
+                <template if:false={noDataAvailable}>
+                    <div class="slds-m-top_small">
+                        <lightning-datatable
+                            key-field="srn"
+                            data={studentTableData}
+                            columns={studentColumns}
+                            hide-checkbox-column>
+                        </lightning-datatable>
+                    </div>
+                </template>
+
+                <template if:true={noDataAvailable}>
+                    <div class="slds-text-align_center slds-m-top_small slds-text-color_weak">
+                        No data is available.
+                    </div>
+                </template>
+            </template>
+            <template if:false={finalAttendanceUpdateStatus}>
+                <button                    
+                    class="slds-button slds-button_brand slds-size_full slds-m-top_small"
+                    onclick={openModal}
+                    disabled={isLoading}>
+                    Submit Attendance
+                </button>
+            </template>
+
+            <!-- Back Button -->
+            <button
+                class="slds-button slds-button_destructive slds-size_full slds-m-top_small"
+                onclick={goBack}
+                disabled={isLoading}>
+                Back
+            </button>
+        </div>
+        <!-- POP UP Dialog starts -->
+        
+            <!-- <lightning-button
+                label="Open Popup"
+                onclick={openModal}>
+            </lightning-button> -->
+
+            <template if:true={showModal}>
+                <section
+                    role="dialog"
+                    tabindex="-1"
+                    class="slds-modal slds-fade-in-open">
+
+                    <div class="slds-modal__container">
+
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium">
+                                Confirmation
+                            </h2>
+                        </header>
+
+                        <div class="slds-modal__content slds-p-around_medium">
+                            Are you sure you want to submit the attendance?
+                            Note: Once submitted, attendance cannot be modified.
+                        </div>
+
+                        <footer class="slds-modal__footer">
+                            <lightning-button
+                                label="No"
+                                onclick={handleNo}>
+                            </lightning-button>
+
+                            <lightning-button
+                                variant="brand"
+                                label="Yes"
+                                onclick={handleYes}
+                                class="slds-m-left_small">
+                            </lightning-button>
+                        </footer>
+
+                    </div>
+                </section>
+
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        
+        <!-- POP UP Dialog ends -->
+    </template>
+</template>

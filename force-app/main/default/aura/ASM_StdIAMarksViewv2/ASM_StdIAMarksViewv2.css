@@ -1,0 +1,174 @@
+.THIS .semDK {
+    width : 175%;
+}
+/* for first input field*/
+.THIS .slds-tabs_scoped__link {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    cursor: pointer;
+    height: var(--lwc-lineHeightTab,2.5rem);
+    line-height: var(--lwc-lineHeightTab,2.5rem);
+    padding: 0 var(--lwc-spacingMedium,1rem);
+    color: var(--slds-g-color-neutral-base-30, var(--lwc-colorTextActionLabel,rgba(0, 0, 0, 0.86)));
+    border-top: 0px;
+    border-bottom: 0px;
+    border-image: initial;
+    border-left: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-right: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-radius: 0px;
+    color: black;
+    font-size:15px;
+    font-weight: 600;                             
+}
+.THIS .slds-tabs--scoped__link {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    cursor: pointer;
+    height: var(--lwc-lineHeightTab,2.5rem);
+    line-height: var(--lwc-lineHeightTab,2.5rem);
+    padding: 0 var(--lwc-spacingMedium,1rem);
+    color: var(--slds-g-color-neutral-base-30, var(--lwc-colorTextActionLabel,rgba(0, 0, 0, 0.86)));
+    border-top: 0px;
+    border-bottom: 0px;
+    border-image: initial;
+    border-left: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-right: var(--lwc-borderWidthThin,1px) solid transparent;
+    border-radius: 0px;
+    color: black;
+    font-size:15px;
+    font-weight: 600;                            
+}
+/* .THIS .slds-tabs_scoped__content .slds-tabs--scoped__content {
+    background-color: #FEF1E8 !important;
+    border: 0px solid white !important;
+    padding: var(--lwc-spacingMedium,1rem);                                                                    
+} */
+
+.THIS .slds-is-active .slds-tabs_scoped__link{
+    background-color:#f57f26 !important;
+    color:white !important;
+    font-weight:600 !important;
+    text-decoration: none !important;
+}
+.THIS .slds-tabs_scoped__content {
+    border: 0px solid white !important;
+    padding-top:5px !important;     
+    padding: 7px 1px 5px 0px!important;                                                              
+}
+
+.THIS .slds-input[disabled] {
+    background-color: #FEF1E8 !important;
+    border-color: var(--slds-g-color-border-base-1, var(--lwc-colorBorderInputDisabled,rgb(201, 201, 201)));
+    color: var(--slds-g-color-neutral-base-50, var(--lwc-colorTextInputDisabled,rgb(116, 116, 116)));
+    cursor: not-allowed;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.THIS .slds-input.slds-is-disabled {
+    background-color: #FEF1E8 !important;
+    border-color: var(--slds-g-color-border-base-1, var(--lwc-colorBorderInputDisabled,rgb(201, 201, 201)));
+    color: var(--slds-g-color-neutral-base-50, var(--lwc-colorTextInputDisabled,rgb(116, 116, 116)));
+    cursor: not-allowed;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+/* for second input field*/
+.THIS .slds-select_container .slds-select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    padding-left: var(--lwc-spacingXSmall,0.5rem);
+    padding-right: var(--lwc-spacingLarge,1.5rem);
+    background-color: #FEF1E8 !important;
+}
+
+/* for checkbox*/
+.THIS .slds-checkbox_toggle .slds-checkbox_faux .slds-checkbox_toggle .slds-checkbox--faux .slds-checkbox--toggle .slds-checkbox_faux .slds-checkbox--toggle .slds-checkbox--faux {
+    display: block;
+    position: relative;
+    width: var(--lwc-widthToggle,3rem);
+    height: var(--lwc-heightToggle,1.5rem);
+    border-width: var(--lwc-borderWidthThin,1px);
+    border-style: solid;
+    border-color: var(--slds-c-checkbox-toggle-color-border, var(--sds-c-checkbox-toggle-color-border, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle,rgb(174, 174, 174)))));
+    padding: var(--lwc-spacingXxxSmall,0.125rem);
+    /* background-color: var(--slds-c-checkbox-toggle-color-background, var(--sds-c-checkbox-toggle-color-background, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle,rgb(174, 174, 174))))); */
+    border-radius: var(--slds-c-checkbox-toggle-radius-border, var(--sds-c-checkbox-toggle-radius-border, var(--lwc-borderRadiusPill,15rem)));
+    box-shadow: var(--slds-c-checkbox-toggle-shadow, var(--sds-c-checkbox-toggle-shadow));
+    transition: background-color .2s cubic-bezier(0.75, 0, 0.08, 1);
+    background-color: #f57f26 !important;
+}
+.THIS .slds-checkbox_toggle .slds-checkbox_faux {
+    display: block;
+    position: relative;
+    width: var(--lwc-widthToggle,3rem);
+    height: var(--lwc-heightToggle,1.5rem);
+    border-width: var(--lwc-borderWidthThin,1px);
+    border-style: solid;
+    border-color: var(--slds-c-checkbox-toggle-color-border, var(--sds-c-checkbox-toggle-color-border, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle,rgb(174, 174, 174)))));
+    padding: var(--lwc-spacingXxxSmall,0.125rem);
+    /* background-color: var(--slds-c-checkbox-toggle-color-background, var(--sds-c-checkbox-toggle-color-background, var(--slds-g-color-neutral-base-60, var(--lwc-colorBackgroundToggle,rgb(174, 174, 174))))); */
+    border-radius: var(--slds-c-checkbox-toggle-radius-border, var(--sds-c-checkbox-toggle-radius-border, var(--lwc-borderRadiusPill,15rem)));
+    box-shadow: var(--slds-c-checkbox-toggle-shadow, var(--sds-c-checkbox-toggle-shadow));
+    transition: background-color .2s cubic-bezier(0.75, 0, 0.08, 1);
+    background-color: #f57f26 !important;
+}
+
+.THIS .ia-marks-table {
+    table-layout: fixed;
+}
+
+.THIS .ia-marks-table thead th {
+    text-align: center !important;
+    background-color: var(--reva-table-heading-background-color);
+    color: white;
+    padding: 8px !important;
+    font-size: 13px;
+    white-space: normal;
+    word-wrap: break-word;
+
+}
+
+.THIS .ia-marks-table tbody tr:focus {
+    background: var(--reva-table-row-background-color) !important;
+
+}
+
+.THIS .ia-marks-table tbody tr:hover {
+    background: var(--reva-table-row-background-color) !important;
+
+}
+
+.THIS .ia-marks-table tbody td {
+    text-align: center !important;
+    color: black;
+    background: var(--reva-table-row-background-color) !important;
+    padding: 8px !important;
+    font-size: 13px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+@media only screen and (max-width:767px) {
+
+    .THIS .ia-marks-table thead th {
+        padding: 5px !important;
+        font-size: 11px;
+    }
+
+    .THIS .ia-marks-table tbody td {
+        padding: 5px !important;
+        font-size: 12px;
+    }
+
+
+    }

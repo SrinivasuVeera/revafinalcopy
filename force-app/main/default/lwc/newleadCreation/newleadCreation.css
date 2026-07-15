@@ -1,0 +1,40 @@
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.email-row, .otp-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+/* Container to take up the full screen height available */
+.custom-modal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 400px; /* Adjust based on your preference */
+    max-height: 85vh;  /* Limits height so it fits in the screen */
+}
+
+/* The middle section takes all remaining space and scrolls */
+.body-content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Ensure buttons don't have strange margin in footer */
+.slds-modal__footer {
+    padding: 0.75rem 1rem;
+    background-color: #f3f3f3;
+}
+
+/* Ensure buttons don't jump on mobile */
+@media (max-width: 768px) {
+    .two-col {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,18 @@
+<template>
+    <lightning-card>
+        
+       <p class="slds-p-horizontal_small">
+          <lightning-input type="search" class="slds-m-bottom_small" label="Pincode"
+             onchange={pincodeEntered} value={pinCode} maxlength="6"></lightning-input>
+       </p>
+       <div if:true={showTable}>
+         <c-responsive-datatable pk-field="Id" column-config={cols} selected-pk={selectedRecordId}
+         row-data={postOfficeList} onrowclick={postOfficeSelected} max-row-selection=1>
+     </c-responsive-datatable>
+       </div>
+       <div if:false={showTable}>
+            <p style="text-align:center">Enter valid pincode.</p>
+       </div>
+       
+    </lightning-card>
+ </template>

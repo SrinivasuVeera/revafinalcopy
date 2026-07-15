@@ -1,0 +1,21 @@
+<apex:page showHeader="false" sidebar="false">
+   
+        <apex:includeLightning />
+        
+        <div id="auraContainer"></div>
+        
+        <script>
+        $Lightning.use("c:ALU_Registr_Component_App", function() {
+            $Lightning.createComponent(
+                "c:ALU_Registr_Component_CMP",
+                {},
+                "auraContainer",
+                function(cmp) {
+                    //console.log("Aura component created.");
+                }
+            );
+        });
+        </script>
+ 
+
+</apex:page>

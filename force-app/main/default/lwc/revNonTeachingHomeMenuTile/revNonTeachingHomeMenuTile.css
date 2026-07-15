@@ -1,0 +1,112 @@
+.tile-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 4 equal columns for large screens */
+    grid-gap: 1rem; /* Adds consistent space between tiles */
+    width: 100%;
+}
+
+.parent-tile {
+    border-radius: 0.9375rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+    font-size: 12px;
+    min-height: 200px; /* Ensures a consistent height */
+}
+
+.heading-tile {
+    display: flex;
+    justify-content: space-between;
+}
+
+.heading-tile-icon {
+    min-width: 3.125rem;
+}
+
+.heading-tile-icon img {
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: contain;
+}
+
+.body-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.body-tile :nth-child(1) {
+    border-bottom: 0.0625rem dotted darkgrey;
+    width: 70%;
+}
+
+.footer-tile {
+    text-align: end;
+}
+
+.footer-tile a {
+    color: white;
+}
+
+.parent-tile:nth-child(1) {
+    background-image: linear-gradient(135deg, #3B4A69 0%, #049AD7 100%);
+}
+.parent-tile:nth-child(2)  {
+    background-image: linear-gradient(135deg, #145655 0%, #0097A2 100%);
+}
+.parent-tile:nth-child(3) {
+    background-image: linear-gradient(135deg, #902551 0%, #DA3B73 100%);
+}
+   
+.parent-tile:nth-child(5){
+    background-image: linear-gradient(135deg, #3b694b 0%, #04d76a 100%);
+}
+.parent-tile:nth-child(6){
+    background-image: linear-gradient(135deg, #693b43 0%, #d7042e 100%);
+}
+.parent-tile:nth-child(7){
+    background-image: linear-gradient(135deg, #8b9554 0%, #e4eb60 100%);
+}
+.parent-tile:nth-child(8){
+    background-image: linear-gradient(135deg, #902579 0%, #e92dd9 100%);
+}
+ .parent-tile:nth-child(9){
+    background-image: linear-gradient(135deg, #583b69 0%, #8808c3 100%);
+}
+.parent-tile:nth-child(10){
+  background-image: linear-gradient(135deg, #64693b 0%, #6a6d06 100%);
+}
+.parent-tile:nth-child(11){
+  background-image: linear-gradient(135deg, #4f693b 0%, #78c308 100%);
+}
+ .parent-tile:nth-child(12){
+      background-image: linear-gradient(135deg, #725583 0%, #b27fc2 100%);
+ }
+ .parent-tile:nth-child(13){  background-image: linear-gradient(135deg, #3b3f69 0%, #1808c3 100%);
+}
+.parent-tile:nth-child(4) {
+    background-image: linear-gradient(135deg, #924414 0%, #F07F07 100%);
+}
+
+/* Adjust layout for medium screens */
+@media only screen and (max-width: 64rem) {
+    .tile-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 tiles per row */
+    }
+}
+
+/* Adjust layout for smaller screens (tablets) */
+@media only screen and (max-width: 48rem) {
+    .tile-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 tiles per row */
+    }
+}
+
+/* Adjust layout for mobile screens */
+@media only screen and (max-width: 30rem) {
+    .tile-container {
+        grid-template-columns: repeat(1, 1fr); /* 1 tile per row for very small screens */
+    }
+}

@@ -1,0 +1,27 @@
+<template>
+    <lightning-card title="Quick View" class="slds-truncate">
+        <!-- <div class="qr-timer-overlay">
+            Expires in: {countdown} sec
+        </div> -->
+        <!-- Horizontal layout for QR code and booking details -->
+        <div class="horizontal-layout">
+            <!-- QR Code Section -->
+            <div class="qr-code-container">
+                <img src={urlQRCode} alt="Meal Booking Data" class="qr-code" onclick={handleQRCodeScanned}>
+                
+
+            </div>
+
+            <!-- Booking Details Section -->
+            <div class="booking-details">
+                <p><strong>Name:</strong> {bookingForName}</p>
+                <p><strong>SRN No:</strong> {bookingForSRN}</p>
+                <p><strong>Phone:</strong> {bookingForPhone}</p>
+                <img src={photoUrl} alt="Passport Size Photo" class="photo">
+            </div>
+            <div class="qr-timer-overlay">
+                Expires in: {countdown} sec
+            </div>
+        </div>
+    </lightning-card>
+</template>

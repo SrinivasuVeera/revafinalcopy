@@ -1,0 +1,53 @@
+<template>
+    <div class="container">
+        <div class="header">
+            <div class="tabs">
+                <div class="tab tab-header" tabindex="0" data-step="1" onclick={handleStepClick}>
+                    <div><strong data-step="1" onclick={handleStepClick}>TRAINING</strong> </div>
+                    <div><lightning-badge label={colorCodePercentage} data-step="1" onclick={handleStepClick}
+                            class={colorCodePercentageClass}></lightning-badge></div>
+                </div>
+                <div class="tab tab-header" tabindex="0" data-step="2" onclick={handleStepClick}>
+                    <div><strong data-step="2" onclick={handleStepClick}>PLACEMENT</strong></div>
+                </div>
+            </div>
+        </div>
+        <template lwc:if={isTrainingModule}>
+            <div class="tabs">
+                <div class="tab training-tab" tabindex="0" data-step="3" onclick={handleStepClick}>
+                    <div><strong data-step="3" onclick={handleStepClick}>MATERIAL</strong></div>
+                </div>
+                <div class="tab training-tab" tabindex="0" data-step="4" onclick={handleStepClick}>
+                    <div><strong data-step="4" onclick={handleStepClick}>ATTENDANCE</strong></div>
+                    <div><lightning-badge label={attendancePercentage} data-step="4" onclick={handleStepClick}
+                            class={attendancePercentageClass}></lightning-badge>
+                    </div>
+                </div>
+                <div class="tab training-tab" tabindex="0" data-step="5" onclick={handleStepClick}>
+                    <div><strong data-step="5" onclick={handleStepClick}>ASSESSMENTS</strong></div>
+                    <div><lightning-badge label={assesssmentPercentage} data-step="5" onclick={handleStepClick}
+                            class={assesssmentPercentageClass}>
+                        </lightning-badge></div>
+                </div>
+            </div>
+
+
+            <div class="body">
+                <!-- <template lwc:if={isTrainingMaterial}>
+                <c-rpl_-reva-training-material contact-id={contactId}></c-rpl_-reva-training-material>
+            </template> -->
+                <template lwc:if={isAttendance}>
+                    <c-rpl_-reva-training-attendance contact-id={contactId}></c-rpl_-reva-training-attendance>
+                </template>
+                <template lwc:elseif={isAssessment}>
+                    <c-rpl_-reva-training-assessment contact-id={contactId}></c-rpl_-reva-training-assessment>
+                </template>
+            </div>
+        </template>
+        <template lwc:else>
+            <c-rpl_-reva-placement></c-rpl_-reva-placement>
+        </template>
+    </div>
+
+
+</template>

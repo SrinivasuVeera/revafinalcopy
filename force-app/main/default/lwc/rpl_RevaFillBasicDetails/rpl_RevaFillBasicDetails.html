@@ -1,0 +1,1179 @@
+<template>
+    <div class="container">
+        <div class="header-container">
+            <h1>{placementRegistrationText}</h1>
+            <div class="header">
+                <div>
+                    <h1>*Kindly fill all details as per the original records</h1>
+                </div>
+                <span class="middle-separator"></span>
+                <div>
+                    <h1>{fillBasicDetailsRightColText}</h1>
+                </div>
+            </div>
+            <hr>
+            <div class="tabs">
+                <div class="tab" tabindex="0" data-step="1" onclick={handleStepClick}>STUDENT BASIC DETAILS</div>
+                <div class="tab" tabindex="0" data-step="2" onclick={handleStepClick}> 10th / SSLC DETAILS </div>
+                <div class="tab" tabindex="0" data-step="3" onclick={handleStepClick}> 12th / DIPLOMA DETAILS </div>
+                <div class="tab" tabindex="0" data-step="4" onclick={handleStepClick}> UG / PG DETAILS</div>
+            </div>
+        </div>
+        <template lwc:if={isStudentBasicDetails}>
+            <!--Student Basic Details-->
+            <div class="student-basic-details">
+
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                        large-device-size="12" padding="horizontal-small">
+                        <div class="custom-box">
+                            <h1>*Enter your details as per 10th / SSLC mark card</h1>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>First Name</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="---First Name ---" required
+                                    readonly data-label="Rpl_First_Name__c" value={studentRegform.Rpl_First_Name__c}
+                                    onchange={handleInput} />
+                                <div class="error-message"></div><br>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>Middle Name</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="---Middle Name ---" readonly
+                                    data-label="Rpl_Middle_Name__c" value={studentRegform.Rpl_Middle_Name__c}
+                                    onchange={handleInput} />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label> <abbr class="slds-required" title="required">*</abbr>Last Name</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="---Last Name ---" required disabled
+                                    data-label="Rpl_Last_Name__c" value={studentRegform.Rpl_Last_Name__c}
+                                    onchange={handleInput} />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>PAN No.</label>
+                            <div class="input-container">
+                                <!-- <input onblur={blurHandler} type="text" pattern="^[A-Z]{5}\d{4}[A-Z]$"
+                                    value={studentRegform.Rpl_Pan_Card_No__c} onchange={handleInput}
+                                    data-label="Rpl_Pan_Card_No__c" /> -->
+                                <lightning-input type="text" value={panNumber} disabled read-only>
+                                </lightning-input>
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <!-- <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>Current Backlogs</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" value={studentRegform.Rpl_Current_Backlogs__c}
+                                    pattern="^\d*[0-9]\d*$" data-label="Rpl_Current_Backlogs__c" required
+                                    title="Please enter a valid input (Positive Integer)" onchange={handleInput} />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item> -->
+                </lightning-layout>
+
+                <!-- <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box"><label>
+                                <abbr class="slds-required" title="required">*</abbr>Cleared Backlogs</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="" pattern="^\d*[0-9]\d*$"
+                                    title="Please enter a valid input (Positive Integer)"
+                                    value={studentRegform.Rpl_Cleared_Backlogs__c} required onchange={handleInput}
+                                    data-label="Rpl_Cleared_Backlogs__c" />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>Total Backlogs</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="number" required onchange={handleInput}
+                                    value={studentRegform.Rpl_Total_Backlogs__c} readonly
+                                    data-label="Rpl_Total_Backlogs__c" />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout> -->
+
+
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>Education Gap</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" value={studentRegform.Rpl_Education_Gap__c}
+                                    placeholder="-- Valid Value : Double Digit Number --" pattern="^\d*[0-9]\d*$"
+                                    data-label="Rpl_Education_Gap__c" required onchange={handleInput} />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>Interest In Placement</label>
+                            <div class="checkbox-container">
+                                <div>
+                                    <label>Yes</label>
+                                    <input type="radio" value="Yes" data-input-checkbox="placement-interested"
+                                        data-label="Rpl_Interested_in_placement__c"
+                                        class="checkbox-item placement-interest" onchange={handleInput}
+                                        onclick={handleCheckBoxClick} />
+                                    <div class="error-message"></div><br>
+                                </div>
+                                <div>
+                                    <label>No</label>
+                                    <input type="radio" value="No" class="checkbox-item placement-not-interest"
+                                        onchange={handleInput} data-label="Rpl_Interested_in_placement__c"
+                                        data-input-checkbox="placement-not-interested" onclick={handleCheckBoxClick} />
+                                    <div class="error-message"></div><br>
+                                </div>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows lwc:if={showEducationGapReason}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>Reason For Education Gap</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text"
+                                    value={studentRegform.Rpl_Reason_For_Education_Gap__c}
+                                    placeholder="--Eg: Medical Problem--" data-label="Rpl_Reason_For_Education_Gap__c"
+                                    onchange={handleInput} />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>Student Recent Image</label> &nbsp;
+                            <lightning-helptext
+                                content="The uploaded image will be converted to 135px X 135px for uniform size, so upload your image according for the best quality."></lightning-helptext>
+                            <div class="input-container">
+                                <lightning-input-rich-text label="Student Image" valid={validity}
+                                    value={studentRegform.Rpl_Student_Image__c} required=true class="student-image"
+                                    onchange={handleStudentImageUpload} formats="image"
+                                    message-when-bad-input="Please upload your recent Image"></lightning-input-rich-text>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <div class="next-prev-button-section">
+                    <button class="reva-brand-button  prev-next-btn" disabled={isSaveButtonDisabled}
+                        onclick={handleNextOne}>Next</button>
+                </div>
+            </div>
+        </template>
+        <template lwc:if={isTenthDetails}>
+            <div class="tenth-details">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                        large-device-size="12" padding="horizontal-small">
+                        <div class="custom-box">
+                            <h1>*Enter your details as per 10th / SSLC mark card</h1>
+                            <h1>*Note: If the marks are below or equal to 10, they are considered as CGPA; otherwise,
+                                they are considered as a percentage.</h1>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required"></abbr>Board Name</label>
+                            <div class="input-container">
+                                <!-- <input onblur={blurHandler} type="text" placeholder="Eg: CBSE"
+                                    value={studentRegform.Rpl_10th_Board_Name__c} required onchange={handleInput}
+                                    data-label="Rpl_10th_Board_Name__c" /> -->
+                                <lightning-input type="text" value={tenthBoardName} disabled read-only>
+                                </lightning-input>
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required"></abbr>10th CGPA / Percentage</label>
+                            <div class="input-container">
+                                <!-- <input onblur={blurHandler} type="text" value={tenthPercentageOrCGPA} required
+                                    pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                    title="Enter a valid number with up to two decimal places" onchange={handleInput}
+                                    data-label="Rpl_10th_Percentage__c" /> -->
+                                <lightning-input type="text" value={tenthCGPA} disabled read-only>
+                                </lightning-input>
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>
+                                <abbr class="slds-required" title="required">*</abbr>10th Year Of Passing</label>
+                            <div class="input-container">
+                                <!-- <lightning-combobox onblur={blurHandler} data-label="Rpl_10th_Year_of_passing__c"
+                                    label-hidden value={studentRegform.Rpl_10th_Year_of_passing__c}
+                                    options={tenthPickList} onchange={handleInput}>
+                                </lightning-combobox> -->
+                                <!-- <input onblur={blurHandler} type="date" data-label="Rpl_10th_Year_of_passing__c"
+                                    value={studentRegform.Rpl_10th_Year_of_passing__c} required
+                                    onchange={handleInput} /> -->
+                                <lightning-input type="text" value={tenthYearOfPassing} disabled read-only>
+                                </lightning-input>
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <div class="next-prev-button-section">
+                    <button class="reva-base-button prev-next-btn" onclick={handlePreviousTwo}>Previous</button>
+                    <button class="reva-brand-button  prev-next-btn" disabled={isSaveButtonDisabled}
+                        onclick={handleNextTwo}>Next</button>
+                </div>
+            </div>
+        </template>
+        <template lwc:elseif={isTwelvethDetails}>
+            <div class="twelveth-or-diploma-details">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                        large-device-size="12" padding="horizontal-small">
+                        <div class="custom-box">
+                            <h1>*Enter your details as per 12th / Diploma mark card</h1>
+                            <h1>*Note: If the marks are below or equal to 10, they are considered as CGPA; otherwise,
+                                they are considered as a percentage.</h1>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                        large-device-size="12" padding="horizontal-small">
+                        <div class="custom-box">
+                            <div class="course-container">
+                                <div>
+                                    <label> 12th</label>
+                                    <!-- <input onblur={blurHandler} type="checkbox" checked={isTwelvethStudent} required=""
+                                        class="course-item twelveth-checkbox" data-input-checkbox="twelveth"
+                                        onclick={handleCheckBoxClick} /> -->
+                                    <input type="checkbox" checked={isTwelvethStudent} data-input-checkbox="twelveth"
+                                        onclick={handleCheckBoxClick} />
+
+                                    <div class="error-message"></div><br>
+                                </div>
+                                <div>
+                                    <label>Diploma</label>
+                                    <!-- <input onblur={blurHandler} type="checkbox" checked={isDiplomaStudent} required=""
+                                        class="course-item diploma-checkbox" data-input-checkbox="diploma"
+                                        onclick={handleCheckBoxClick} /> -->
+                                    <input type="checkbox" checked={isDiplomaStudent} data-input-checkbox="diploma"
+                                        onclick={handleCheckBoxClick} />
+
+                                    <div class="error-message"></div><br>
+                                </div>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <template lwc:if={isTwelvethStudent}>
+                    <template lwc:if={hasTwelvethData}>
+                        <div class="twelveth">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <label> Board Name</label>
+                                        <div class="input-container">
+                                            <!-- <input onblur={blurHandler} type="text" placeholder="Eg: CBSE"
+                                                value={studentRegform.Rpl_12th_Board_Name__c}
+                                                data-label="Rpl_12th_Board_Name__c" onchange={handleInput} /> -->
+                                            <!-- <div class="readonly-field">{twelvethData.BoardName}</div> -->
+                                            <lightning-input type="text" value={twelvethData.BoardName} disabled
+                                                read-only></lightning-input>
+
+                                            <div class="error-message"></div><br>
+
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <label> 12th CGPA / Percentage</label>
+                                        <div class="input-container">
+                                            <!-- <input onblur={blurHandler} type="text" value={twelfthPercentageOrCGPA}
+                                                pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                                title="Enter a valid number with up to two decimal places"
+                                                data-label="Rpl_12th_Percentage__c" onchange={handleInput} /> -->
+                                            <!-- <div class="readonly-field">{twelvethData.Percentage}</div> -->
+                                            <lightning-input type="text" value={twelvethData.Percentage} disabled
+                                                read-only></lightning-input>
+
+                                            <div class="error-message"></div><br>
+
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <label> 12th Year Of Passing</label>
+                                        <div class="input-container">
+                                            <!-- <lightning-combobox onblur={blurHandler}
+                                                data-label="Rpl_12th_Year_of_passing__c" label-hidden
+                                                value={studentRegform.Rpl_12th_Year_of_passing__c}
+                                                options={twelvethPickList} onchange={handleInput}>
+                                            </lightning-combobox> -->
+                                            <!-- <div class="readonly-field">{twelvethData.YearOfPassing}</div> -->
+                                            <lightning-input type="text" value={twelvethData.YearOfPassing} disabled
+                                                read-only></lightning-input>
+
+                                            <!-- <input onblur={blurHandler} type="date"
+                                            value={studentRegform.Rpl_12th_Year_of_passing__c}
+                                            data-label="Rpl_12th_Year_of_passing__c" onchange={handleInput} /> -->
+                                            <div class="error-message"></div><br>
+
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="custom-box error-message">No records found for 12th education details.</div>
+                    </template>
+                </template>
+
+                <template lwc:elseif={isDiplomaStudent}>
+                    <template lwc:if={hasDiplomaData}>
+                        <div class="diploma">
+                            <lightning-layout multiple-rows>
+
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <label>College Name</label>
+                                        <div class="input-container">
+                                            <!-- <input onblur={blurHandler} type="text"
+                                                value={studentRegform.Rpl_Diploma_University__c}
+                                                data-label="Rpl_Diploma_University__c" onchange={handleInput} /> -->
+                                            <!-- <div class="readonly-field">{diplomaData.CollegeName}</div> -->
+                                            <lightning-input type="text" value={diplomaData.CollegeName} disabled
+                                                read-only></lightning-input>
+
+                                            <div class="error-message"></div><br>
+
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <label>Diploma Overall CGPA /
+                                            Percentage</label>
+                                        <div class="input-container">
+                                            <!-- <input onblur={blurHandler} type="text"
+                                                value={studentRegform.Rpl_Diploma_Percentage__c}
+                                                pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                                title="Enter a valid number with up to two decimal places"
+                                                data-label="Rpl_Diploma_Percentage__c" onchange={handleInput} /> -->
+                                            <!-- <div class="readonly-field">{diplomaData.Percentage}</div> -->
+                                            <lightning-input type="text" value={diplomaData.Percentage} disabled
+                                                read-only></lightning-input>
+                                            <div class="error-message"></div><br>
+
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <label>Branch</label>
+                                        <div class="input-container">
+                                            <!-- <input onblur={blurHandler} type="text"
+                                                value={studentRegform.Rpl_DiplomaName__c}
+                                                data-label="Rpl_DiplomaName__c" onchange={handleInput} /> -->
+                                            <!-- <div class="readonly-field">{diplomaData.Branch}</div> -->
+                                            <lightning-input type="text" value={diplomaData.Branch} disabled
+                                                read-only></lightning-input>
+                                            <div class="error-message"></div><br>
+
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <label>Diploma Date Of Passing</label>
+                                        <div class="input-container">
+                                            <!-- <lightning-combobox onblur={blurHandler}
+                                                data-label="Rpl_Diploma_Graduation_Year__c" label-hidden
+                                                value={studentRegform.Rpl_Diploma_Graduation_Year__c}
+                                                options={diplomaPickList} onchange={handleInput}>
+                                            </lightning-combobox> -->
+                                            <!-- <div class="readonly-field">{diplomaData.GraduationYear}</div> -->
+                                            <lightning-input type="text" value={diplomaData.GraduationYear} disabled
+                                                read-only></lightning-input>
+                                            <!--  <input onblur={blurHandler} type="date"
+                                            value={studentRegform.Rpl_Diploma_Graduation_Year__c}
+                                            data-label="Rpl_Diploma_Graduation_Year__c" onchange={handleInput} /> -->
+                                            <div class="error-message"></div><br>
+
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="custom-box error-message">No records found for Diploma education details.</div>
+                    </template>
+                </template>
+                <div class="next-prev-button-section">
+                    <button class="reva-base-button prev-next-btn" onclick={handlePreviousThree}>Previous</button>
+                    <button class="reva-brand-button  prev-next-btn" disabled={isSaveButtonDisabled}
+                        onclick={handleNextThree}>Next</button>
+                </div>
+            </div>
+        </template>
+        <template lwc:elseif={isUgOrPgDetails}>
+            <div class="ug-or-pg-details">
+
+                <!-- ************************************************************ -->
+                <!-- <template lwc:if={isUgDetailsOnly}>
+                    <div class="ug-details">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                                large-device-size="12" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <h1>*Enter your details as per UG Mark card</h1>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small" lwc:if={isShowUgSem1}>
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem1Required}>*</abbr>
+                                    <label>
+                                        UG Sem 1 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" value={studentRegform.Rpl_Sem_1_CGPA__c}
+                                            required={isUgSem1Required} pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            data-label="Rpl_Sem_1_CGPA__c" onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                lwc:if={isShowUgSem2} large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem2Required}>*</abbr>
+                                    <label>
+                                        UG Sem 2 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder=""
+                                            required={isUgSem2Required} pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            value={studentRegform.Rpl_Sem_2_CGPA__c} data-label="Rpl_Sem_2_CGPA__c"
+                                            onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem3Required}>*</abbr>
+                                    <label>
+                                        UG Sem 3 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" value={studentRegform.Rpl_Sem_3_CGPA__c}
+                                            required={isUgSem3Required} pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            data-label="Rpl_Sem_3_CGPA__c" onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem4Required}>*</abbr>
+                                    <label>
+                                        UG Sem 4 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder=""
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$" required={isUgSem4Required}
+                                            title="Enter a valid number with up to two decimal places"
+                                            value={studentRegform.Rpl_Sem_4_CGPA__c} data-label="Rpl_Sem_4_CGPA__c"
+                                            onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem5Required}>*</abbr>
+                                    <label>UG Sem 5 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" value={studentRegform.Rpl_Sem_5_CGPA__c}
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$" required={isUgSem5Required}
+                                            title="Enter a valid number with up to two decimal places"
+                                            data-label="Rpl_Sem_5_CGPA__c" onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem6Required}>*</abbr>
+                                    <label>UG Sem 6 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder=""
+                                            value={studentRegform.Rpl_Sem_6_CGPA__c} data-label="Rpl_Sem_6_CGPA__c"
+                                            required={isUgSem6Required} pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem7Required}>*</abbr>
+                                    <label>UG Sem 7 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" value={studentRegform.Rpl_Sem_7_CGPA__c}
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$" required={isUgSem7Required}
+                                            title="Enter a valid number with up to two decimal places"
+                                            onchange={handleInput} data-label="Rpl_Sem_7_CGPA__c" />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem8Required}>*</abbr>
+
+                                    <label>UG Sem 8 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder=""
+                                            required={isUgSem8Required} value={studentRegform.Rpl_Sem_8_CGPA__c}
+                                            data-label="Rpl_Sem_8_CGPA__c"
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </template> -->
+                <template lwc:if={isUgDetailsOnly}>
+                    <div class="ug-details">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                                large-device-size="12" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <h1>*Enter your details as per UG Mark card</h1>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- UG Sem 1 -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small" lwc:if={isShowUgSem1}>
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem1Required}>*</abbr>
+                                    <label>UG Sem 1 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem1Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+
+                            <!-- UG Sem 2 -->
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small" lwc:if={isShowUgSem2}>
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem2Required}>*</abbr>
+                                    <label>UG Sem 2 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem2Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- UG Sem 3 & 4 -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem3Required}>*</abbr>
+                                    <label>UG Sem 3 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem3Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem4Required}>*</abbr>
+                                    <label>UG Sem 4 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem4Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- UG Sem 5 & 6 -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem5Required}>*</abbr>
+                                    <label>UG Sem 5 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem5Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem6Required}>*</abbr>
+                                    <label>UG Sem 6 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem6Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- UG Sem 7 & 8 -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem7Required}>*</abbr>
+                                    <label>UG Sem 7 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem7Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isUgSem8Required}>*</abbr>
+                                    <label>UG Sem 8 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugSem8Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <lightning-layout multiple-rows>
+
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>Current Backlogs
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={totalBacklogs} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>Total Backlogs
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={totalBacklogs1} data-label="Rpl_Total_Backlogs__c" onchange={handleInput}/>
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </template>
+
+                <!-- <template lwc:elseif={isPgDetailsOnly}>
+                    <div class="pg-details">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                                large-device-size="12" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <h1>*Enter your details as per UG / PG Mark card</h1>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG Cumulative CGPA /
+                                        Percentage</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder="" required
+                                            onchange={handleInput} value={studentRegform.Rpl_UG_CGPA__c}
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            data-label="Rpl_UG_CGPA__c" />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG Year Of
+                                        Graduation</label>
+
+                                    <div class="input-container">
+                                        <lightning-combobox onblur={blurHandler}
+                                            data-label="Rpl_UG_Year_of_Graduation__c" label-hidden
+                                            value={studentRegform.Rpl_UG_Year_of_Graduation__c} options={ugPickList}
+                                            onchange={handleInput}>
+                                        </lightning-combobox>
+
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG College Name</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder="" required
+                                            onchange={handleInput} value={studentRegform.Rpl_UG_College_Name__c}
+                                            data-label="Rpl_UG_College_Name__c" />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG Branch</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder="Eg: BTech Biotechnology"
+                                            onchange={handleInput} required value={studentRegform.Rpl_UG_Degree__c}
+                                            data-label="Rpl_UG_Degree__c" />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG University Name</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder="" required
+                                            onchange={handleInput}
+                                            value={studentRegform.Rpl_UG_Board_Name_University_Name__c}
+                                            data-label="Rpl_UG_Board_Name_University_Name__c" />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isPgSem1Required}>*</abbr>
+                                    <label>
+                                        PG Sem 1 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" required={isPgSem1Required}
+                                            value={studentRegform.Rpl_PG1_Sem_CGPA__c} data-label="Rpl_PG1_Sem_CGPA__c"
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            onchange={handleInput} />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        PG Sem 2 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder="" onchange={handleInput}
+                                            value={studentRegform.Rpl_PG2_Sem_CGPA__c}
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            data-label="Rpl_PG2_Sem_CGPA__c" />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>PG Sem 3 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder="" onchange={handleInput}
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            value={studentRegform.Rpl_PG3_Sem_CGPA__c}
+                                            data-label="Rpl_PG3_Sem_CGPA__c" />
+                                        <div class="error-message"></div><br>
+
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>PG Sem 4 CGPA</label>
+                                    <div class="input-container">
+                                        <input onblur={blurHandler} type="text" placeholder="" onchange={handleInput}
+                                            pattern="^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$"
+                                            title="Enter a valid number with up to two decimal places"
+                                            value={studentRegform.Rpl_PG4_Sem_CGPA__c}
+                                            data-label="Rpl_PG4_Sem_CGPA__c" />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+
+                </template> -->
+                <template lwc:elseif={isPgDetailsOnly}>
+                    <div class="pg-details">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                                large-device-size="12" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <h1>*Enter your details as per UG / PG Mark card</h1>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- UG Cumulative CGPA / Percentage -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG Cumulative CGPA /
+                                        Percentage
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugCumulativeCgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+
+                            <!-- UG Year of Graduation -->
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG Year Of Graduation
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugGraduationYear} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- UG College Name & UG Branch -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG College Name
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugCollegeName} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG Branch
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugBranch} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- UG University Name -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>UG University Name
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={ugUniversityName} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>Current Backlogs
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={totalBacklogs} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>
+                                        <abbr class="slds-required" title="required">*</abbr>Total Backlogs
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="text" value={totalBacklogs1} data-label="Rpl_Total_Backlogs__c" onchange={handleInput}/>
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <!-- PG Semester CGPAs -->
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <abbr class="slds-required" title="required" lwc:if={isPgSem1Required}>*</abbr>
+                                    <label>PG Sem 1 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={pgSem1Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>PG Sem 2 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={pgSem2Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>PG Sem 3 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={pgSem3Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <div class="custom-box">
+                                    <label>PG Sem 4 SGPA</label>
+                                    <div class="input-container">
+                                        <input type="text" value={pgSem4Cgpa} readonly />
+                                        <div class="error-message"></div><br>
+                                    </div>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </template>
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+
+                        </div>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+                <div class="next-prev-button-section">
+                    <button class="reva-base-button prev-next-btn" onclick={handlePreviousFour}>Previous</button>
+                    <button class="reva-brand-button  prev-next-btn" disabled={isSaveButtonDisabled}
+                        onclick={handleSave}>Next</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- **********************Newly added for UG or PG details************************************** -->
+
+
+        <!-- ************************************************************ -->
+
+    </div>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+</template>

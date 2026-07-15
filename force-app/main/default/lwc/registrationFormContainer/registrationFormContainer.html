@@ -1,0 +1,21 @@
+<template>
+  <div class="registration-form-wrapper">
+    <div class="registration-form">
+      <div class="form-header">
+        Admissions {propYear}
+      </div>
+      <div class="screen">
+        <lightning-flow flow-api-name='Registration_Home_Screen' flow-input-variables={flowInputVariables}
+          onstatuschange={handleStatusChange} flow-finish-behavior=NONE>
+        </lightning-flow>
+      </div>
+      <div>
+        <template if:true={loader}>
+          <div class="spinner">
+            <lightning-spinner alternative-text="Payment Page Loading"></lightning-spinner>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>

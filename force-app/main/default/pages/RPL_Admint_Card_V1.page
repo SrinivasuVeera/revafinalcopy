@@ -1,0 +1,292 @@
+<apex:page standardController="Rpl_Student_Registration_Drive__c" applyHtmlTag="false" showHeader="false"
+        standardStylesheets="false" applyBodyTag="false" renderAs="pdf">
+        <html>
+
+        <head>
+            <style>
+                * {
+                    font-family: serif;
+                    margin: 0;
+                    padding: 0;
+
+                }
+
+                .reva-logo {
+                    height: 100px;
+                }
+
+                .reva-logo {
+                    text-align: center;
+
+                }
+
+                .admit-card-header-container {
+                    width: 85%;
+                    margin: auto;
+                }
+
+                .admit-card-header {
+                    background-color: #56565e;
+                    color: white;
+                    text-align: center;
+                }
+
+                .admit-card-header p {
+                    font-size: 24px;
+                    font-weight: 600;
+                    padding: 0.5rem;
+                }
+
+                .company-logo {
+                    top: 0;
+                    max-height: 50px;
+                }
+
+                .company-logo .company-img {
+                    max-height: 100px;
+                    max-width: 250px;
+                }
+
+                .drive-details-container {
+                    padding-inline: 80px;
+                    margin-top: 30px;
+                }
+
+              
+
+                .drive-details div {
+                    padding: 8px;
+                    font-weight: 900;
+                    font-size: 20px;
+                }
+
+               
+                .qr-code {
+                    margin-top: 20px;
+                    text-align: center;
+                }
+
+                .qr-code .qr-img {
+                    height: 150px;
+                }
+
+
+                .student-image .student-img {
+                    height: 150px;
+                    width: 135px;
+                    margin-left: 70px;
+                }
+
+                .footer {
+                    margin-top: 150px;
+                }
+
+                .footer * {
+                    text-align: center;
+                    font-size: 20px;
+                }
+
+                .footer h4 {
+                    text-align: center;
+                }
+
+                .footer strong {
+                    display: inline;
+                }
+
+                .footer h5 {
+                    font-weight: 500;
+                    display: inline;
+                }
+
+                .all-the-best {
+                    margin-top: 30px;
+                }
+
+                table.greyGridTable {
+                    border: 2px solid #FFFFFF;
+                    height: 203px;
+
+                    border-collapse: collapse;
+                    font-weight: 600;
+                }
+
+                table.greyGridTable td,
+                table.greyGridTable th {
+                    border: 0px solid #FFFFFF;
+                    padding: 5px 9px;
+                }
+
+                table.greyGridTable tbody td {
+                    font-size: 20px;
+                }
+
+                table.greyGridTable tfoot td {
+                    font-size: 14px;
+                }
+
+                .student-detaills {
+                    margin: auto;
+                    margin-top: 40px;
+
+                }
+
+                .drive-details-container {
+                    margin: auto;
+                    margin-top: 20px;
+
+                }
+
+                body,
+                html {
+                    background-color: #eff0f2;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .watermark {
+                    position: absolute;
+                }
+            </style>
+        </head>
+
+        <body>
+            <header>
+                <div class="reva-logo">
+                    <apex:image url="{!URLFOR($Resource.RPL_Static_Resources, 'Reva_Placement_Static_Resources/Icons/revalogo.png')}"
+                        height="100px" />
+                </div>
+                <div class="admit-card-header-container">
+                    <div class="admit-card-header">
+                        <p>PLACEMENT ADMIT CARD</p>
+                    </div>
+                </div>
+            </header>
+            <table class="drive-details-container">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div styleClass="company-logo">
+                                <apex:outputField styleClass="company-img"
+                                    value="{!Rpl_Student_Registration_Drive__c.Rpl_Placement_Drive__r.Rpl_Company_Name__r.Company_Image__c}" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="drive-details">
+                                <div class="drive-name">
+                                    {!Rpl_Student_Registration_Drive__c.Rpl_Placement_Drive__r.Name}
+                                </div>
+                                <div class="drive-date"> Date &nbsp;: &nbsp;
+                                    <apex:outputText value="{0,date,dd'-'MM'-'yyyy}"
+                                        style="font-size: 18px; font-weight:bolder">
+                                        <apex:param value="{!Rpl_Student_Registration_Drive__c.Rpl_Placement_Drive__r.Rpl_Event_Date_Time__c}" />
+                                    </apex:outputText>
+                                </div>
+                                <div class="drive-time"> Time : 10:30</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <apex:image url="{!URLFOR($Resource.RPL_Static_Resources, 'Reva_Placement_Static_Resources/Icons/REVA_Logo_Watermark.png')}"
+                    style="position:absolute; height:500px; margin-left:120px; " />
+            </div>
+            <div class="qr-code">
+                <apex:image alt="REVA UNIVERSITY" url="{!Rpl_Student_Registration_Drive__c.Rpl_QR_Href_Link__c}"
+                    styleClass="qr-img" />
+            </div>
+            
+            <table class="student-detaills">
+                <tbody>
+                    <tr>
+                        <td>
+                            <table class="greyGridTable">
+                                <tbody>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>: {!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Name}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SRN</td>
+                                        <td>:
+                                            {!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_SRN__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>:
+                                            {!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Gender__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Program</td>
+                                        <td>:
+                                            {!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Branch_Name__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Semester</td>
+                                        <td>:
+                                            {!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Acitve_Semester__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile</td>
+                                        <td>:
+                                            {!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Contact_No__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email ID</td>
+                                        <td>:
+                                            {!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Personal_Mail_ID__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Non-Appeared</td>
+                                        <td>:
+                                            {!ROUND(Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Count_of_non_appeared_drives__c,
+                                            0)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Offer Count</td>
+                                        <td>:
+                                            {!ROUND(Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Offer_Count__c,
+                                            0)}</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+
+                        </td>
+                        <td>
+                            <div styleClass="student-image">
+                                <apex:outputField value="{!Rpl_Student_Registration_Drive__c.Rpl_Student_Registration__r.Rpl_Student_Image__c}"
+                                    styleClass="student-img" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="footer">
+                <div>
+                    <strong>Note : </strong>
+                    <h5>Please scan the QR code at the time of arrival for the attendance.</h5>
+                </div>
+                <div class="all-the-best">
+                    <h4>All The Best!!!</h4>
+                </div>
+
+
+            </div>
+            
+
+
+        </body>
+
+        </html>
+    </apex:page>

@@ -1,0 +1,479 @@
+<apex:page renderAs="pdf" applyHtmlTag="false" showHeader="false" standardStylesheets="false" sidebar="false" applyBodyTag="false" standardController="hed__Application__c" extensions="ProvisionalAdmissionFeeChallan_Extension">
+    <head>
+    <style>
+        @page {
+            size: A3 landscape;
+        }
+        .box {
+            display: inline-block;
+            width: 21.5%;
+            padding: 10px;
+            border: 2px solid black;
+            margin: 10px;
+            position: relative;
+            top: 60px;
+        }
+        .insideBox {
+            display: inline-block;
+            width: 100%;
+            padding: 1px;
+            border: 1px solid black;
+            margin: 0px;
+        }
+    
+        .watermarkStudent {
+            transform: rotate(-45deg);
+            position: absolute;
+            top: 30%;
+            left: 0%;
+            opacity: 0.1;
+            font-size: 15em;
+            font-weight: bold;
+            color: #000;
+            z-index: -1;
+        }
+        .watermarkAdmission {
+            transform: rotate(-45deg);
+            position: absolute;
+            top: 30%;
+            left: 0%;
+            opacity: 0.1;
+            font-size: 5em;
+            font-weight: bold;
+            color: #000;
+            z-index: -1;
+        }
+        .watermarkFinance {
+            transform: rotate(-45deg);
+            position: absolute;
+            top: 30%;
+            left: 0%;
+            opacity: 0.1;
+            font-size: 5em;
+            font-weight: bold;
+            color: #000;
+            z-index: -1;
+        }
+        .watermarkBank {
+            transform: rotate(-45deg);
+            position: absolute;
+            top: 30%;
+            left: 0%;
+            opacity: 0.1;
+            font-size: 5em;
+            font-weight: bold;
+            color: #000;
+            z-index: -1;
+        }
+    </style>
+    </head>
+    <body>
+        <apex:outputPanel rendered="{!(recordOwnerUsername != currentUserName && currentUserProfileName == 'Counselor')}" >
+            <div>
+                <center style = "color:#000000;font-size:15px"><b> You do not have access to generate Provisional Admissional Fee Challan</b></center><br/>
+                <center style = "color:#000000;font-size:15px"><b> currentUserName : {!currentUserName}</b></center><br/>
+                <center style = "color:#000000;font-size:15px"><b> recordOwnerUsername : {!recordOwnerUsername}</b></center><br/>
+                    <center style = "color:#000000;font-size:15px"><b> currentUserProfileName : {!currentUserProfileName}</b></center><br/>
+            </div>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!(currentUserProfileName != 'Counselor' || (currentUserProfileName == 'Counselor' && recordOwnerUsername == currentUserName))}" >
+        <apex:repeat value="{!PAFList}" var="PAF" id="theRepeat">
+        <!-- *****************STUDENT COPY*************** -->
+            <div class="box">
+                <apex:image url="{!$Resource.REVA_LOGO_BOOKMARK}" styleClass="watermarkStudent">
+                    <center style = "color:#000000;font-size:15px"><b>STUDENT COPY</b></center><br/>
+                    <div class="insideBox">
+                        <center><img src="{!$Resource.REVA_LOGO}" width="300px"/><br/></center>
+                        <p style = "text-align: center; font-size:15px"><b>No: {!PAF.challanNo}</b></p> 
+                                     
+                    </div>
+                    <div class="insideBox">
+                         
+                        <p style = "font-size:13px">
+                            <b> DATE:
+                                <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                    <apex:param value="{!today}"></apex:param>
+                                </apex:outputText>
+                            </b>
+                        </p>
+                        <p style = "font-size:14px"><b>NAME: {!PAF.applicantName}</b> </p>
+                        <p style = "font-size:14px"><b>Appln No.: {!PAF.applicationNumber}</b></p>
+                        <p style = "font-size:14px"><b>BRANCH: {!PAF.program}</b></p>
+                        <p style = "font-size:14px"><b>YEAR: {!PAF.yearWord}</b></p>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </div>
+                    
+                    <div class="insideBox">
+                        <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                            <tr style="text-align: center; font-family: Arial; font-size: 15px;">
+                                <td><b>PARTICULARS</b></td>
+                                <td><b>AMOUNT</b></td>
+                            </tr>
+                            <apex:outputText rendered="{!tuitionTotalFee != null}">
+                                <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                    <td>Tuition Fee</td>
+                                    <td>{!PAF.tuitionFee}</td>
+                                </tr>
+                            </apex:outputText>
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td>University Fee</td>
+                                <td>{!PAF.universityFee}</td>
+                            </tr>
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td>Total Amount</td>
+                                <td>{!PAF.totalPAFAmount}</td>
+                            </tr>
+                        </table>
+                        <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td>Total Amount (in words): Rupees {!PAF.totalInWords} Only.</td>
+                            </tr>
+                        </table>
+                        <table border="0" cellpadding="2" cellspacing="3" style="width:100%;">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td><b>Mode of Payment:</b> {!PAF.modeOfPaymentType}</td>
+                                <td ><b>Generated By:</b> {!name}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <apex:outputPanel rendered="{!PAF.modeOfPaymentType == 'Cheque / DD'}">
+                        <div class="insideBox">
+                            <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                                <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                    <td><b>Cheque/DD No: </b>{!PAF.chequeDDNumber}</td>
+                                    <td><b>Cheque Date: </b>
+                                        <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                        <apex:param value="{!PAF.chequeDDDate}"></apex:param>
+                                        </apex:outputText>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="insideBox">
+                            <p style = "color:#fb0606;font-size:15px">Remark: The Admission Confirmation is subjected to the realization of payment</p>
+                        </div>
+                    </apex:outputPanel>
+                    <div class="insideBox">
+                        <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td><b>Signature of the candidate</b></td>
+                                <td style="text-align: right;"><b>Signature of receving Authority with seal</b></td>
+                            </tr>
+                            <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                                <td></td>
+                            </tr>
+                            <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                                <td></td>
+                            </tr>
+                            <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </apex:image>
+            </div>
+        <!-- *******ADMISSION COPY************** -->
+        <div class="box">
+            <apex:image url="{!$Resource.REVA_LOGO_BOOKMARK}" styleClass="watermarkStudent">
+                <center style = "color:#000000;font-size:15px"><b>ADMISSION COPY</b></center><br/>
+                <div class="insideBox">
+                    <center><img src="{!$Resource.REVA_LOGO}" width="300px"/><br/></center>
+                    <p style = "text-align: center; font-size:15px"><b>No: {!PAF.challanNo}</b></p>                
+                </div>
+                <div class="insideBox">
+                     
+                    <p style = "font-size:13px">
+                        <b> DATE:
+                            <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                <apex:param value="{!today}"></apex:param>
+                            </apex:outputText>
+                        </b>
+                    </p>
+                    <p style = "font-size:14px"><b>NAME: {!PAF.applicantName}</b> </p>
+                    <p style = "font-size:14px"><b>Appln No.: {!PAF.applicationNumber}</b></p>
+                    <p style = "font-size:14px"><b>BRANCH: {!PAF.program}</b></p>
+                    <p style = "font-size:14px"><b>YEAR: {!PAF.yearWord}</b></p>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </div>
+                
+                <div class="insideBox">
+                    <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: center; font-family: Arial; font-size: 15px;">
+                            <td><b>PARTICULARS</b></td>
+                            <td><b>AMOUNT</b></td>
+                        </tr>
+                        <apex:outputText rendered="{!tuitionTotalFee != null}">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td>Tuition Fee</td>
+                                <td>{!PAF.tuitionFee}</td>
+                            </tr>
+                        </apex:outputText>
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>University Fee</td>
+                            <td>{!PAF.universityFee}</td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>Total Amount</td>
+                            <td>{!PAF.totalPAFAmount}</td>
+                        </tr>
+                    </table>
+                    <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>Total Amount (in words): Rupees {!PAF.totalInWords} Only.</td>
+                        </tr>
+                    </table>
+                    <table border="0" cellpadding="2" cellspacing="3" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td><b>Mode of Payment:</b> {!PAF.modeOfPaymentType}</td>
+                            <td ><b>Generated By:</b> {!name}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <apex:outputPanel rendered="{!PAF.modeOfPaymentType == 'Cheque / DD'}">
+                    <div class="insideBox">
+                        <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td><b>Cheque/DD No: </b>{!PAF.chequeDDNumber}</td>
+                                <td><b>Cheque Date: </b>
+                                    <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                    <apex:param value="{!PAF.chequeDDDate}"></apex:param>
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="insideBox">
+                        <p style = "color:#fb0606;font-size:15px">Remark: The Admission Confirmation is subjected to the realization of payment</p>
+                    </div>
+                </apex:outputPanel>
+                <div class="insideBox">
+                    <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td><b>Signature of the candidate</b></td>
+                            <td style="text-align: right;"><b>Signature of receving Authority with seal</b></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </apex:image>
+        </div>
+        <!-- *******FINANCE COPY************** -->
+        <div class="box">
+            <apex:image url="{!$Resource.REVA_LOGO_BOOKMARK}" styleClass="watermarkStudent">
+                <center style = "color:#000000;font-size:15px"><b>FINANCE COPY</b></center><br/>
+                <div class="insideBox">
+                    <center><img src="{!$Resource.REVA_LOGO}" width="300px"/><br/></center>
+                    <p style = "text-align: center; font-size:15px"><b>No: {!PAF.challanNo}</b></p> 
+                                 
+                </div>
+                <div class="insideBox">
+                     
+                    <p style = "font-size:13px">
+                        <b> DATE:
+                            <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                <apex:param value="{!today}"></apex:param>
+                            </apex:outputText>
+                        </b>
+                    </p>
+                    <p style = "font-size:14px"><b>NAME: {!PAF.applicantName}</b> </p>
+                    <p style = "font-size:14px"><b>Appln No.: {!PAF.applicationNumber}</b></p>
+                    <p style = "font-size:14px"><b>BRANCH: {!PAF.program}</b></p>
+                    <p style = "font-size:14px"><b>YEAR: {!PAF.yearWord}</b></p>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </div>
+                
+                <div class="insideBox">
+                    <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: center; font-family: Arial; font-size: 15px;">
+                            <td><b>PARTICULARS</b></td>
+                            <td><b>AMOUNT</b></td>
+                        </tr>
+                        <apex:outputText rendered="{!tuitionTotalFee != null}">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td>Tuition Fee</td>
+                                <td>{!PAF.tuitionFee}</td>
+                            </tr>
+                        </apex:outputText>
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>University Fee</td>
+                            <td>{!PAF.universityFee}</td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>Total Amount</td>
+                            <td>{!PAF.totalPAFAmount}</td>
+                        </tr>
+                    </table>
+                    <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>Total Amount (in words): Rupees {!PAF.totalInWords} Only.</td>
+                        </tr>
+                    </table>
+                    <table border="0" cellpadding="2" cellspacing="3" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td><b>Mode of Payment:</b> {!PAF.modeOfPaymentType}</td>
+                            <td ><b>Generated By:</b> {!name}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <apex:outputPanel rendered="{!PAF.modeOfPaymentType == 'Cheque / DD'}">
+                    <div class="insideBox">
+                        <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td><b>Cheque/DD No: </b>{!PAF.chequeDDNumber}</td>
+                                <td><b>Cheque Date: </b>
+                                    <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                    <apex:param value="{!PAF.chequeDDDate}"></apex:param>
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="insideBox">
+                        <p style = "color:#fb0606;font-size:15px">Remark: The Admission Confirmation is subjected to the realization of payment</p>
+                    </div>
+                </apex:outputPanel>
+                <div class="insideBox">
+                    <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td><b>Signature of the candidate</b></td>
+                            <td style="text-align: right;"><b>Signature of receving Authority with seal</b></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </apex:image>
+        </div>
+        <!-- *******BANK COPY************** -->
+        <div class="box">
+            <apex:image url="{!$Resource.REVA_LOGO_BOOKMARK}" styleClass="watermarkStudent">
+                <center style = "color:#000000;font-size:15px"><b>BANK COPY</b></center><br/>
+                <div class="insideBox">
+                    <center><img src="{!$Resource.REVA_LOGO}" width="300px"/><br/></center>
+                    <p style = "text-align: center; font-size:15px"><b>No: {!PAF.challanNo}</b></p> 
+                                 
+                </div>
+                <div class="insideBox">
+                     
+                    <p style = "font-size:13px">
+                        <b> DATE:
+                            <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                <apex:param value="{!today}"></apex:param>
+                            </apex:outputText>
+                        </b>
+                    </p>
+                    <p style = "font-size:14px"><b>NAME: {!PAF.applicantName}</b> </p>
+                    <p style = "font-size:14px"><b>Appln No.: {!PAF.applicationNumber}</b></p>
+                    <p style = "font-size:14px"><b>BRANCH: {!PAF.program}</b></p>
+                    <p style = "font-size:14px"><b>YEAR: {!PAF.yearWord}</b></p>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </div>
+                
+                <div class="insideBox">
+                    <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: center; font-family: Arial; font-size: 15px;">
+                            <td><b>PARTICULARS</b></td>
+                            <td><b>AMOUNT</b></td>
+                        </tr>
+                        <apex:outputText rendered="{!tuitionTotalFee != null}">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td>Tuition Fee</td>
+                                <td>{!PAF.tuitionFee}</td>
+                            </tr>
+                        </apex:outputText>
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>University Fee</td>
+                            <td>{!PAF.universityFee}</td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>Total Amount</td>
+                            <td>{!PAF.totalPAFAmount}</td>
+                        </tr>
+                    </table>
+                    <table border="1" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td>Total Amount (in words): Rupees {!PAF.totalInWords} Only.</td>
+                        </tr>
+                    </table>
+                    <table border="0" cellpadding="2" cellspacing="3" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td><b>Mode of Payment:</b> {!PAF.modeOfPaymentType}</td>
+                            <td ><b>Generated By:</b> {!name}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <apex:outputPanel rendered="{!PAF.modeOfPaymentType == 'Cheque / DD'}">
+                    <div class="insideBox">
+                        <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                            <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                                <td><b>Cheque/DD No: </b>{!PAF.chequeDDNumber}</td>
+                                <td><b>Cheque Date: </b>
+                                    <apex:outputText value="{0,date, dd-MM-yyyy}">
+                                    <apex:param value="{!PAF.chequeDDDate}"></apex:param>
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="insideBox">
+                        <p style = "color:#fb0606;font-size:15px">Remark: The Admission Confirmation is subjected to the realization of payment</p>
+                    </div>
+                </apex:outputPanel>
+                <div class="insideBox">
+                    <table border="0" cellpadding="7" cellspacing="0" style="width:100%;">
+                        <tr style="text-align: left; font-family: Arial; font-size: 15px;">
+                            <td><b>Signature of the candidate</b></td>
+                            <td style="text-align: right;"><b>Signature of receving Authority with seal</b></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                        <tr style="text-align: left; font-family: Arial; font-size: 14px;">
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </apex:image>
+        </div>
+    </apex:repeat>
+        </apex:outputPanel>
+    </body>
+</apex:page>

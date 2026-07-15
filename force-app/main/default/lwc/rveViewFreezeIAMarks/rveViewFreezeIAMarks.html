@@ -1,0 +1,73 @@
+<template>
+    <div>
+      <!--  <lightning-datatable
+            key-field="Id"
+            data={data}
+            columns={columns}
+            hide-checkbox-column="true"
+            >
+           
+            </lightning-datatable>-->
+            <template if:true={enableData}>
+            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Class Rooms">
+                <thead>
+                    
+                    <tr class="slds-line-height_reset">
+                     <th class="" scope="col">
+                            <div class="slds-truncate " title="Total Students">SL.No</div>
+                     </th>
+                     <th class="" scope="col">
+                         <div class="slds-truncate " title="Total Students">SRN</div>
+                       </th>
+                      <th class="" scope="col">
+                         <div class="slds-truncate " title="Total Students">Name</div>
+                       </th>
+                       <th class="" scope="col">
+                            <div class="slds-truncate slds-text-align_center" title="Total Students">IA1</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate slds-text-align_center" title="Total Students">IA2</div>
+                        </th>
+                       <th class="" scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Total Students">Total IA Marks(IA1+IA2) Max Marks=50</div>
+                       </th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                 <template for:each={data} for:item="entry">
+                     <tr key={entry.SRN} class="slds-hint-parent">
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title="Block">{entry.index}</div>
+                        </td>
+                         <td>
+                             <div class="slds-truncate " title="Block">{entry.SRN}</div>
+                         </td>
+                         <td>
+                             <div class="slds-truncate " title="Block">{entry.Name}</div>        
+                         </td>
+                         <td>
+                                <div class="slds-truncate slds-text-align_center" title="Block">{entry.IA1Marks}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate slds-text-align_center" title="Block">{entry.IA2Marks}</div>
+                            </td>
+                         <td>
+                                <div class="slds-truncate slds-text-align_center" title="Block">
+                                    {entry.Marks}
+                                </div>
+                         </td>
+                       
+                        </tr>
+                     </template>
+                </tbody>
+      </table>
+            </template>
+            <template if:true={nodata}>
+                <div class="slds-text-align_center">
+                  No IA Marks Found for this Course
+                </div>
+
+            </template>
+    </div>
+</template>

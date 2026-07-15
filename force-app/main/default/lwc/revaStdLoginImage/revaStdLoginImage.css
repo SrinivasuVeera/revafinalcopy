@@ -1,0 +1,45 @@
+.userLogin{
+color:black;
+font-size: 30px;
+font-family: sans-serif;
+}
+.welcomeBack{
+color:skyblue;
+font-size: 20px;
+font-family: sans-serif;
+}
+.Imgs[c-revaStdLoginImage_revaStdLoginImage] {
+    position: relative;
+    max-width: 112%;
+    margin-left: -12px;
+    margin-top: -5px;
+    margin-right: -13px;
+    /* border-radius: 20px 21px 0px 0px;
+    box-shadow: 8px 0px 8px -4px rgba(0,0,0,0.75); */
+}
+.lineHeight{
+    line-height: 23px;
+    margin: 20px 0px 12px 20px;
+    /* background-color: black; */
+}
+
+@media (max-width:700px){
+.userLogin{
+    color:black;
+    font-size: 20px;
+    font-family: sans-serif;
+}
+.welcomeBack{
+    color:skyblue;
+    font-size: 15px;
+    font-family: sans-serif;
+}
+.lineHeight{
+    line-height: 23px;
+    margin: 20px 0px 12px 20px;
+}
+.HideThis{
+    display:none;
+}
+
+}

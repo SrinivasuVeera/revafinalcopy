@@ -1,0 +1,81 @@
+<template>
+    <div class="container">
+        <lightning-layout multiple-rows>
+
+            <!-- Menu Type -->
+            <lightning-layout-item size="4" small-device-size="4" medium-device-size="4" large-device-size="2"
+                padding="horizontal-small">
+                <div class="custom-box">
+                    <h2 class="font-style">{menuType}</h2>
+                </div>
+            </lightning-layout-item>
+
+            <!-- Start Time -->
+            <lightning-layout-item size="4" small-device-size="4" medium-device-size="4" large-device-size="2"
+                padding="horizontal-small">
+                <div class="custom-box">
+                    <lightning-input label="Start Time" type="time" value={startTime}
+                        onchange={handleStartTimeChange}></lightning-input>
+                </div>
+            </lightning-layout-item>
+
+            <!-- End Time -->
+            <lightning-layout-item size="4" small-device-size="4" medium-device-size="4" large-device-size="2"
+                padding="horizontal-small">
+                <div class="custom-box">
+                    <lightning-input label="End Time" type="time" value={endTime}
+                        onchange={handleEndTimeChange}></lightning-input>
+                </div>
+            </lightning-layout-item>
+
+            <!-- Search + Dropdown -->
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="5"
+                padding="horizontal-small">
+
+                <div class="keyboard-wrapper" tabindex="0" onkeydown={handleKeyDown}>
+                    <lightning-input type="search"
+                                     value={searchKey}
+                                     label="Select Menu"
+                                     onchange={handleSearch}
+                                     onkeydown={handleKeyDown} 
+                                     class="search-box">
+                    </lightning-input>
+
+                    <!-- Dropdown Options -->
+                    <div class="slds-p-top_small options-container" style="max-height:180px; overflow-y:auto;">
+                        <template if:true={filteredPicklistValues}>
+                            <template for:each={filteredPicklistValues} for:item="item" for:index="index">
+                                <div key={item.label}
+                                     class={item.cls}
+                                     data-index={index}
+                                     data-value={item.label}
+                                     onclick={handleSelect}>
+                                    {item.label}
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+
+                    <!-- Selected Values -->
+                    <div>
+                        <template if:true={selectedValues}>
+                            <div class="selected-item-container">
+                                <template for:each={selectedValues} for:item="value">
+                                    <div key={value}>
+                                        <lightning-badge label={value}
+                                                         icon-name="utility:close"
+                                                         class="badge"
+                                                         data-value={value}
+                                                         onclick={handleRemove}>
+                                        </lightning-badge>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

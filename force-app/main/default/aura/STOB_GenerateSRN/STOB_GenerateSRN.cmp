@@ -1,0 +1,296 @@
+<aura:component controller="STOB_GenerateSRN_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    
+    <aura:attribute name ="hidePicklist" type="boolean" default ="false"/>
+    <aura:attribute name ="hideConfirmBtn" type="boolean" default ="false"/>
+    <aura:attribute name ="disableSelection" type="boolean" default ="false"/>
+    <aura:attribute name ="hideStudPicklist" type="boolean" default ="false"/>
+    <aura:attribute name ="hideSRNPicklist" type="boolean" default ="false"/>
+    <aura:attribute name="studTypeOptions" type="List"/>
+    <aura:attribute name="progmEnrollmentLst" type="List"/>
+    <aura:attribute name="confStudSRNLst" type="List"/>
+    <aura:attribute name="studentType" type="String"/>
+    <aura:attribute type="hed__Program_Plan__c" name="objProgPlan"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="showGRNGenerateDialog" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds-card">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:user" alternativeText="SRN Number Generation for all Confirmed Students" title="SRN Number Generation for all Confirmed Students"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="SRN Number Generation for all Confirmed Students">SRN Number Generation for all Confirmed Students enrolled for the Program <br/>{!v.objProgPlan.Name}</span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="slds-section slds-is-open">
+            <h3 class="slds-section__title slds-theme_shade slds-align_absolute-center">
+                <center>
+                    <div class="slds-align_absolute-center"><b> SRN Number Generation for all Confirmed Students enrolled for the Program {!v.objProgPlan.Name} </b></div>
+                </center>
+            </h3>
+        </div>-->
+        <br/>
+        <div class="slds-form">
+            <div class="slds-form-element slds-form-element_horizontal">
+                <label class="slds-form-element__label" for="horizontal-input-id-01">
+                    <span style="color:red;">*&nbsp;</span>
+                    <b>Student Type</b>
+                </label>
+                <div class="slds-size_2-of-4">
+                    <div class="slds-form-element__control">
+                        <lightning:combobox aura:id="studTypeOptId" variant = "label-hidden" name="studTypeOptions" label="Student Type"  placeholder="Select Student Type"
+                                            value="{!v.studentType}" options="{!v.studTypeOptions}" disabled="{!v.disableSelection}" onchange="{!c.getEnrollmentDetails}"/>
+                        <span id="errorStudType" style="color:rgb(194, 57, 52);display:none;">Complete this field.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aura:if isTrue="{!not(empty(v.studentType))}">
+            <div class="slds-form">
+                <div class="slds-form-element slds-form-element_horizontal">
+                    <lightning:button class="slds-button slds-button_brand" disabled="{!v.disableSelection}" onclick="{!c.handleChangeStudType}"> Generate SRN </lightning:button><br/>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.hidePicklist}">
+            <div class="slds-box">
+                <lightning:tabset> 
+                    <lightning:tab label="To be Generated">
+                        <aura:if isTrue="{!not(empty(v.progmEnrollmentLst))}">
+                            <div class="slds-table--header-fixed_container" style="height:450px;">
+                                <div class="slds-scrollable_y" style="height:100%;">
+                                    <table class="slds-table slds-table--bordered slds-max-medium-table--stacked slds-table--header-fixed" style="overflow: visible;" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:5%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Sl.No </b> </div>   
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:30%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Student Name </b></div>
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:20%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Application Number </b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Status Type </b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:20%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Program Enrollment Status </b></div>
+                                                </th> 	
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;">
+                                                    <div class="slds-truncate slds-cell-fixed"><b> SRN Number </b><br/>
+                                                        ({!v.objProgPlan.SRN_Format__c})
+                                                    </div>
+                                                </th> 
+                                            </tr>
+                                        </thead>       
+                                        <tbody>
+                                            <aura:iteration items="{!v.progmEnrollmentLst}" var="obj" indexVar="index">
+                                                <tr>
+                                                    <td data-label="Sl. No" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!index + 1}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Student Name" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.hed__Contact__r.Name}
+                                                        </div>
+                                                    </td>  
+                                                    <td data-label="Application Number" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.Application_Number__c}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Student Type" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.Type_Of_Enrollment__c}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Program Enrollment Status" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">	
+                                                            {!obj.Program_Enrollment_Status__c}
+                                                        </div>							
+                                                    </td>
+                                                    <td data-label="SRN Number" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">		
+                                                            {!obj.SRN_Number__c}
+                                                        </div>							
+                                                    </td>							
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>  
+                                    </table>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-align_absolute-center">
+                                <aura:if isTrue="{!!v.hideConfirmBtn}">
+                                    <lightning:button aura:id="confimStudSRN"
+                                                      variant="brand"
+                                                      label="Confirm"
+                                                      title="Confirm"
+                                                      onclick="{!c.generatedialogSRN}"/>
+                                    <aura:if isTrue="{!v.showGRNGenerateDialog}">
+                                        <div role="dialog" class="slds-modal slds-fade-in-open ">
+                                            <div class="slds-modal__container">
+                                                <header class="slds-modal__header">
+                                                    <h1 class="slds-text-heading--medium">Generate SRN Confirmation</h1>
+                                                </header>
+                                                
+                                                <div class="slds-modal__content slds-p-around--medium">
+                                                    <center><b>Are you sure you want to generate SRN?</b></center>
+                                                </div>
+                                                
+                                                <footer class="slds-modal__footer">
+                                                    <lightning:button name='No' label='No' onclick='{!c.handlegenerateNo}'/>
+                                                    <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handlegenerateYes}'/>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <div class="slds-backdrop slds-backdrop--open"></div>            
+                                    </aura:if>
+                                </aura:if>
+                                <lightning:button variant="brand-outline"
+                                                  label="Back"
+                                                  title="Back"
+                                                  onclick="{!c.displayPicklist}"/>
+                            </div>
+                            <aura:set attribute='else'>
+                                <div class="slds-align_absolute-center" style="color:red">No Records found to Generate SRN..!</div>
+                                <div class="slds-align_absolute-center">
+                                    <lightning:button variant="brand-outline"
+                                                      label="Back"
+                                                      title="Back"
+                                                      onclick="{!c.displayPicklist}"/>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </lightning:tab>
+                    <lightning:tab label="Generated(Read Only)">
+                        <aura:if isTrue="{!not(empty(v.confStudSRNLst))}">
+                            <div class="slds-table--header-fixed_container" style="height:450px;">
+                                <div class="slds-scrollable_y" style="height:100%;">
+                                    <table class="slds-table slds-table--bordered slds-max-medium-table--stacked slds-table--header-fixed" style="overflow: visible;" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:5%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Sl.No </b> </div>   
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:30%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Student Name </b></div>
+                                                </th>
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:20%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Application Number </b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:15%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Status Type </b></div>
+                                                </th> 
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:20%;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-p-top_xx-small"><b> Program Enrollment Status </b></div>
+                                                </th> 	
+                                                <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;width:10%;">
+                                                    <div class="slds-truncate slds-cell-fixed"><b> SRN Number </b><br/>
+                                                        ({!v.objProgPlan.SRN_Format__c})
+                                                    </div>
+                                                </th> 
+                                            </tr>
+                                        </thead>       
+                                        <tbody>
+                                            <aura:iteration items="{!v.confStudSRNLst}" var="obj" indexVar="index">
+                                                <tr>
+                                                    <td data-label="Sl. No" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!index + 1}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Student Name" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.hed__Contact__r.Name}
+                                                        </div>
+                                                    </td>  
+                                                    <td data-label="Application Number" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.Application_Number__c}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Student Type" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">
+                                                            {!obj.Type_Of_Enrollment__c}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Program Enrollment Status" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">	
+                                                            {!obj.Program_Enrollment_Status__c}
+                                                        </div>							
+                                                    </td>
+                                                    <td data-label="SRN Number" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;">
+                                                        <div class="slds-col">		
+                                                            {!obj.SRN_Number__c}
+                                                        </div>							
+                                                    </td>							
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>  
+                                    </table>
+                                </div> 
+                            </div>
+                            <br/>
+                            <div class="slds-align_absolute-center">
+                                <!--<lightning:button aura:id="Okay"
+                                              variant="brand"
+                                              label="Okay"
+                                              title="Okay"
+                                              onclick="{!c.closeQuickAction}"/>-->
+                                <lightning:button variant="brand-outline"
+                                                  label="Back"
+                                                  title="Back"
+                                                  onclick="{!c.displayPicklist}"/>
+                            </div>
+                            <aura:set attribute='else'>
+                                <div class="slds-align_absolute-center" style="color:red">No Records found for Generated SRN..!</div>
+                                <div class="slds-align_absolute-center">
+                                    <lightning:button variant="brand-outline"
+                                                      label="Back"
+                                                      title="Back"
+                                                      onclick="{!c.displayPicklist}"/>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </lightning:tab>
+                </lightning:tabset>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

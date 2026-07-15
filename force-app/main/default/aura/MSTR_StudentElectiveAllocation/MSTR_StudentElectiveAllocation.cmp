@@ -1,0 +1,339 @@
+<aura:component controller="MSTR_StudentElectiveAllocation_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionwithoutHeader" access="global" >
+    <aura:html tag="style">       
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/> 
+    <aura:attribute name="showConfirmSubject" type="boolean" default="false"/> 
+    <aura:attribute name="listStudentPreference" type="List"/>
+    <aura:attribute name="objTermName" type="string"/>
+    <aura:attribute name="ProgPlanName" type="string"/>
+    <aura:attribute name="HeaderName" type="string"/>
+    <aura:attribute name="selectedSubject" type="String"/>
+    <aura:attribute name="subjectDetailsMap" type="Map"/>
+    <aura:attribute name="MapPreference" type="Map"/>
+    <aura:attribute name="SubjectWrp" type="Map"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="lstCourseOfferingdata" type="List"/> 
+    <aura:attribute name="courseElectId" type="String"/>
+    <aura:attribute name="showConfirmStudents" type="boolean" default="false"/>
+    <aura:attribute name="showCreateSubject" type="boolean" default="false"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-card">        
+        <aura:if isTrue="{!not(empty(v.lstCourseOfferingdata))}">
+            <div class="slds-page-header">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning:icon iconName="doctype:image" alternativeText="Student Elective Allocation" title="Student Elective Allocation" /> &nbsp;
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Student Elective Allocation">
+                                                Student Elective Allocation For
+                                                the Program Batch {!v.ProgPlanName} of term {!v.objTermName}
+                                            </span>
+                                        </h1>
+                                    </div>
+                                </div>
+                                <p class="slds-text-body_small"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <br/>
+            <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-table--striped" style="overflow: visible;width=80%">
+                <thead>
+                    <tr class="slds-text-heading--label">
+                        <th class="slds-is-resizable" scope="col" >
+                            <b style="text-align:center;"> Electives</b>    
+                        </th>                        
+                        <aura:iteration items="{!v.MapPreference}" var="cus" indexVar="key">
+                            <th class="slds-is-resizable" scope="col" >
+                                <center>{!cus.value}</center>
+                            </th>
+                        </aura:iteration> 
+                        <th class="slds-is-resizable" scope="col" >
+                            <b style="text-align:center;"> Assigned</b>    
+                        </th> 
+                        <th class="slds-is-resizable" scope="col" >
+                            <b style="text-align:center;"> Active</b>    
+                        </th> 
+                    </tr>
+                </thead>
+                <thead>
+                    <aura:iteration items="{!v.lstCourseOfferingdata}" var="cData" indexVar="key">
+                        <tr class="slds-hint-parent">                        
+                            <td>
+                                <aura:if isTrue="{!cData.ParentCourseOffering_Name==null}" >
+                                    <a data-Id="{!cData.CourseOfferingId}" onclick="{!c.ElectiveOnclick}"> <b> {!cData.Name} </b> <br/> </a>    
+                                </aura:if> 
+                                <aura:if  isTrue="{!cData.ParentCourseOffering_Name!=null}">
+                                   <b> {!cData.Name} </b>
+                                </aura:if>                                                        
+                            </td>
+                            <td><center> <b> {!cData.Student_Preference_1} </b></center></td>
+                            <td><center> <b> {!cData.Student_Preference_2} </b> </center> </td>   
+                            <td><center> <b> {!cData.Student_Preference_3} </b> </center> </td>   
+                            <td><center> <b> {!cData.assigned} </b> </center></td> 
+                            <td>
+                                <center>
+                                    <b><aura:if  isTrue="{!cData.ParentCourseOffering_Name!=null}">
+                                        <ui:inputCheckbox aura:id="selectActive"
+                                                          name = "{!key}"
+                                                          value="{!cData.active}"
+                                                          change="{!c.activeSubject}"/>
+                                        </aura:if></b>
+                                </center>
+                            </td>  
+                        </tr>
+                    </aura:iteration>
+                </thead>
+            </table>
+            <aura:set attribute="else">
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">                                     
+                                    <lightning:icon iconName="utility:error" variant="error"  alternativeText="Records not found" title="Records not found" /> &nbsp;
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Records not found">Records not found.<br/>
+                                                </span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                    <div class="slds-float_right">                                        
+                                    </div>
+                                    <p class="slds-text-body_small"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </aura:set>
+        </aura:if>        
+    </div>
+    <aura:if isTrue="{!v.isModalOpen}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">                    
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{!c.closeModel}"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>                        
+                    <h2> 
+                        <div class="slds-page-header">
+                            <div class="slds-page-header__row">
+                                <div class="slds-page-header__col-title">
+                                    <div class="slds-media">
+                                        <div class="slds-media__figure">
+                                            <lightning:icon iconName="custom:custom55" alternativeText="Elective Allocation" title="Elective Allocation"/>
+                                        </div>
+                                        <div class="slds-media__body" style="text-align: left;">
+                                            <div class="slds-page-header__name">
+                                                <div class="slds-page-header__name-title">
+                                                    <h1>
+                                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Elective Name">{!v.HeaderName}</span>
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                            <div class="slds-float_right">
+                                                <lightning:button variant="brand" label="Save" title="Save" onclick="{!c.saveCourseConnection}" />
+                                                <!--<lightning:button variant="brand" label="Save &amp;Submit" title="Save &amp; Submit"/> -->
+                                                <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closeModel}"/>
+                                            </div>
+                                            <p class="slds-text-body_small"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-float_right">                                
+                            <aura:if isTrue="{!v.showConfirmSubject}">
+                                <div role="dialog" class="slds-modal slds-fade-in-open ">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header">
+                                            <h1 class="slds-text-heading--medium">Elective Allocation</h1>
+                                        </header>                    
+                                        <div class="slds-modal__content slds-p-around--medium">
+                                            <center><b>Are you sure you want to Transfer?</b></center>
+                                        </div>                    
+                                        <footer class="slds-modal__footer">
+                                            <lightning:button name='No' label='No' onclick='{!c.handleAllocateNo}'/>
+                                            <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleAllocateYes}'/>
+                                        </footer>
+                                    </div>
+                                </div>
+                                <div class="slds-backdrop slds-backdrop--open"></div>            
+                            </aura:if> 
+                        </div>
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                    <aura:if isTrue="{!not(empty(v.SubjectWrp))}">
+                        <lightning:tabset>                                  
+                            <aura:iteration items="{!v.SubjectWrp}" var="item" indexVar="indexsubject">
+                                <aura:if isTrue="{!item.value.lstStudPrefElect.length > 0}">
+                                    <lightning:tab label="{!item.value.subjectsName}" id="{!item.value.subjectsNo}">
+                                        <div class="slds-form_horizontal slds-form slds-grid slds-wrap">
+                                            <table class="slds-table slds-table--bordered slds-table_cell-buffer" style="overflow: visible;">
+                                                <thead>
+                                                    <tr>        
+                                                        <th class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                                            <div class="slds-form-element">
+                                                                <div class="slds-form-element__control">
+                                                                    <label class="slds-checkbox">
+                                                                        <ui:inputCheckbox aura:id="selectAllId"
+                                                                                          text="{!indexsubject+'_'+item.value.subjectsId}"
+                                                                                          change="{!c.selectAllCheckbox}"/>
+                                                                        <span class="slds-checkbox_faux"></span>
+                                                                        <span class="slds-form-element__label"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="col" class="slds-is-resizable">
+                                                            <b>Sl.No</b>
+                                                        </th>
+                                                        <th scope="col" class="slds-is-resizable">
+                                                            <b>Student Name  </b>
+                                                        </th>
+                                                        <th scope="col" class="slds-is-resizable">
+                                                            <b>Section  </b>
+                                                        </th> 
+                                                        <th scope="col" class="slds-is-resizable">
+                                                            <b>  SRN Number </b>
+                                                        </th>
+                                                        <th scope="col" class="slds-is-resizable">
+                                                            <b>  Preference 1 </b>
+                                                        </th>
+                                                        <th scope="col" class="slds-is-resizable">
+                                                            <b>Preference 2 </b>
+                                                        </th>
+                                                        <th scope="col" class="slds-is-resizable">
+                                                            <b>  Preference 3 </b>
+                                                        </th>
+                                                        <!--<th  scope="col" class="slds-is-resizable">
+                                                        <b>  Move To </b>
+                                                    </th>-->
+                                                    </tr>
+                                                </thead>  
+                                                <aura:if isTrue="{!item.value.lstStudPrefElect.length >0}">
+                                                    <aura:iteration items="{!item.value.lstStudPrefElect}" var="objStudent" indexVar="indexStudnt">
+                                                        <tr class="slds-hint-parent">                
+                                                            <td class="slds-is-resizable" scope="col" style="width:3.25rem;">
+                                                                <div class="slds-form-element">
+                                                                    <div class="slds-form-element__control">
+                                                                        <label class="slds-checkbox">
+                                                                            <ui:inputCheckbox text="{!objStudent.StudentPreferenceId}"
+                                                                                              value="{!objStudent.isChecked}"
+                                                                                              />
+                                                                            <span class="slds-checkbox_faux"></span>
+                                                                            <span class="slds-form-element__label text"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td data-label="Sl. No" class="slds-cell-wrap" scope="col">
+                                                                <div class="slds-truncate" style="white-space:normal;">
+                                                                    {!indexStudnt + 1} 
+                                                                </div>
+                                                            </td>
+                                                            <td data-label="Student Name" class="slds-cell-wrap" scope="col">
+                                                                <div class="slds-truncate" style="white-space:normal;">
+                                                                    {!objStudent.Contact_Name}
+                                                                </div>
+                                                            </td>  
+                                                            <td data-label="Section" class="slds-cell-wrap" scope="col">
+                                                                <div class="slds-truncate" style="white-space:normal;">
+                                                                    {!objStudent.Section_Name}
+                                                                </div>
+                                                            </td>
+                                                            <td data-label="SRN Number" class="slds-cell-wrap" scope="col">
+                                                                <div class="slds-truncate" style="white-space:normal;">
+                                                                    {!objStudent.SRN_No}
+                                                                </div>
+                                                            </td>
+                                                            <td data-label="Preference 1" class="slds-cell-wrap" scope="col">
+                                                                <div class="slds-truncate" style="white-space:normal;">
+                                                                    {!objStudent.Preference1} 
+                                                                </div>
+                                                            </td>
+                                                            <td data-label="Preference 2" class="slds-cell-wrap" scope="col">
+                                                                <div class="slds-truncate" style="white-space:normal;">
+                                                                    {!objStudent.Preference2} 
+                                                                </div>
+                                                            </td>
+                                                            <td data-label="Preference3" class="slds-cell-wrap" scope="col">
+                                                                <div class="slds-truncate" style="white-space:normal;">
+                                                                    {!objStudent.Preference3} 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </aura:if>
+                                            </table>
+                                        </div>
+                                        <aura:if isTrue="{!item.value.lstStudPrefElect.length >0}">
+                                            <div class="slds-grid slds-wrap slds-gutters slds-theme_default slds-p-top_x-small">
+                                                <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                                                    <lightning:select aura:id="moveToId" label="Move To" name="subjectOptions" value="{!item.value.newSubjectId}">
+                                                        <option value="">None</option>
+                                                        <aura:iteration items="{!v.subjectDetailsMap}" var="sub" >
+                                                            <option value="{!sub.key}"> {!sub.value}</option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>
+                                        </aura:if>
+                                    </lightning:tab>
+                                </aura:if>
+                            </aura:iteration>                                    
+                        </lightning:tabset>
+                    </aura:if>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <aura:if isTrue="{!v.showCreateSubject}">
+        <div role="dialog" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h1 class="slds-text-heading--medium">Elective Allocation</h1>
+                </header>                    
+                <div class="slds-modal__content slds-p-around--medium">
+                    <center><b>Are you sure you want to Create Course Connection?</b></center>
+                </div>                    
+                <footer class="slds-modal__footer">
+                    <lightning:button name='No' label='No' onclick='{!c.handleCourseNo}'/>
+                    <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleCourseYes}'/>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>
+</aura:component>

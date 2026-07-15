@@ -1,0 +1,63 @@
+<template>
+        <template if:false={showForm}>
+            <div class="slds-p-around_medium">
+                <lightning-button
+                    variant="Brand"
+                    label="Click to Submit Vacating Request"
+                    title="Open the self-declaration form"
+                    onclick={handleClick}
+                    class="slds-m-top_medium">
+                </lightning-button>
+            </div>
+        </template>
+        <template if:true={showForm}>
+        <lightning-card title="Vacating Request Form" icon-name="custom:custom18">
+            <div class="slds-p-around_medium">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <label class="custom-bold-label">Vacating Reason</label>
+                        <lightning-input 
+                            type="text" 
+                            name="Cancellation Reason" 
+                            value={selectedVacateReason} 
+                            class="small-input" 
+                            onchange={handleReasonChange} 
+                            required 
+                            variant="label-hidden">
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col">
+                        <label class="custom-bold-label">Vacating Date</label>
+                        <lightning-input 
+                            type="date" 
+                            name="Cancellation Request Date" 
+                            value={selectedVacateDate} 
+                            class="dateCmps" 
+                            onchange={handleDateChange} 
+                            required 
+                            variant="label-hidden">
+                        </lightning-input>
+                    </div>
+                </div>
+                <div class="slds-m-top_medium slds-grid slds-grid_align-spread">
+                    <lightning-button
+                        variant="Brand"
+                        label="Back"
+                        title="Back"
+                        onclick={handleBackClick}>
+                    </lightning-button>
+
+                    <lightning-button 
+                        style="background-color:orange !important;"
+                        variant="brand"
+                        label="Submit"
+                        title="Successful action"
+                        onclick={handleFormSubmit}
+                        disabled={disable}>
+                    </lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+        </template>
+    
+</template>

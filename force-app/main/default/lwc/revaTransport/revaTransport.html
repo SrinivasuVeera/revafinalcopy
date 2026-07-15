@@ -1,0 +1,412 @@
+<template>
+<template if:true={showParentComponent}>
+<div class="transport-container">
+<div class="heading">
+<strong>TRANSPORT</strong>
+</div>
+ 
+            <div class="details slds-var-p-around_medium">
+<div class="slds-text-heading_small" style="color:#F07F07;"> <strong>Transport for {loginUserName} </strong></div>
+<template if:true={showCourseData}>
+<div class="course-data">Course Details : {loginDetails.Program_Batch__r.Name} </div> 
+</template>          
+</div>
+ 
+            <div> 
+                <div class=" marginAround">
+<strong class="underline-text">{LABELS}</strong>
+</div>              
+<div >
+<div >
+                        <template if:true={isDesktop}>
+                        <div class="desktop-image">
+                            <div class="custom-column custom-column-1">
+                                <span class="mainDiv">
+                                    <img src={IMAGES} alt="user Image" height="450px" width="2000px" />
+<!-- <p class='para-box'>{staticBusData.rtrBusImageData}</p> -->
+</span>
+</div>
+</div>
+                        </template>
+                        <template if:true={isMobile}>
+                        <div class="mobile-image">
+                                    <img src={IMAGESTR} alt="user Image" width="100%;" />
+                        </div>
+                        </template>
+                    </div>
+<!-- <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 padAroundMin spacedDiv">
+<div class="custom-column custom-column-2">
+<span class="mainDiv"> 
+<img src={IMAGES.rtrImage2} alt="user Image" height="450px" width="400px" /> 
+<p class="para-box-1"> {staticBusData.rtrBusImageData1} </p>
+ 
+                         </span>
+</div>
+</div> -->
+<!-- <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 padAroundMin spacedDiv">
+<div class="custom-column custom-column-3">
+<span class="mainDiv"> <img src={IMAGES.rtrImage3} alt="user Image" height="450px" width="400px" />
+<p class="para-box-2"> 
+                           {staticBusData.rtrBusImageData2}
+</p>
+</span>
+</div>
+</div> -->
+</div>
+<div>
+<template if:true={revaRegistrationPage}>
+<div class="slds-var-p-around_medium">
+<!-- <div class="slds-scrollable_x"> -->
+<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-no-row-hover slds-table-subject">
+<tbody>
+<tr>
+<th><strong>Registration Name</strong></th>
+<td>{revaRegistrationPage.Reva_Transport__r.Name}</td>
+</tr>
+<tr>
+<th><strong>Route Number</strong></th>
+<td>{revaRegistrationPage.Route_Master__r.Name}</td>
+</tr>
+<tr>
+<th><strong>Route Path</strong></th>
+<td>{revaRegistrationPage.Route_Master__r.RTR_Route_Path__c}</td>
+</tr>
+<tr>
+<th><strong>Pick-up Point</strong></th>
+<td>{revaRegistrationPage.Route_Pick_Up_Point__r.Name}</td>
+</tr>
+<tr >
+<th><strong>Registration Status</strong></th>
+<td class={regStatus}>{revaRegistrationPage.Registration_Status__c}</td>
+</tr>
+<template lwc:if={CancelStatus} > <!-- newly added from  -->
+<template if:true={showMainRefund}>
+        <tr>
+            <th><strong>Amount To be Refunded/Adjusted</strong></th>
+            <td class={regStatus}>{revaRegistrationPage.Amount_to_be_Refunded__c}</td>
+        </tr>
+    </template>
+
+    <!-- Show Route Refunds only when they should be visible -->
+    <template if:true={showRouteRefunds}>
+        <tr>
+            <th><strong>Route Amount To be Refunded</strong></th>
+            <td class={regStatus}>{revaRegistrationPage.Route_Change_Refund__c}</td>
+        </tr>
+        <tr>
+            <th><strong>Route Change Amount To be Paid</strong></th>
+            <td class={regStatus}>{revaRegistrationPage.RouteChangeAmountToPay__c}
+                <template if:true={showPayButton}>
+                    <button onclick={handlePayRouteChange} class="slds-button slds-button_brand" style="margin-left: 400px;">
+                        Pay Route Change Fee
+                    </button>
+                </template></td>
+        </tr>
+    </template>
+</template>
+<template lwc:if={RejectedStatus} >
+<tr >
+    <th><strong>Reason for Rejection</strong></th>
+    <td class ={regStat}>{revaRegistrationPage.Reason_For_Rejection__c}</td>
+    </tr>
+</template>
+</tbody>
+</table>
+</div>
+
+<template if:true={isStudent}>
+<lightning-button label="Cancel Registration" variant="brand" class="button slds-m-around_xx-small"
+						onclick={handleCancelClick} disabled={isSubmitButtonDisabled} hidden={isCancelHidden}></lightning-button>
+
+<lightning-button label="Route Change Request" variant="brand" class="button slds-m-around_xx-small"
+						 disabled={isSubmitButtonDisabled} hidden={isCancelHidden} onclick={openRouteChangeModal}></lightning-button>
+</template>
+<!-- transportPolicy.html -->
+
+    <template if:true={isRouteChangePolicy}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title slds-hyphenate">REVA University Transport Route Change Policy</h2>
+                </header>
+
+                <!-- Modal Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:true={policyText}>
+                        <div class="slds-box slds-theme_default">
+                            <pre style="white-space: pre-wrap;">{policyText}</pre>
+                        </div>
+                    </template>
+                    <template if:false={policyText}>
+                        <p>Loading policy...</p>
+                    </template>
+                </div>
+
+                <!-- Modal Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
+                    <lightning-button variant="brand" label="I Agree" class="slds-m-left_small" onclick={agreeToPolicy}></lightning-button>
+                </footer>
+            </div>
+        </section>
+
+        <!-- Backdrop -->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+
+                         
+                         <template if:true={isRouteChangeModalOpen}>
+                            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                                <div class="slds-modal__container">
+                                    <!-- Modal Header -->
+                                    <header class="slds-modal__header">
+                                        <h2 class="slds-text-heading_medium">Route Change Request</h2>
+                                        <button class="slds-button slds-modal__close" title="Close" onclick={closeRouteChangeModal}>
+                                            <lightning-icon icon-name="utility:close" size="small" alternative-text="close"></lightning-icon>
+                                        </button>
+                                    </header>
+                        
+                                    <!-- Modal Body -->
+                                    <form onsubmit={handleRouteChangeSubmit}>
+                                    <div class="slds-modal__content slds-p-around_medium">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12"
+                                                style="padding: 5px 2% 2% 1px">
+                                                <div class="slds-form-element" style="margin-top:22px;">
+                                                    <label class="slds-form-element__label" style="font-size:15px;" for="combobox-id-2">New Route Path<abbr class="slds-required" title="required">*</abbr></label>
+                                                    <div class="slds-form-element__control">
+                                                        <div class="slds-combobox_container">
+                                                            <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open "
+                                                                aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                                                <template if:true={selectedValue}>
+                                                                    <div data-key="pilldiv"
+                                                                        class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right"
+                                                                        role="none">
+                                                                        <span
+                                                                            class="slds-icon_container slds-icon-standard-account slds-combobox__input-entity-icon"
+                                                                            title="object">
+                                                                            <div class="slds-icon slds-icon_small" aria-hidden="true">
+                                                                                <lightning-icon icon-name="custom:custom31"
+                                                                                    size="small"></lightning-icon>
+                                                                            </div>
+                                                                            <span class="slds-assistive-text">Record</span>
+                                                                        </span>
+                                                                        <input type="text"
+                                                                            class="slds-input slds-combobox__input slds-combobox__input-value"
+                                                                            id="combobox-id-5" aria-controls="listbox-id-5" role="textbox"
+                                                                            placeholder="Select an Option" readonly value={selectedValue} required/>
+                                                                        <button
+                                                                            class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                                                            onclick={removeRecordOnLookup} title="Remove selected option">
+                                                                            <span class="slds-button__icon" aria-hidden="true">
+                                                                                <lightning-icon icon-name="utility:clear" size="xx-Small"
+                                                                                    class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                                                                    aria-hidden="true"></lightning-icon>
+                                                                            </span>
+                                                                            <span class="slds-assistive-text">Remove selected record</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </template>
+                                                                <template if:false={selectedValue}>
+                                                                    <div data-key="searchdiv"
+                                                                        class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                                                        role="none">
+                                                                        <input type="text" onfocusout={onLeave} value={searchKey}
+                                                                            onkeyup={handleKeyChange} onchange={handleKeyChange}
+                                                                            class="slds-input slds-combobox__input slds-has-focus back-color"
+                                                                            id="combobox-id-2" aria-autocomplete="list" aria-controls="listbox-id-2"
+                                                                            role="textbox" placeholder="--Select the route path--" />
+                                                                        <span
+                                                                            class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                                                            <lightning-icon icon-name="utility:search" size="xx-Small"
+                                                                                class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                                                                aria-hidden="true"></lightning-icon>
+                                                                        </span>
+                                                                    </div>
+                                                                    <template if:true={recordsList}>
+                                                                        <div id="listbox-id-2-venu" data-key="dropdownresult"
+                                                                            class="slds-show slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                                                                            role="listbox">
+                                                                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                                                <template if:true={message}>
+                                                                                    <center> {message}</center>
+                                                                                </template>
+                                                                                <template for:each={recordsList} for:item="record">
+                                                                                    <li id={record.Id} key={record.Id} onclick={onRecordSelection}
+                                                                                        role="presentation" class="slds-listbox__item">
+                                                                                        <div data-key={record.Id}
+                                                                                            data-name={record.RTR_Route_Path__c}
+                                                                                            class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                                                            role="option">
+                                                                                            <span
+                                                                                                class="slds-media__figure slds-listbox__option-icon">
+                                                                                                <span class="slds-icon_container">
+                                                                                                    <lightning-icon icon-name="custom:custom31"
+                                                                                                        size="small"></lightning-icon>
+                                                                                                </span>
+                                                                                            </span>
+                                                                                            <span class="slds-media__body">
+                                                                                                <span data-key={record.Id}
+                                                                                                    data-name={record.RTR_Route_Path__c}
+                                                                                                    class="slds-listbox__option-text slds-listbox__option-text_entity">{record.RTR_Route_Path__c}
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                </template>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </template>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12"
+                                                style="padding: 4px 4px 2px 0%;">
+                                                <!-- <lightning-combobox name="Pick Up Point" class="lc-pick-up" label="Pick Up Point" value={value}
+                                                    placeholder="--Select the pick up point--" options={pickupPointOptions} onchange={handleChange} required
+                                                    disabled={studentCapacityFull}>
+                                                </lightning-combobox> -->
+                            
+                                                <div class="custom-dropdown" style="margin-top:22px;">
+                                                    <label class="slds-form-element__label" style="font-size:15px;" for="pickupPoint"> New Pick-up Point<abbr class="slds-required" title="required">*</abbr></label>
+                                                    <select name="pickupPoint" id="pickupPoint" class="lc-pick-up" style="width: 287px; height : 35px; background-color:#fef1e8; " 
+                                                    onchange={handleChange}
+                                                        disabled={studentCapacityFull} required>
+                                                        <option value={value}>--Select the pick up point--</option>
+                                                        <template for:each={pickupPointOptions} for:item="option">
+                                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                             <!-- Reason for Route Change -->
+        <div class="slds-col slds-size_12-of-12" style="padding: 4px 2% 2% 1px;">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" style="font-size:15px;" for="reason">Reason for Route Change<abbr class="slds-required" title="required">*</abbr></label>
+                <div class="slds-form-element__control">
+                    <textarea class="slds-textarea" id="reason" onchange={handleReasonChange} placeholder="Enter the reason here..." required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Date -->
+        <div class="slds-col slds-size_12-of-12" style="padding: 4px 2% 2% 1px;">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" style="font-size:15px;" for="startDate">Start Date<abbr class="slds-required" title="required">*</abbr></label>
+                <div class="slds-form-element__control">
+                    <input type="date" id="startDate" class="slds-input" onchange={handleStartDateChange} required/>
+                </div>
+            </div>
+        </div>
+        <template if:true={showMessageComponent}>
+                <div class=" padMessage slds-p-around_small slds-text-color_error">
+                        <h3>{routeMessage}</h3>
+                 </div>
+        </template>
+        </div>
+    </div>
+                        
+                                    <!-- Modal Footer -->
+                                    <footer class="slds-modal__footer">
+                                        <lightning-button variant="neutral" label="Cancel" onclick={closeRouteChangeModal}></lightning-button>
+                                        <button type="submit" class="slds-button slds-button_brand slds-m-left_small">
+                        Submit
+                    </button>
+                                    </footer>
+                                    </form>
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </template>
+
+                        <!-- Policy Confirmation Modal -->
+<template if:true={isPolicyOpen}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_medium">Cancellation Policy</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium">
+                <p>
+                    Please read and accept our transport cancellation policy before proceeding.
+                    <br/>
+                    - A processing fee will be deducted if a student cancels transportation without using it for a single day (before classes start).Processing  Fee – Rs 2000/-<br/>
+                    - 15% deduction if cancelled within 30 days<br/>
+                    - 30% deduction if cancelled within 60 days<br/>
+                    - 50% deduction if cancelled within 90 days<br/>
+                    - No refund after 90 days<br/>
+                    - After submitting the request for cancellation transport Id card must be submitted.
+                </p>
+            </div>
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={handleClosePolicy}>Close</button>
+                <button class="slds-button slds-button_brand" onclick={handleAgreePolicy}>I Agree</button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+                        <!-- Modal Popup -->
+    <template if:true={isModalOpen}>
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Cancel Registration</h2>
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close"
+                        class="slds-modal__close" onclick={handleCloseModal}></lightning-button-icon>
+                </header>
+
+                <!-- Modal Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-input name="cancellationDate" type="date" label="Start Date for Cancellation" value={cancellationDate} 
+                        onchange={handleDateChange} required></lightning-input>
+                    <lightning-textarea  name="cancellationReason"  label="Reason for Cancellation" value={cancellationReason} 
+                        onchange={handleReasonChanges} required></lightning-textarea>
+                </div>
+
+                <!-- Modal Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button label="Submit" variant="brand" onclick={handleSubmit} class="slds-m-left_small" disabled={isSubmitting}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+<!-- </div> -->
+</template>
+</div>
+ 
+<template if:false={revaRegistrationPage}>
+<div class="slds-var-p-around_medium">
+<div class="slds-clearfix">
+<div class="slds-float_right">      
+<template for:each={revaReg} for:item="record">
+<div key={record.Id} class="slds-p-around_medium">
+<div >{record.Name}</div> 
+                           
+<lightning-button label="Click Here To Apply" variant="brand" class="button slds-var-m-top_small" onclick={handleNavigation} data-key={record.Id} data-name={record.Name}></lightning-button>
+</div>
+</template>
+</div>       
+</div>
+</div>
+</template>
+</div>
+</div>
+</template>
+<div class="slds-var-m-top_small">
+<template if:true={showStudentTransportForm}>
+<c-student-transport-form reva-transport-id={revaTransportRecordId}
+                reva-transport-name={revaTransportRecordName}></c-student-transport-form>
+                
+</template>
+</div>
+</template>

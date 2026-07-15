@@ -1,0 +1,47 @@
+.THIS .result-table {
+    table-layout: fixed;
+}
+
+.THIS .result-table thead th {
+    text-align: center !important;
+    background-color: var(--reva-table-heading-background-color);
+    color: white;
+    padding: 8px !important;
+    font-size: 13px;
+    white-space: normal;
+    word-wrap: break-word;
+
+}
+
+.THIS .result-table tbody tr:focus {
+    background: var(--reva-table-row-background-color) !important;
+
+}
+
+.THIS .result-table tbody tr:hover {
+    background: var(--reva-table-row-background-color) !important;
+
+}
+
+.THIS .result-table tbody td {
+    text-align: center !important;
+    color: black;
+    background: var(--reva-table-row-background-color) !important;
+    padding: 8px !important;
+    font-size: 13px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+@media only screen and (max-width:767px) {
+    .THIS .result-table thead th {
+        padding: 5px !important;
+        font-size: 11px;
+    }
+
+    .THIS .result-table tbody td {
+        padding: 5px !important;
+        font-size: 12px;
+    }
+
+}

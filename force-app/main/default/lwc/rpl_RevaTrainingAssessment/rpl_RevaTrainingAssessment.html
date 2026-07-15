@@ -1,0 +1,92 @@
+<template>
+    <template lwc:if={data}>
+        <div class="cards-container">
+            <template for:each={data} for:item="module" for:index="index">
+                <div key={module.name} class="card" onclick={handleCardClick} data-module={module.name}>
+
+                    <div>
+                        <strong>{module.name}</strong>
+                    </div>
+
+                    <div class="skill">
+                        <div class="outer">
+                            <div class="inner">
+                                <div data-percentage={module.attendancePercentage} class="number">
+                                    {module.totalPercentage}%
+                                </div>
+                            </div>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100px" height="100px">
+                            <defs>
+                                <linearGradient data-id="GradientColor">
+                                    <stop offset="0%" stop-color="#ee8b26" />
+                                    <stop offset="100%" stop-color="#f2c08e" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="40" stroke-linecap="round" style={module.style} />
+                        </svg>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>
+    <template lwc:if={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+    <template if:true={showTable}>
+        <div class="">
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleModalClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium modal-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Topic</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={tableData} for:item="row">
+                                    <tr key={row.Id}>
+                                        <td data-cell="Date">
+                                            <strong>{row.date}</strong>
+                                        </td>
+                                        <td data-cell="Topic">
+                                            <strong>{row.topic}</strong>
+                                        </td>
+                                        <td data-cell="Percentage">
+                                            <strong>{row.percentage}%</strong>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+    <template lwc:if={showNoAssessment}>
+        <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+            <p class="slds-text-heading_small slds-text-color_error">No Placement Assessment Results Available</p>
+            <p class="slds-text-body_regular"></p>
+        </div>
+    </template>
+</template>

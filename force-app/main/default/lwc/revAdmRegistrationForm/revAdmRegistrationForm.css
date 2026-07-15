@@ -1,0 +1,237 @@
+.registration-from-wrapper {
+    border: 1px solid #9EC5E4;
+    background-color: #CDEAF8;
+    border-radius: 10px;
+    padding: 12px 12px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+    gap: 10px;
+
+}
+
+.registration-info-section {
+    display: flex;
+    gap: 30px;
+}
+
+.text-section .heading {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 10px;
+
+}
+
+.text-section .content {
+    font-size: 13px;
+}
+
+.registration-icon {
+    min-width: 150px;
+
+}
+
+.registration-icon img {
+    height: 130px;
+    width: 150px;
+    object-fit: contain;
+}
+
+.registration-from-section {
+    display: flex;
+    gap: 20px;
+
+}
+
+
+
+.status-content-tracker-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 185px;
+    min-width: 185px;
+}
+
+.status-content-tracker {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.status-icons {
+    min-width: 35px;
+}
+
+.status-icons img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.status-icons-fee {
+    min-width: 35px;
+}
+
+.status-icons-fee img {
+    width: 35px;
+    height: 40px;
+    object-fit: contain;
+}
+
+
+
+.status-number-tracker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.status-element {
+    position: relative;
+    text-align: center;
+    flex: 1;
+
+}
+
+.status-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #6F6F6F;
+    color: white;
+    line-height: 30px;
+    z-index: 1;
+}
+
+.status-line {
+    position: absolute;
+    left: 50%;
+    top: 30px;
+    width: 1px;
+    height: 40px;
+    background-color: #00679A;
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+
+.status-circle.active {
+    background-color: #00679A;
+}
+
+.status-circle.inactive {
+    background-color: #6F6F6F;
+}
+
+
+.component-section-wrapper {
+    border: 1px solid #00679A;
+    border-radius: 10px;
+    flex: 1;
+    background-color: #F6F6F6;
+    height: max-content;
+}
+
+@media only screen and (max-width:767px) {
+    .registration-from-wrapper {
+        gap: 40px;
+
+    }
+
+    .registration-info-section {
+        justify-content: center;
+    }
+
+    .text-section .heading {
+        font-size: 14px;
+        align-items: center;
+    }
+
+    .text-section .content {
+        display: none;
+    }
+
+    .image-section {
+        display: none;
+
+    }
+
+    .registration-from-section {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .status-content-tracker-wrapper {
+        flex-direction: row;
+        width: 100%;
+        gap: 0;
+        justify-content: space-around;
+    }
+
+    .status-content-tracker {
+        flex-direction: column;
+        width: 60px;
+    }
+
+    .status-content-tracker:nth-child(3) {
+        gap: 10px;
+    }
+
+    .status-icons {
+        min-width: 25px;
+    }
+
+    .status-icons img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .status-icons-fee {
+        min-width: 25px;
+    }
+
+    .status-icons-fee img {
+        width: 25px;
+        height: 30px;
+
+    }
+
+    .status-icons-text {
+        font-size: 10px;
+        text-align: center;
+    }
+
+
+    .status-number-tracker {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        gap: 0;
+    }
+
+    .status-element {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+
+    }
+
+    .status-circle {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+
+    }
+
+    .status-circle+.status-line {
+        width: 100%;
+        height: 1px;
+        left: 100%;
+        top: 12.5px;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+}

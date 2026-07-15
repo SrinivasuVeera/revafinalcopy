@@ -1,0 +1,86 @@
+<template>
+    <!-- Full page background -->
+    <div style={backgroundStyle}>
+
+        <!-- Card shell -->
+        <div style={cardStyle}>
+            <div style={cardPaddingStyle}>
+
+                <!-- Spinner -->
+                <template if:true={showSpinner}>
+                    <div style={spinnerBackdropStyle}>
+                        <lightning-spinner alternative-text="Logging in..." size="medium"></lightning-spinner>
+                        <p style={spinnerTextStyle}>Logging you in, please wait…</p>
+                    </div>
+                </template>
+
+                <!-- Title: Student Login -->
+                <div style={titleRowStyle}>
+                    <span style={titleTextStyle}>Candidate Login</span>
+                    <lightning-icon icon-name="utility:education" size="medium"></lightning-icon>
+                </div>
+
+                <!-- Red underline divider — same as CustomForgotPasswordNew -->
+                <div style={dividerStyle}></div>
+
+                <!-- Username Field -->
+                <div style={fieldWrapperStyle}>
+                    <label style={labelStyle}>
+                        <span>*</span>&nbsp;User Name
+                    </label>
+                    <input
+                        type="text"
+                        style={inputStyle}
+                        placeholder="Eg.: 26415000241@reva.edu.in"
+                        name="userName"
+                        value={username}
+                        onchange={handleUsername} />
+                    <span style={hintTextStyle}>Eg.: 26415000241@reva.edu.in</span>
+                </div>
+
+                <!-- Password Field -->
+                <div style={fieldWrapperStyle}>
+                    <label style={labelStyle}>
+                        <span style={reqStyle}>*</span>&nbsp;Password
+                    </label>
+                    <input
+                        type="password"
+                        style={inputStyle}
+                        placeholder="Enter your password"
+                        name="password"
+                        value={password}
+                        onchange={handlePassword} />
+                </div>
+
+                <!-- Error Message -->
+                <template if:true={error}>
+                    <div style={errorStyle}>{error}</div>
+                </template>
+
+                <!-- Thin separator -->
+                <div style={lineDividerStyle}></div>
+
+                <!-- Login Button -->
+                <div style={btnRowStyle}>
+                    <button style={loginBtnStyle} onclick={handleLogin} disabled={isLoading}>Login</button>
+                </div>
+
+                <!-- Helper Links -->
+                <div style={helperLinksRowStyle}>
+                    <a href="https://admission.reva.edu.in/s/login/ForgotPassword" style={helperLinkStyle}>Forgot your password?</a>
+                    <span style={pipeSeparatorStyle}>|</span>
+                    <a href="https://admission.reva.edu.in/s/login/ForgotPassword" style={helperLinkStyle}>Resend Verification Link?</a>
+                    <a href="https://admission.reva.edu.in/s/otp-login" style={helperLinkStyle}>Login With OTP</a>
+                </div>
+
+                <!-- Not a Member row -->
+                <div style={alreadyRegisteredStyle}>
+                    Not a Member?
+                    <a href="https://admission.reva.edu.in" style={registerLinkStyle}>Register Here</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</template>

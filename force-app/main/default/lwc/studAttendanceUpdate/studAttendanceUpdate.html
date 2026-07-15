@@ -1,0 +1,351 @@
+<template>   
+    <!-- <template if:true={enable}> -->
+    <!-- Requested Student Record List  -->
+    <template if:true={schoolDirectorVisible}>
+        <lightning-card>
+            <div class="custom-card slds-p-left_x-large slds-text-heading_small">Student Records List Pending For Approval</div><br>
+            <div class="slds-p-left_x-large slds-p-bottom_large" >
+                <lightning-button label="Approve Records" onclick={handleApproveSubmitted}></lightning-button>
+            </div>    
+            <template if:true={approvalPendingRecords}>
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col">
+                                <div class="slds-truncate">
+                                    <input type="checkbox" onchange={handleSelectAll} /> 
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">SRN / Appl no.</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Course Offering</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Slot</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Attendance Type</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Reason</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Schedule Date</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Requested Date</div>
+                            </th>
+                            <!-- <th scope="col">
+                                <div class="slds-truncate">End Time</div>
+                            </th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={approvalPendingRecords} for:item="record">
+                            <tr key={record.Id}>
+                                <td>
+                                    <input type="checkbox" data-id={record.Id} onchange={handleRowSelection} />
+                                </td>
+                                <td>{record.displaySRNOrApplication}</td>
+                                <td>{record.hed__Contact__r.Name}</td>
+                                <td>{record.Course_Offering_From_Schedule__c}</td>
+                                <td>{record.Slot__c}</td>
+                                <td>{record.hed__Attendance_Type__c}</td>
+                                <td>{record.hed__Reason__c}</td>
+                                <td>{record.Course_Offering_Schedule_Date__c}</td>
+                                <td>{record.activity_based_att_req_dt__c}</td>
+                                <!-- <td>{record.startTime}</td> -->
+                                <!-- <td>{record.endTime}</td> -->
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>            
+            </template>
+            <template if:true={isPendingApprLoading}>
+                <lightning-spinner alternative-text="Records Are Loading Please Wait"></lightning-spinner>
+            </template>
+        </lightning-card>
+    </template> 
+    <template if:true={verticleHeadVisible}>
+    <div class="custom-card">
+        <lightning-card>
+            <div class="slds-p-bottom_small slds-p-left_x-large slds-p-right_x-large">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_medium">
+                        <lightning-combobox
+                            name="searchType"
+                            label="Search By"
+                            options={searchOptions}
+                            onchange={handleSearchTypeChange}
+                            value={searchTypeVal}
+                            >        
+                        </lightning-combobox>                   
+                    </div>                         
+                    <!-- <br>    -->
+                    <!-- min={minDate}             -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_medium">
+                        <lightning-input 
+                            label="Enter Number" 
+                            value={srn} 
+                            onchange={handleSrnChange} 
+                            class="inputSRNnumber" 
+                            message-when-pattern-mismatch="Please enter a valid 10-digit SRN number." 
+                            placeholder="Enter Number">
+                        </lightning-input>
+                    </div>  
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_medium">
+                        <lightning-input 
+                            label="Select From Date" 
+                            type="date" 
+                            max={currentDatePick}                    
+                            value={searchFromDate} 
+                            onchange={handleFromDateChange} 
+                            placeholder="Select From Date"                    
+                            >
+                        </lightning-input>
+                    </div>
+                    <!-- <br> -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_medium">
+                        <lightning-input 
+                            label="Select To Date" 
+                            type="date"                     
+                            value={searchToDate} 
+                            onchange={handleToDateChange} 
+                            placeholder="Select To Date"                    
+                            >
+                        </lightning-input>
+                    </div>                        
+                </div>
+                    <lightning-card>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_medium">
+                                <lightning-checkbox-group
+                                    name="slots"
+                                    label="Available Slots"
+                                    value={selectedSlots}
+                                    options={slotOptions}
+                                    onchange={handleSlotChange}>
+                                </lightning-checkbox-group>
+                            </div>
+                            <!-- <br> -->
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_medium">
+                                <lightning-input type="checkbox" value="firstHalf" label="First Half" onchange={handleFirstHalfChange} checked={firstHalfSelected}></lightning-input>
+                                <!-- <lightning-checkbox
+                                    label="First Half"
+                                    value="firstHalf"
+                                    checked={firstHalfSelected}
+                                    onchange={handleFirstHalfChange}></lightning-checkbox> -->
+                                <lightning-input type="checkbox" value="secondHalf" label="Second Half" onchange={handleSecondHalfChange} checked={secondHalfSelected}></lightning-input>        
+                                <!-- <lightning-checkbox
+                                    label="Second Half"
+                                    value="secondHalf"
+                                    checked={secondHalfSelected}
+                                    onchange={handleSecondHalfChange}></lightning-checkbox> -->
+                                <lightning-input type="checkbox" value="fullDay" label="Full Day" onchange={handleFullDayChange} checked={fullDaySelected}></lightning-input>        
+                                <!-- <lightning-checkbox
+                                    label="Full Day"
+                                    value="fullDay"
+                                    checked={fullDaySelected}
+                                    onchange={handleFullDayChange}></lightning-checkbox> -->
+                            </div>
+                        </div>
+                        <!-- displays selected slots  -->
+                        <!-- <template if:true={selectedSlots.length}>
+                            <div class="slds-m-around_medium">
+                                <h3>Selected Slots:</h3>
+                                <ul>
+                                    <template for:each={selectedSlots} for:item="slot">
+                                        <li key={slot}>{slot}</li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </template> -->
+                    </lightning-card>
+                    <br>
+                    <div class="button-container slds-m-top_xxx-small">                            
+                        <lightning-button variant="brand" label="Search" onclick={handleSearch}></lightning-button>
+                        <lightning-button variant="brand-outline" label="Reset" onclick={handleReset} class="slds-m-left_medium"></lightning-button>    
+                    </div>   
+                    
+            </div>
+        </lightning-card>
+    </div>
+    <br>
+    <template if:true={isUpdateButtonVisible}>
+        <div class="custom-card">
+            <lightning-card>
+                <div class="slds-p-bottom_small slds-p-left_x-large slds-p-right_x-large">                   
+                    <template if:true={isLoading1}>
+                        <div class="slds-spinner slds-spinner_brand slds-spinner_medium">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </template>
+            
+                    <template if:false={isLoading1}>
+                        <lightning-combobox
+                            name="reason"
+                            label="Select Reason To Update Student Records"
+                            value={selectedReason}
+                            options={reasonOptions}
+                            onchange={handleReasonChange}>
+                        </lightning-combobox>
+                    </template>                    
+                    <template if:true={isOtherSelected}>
+                        <br>
+                        <lightning-input
+                            label="Please specify"
+                            value={otherReason}
+                            onchange={handleOtherReasonChange}>
+                        </lightning-input>
+                    </template>
+                    <br>               
+                    <lightning-button 
+                        label="Save Records" 
+                        onclick={handleUpdateSelected} 
+                        class="slds-m-top_small">
+                    </lightning-button>                
+                </div>
+            </lightning-card>
+        </div>
+    </template> 
+    <br>
+    <lightning-card>
+        <div class="custom-card slds-p-left_x-large slds-text-heading_small">Select Student Records</div><br>
+        <template if:true={attendanceRecords}>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                            <div class="slds-truncate">
+                                <input type="checkbox" onchange={handleSelectAll} /> <!-- Select All Checkbox -->
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">
+                                <template if:true={isSRNnumber}>SRN</template>
+                                <template if:false={isSRNnumber}>Application no</template>                                
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Name</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Course Offering</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Slot</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Attendance Type</div>
+                        </th>
+                        <!-- <th scope="col">
+                            <div class="slds-truncate">Reason</div>
+                        </th> -->
+                        <th scope="col">
+                            <div class="slds-truncate">Schedule Date</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Start Time</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">End Time</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={attendanceRecords} for:item="record">
+                        <tr key={record.Id}>
+                            <td>
+                                <input type="checkbox" data-id={record.Id} onchange={handleRowSelection} />
+                            </td>
+                            <td>
+                                <template if:true={isSRNnumber}>{record.SRN__c}</template>
+                                <template if:false={isSRNnumber}>{record.Application_Number__c}</template>
+                            </td>
+                            <td>{record.hed__Contact__r.Name}</td>
+                            <td>{record.Course_Offering_From_Schedule__c}</td>
+                            <td>{record.Slot__c}</td>
+                            <td>{record.hed__Attendance_Type__c}</td>
+                            <!-- <td>{record.hed__Reason__c}</td> -->
+                            <td>{record.Course_Offering_Schedule_Date__c}</td>
+                            <td>{record.startTime}</td>
+                            <td>{record.endTime}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>            
+        </template>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+    </lightning-card>
+
+        <!-- Modal Dialog -->
+        <template if:true={isModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Title Section -->
+                    <header class="slds-modal__header">
+                        <!-- <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" size="small" alternative-text="close" class="slds-button__icon slds-button__icon_large"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button> -->
+                        <h2 class="slds-text-heading_medium">Invalid SRNs</h2>
+                    </header>
+    
+                    <!-- Modal/Body Section -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p>Entered Below SRN Is Not Belongs To Your School</p>
+                        <template for:each={invalidSrns} for:item="srn">
+                            <li key={srn}>{srn}</li>
+                        </template>
+                    </div>
+    
+                    <!-- Modal/Footer Section -->
+                    <footer class="slds-modal__footer">                        
+                        <lightning-button variant="brand-outline" label="Ok" title="Primary action with lighter look" onclick={closeModal} class="slds-align_absolute-center"></lightning-button>
+                    </footer>
+                </div>
+            </section>
+    
+            <!-- Modal Overlay -->
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    
+    </template>
+    <!-- <div>
+        <div class="slds-section slds-is-open">
+            <h3 class="slds-section__title">
+                <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                    <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                    </svg>
+                    <span class="slds-truncate" title="Section Title">Section Title</span>
+                </button>
+            </h3>
+            <div class="slds-section__content" id="expando-unique-id">
+                <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Nullam quis risus eget urna mollis ornare vel eu leo. Nulla vitae elit libero, a pharetra augue.</p>
+            </div>
+        </div>
+    </div>    -->
+    <!-- </template> -->
+    <!-- <template if:false={enable}>
+        <div class="container11">            
+            <img src="https://reva-university--c.vf.force.com/resource/1758174433000/underconstruction" alt="Centered Image"  width="90%" height="90%">
+            <lightning-input 
+                name="bypass"  
+                value={something}               
+                onchange={handleVisible}                 
+                >
+            </lightning-input>  
+        </div>
+    </template> -->
+</template>

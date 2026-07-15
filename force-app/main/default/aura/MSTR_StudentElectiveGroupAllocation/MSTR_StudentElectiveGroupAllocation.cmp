@@ -1,0 +1,348 @@
+<aura:component Controller="MSTR_StudentElectiveGroupAllocation_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">
+        .slds-modal__container {
+        height : 100%;
+        width: 90%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="subjectModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="recordExistModal" type="boolean" default="false"/>
+    <aura:attribute name="disableCreateButton" type="boolean" default="false"/>
+    <aura:attribute name="disableAllocateButton" type="boolean" default="true"/>
+    <aura:attribute name="saveModal" type="boolean" default="false"/>
+    <aura:attribute name="selectedSubjectId" type="String"/>
+    <aura:attribute name="selectedSubject" type="String"/>
+    <aura:attribute name="selectedParentCourseId" type="String"/>
+    <aura:attribute name="selectedCourseCode" type="String"/>
+    <aura:attribute name="selectedTotalStud" type="Integer"/>
+    <aura:attribute name="noOfGroups" type="Integer"/>
+    <aura:attribute name="noOfStudPerGroup" type="Integer"/>
+    <aura:attribute type="hed__Term__c" name="objTerm"/>
+    <aura:attribute name="courseDetails" type="Map"/>
+    <aura:attribute name="groupDetailMap" type="Map"/>
+    <aura:attribute name="groupsMap" type="Map"/>
+    <aura:attribute name="groupValues" type="Map"/>
+    <aura:attribute name="lstUnassigned" type="List"/>
+    <aura:attribute name="selectedTab" type="String"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds-theme_default">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:user" alternativeText="Student Elective Group Allocation" title="Student Elective Group Allocation"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Student Elective Group Allocation">Student Elective Group Allocation for the Program Batch {!v.objTerm.Program_Plan__r.Name} <br/> of Semester {!v.objTerm.Name}</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <p class="slds-text-body_small"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aura:if isTrue="{!not(empty(v.courseDetails))}">
+            <div class="demo-only demo-only--sizing slds-grid slds-wrap">        
+                <div class="slds-box slds-size_4-of-4">
+                    <lightning:tabset variant="vertical">
+                        <aura:iteration items="{!v.courseDetails}" var="item" indexVar="indexElect">
+                            <lightning:tab label="{!item.key}">
+                                <table class="slds-table slds-table_bordered slds-table_striped">
+                                    <thead>
+                                        <tr class="slds-text-title_caps"> 
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> Subjects </b>    
+                                            </th>
+                                            <th class="slds-is-resizable" scope="col" >
+                                                <b> No of Students </b>
+                                            </th>
+                                        </tr>
+                                    </thead>  
+                                    <tbody>
+                                        <aura:iteration items="{!item.value}" var="Subjects" indexVar="indexSub">
+                                            <tr class="slds-hint-parent">
+                                                <td data-label="Sl. No" class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-truncate" style="white-space:normal;">
+                                                        <a data-Id="{!indexElect+'_'+indexSub}" 
+                                                           onclick="{!c.subjectOnClick}" > {!Subjects.subjectName} </a>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Student Name" class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-truncate" style="white-space:normal;">
+                                                        {!Subjects.totlNoOfStudents}
+                                                    </div>
+                                                </td>  
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </lightning:tab>
+                        </aura:iteration>
+                    </lightning:tabset>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.subjectModalOpen}">
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{!c.closeSubjectModel}"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <div class="slds-page-header">
+                            <div class="slds-page-header__row">
+                                <div class="slds-page-header__col-title">
+                                    <div class="slds-media">
+                                        <div class="slds-media__figure">
+                                            <lightning:icon iconName="custom:custom55" alternativeText="{!v.selectedSubject}" title="{!v.selectedSubject}"/>
+                                        </div>
+                                        <div class="slds-media__body" style="text-align: left;">
+                                            <div class="slds-page-header__name">
+                                                <div class="slds-page-header__name-title">
+                                                    <h1>
+                                                        <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="{!v.selectedSubject}">{!v.selectedSubject}</span>
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                            <div class="slds-float_right">
+                                                <lightning:button variant="brand" label="Allocate" title="Allocate" onclick="{!c.allocateGroups}" disabled="{!v.disableAllocateButton}"/>
+                                                <lightning:button variant="brand" label="Create Group" title="Create Group" onclick="{!c.createGroups}" disabled="{!v.disableCreateButton}"/>
+                                                <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closeSubjectModel}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-float_right">
+                            <aura:if isTrue="{!v.saveModal}">
+                                <div role="dialog" class="slds-modal slds-fade-in-open ">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header">
+                                            <h1 class="slds-text-heading--medium">Student Elective Group Allocation</h1>
+                                        </header>
+                                        <div class="slds-modal__content slds-p-around--medium">
+                                            <center><b>Are you sure you want to Allocate Groups?</b></center>
+                                        </div>
+                                        <footer class="slds-modal__footer">
+                                            <lightning:button name='No' label='No' onclick='{!c.cancelAssignGroup}'/>
+                                            <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.assignGroups}'/>
+                                        </footer>
+                                    </div>
+                                </div>
+                                <div class="slds-backdrop slds-backdrop--open"></div>  
+                            </aura:if>
+                        </div>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-grid slds-wrap slds-gutters slds-theme_default slds-p-top_x-small">
+                            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <label class="slds-form-element__label" for="unique-id-of-input">Total No of Students Enrolled</label>
+                                <br/>
+                                {!v.selectedTotalStud}
+                            </div>
+                            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning:input aura:id="auraInputId" type="number" name="NoOfGroups" label="No of Groups" disabled="{!v.disableCreateButton}"
+                                                 value="{!v.noOfGroups}" required="true" max="{!v.selectedTotalStud}" min="1"/>
+                            </div>
+                            <aura:if isTrue="{!v.disableCreateButton}">
+                                <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                    <lightning:input aura:id="auraInputId" type="number" name="NoOfStudents" label="No of Students Per Group" 
+                                                     value="{!v.noOfStudPerGroup}" required="true" max="{!v.selectedTotalStud}" min="{!v.noOfGroups}"/>
+                                </div>
+                            </aura:if>
+                        </div>
+                        <aura:if isTrue="{!not(empty(v.lstUnassigned)) || not(empty(v.groupDetailMap))}">
+                            <lightning:tabset selectedTabId="{!v.selectedTab}">
+                                <aura:if isTrue="{!not(empty(v.lstUnassigned))}">
+                                    <lightning:tab label="{!'Unassigned ('+ v.lstUnassigned.length +')'}">
+                                        <div class="slds-form_horizontal slds-form slds-grid slds-wrap">
+                                            <table class="slds-table slds-table--bordered slds-table_cell-buffer" style="overflow: visible;">
+                                                <thead>
+                                                    <tr class="slds-text-heading--label">
+                                                        <th class="slds-is-resizable" scope="col" >
+                                                            <b> Sl.No </b>    
+                                                        </th>
+                                                        <th class="slds-is-resizable" scope="col" >
+                                                            <b> Student Name </b>
+                                                        </th>
+                                                        <th class="slds-is-resizable" scope="col" >
+                                                            <b> Section </b>
+                                                        </th> 
+                                                        <th class="slds-is-resizable" scope="col" >
+                                                            <b> SRN Number </b>
+                                                        </th> 
+                                                        <th class="slds-is-resizable" scope="col" >
+                                                            <div class="slds-align_absolute-center "> <b> Move To </b> </div>
+                                                        </th> 
+                                                    </tr>
+                                                </thead>  
+                                                <aura:iteration items="{!v.lstUnassigned}" var="courseCon" indexVar="index">
+                                                    <tr class="slds-hint-parent">
+                                                        <td data-label="Sl. No" class="slds-cell-wrap" scope="col">
+                                                                {!index + 1}
+                                                        </td>
+                                                        <td data-label="Student Name" class="slds-cell-wrap" scope="col">
+                                                                {!courseCon.contactName}
+                                                        </td>  
+                                                        <td data-label="Section" class="slds-cell-wrap" scope="col">
+                                                                {!courseCon.sectionName}
+                                                        </td>
+                                                        <td data-label="SRN Number" class="slds-cell-wrap" scope="col">
+                                                                {!courseCon.srnNumber}
+                                                        </td>	
+                                                        <td data-label="Move" class="slds-cell-wrap" scope="col">
+                                                            <lightning:select aura:id="groupId" variant ="label-hidden" name="{!index}" value="{!courseCon.groupNo}" onchange="{!c.changeUnAssignGroups}">
+                                                                <option value="">None</option>
+                                                                <aura:iteration items="{!v.groupsMap}" var="val" >
+                                                                    <option value="{!val.key}"> {!val.value}</option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                            <!--<lightning:combobox aura:id="sectionId" variant ="label-hidden" name="{!index}" placeholder="Select Group"
+                                                                                value="{!courseCon.groupNo}" options="{!v.groupsMap}"/>-->
+                                                        </td>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </table>
+                                        </div>
+                                        <aura:if isTrue="{!v.lstUnassigned.length >0}">
+                                            <div class="slds-align_absolute-center slds-p-top_xx-small">
+                                                <lightning:button aura:id="confimStudGroup"
+                                                                  variant="brand"
+                                                                  label="Save"
+                                                                  title="Save"
+                                                                  onclick="{!c.saveSTMGroup}"/>
+                                                
+                                                <lightning:button variant="brand-outline"
+                                                                  label="Cancel"
+                                                                  title="Cancel"/>
+                                            </div>
+                                        </aura:if>
+                                    </lightning:tab>
+                                </aura:if>
+                                <aura:if isTrue="{!not(empty(v.groupDetailMap))}">
+                                    <aura:iteration items="{!v.groupDetailMap}" var="item" indexVar="indexGroup">
+                                        <lightning:tab label="{!item.value.groupName+' ('+ item.value.lstcourseCons.length+')'}" id="{!item.value.groupNo}">
+                                            <div class="slds-form_horizontal slds-form slds-grid slds-wrap">
+                                                <table class="slds-table slds-table--bordered slds-table_cell-buffer" style="overflow: visible;">
+                                                    <thead>
+                                                        <tr class="slds-text-heading--label">
+                                                            <th class="slds-is-resizable" scope="col" >
+                                                                <b> Sl.No </b>    
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col" >
+                                                                <b> Student Name </b>
+                                                            </th>
+                                                            <th class="slds-is-resizable" scope="col" >
+                                                                <b> Section </b>
+                                                            </th> 
+                                                            <th class="slds-is-resizable" scope="col" >
+                                                                <b> SRN Number </b>
+                                                            </th> 
+                                                            <th class="slds-is-resizable" scope="col" >
+                                                                <div class="slds-align_absolute-center "> <b> Move To </b> </div>
+                                                            </th> 
+                                                        </tr>
+                                                    </thead>  
+                                                    <aura:iteration items="{!item.value.lstcourseCons}" var="courseCons" indexVar="indexcourse">
+                                                        <tr class="slds-hint-parent">
+                                                            <td data-label="Sl. No" class="slds-cell-wrap" scope="col">
+                                                                    {!indexcourse + 1}
+                                                            </td>
+                                                            <td data-label="Student Name" class="slds-cell-wrap" scope="col">
+                                                                    {!courseCons.contactName}
+                                                            </td>  
+                                                            <td data-label="Student Section" class="slds-cell-wrap" scope="col">
+                                                                    {!courseCons.sectionName}
+                                                            </td>
+                                                            <td data-label="SRN Number" class="slds-cell-wrap" scope="col">
+                                                                    {!courseCons.srnNumber}
+                                                            </td>
+                                                            <td data-label="Move" class="slds-cell-wrap" scope="col">
+                                                                <lightning:select aura:id="groupId" variant ="label-hidden" name="{!indexGroup+'_'+indexcourse}" value="{!courseCons.groupNo}" onchange="{!c.changeGroup}">
+                                                                    <aura:iteration items="{!v.groupsMap}" var="val" >
+                                                                        <option value="{!val.key}"> {!val.value}</option>
+                                                                    </aura:iteration>
+                                                                </lightning:select>
+                                                                <!--<lightning:combobox aura:id="groupId" variant ="label-hidden" name="{!indexGroup+'_'+indexcourse}" placeholder="Select Group"
+                                                                                    value="{!courseCons.groupNo}" options="{!v.groupsMap}" onchange="{!c.changeGroup}"/>-->
+                                                            </td>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </table>
+                                            </div>
+                                            <aura:if isTrue="{!item.value.lstcourseCons.length >0}">
+                                                <div class="slds-align_absolute-center slds-p-top_xx-small">
+                                                    <lightning:button aura:id="confimStudGroup"
+                                                                      variant="brand"
+                                                                      label="Save"
+                                                                      title="Save"
+                                                                      onclick="{!c.saveSTMGroup}"/>
+                                                    
+                                                    <lightning:button variant="brand-outline"
+                                                                      label="Cancel"
+                                                                      title="Cancel"
+                                                                      onclick="{!c.cancelSubjectModal}"/>
+                                                </div>
+                                            </aura:if>
+                                        </lightning:tab>
+                                    </aura:iteration>
+                                </aura:if>
+                            </lightning:tabset>
+                            <aura:set attribute="else">
+                            	<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+        <aura:if isTrue="{!v.recordExistModal}">
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading--medium">Student Elective Group Allocation</h1>
+                    </header>
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center><b>Already Group Allocation Records Exists. Do You Want to Continue With Existing Groups?</b></center>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <aura:if isTrue="{!v.recordExistModal}">
+                            <lightning:button name='No' label='No' onclick='{!c.deleteExistingGroups}'/>
+                            <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.showExistingGroups}'/>
+                        </aura:if>
+                    </footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>  
+        </aura:if>
+    </div>
+</aura:component>

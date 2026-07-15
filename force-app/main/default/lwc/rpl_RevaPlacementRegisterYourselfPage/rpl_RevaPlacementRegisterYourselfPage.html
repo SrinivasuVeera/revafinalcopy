@@ -1,0 +1,139 @@
+<!--
+  @description       :
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             :
+  @last modified on  : 01-04-2024
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <div class="maincontainer">
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12"
+                padding="horizontal-small">
+                <div class="custom-box">
+                    <h1>{placementRegistrationText}</h1>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+
+
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                padding="horizontal-small">
+                <div class="custom-box">
+                    <label><abbr class="slds-required" title="required">*</abbr>E-mail</label>
+                    <div class="input-container">
+                        <input onblur={blurHandler} type="email" placeholder="--Enter Your Personal Email Id--" required
+                            onchange={handleInput} value={studentMapping.Rpl_Personal_Mail_ID__c}
+                            data-label="Rpl_Personal_Mail_ID__c" />
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div>
+            <div>
+                <!--  <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="4"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label><abbr class="slds-required" title="required">*</abbr>First Name</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="---First Name ---"
+                                    onchange={handleInput} required value={studentMapping.firstName}
+                                    data-label="firstName" />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="4"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label>Middle Name</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="---Middle Name---"
+                                    onchange={handleInput} value={studentMapping.middleName} data-label="middleName" />
+                                <div class="error-message"></div><br>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="4"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label><abbr class="slds-required" title="required">*</abbr>Last Name</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="---Last Name ---"
+                                    onchange={handleInput} required value={studentMapping.lastName}
+                                    data-label="lastName" />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout> -->
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label><abbr class="slds-required" title="required">*</abbr>Country Code</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder="---Country Code ---" readonly
+                                    onchange={handleInput} required pattern="^\+(\d{1,4})$" data-label="countryCode"
+                                    value="+91" />
+                                <div class="error-message"></div><br>
+
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        padding="horizontal-small">
+                        <div class="custom-box">
+                            <label><abbr class="slds-required" title="required">*</abbr>Mobile Number</label>
+                            <div class="input-container">
+                                <input onblur={blurHandler} type="text" placeholder=""
+                                    value={studentMapping.mobileNumber} pattern="^\d{10}$" onchange={handleInput}
+                                    data-label="mobileNumber" />
+                                <div class="error-message"></div><br>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        </div>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12"
+                padding="horizontal-small">
+                <div class="custom-box">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <div class="slds-checkbox">
+                                <input type="checkbox" name="options" id="checkbox-unique-id-80"
+                                    checked={acknowledgmentChecked} onchange={handleAcknowledgmentChange} />
+                                <label class="slds-checkbox__label" for="checkbox-unique-id-80">
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label checkbox_faux">I agree to receive information
+                                        regarding my submitted application from REVA University*</span>
+                                </label>
+                            </div>
+                            <hr class="horizontalLine">
+                            <lightning-button class="slds-m-top_xx-small button_02 reva-brand-button"
+                                disabled={isSubmitDisabled} label="REGISTER" variant="brand"
+                                onclick={handleNextButton}></lightning-button>
+                            <!-- <button class="slds-button slds-button_brand reva-brand-button" aria-disabled="false"
+                                type="button" part="button" kx-scope="button-brand" kx-type="ripple">REGISTER</button> -->
+                        </div>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <!--Agree Check Content End-->
+    </div>
+    <template lwc:if={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height:50%; margin:auto"></div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,379 @@
+<template>
+    <div class="container">
+        <div class="header">
+            <strong> INFRA Support Cases</strong>
+            <div>
+                <lightning-button label="New" class="slds-p-around_medium" onclick={createCase}
+                    variant="brand"></lightning-button>
+            </div>
+        </div>
+        <template lwc:if={cases}>
+            <section>
+                <table class="slds-text-heading_small">
+                    <thead>
+                        <tr>
+                            <th>Case Number</th>
+                            <th>Infra Category</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Assigned To</th>
+                            <th>Created Date</th>
+                            <th>Created By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={cases} for:item="eachCase">
+                            <tr key={eachCase.Id}>
+                                <td data-cell="Case Number">
+                                    <p class="case-number pointer-hover" data-id={eachCase.Id} onclick={showCaseDetail}>
+                                        <strong data-id={eachCase.Id}>{eachCase.CaseNumber}</strong>
+                                    </p>
+                                </td>
+                                <td data-cell="Infra Category">
+                                    <strong>{eachCase.INFRA_Category__c}</strong>
+                                </td>
+                                <td data-cell="Status">
+                                    <strong>{eachCase.Status}</strong>
+                                </td>
+                                <td data-cell="Priority">
+                                    <strong>{eachCase.Priority}</strong>
+                                </td>
+                                <td data-cell="Assigned To"><strong>{eachCase.Owner.Name}</strong></td>
+                                <td data-cell="Created Date"><strong>
+                                        <lightning-formatted-date-time value={eachCase.CreatedDate} year="numeric"
+                                            month="numeric" day="numeric" hour="2-digit" minute="2-digit"
+                                            time-zone-name="short">
+                                        </lightning-formatted-date-time>
+                                    </strong></td>
+                                <td data-cell="Created By"><strong>{eachCase.CreatedBy.Name}</strong></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </section>
+        </template>
+        <template lwc:else>
+            <div class="slds-text-align_center slds-p-around_medium slds-border slds-border_top slds-border_bottom">
+                <p class="slds-text-heading_large slds-text-color_error">No Cases Found</p>
+            </div>
+        </template>
+    </div>
+
+    <template if:true={openModalForUpdateCase}>
+        <div class="">
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <strong>Infra Support Request Detail</strong>
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleModalClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                    <div class="modal-container" style="max-height: 80vh;overflow: auto;">
+                        <lightning-record-edit-form record-id={recordId} object-api-name="Case" onerror={handleError}
+                            onsuccess={handleSuccess}>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="CaseNumber"
+                                            class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="OwnerId"
+                                            class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="Priority"
+                                            class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="Status"
+                                            class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="INFRA_Category__c"
+                                            class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled}
+                                            field-name="INFRA_Sub_Category__c" class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="Description"
+                                            class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="Facility_Name__c"
+                                            class="field-value">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled} field-name="Case_Comments__c"
+                                            class="field-value ">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field disabled={isInputDisabled}
+                                            field-name="INFRA_Attachment__c" class="field-value ">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <div class="button-container">
+                                <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="update"
+                                    onclick={handleClick} label="Update">
+                                </lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+    <template if:true={openModalForCreateCase}>
+        <div class="">
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <strong>Infra Support Request Detail</strong>
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleModalClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                    <div class="modal-container" style="max-height: 80vh;overflow: auto;">
+                        <lightning-record-edit-form object-api-name="Case" onerror={handleCreateError}
+                            onsuccess={handleCreateSuccess}>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field required field-name="INFRA_Category__c"
+                                            class="field-value create-input">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field required field-name="INFRA_Sub_Category__c"
+                                            class="field-value create-input">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field required field-name="Priority"
+                                            class="field-value create-input">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field required field-name="Status" lwc:ref="status"
+                                            class="field-value create-input">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field required field-name="Facility__c"
+                                            class="field-value create-input">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field required field-name="Description"
+                                            class="field-value create-input">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field field-name="Case_Comments__c" class="field-value ">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="horizontal-small">
+                                    <div class="custom-box">
+                                        <lightning-input-field field-name="INFRA_Attachment__c" class="field-value ">
+                                        </lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <div class="button-container">
+                                <lightning-button class="slds-m-top_small" variant="brand" onclick={handleSave}
+                                    label="Create Case">
+                                </lightning-button>
+                                <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="save"
+                                    lwc:ref="save" label="Create Cases" style="display: none;">
+                                </lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+    <template if:true={isSpinner}>
+        <div class="slds-is-relative">
+            <section class="slds-modal slds-fade-in-open">
+                <lightning-spinner alternative-text="loading..." variant="brand"></lightning-spinner>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" style="width: 60%; height: 50%; margin: auto"></div>
+        </div>
+    </template>
+</template>
+
+<!-- <lightning-layout multiple-rows>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> Case Number</label>
+            <div class="input-container">
+                <input value={caseNumber} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> Infra Category</label>
+            <div class="input-container">
+                <input value={infraCategory} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+</lightning-layout>
+<lightning-layout multiple-rows>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> Status</label>
+            <div class="input-container">
+                <input value={status} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> Priority</label>
+            <div class="input-container">
+                <input value={priority} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+</lightning-layout>
+<lightning-layout multiple-rows>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> Assigned To</label>
+            <div class="input-container">
+                <input value={assignedTo} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> Description</label>
+            <div class="input-container">
+                <input value={description} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+</lightning-layout>
+<lightning-layout multiple-rows>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> INFRA Sub Category</label>
+            <div class="input-container">
+                <input value={infraSubCategory} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+        padding="horizontal-small">
+        <div class="custom-box">
+            <label> Facility</label>
+            <div class="input-container">
+                <input value={facility} disabled />
+            </div>
+        </div>
+    </lightning-layout-item>
+</lightning-layout> -->

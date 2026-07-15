@@ -1,0 +1,194 @@
+<aura:component controller="ACM_StudentAcademics_Ctrl"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute type="string" name="ProgName" />
+    <aura:attribute type="string" name="SemNo" />
+    <aura:attribute type="string" name="SecName" />
+    <aura:attribute type="string" name="AtopicName" />
+    <aura:attribute type="string" name="PtopicName" />
+    <aura:attribute type="list" name="lst_Files" />
+    <aura:attribute name="openModel" type="boolean" default="false" />
+    <aura:attribute type="Map" name="MapFaculty" />
+    <aura:attribute type="list" name="lst_CouSch" />
+    <aura:attribute type="Map" name="SelMap" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="fees-payments-wrapper">
+        <div class="fees-payments-heading">
+            <b>ACADEMICS</b>
+        </div>
+
+        <div class="title">
+            <!-- <div class="title-year">Academic Year 2023-24</div> -->
+            <div class="title-info">Course Details:&nbsp;&nbsp;{!v.ProgName} </div>
+            <div class="title-info">
+                <b>Section: &nbsp;&nbsp;{!v.SecName}</b>&nbsp;&nbsp;
+                <b>Semester: &nbsp;&nbsp;{!v.SemNo}</b>
+            </div>
+        </div>
+
+        <!-- <div class="demo-only  slds-wrap">
+            <div class="slds-size_1-of-6"> 
+                <aura:if isTrue="{!not(empty(v.SemNo))}">
+                    <b>Semester : {!v.SemNo}</b>
+                </aura:if>
+            </div>
+            <div class="slds-size_1-of-6">               
+            </div>
+            <div class="slds-size_1-of-6">
+            </div>
+            <div class="slds-size_1-of-6">
+            </div>
+            <div class="slds-size_1-of-6">
+            </div>
+            <div class="slds-size_1-of-6" style="text-align:right;">
+                <aura:if isTrue="{!not(empty(v.SecName))}">
+                    <b>Section: {!v.SecName}</b>
+                </aura:if>
+            </div>
+        </div> -->
+        <aura:if isTrue="{!v.lst_CouSch.length == 0}">
+            <div style="text-align:center;color:red; font-size:13px;font-weight:700">
+                No data to show
+            </div>
+
+        </aura:if>
+        <aura:if isTrue="{!not(empty(v.lst_CouSch))}">
+            <table class="slds-table slds-table--bordered aca-table" style="overflow: visible;" width="100%">
+                <thead>
+                    <tr>
+                        <!-- <th scope="col" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;background-color:grey; color:white; height:3vw;">Course Code</th> -->
+                        <th scope="col" class="course-code">COURSE CODE</th>
+                        <th scope="col" class="course-category">CATEGORY</th>
+                        <th scope="col" class="course-subject">SUBJECT</th>
+                        <th scope="col" class="course-srt-time">START TIME</th>
+                        <th scope="col" class="course-end-time">END TIME</th>
+                        <th scope="col" class="course-prof"> PROFESSOR</th>
+                        <th scope="col" class="course-status">STATUS</th>
+                        <th scope="col" class="course-plan">COURSE PLAN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.lst_CouSch}" var="Cour" indexVar="index">
+                        <tr>
+                            <!-- <td data-label="Course Code" style="overflow-x: visible;overflow-wrap: normal;overflow-y: visible;color:black;background:#D3D3D3;">{!Cour.Course_ID__c}</td> -->
+                            <td data-label="Course Code">{!Cour.Course_ID__c}</td>
+                            <td data-label="Category">{!Cour.hed__Course_Offering__r.Category__c}</td>
+                            <td data-label="Subject">
+                                <aura:if isTrue="{!Cour.hed__Course_Offering__r.Name != null}">
+                                    {!Cour.hed__Course_Offering__r.Name}
+                                </aura:if>
+                                <aura:if isTrue="{!Cour.hed__Course_Offering__r.Name == null}">
+                                    {!Cour.Display_Name__c}
+                                </aura:if>
+                            </td>
+                            <td data-label="Start Time">
+                                <lightning:formattedDateTime value="{!Cour.hed__Start_Time__c}" hour="2-digit"
+                                    minute="2-digit" timeZone="UTC" />
+                            </td>
+                            <td data-label="End Time">
+                                <lightning:formattedDateTime value="{!Cour.hed__End_Time__c}" hour="2-digit"
+                                    minute="2-digit" timeZone="UTC" />
+                            </td>
+                            <td data-label="Professor">{!Cour.Professor__r.Name}</td>
+                            <td data-label="Status">{!Cour.Status__c}</td>
+                            <td data-label="Course Plan">
+                                <!-- <center> -->
+                                <button name="view" class="slds-button">
+                                    <span data-value="{!index}" onclick="{!c.view}">
+                                        <span style="color:#2D79BA; font-weight:600;">View</span>
+                                        <!-- <lightning:icon iconName="action:preview" size="small" title="Preview"/> -->
+                                    </span>
+                                </button>
+                                <!-- </center> -->
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </aura:if>
+        <aura:if isTrue="{!v.openModel}">
+            <!-- <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"> -->
+
+            <!-- <div class="slds-modal__container"> -->
+            <!-- <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{!c.closeModel}"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>                                
+                    </header> -->
+            <!-- <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1"> -->
+            <aura:if isTrue="{!not(empty(v.PtopicName))}">
+                <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                        Planned Topic
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                        {!v.PtopicName}
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!not(empty(v.AtopicName))}">
+                <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                        Actual Topic
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                        {!v.AtopicName}
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!not(empty(v.lst_Files))}">
+                <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                        Notes
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+                        <aura:iteration items="{!v.lst_Files}" var="SFile" indexVar="index">
+                            <a href="{!'/sfc/servlet.shepherd/document/download/'+SFile.ContentDocumentId}"
+                                target="_blank">
+                                {!SFile.ContentDocument.Title}<br />
+                            </a>
+                        </aura:iteration>
+                    </div>
+                    <div class="slds-size_1-of-4 slds-p-around_medium">
+
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!and(empty(v.PtopicName), empty(v.AtopicName))}">
+                <div style="text-align:center;color:red; font-size:13px;font-weight:700">
+                    There is no plan topic for this course offering schedule record
+                </div>
+
+            </aura:if>
+            <!-- </div> -->
+            <!-- </div> -->
+            <!-- </section> -->
+            <!-- <div class="slds-backdrop slds-backdrop_open"></div> -->
+        </aura:if>
+    </div>
+</aura:component>

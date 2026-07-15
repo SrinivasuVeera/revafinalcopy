@@ -1,0 +1,135 @@
+<template>
+  <lightning-card>
+    <div class="slds-page-header slds-p-around_medium">
+      <div class="slds-align_absolute-center">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <lightning-icon icon-name="standard:timetable" alternative-text="Time Table Allocation"
+              title="Time Table Allocation">
+            </lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <div class="slds-page-header__name">
+              <div class="slds-page-header__name-title">
+                <h1 class="slds-text-align_center" style="font-size: 1.8rem; font-weight: bold;">
+                  <span class="slds-page-header__title slds-truncate " style="color: orange;">
+                    Time Table Allocation
+                  </span>
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Full-screen loading spinner -->
+    <div class="slds-p-around_medium">
+      <template if:true={isLoading}>
+        <div class="slds-spinner_container">
+          <div class="slds-spinner--brand slds-spinner slds-spinner--large slds-is-relative">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+      </template>
+      <template if:true={isTimetableCreated}>
+        <div
+          class="slds-box slds-text-color_success slds-align_absolute-center slds-text-heading_small slds-m-bottom_small">
+          <strong> Time table already created for this semester with below Allocation</strong>
+        </div>
+      </template>
+
+      <template if:false={isTimetableCreated}>
+        <div
+          class="slds-box slds-text-color_error slds-align_absolute-center slds-text-heading_small slds-m-bottom_small">
+          <strong>The timetable allocation for this semester is shown below. Click Save to confirm and create Course
+            Offering
+            Schedules.</strong>
+        </div>
+      </template>
+
+      <!-- <template if:false={isTimetableCreated}> -->
+      <lightning-tabset variant="scoped" active-tab-value={activeTab}>
+        <template for:each={sections} for:item="section">
+          <lightning-tab label={section.Name} value={section.Id} key={section.Id} onactive={handleTabChange}>
+            <div class="timetable-grid slds-scrollable_x">
+              <table class="slds-table slds-table_bordered timetable-table">
+                <thead>
+                  <tr>
+                    <th>Weekday</th>
+                    <template for:each={headerSlots} for:item="slot">
+                      <th key={slot.id}>{slot.startTimeLabel} - {slot.endTimeLabel}</th>
+                    </template>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template for:each={activeGridRows} for:item="row">
+                    <tr key={row.day}>
+                      <td><strong>{row.day}</strong></td>
+
+                      <template for:each={row.slots} for:item="slot">
+                        <template if:true={slot.allocation}>
+                          <td key={slot.slotKey} class={slot.allocation.cellClass}>
+                            <!-- Course Slot -->
+                            <template if:true={slot.allocation.isCourseSlot}>
+                              <span class="course-name">{slot.allocation.CourseName}</span><br />
+                              <small class="faculty-name">{slot.allocation.FacultyName}</small><br />
+                              <small class="facility-name">{slot.allocation.FacilityName}</small>
+                            </template>
+
+                            <!-- Break -->
+                            <template if:true={slot.allocation.isBreak}>
+                              <span class="break-text">{slot.allocation.CourseName}</span>
+                            </template>
+
+                            <!-- Free Slot -->
+                            <template if:true={slot.allocation.isFreeSlot}>
+                              <span class="free-slot-text">{slot.allocation.CourseName}</span>
+                            </template>
+                          </td>
+                        </template>
+
+                        <!-- If slot.allocation is null, show empty cell -->
+                        <template if:false={slot.allocation}>
+                          <td key={slot.slotKey} class="empty-cell"></td>
+                        </template>
+                      </template>
+
+                    </tr>
+                  </template>
+
+                </tbody>
+              </table>
+            </div>
+          </lightning-tab>
+        </template>
+      </lightning-tabset>
+
+      <template if:false={isTimetableCreated}>
+
+        <template if:true={unallocatedCourses}>
+          <div class="slds-m-top_medium myTable">
+            <lightning-card title="Unallocated Courses">
+              <lightning-datatable key-field="id" data={unallocatedCourses} columns={unallocatedColumns}
+                class="slds-scrollable_x ">
+              </lightning-datatable>
+            </lightning-card>
+          </div>
+        </template>
+
+        <div class="slds-m-top_medium slds-align_absolute-center slds-grid slds-grid_align-end">
+          <lightning-button variant="neutral" label="Refresh" icon-name="utility:refresh" onclick={handleRefresh}
+            class="slds-m-right_small">
+          </lightning-button>
+
+          <lightning-button variant="brand" label="Save Schedules" onclick={handleSave} disabled={isSaveDisabled}>
+          </lightning-button>
+        </div>
+      </template>
+      <!-- </template> -->
+    </div>
+  </lightning-card>
+</template>

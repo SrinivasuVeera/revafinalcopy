@@ -1,0 +1,236 @@
+<apex:page standardController="hed__Application__c" extensions="POLetter_Extension"   standardStylesheets="false" showHeader="false" renderAs="PDF" >
+    <html>
+        <head>
+            <style type="text/css" >
+                @page {
+                margin-left:1 cm; 
+                margin-right:1 cm;
+                margin-top:1 cm; 
+                margin-bottom:1 cm;
+                @top-Left{
+                content: element(header);
+                }
+                @bottom-Left{
+                content: element(footer);
+                }
+                }                
+                div.footer {
+                display: block;
+                padding: 10px;
+                position: running(footer);                
+                text-align:Left;
+                }              
+                div.header {
+                display: block;
+                position: running(header);
+                text-Align:Center;
+                
+                }
+            </style>
+        </head>
+       
+              
+        <body>
+            <br/>
+            <div class="header" style="margin-top:15px;">
+             
+                <div style="text-align:center; font-family: sans-serif; font-size: 16px;"><b>Provisional Letter for Enrollment/Admission (AY: 2026-27)</b></div>          
+            </div>
+          
+            <div class="content">
+               
+            <div style="text-align:right; font-family:sans-serif; font-size:13px;">
+                Date : <apex:outputText value="{0,date, dd-MMMM-yyyy}">
+                <apex:param value="{!transactionDateTime}" />
+                </apex:outputText>
+            </div>
+               
+            
+                <table width = "100%" cellpadding="4" style=" table-layout: fixed;margin-top:10px;">
+                    <tr style="font-family: sans-serif; font-size: 15px;margin-bottom:5px;line-height:3.5px; ">
+                        <td style="width:30%;padding-bottom:7px;">Application Number</td>
+                        <td style="width:10px;"><b>:</b></td>
+                        <td><b>{!hed__Application__c.Application_Number__c}</b></td>
+                    </tr>
+                    <tr style="font-family: sans-serif; font-size: 15px;margin-bottom:5px;line-height:3.5px;">
+                      <td style="width:30%;padding-bottom:7px;">Name of the Candidate </td>
+                        <td style="width:10px;"><b>:</b></td>
+                        <td style="width:500px;line-height:11px;padding-top:0px;"><b>{!hed__Application__c.hed__Applicant__r.Name}</b></td>
+                        
+                    </tr>
+                    <tr style="font-family: sans-serif; font-size: 15px;line-height:4.5px; margin-bottom:5px;">
+                        <td style="width:30%;padding-bottom:7px;">Mobile Number</td>
+                        <td style="width:10px;"><b>:</b></td>
+                        <td><b>{!hed__Application__c.hed__Applicant__r.MobilePhone}</b></td>
+                    </tr>
+                    <tr style="font-family: sans-serif; font-size: 15px;">
+                        <td style="width:30%;padding-top:0; vertical-align: top;">Program </td>
+                        <td style="width:10px;padding-top:0; vertical-align: top;"><b>:</b></td>
+                        <td style="width:500px;line-height:13px;padding-top:0px;" ><b>{!hed__Application__c.hed__Applying_To__r.Name}</b></td>
+      
+                    </tr>
+            </table>  
+                
+            <div style="font-family: sans-serif; font-size: 14px;margin-top:5px;">
+               <apex:outputPanel rendered="{!isForeigner}">
+                   <p><b>Congratulations!</b>We are pleased to offer you provisional admission to the First Year of the <b>{!hed__Application__c.hed__Applying_To__r.Name}</b> Program at REVA University, Bengaluru, for the academic year 2026–27.</p>
+                   <p>The confirmation of your admission is contingent upon accepting and timely fulfilling of the following conditions:</p>
+                <b>1.</b> Fulfilment of the prescribed eligibility criteria as per the University guidelines. (www.reva.edu.in)<br/>
+                <b>2.</b> Submission and Verification of all academic documents, by the Office of the Registrar, (Through proper channel, initiated at the Office of Admissions).<br/>
+                <b>3.</b> Payment of the applicable annual program fee within 30 days from the date of this letter.<br/>
+                <b>4.</b> Continuation of any scholarship is contingent primarily upon promotion to subsequent year maintaining a minimum of 75% attendance without any Year Backs and students must maintain a   
+                          clean disciplinary record with no instances of ragging, malpractice or misconduct. No other scholarship shall be carried forward.  <br/> 
+                <b>5.</b>REVA University reserves the right to cancel the admission at any stage if any information furnished is   
+found to be false or misleading.  <br/>
+
+<br/>
+                </apex:outputPanel>
+                
+                 <apex:outputPanel rendered="{!!isForeigner}">
+                <p><b>Congratulations!</b>We are pleased to offer you provisional admission to the First Year of the <b>{!hed__Application__c.hed__Applying_To__r.Name}</b> Program at REVA University, Bengaluru, for the academic year 2026–27.</p>
+                 <p>The confirmation of your admission is contingent upon accepting and timely fulfilling of the following conditions:</p>
+                <b>1.</b> Fulfilment of the prescribed eligibility criteria as per the University guidelines. (www.reva.edu.in)<br/>
+                <b>2.</b> Submission and Verification of all academic documents, by the Office of the Registrar, (Through proper channel, initiated at the Office of Admissions).<br/>
+                <b>3.</b> Payment of the applicable annual program fee within 30 days from the date of this letter.<br/>
+                <b>4.</b>Continuation of any scholarship is contingent primarily upon maintaining a minimum of 80% attendance and a GPA/SGPA of 8 or above in all subjects, in a single attempt. No other fee   
+                         concessions shall be carried forward.     <br/> 
+                <b>5.</b>REVA University reserves the right to cancel the admission at any stage if any information furnished is   
+found to be false or misleading.  <br/>
+<br/>
+                </apex:outputPanel> 
+                
+                <table border="1" cellpadding ="2" cellspacing ="0" style ="width:100%; margin-top:16px;">
+<tr style ="Padding:0px; font-family: sans-serif; font-size: 13px;">
+    <th style="padding-left:5px;"><b>Particulars</b></th>
+    <th style ="text-align: center;"><b>1st Year</b></th>
+    <th style ="text-align: center;"><b>2nd Year</b></th>
+    <th style ="text-align: center;"><b>3rd Year</b></th>
+    <th style ="text-align: center;"><b>4th Year</b></th>
+    <th style ="text-align: center;"><b>5th Year</b></th>
+    <th style ="text-align: center;"><b>Total</b></th>
+    </tr>
+<tbody style ="font-family: sans-serif; Padding:0px; font-size: 13px;">
+    <tr>
+        <td style="padding-left:5px;"><b>Annual Fee</b></td>
+        <apex:outputText rendered="{!firstYearFeeRecordSize == 0}" ><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td style="text-align:center;">{!firstYearAnnualFee}</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td style="text-align:center;">{!secondYearAnnualFee}</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td style="text-align:center;">{!thirdYearAnnualFee}</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fourthYearAnnualFee}</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fifthYearAnnualFee}</td></apex:outputText>
+        <td style="text-align:center;">{!totalAnnualFee}</td>
+    </tr>
+    <tr>
+        <td style="padding-left:5px;"><b>Provisional Admission Fee</b></td>
+        <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td style="text-align:center;">{!firstPayment}</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td style="text-align:center;">{!SecondPayment}</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td style="text-align:center;">{!ThirdPayment}</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fourthPayment}</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fifthPayment}</td></apex:outputText>
+        <td style="text-align:center;">{!totalPAFFee}</td>
+    </tr>
+    <tr>
+        <td style="padding-left:5px;"><b>Scholarship</b></td>
+        <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td style="text-align:center;">{!firstYearScholarship}</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td style="text-align:center;">{!secondYearScholarship}</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td style="text-align:center;">{!thirdYearScholarship}</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fourthYearScholarship}</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fifthYearScholarship}</td></apex:outputText>
+        <td style="text-align:center;">{!totalScholarship}</td>
+        
+    </tr>
+    <tr>
+        <td style="padding-left:5px;"><b>Concession</b></td>
+        <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td style="text-align:center;">{!firstYearConcession}</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td style="text-align:center;">{!secondYearConcession}</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td style="text-align:center;">{!thirdYearConcession}</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fourthYearConcession}</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fifthYearConcession}</td></apex:outputText>
+        <td style="text-align:center;">{!totalConcession}</td>
+    </tr>
+    <tr>
+        <td style="padding-left:5px;">
+            <b>Balance</b>
+        </td>
+        <apex:outputText rendered="{!firstYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!firstYearFeeRecordSize != 0}"><td style="text-align:center;" class="currency">{!firstYearBalance}</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!secondYearFeeRecordSize != 0}"><td style="text-align:center;">{!secondYearBalance}</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!thirdYearFeeRecordSize != 0}"><td style="text-align:center;">{!thirdYearBalance}</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fourthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fourthYearBalance}</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize == 0}"><td style="text-align:center;">NA</td></apex:outputText>
+        <apex:outputText rendered="{!fifthYearFeeRecordSize != 0}"><td style="text-align:center;">{!fourthYearBalance}</td></apex:outputText>
+        <td style="text-align:center;">{!totalBalance}</td>
+    </tr>
+    </tbody>
+</table> 
+
+
+  <div style="font-family: sans-serif; font-size: 14px;">
+   <p> <i>For cancellation and refund (if applicable), requests must be submitted to “<b><a href="mailto:refund@reva.edu.in">refund@reva.edu.in</a></b>”. and shall be governed by applicable UGC regulations.</i></p>
+    </div>
+
+
+   <div style="font-family: sans-serif;text-align: center;font-size: 14px;">
+    <b>Undertaking and Declaration by the Student/Candidate and the Parent/Guardian</b>   
+                </div>
+
+
+   <div style="font-family: sans-serif;font-size: 14px;margin-top:8px;align:justify;">   
+          
+        <p> <i>The balance fee for the first year must be paid in full within 30 days from the date of this letter, failing which the admission is liable to be cancelled in accordance with UGC Refund policy.</i></p>
+</div>
+
+  <div style="font-family: sans-serif;font-size: 14px;margin-top:8px;align:justify;">   
+          
+       <p> <i>I/We hereby declare that no unauthorized payment or consideration has been or will be made to secure this admission. The University may cancel the admission without notice if any such transaction is identified.</i></p>
+</div>
+
+                
+                <br/>
+<table border = "1" cellpadding = "1" cellspacing = "0" style = "width:100%;margin-top:px;">
+    <tr style = "text-align: center;font-family: sans-serif; font-size: 14px;width:150px; height:50px;">
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tbody>  
+        <tr style = "text-align: center;font-family: sans-serif; font-size: 13px;">
+            <td> <b>Candidate</b></td>
+            <td> <b>Parent/Guardian</b></td>
+            <td><b>Admissions Counsellor/Officer </b></td>
+             <td><b>Director of Admissions</b></td>
+        </tr>
+        
+    </tbody>
+</table>
+<br/>
+
+
+</div>
+</div> 
+</body>
+
+</html>
+</apex:page>

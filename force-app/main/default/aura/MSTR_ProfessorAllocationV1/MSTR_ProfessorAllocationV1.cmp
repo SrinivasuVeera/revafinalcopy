@@ -1,0 +1,699 @@
+<aura:component controller="MSTR_ProfessorAllocationClsV1" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:html tag="style">
+        .slds-template_default {
+        padding: 0rem;
+        }
+        .slds-modal__container {
+        height : 100%;
+        width: 100%;
+        max-width: 90rem;
+        }
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>    
+    <aura:attribute name="lstSection" type="List"/>
+    <aura:attribute name="listHardCore" type="List"/>
+    <aura:attribute name="listHcIntegrated" type="List"/>
+    <aura:attribute name="listPractical" type="List"/>
+    <aura:attribute name="listMandatory" type="List"/>
+    <aura:attribute name="listOpenElective" type="List"/>
+    <aura:attribute name="listProfElective" type="List"/>
+    <aura:attribute name="showSecondTable" type="boolean" default="false"/>
+    <aura:attribute name="objTerm" type="sobject"/>
+    <aura:attribute name="courseName" type="string"/>
+    <aura:attribute name="courseId" type="string"/>
+    <aura:attribute name="category" type="string"/>
+    <aura:attribute name="minCourse" type="string"/>
+    <aura:attribute name="listProfessors" type="List"/>
+    <aura:attribute name="listProfessorsAssign" type="List"/>
+    <aura:attribute name="Preferences1" type="List" />
+    <aura:attribute name="Preferences2" type="List" />
+    <aura:attribute name="Preferences3" type="List" />
+    <aura:attribute name="Preferences4" type="List" />
+    <aura:attribute name="Preferences5" type="List" />
+    <aura:attribute name="Preferences6" type="List" />
+    <aura:attribute name="OpenTermPopup" type="boolean" default="false"/>
+    <aura:attribute name="primaryFaculty" type="string"/>
+    <aura:attribute name="tableView" type="string"/>
+    <aura:attribute name="listBatch" type="List"/>
+    <aura:attribute name="lstElective" type="List"/>
+    <aura:attribute name="isClickConfirm" type="boolean" default="false"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+<!--    <aura:if isTrue="{!!v.showSecondTable}"> -->
+   <!-- <div class="slds-feed__item-comments">
+        <div class="slds-align_absolute-center slds-text-heading_medium slds-p-around_xxx-small">
+            
+        </div>    
+    </div> -->   
+      <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                         <lightning:icon iconName="action:change_owner" size="x-small" alternativeText="Professor Allocation" title="Professor Allocation" /> &nbsp;
+                  	 
+                        </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Professor Allocation"> <b>Professor allocation for the Program Batch</b><br/>
+                                       {!v.objTerm.Program_Plan__r.Name} of Semester {!v.objTerm.Name}</span>
+                                </h1>
+                            </div>
+                        </div>                       
+                        <p class="slds-text-body_small"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <br/>    
+    <lightning:accordion aura:id="accordion" activeSectionName="A">
+        <lightning:accordionSection name="A" label="Hardcore Course">
+            <table class="slds-table slds-table_bordered slds-table_striped records-table">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th>
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th> 
+                        <div class="slds-truncate" style="text-align:center;">Courses</div> 
+                    </th>
+                    <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                        <th> 
+                            <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                        </th>
+                    </aura:iteration>    
+                </tr>                
+            </thead>
+            <aura:iteration items="{!v.listHardCore}" var="hc" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">{!hc.count}</div>
+                    </td> 
+                    <td>
+                        <div class="slds-truncate" style="text-align:center;">
+                        <aura:if isTrue="{!!hc.isConfirmed}">    
+                    		<a onclick="{!c.hardCoreProfessorDetail}" style="width:100%;" data-index="{!index}">{!hc.courseName}</a>
+                        </aura:if>   
+                        <aura:if isTrue="{!hc.isConfirmed}">
+                            {!hc.courseName}
+                        </aura:if>    
+                        </div>
+                    </td>
+                    <aura:iteration items="{!hc.lstSection}" var="hcSec" indexVar="index1">
+                    	<td>
+                            <div class="slds-truncate" style="text-align:center;">
+                                
+                            <input type="checkbox" name="Assign" checked="{!hcSec.professorAssiened}" disabled="true"/>
+                                
+                            </div>    
+                        </td>    
+                    </aura:iteration>    
+                </tr>
+            </aura:iteration>
+            </table>    
+        </lightning:accordionSection>
+        <lightning:accordionSection name="B" label="Hardcore Integrated Course">
+            <table class="slds-table slds-table_bordered slds-table_striped records-table">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th>
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th> 
+                        <div class="slds-truncate" style="text-align:center;">Courses</div> 
+                    </th>
+                    <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                        <th> 
+                            <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                        </th>
+                    </aura:iteration>    
+                </tr>
+            </thead>
+            <aura:iteration items="{!v.listHcIntegrated}" var="hc" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">
+                        	{!hc.count}
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="slds-truncate" style="text-align:center;">
+                            <aura:if isTrue="{!!hc.isConfirmed}">
+                    		<a onclick="{!c.hardCoreIntProfessorDetail}" style="width:100%;" data-index="{!index}">{!hc.courseName}</a>
+                            </aura:if>
+                            <aura:if isTrue="{!hc.isConfirmed}">
+                                {!hc.courseName}
+                            </aura:if>    
+                        </div>    
+                    </td>
+                    <aura:iteration items="{!hc.lstSection}" var="hcSec" indexVar="index">
+                    	<td>
+                            <div class="slds-truncate" style="text-align:center;">
+                                <input type="checkbox" name="Assign" checked="{!hcSec.professorAssiened}" disabled="true"/>
+                            </div>    
+                        </td>    
+                    </aura:iteration>    
+                </tr>
+            </aura:iteration>    
+            </table>    
+        </lightning:accordionSection>
+        <lightning:accordionSection name="C" label="Practical/Term Work">
+            <table class="slds-table slds-table_bordered slds-table_striped records-table">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th>
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th> 
+                        <div class="slds-truncate" style="text-align:center;">Courses</div> 
+                    </th>
+                    <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                        <th> 
+                            <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                        </th>
+                    </aura:iteration>    
+                </tr>
+            </thead>
+            <aura:iteration items="{!v.listPractical}" var="hc" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">
+                    	    {!hc.count}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate" style="text-align:center;">
+                            <aura:if isTrue="{!!hc.isConfirmed}">
+                    			<a onclick="{!c.praticalProfessorDetail}" style="width:100%;" data-index="{!index}">{!hc.courseName}</a>    
+                            </aura:if>
+                            <aura:if isTrue="{!hc.isConfirmed}">
+                                {!hc.courseName}
+                            </aura:if>    
+                        </div>    
+                    </td>
+                    <aura:iteration items="{!hc.lstSection}" var="hcSec" indexVar="index">
+                    	<td>
+                            <div class="slds-truncate" style="text-align:center;">
+                            <input type="checkbox" name="Assign" checked="{!hcSec.professorAssiened}" disabled="true"/>
+                            </div>    
+                        </td>    
+                    </aura:iteration>    
+                </tr>
+            </aura:iteration>    
+            </table>
+        </lightning:accordionSection>
+        <!--   <lightning:accordionSection name="D" label="Open Elective">
+            <table class="slds-table slds-table_bordered slds-table_striped records-table">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th>
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th> 
+                        <div class="slds-truncate" style="text-align:center;">Courses</div> 
+                    </th>
+                    <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                        <th> 
+                            <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                        </th>
+                    </aura:iteration>    
+                </tr>
+            </thead>
+            <aura:iteration items="{!v.listOpenElective}" var="hc" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">
+                            {!hc.count}
+                        </div>
+                    </td>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">
+                    	{!hc.courseName}
+                        </div>    
+                    </td>
+                    <td colspan="{!v.objTerm.No_Of_Sections__c}"></td>
+                </tr>
+                <aura:iteration items="{!hc.lstCourse}" var="hcc" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">{!hcc.count}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate" style="text-align:center;">
+                        <a onclick="{!c.opElectiveProfessorDetail}" style="width:100%;" data-index="{!index}">{!hcc.courseName}</a>
+                        </div>    
+                    </td>
+                    <aura:iteration items="{!hcc.lstSection}" var="hcSec" indexVar="index">
+                    	<td>
+                            <div class="slds-truncate" style="text-align:center;">
+                            <input type="checkbox" name="Assign" checked="{!hcSec.professorAssiened}" disabled="true"/>
+                            </div>    
+                        </td>    
+                    </aura:iteration>    
+                </tr>
+                </aura:iteration>    
+            </aura:iteration>    
+            </table>
+        </lightning:accordionSection> -->
+        <lightning:accordionSection name="E" label="Professional Elective">
+            <table class="slds-table slds-table_bordered slds-table_striped records-table">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th>
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th> 
+                        <div class="slds-truncate" style="text-align:center;">Courses</div> 
+                    </th>
+                    <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                        <th> 
+                            <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                        </th>
+                    </aura:iteration>    
+                </tr>
+            </thead>
+            <aura:iteration items="{!v.listProfElective}" var="hc" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">
+                        {!hc.count}
+                        </div>
+                    </td>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">{!hc.courseName}</div>
+                    </td>
+                    <td colspan="{!v.objTerm.No_Of_Sections__c}"></td>
+                </tr>
+                <aura:iteration items="{!hc.lstCourse}" var="hcc" indexVar="index1">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">{!hcc.count}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate" style="text-align:center;">
+                            <aura:if isTrue="{!!hcc.isConfirmed}">
+                        		<a onclick="{!c.profElectiveProfessorDetail}" style="width:100%;" data-index="{!index1}">{!hcc.courseName}</a>
+                            </aura:if>
+                            <aura:if isTrue="{!hcc.isConfirmed}">
+                                {!hcc.courseName}
+                            </aura:if>    
+                        </div>    
+                    </td>
+                    <aura:iteration items="{!hcc.lstSection}" var="hcSec" indexVar="index2">
+                    	<td>
+                            <div class="slds-truncate" style="text-align:center;">
+                        	<input type="checkbox" name="Assign" checked="{!hcSec.professorAssiened}" disabled="true"/>
+                            </div>    
+                        </td>    
+                    </aura:iteration>    
+                </tr>
+                </aura:iteration>    
+            </aura:iteration>    
+            </table>
+        </lightning:accordionSection>
+        <lightning:accordionSection name="F" label="Mandatory Course">
+            <table class="slds-table slds-table_bordered slds-table_striped records-table">
+            <thead>
+                <tr class="slds-text-title_caps"> 
+                    <th>
+                        <div class="slds-truncate" style="text-align:center;">Sequence</div>
+                    </th>
+                    <th> 
+                        <div class="slds-truncate" style="text-align:center;">Courses</div> 
+                    </th>
+                    <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                        <th> 
+                            <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                        </th>
+                    </aura:iteration>    
+                </tr>
+            </thead>
+            <aura:iteration items="{!v.listMandatory}" var="hc" indexVar="index">
+                <tr>
+                	<td>
+                        <div class="slds-truncate" style="text-align:center;">{!hc.count}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate" style="text-align:center;">
+                        	<aura:if isTrue="{!!hc.isConfirmed}">    
+                    			<a onclick="{!c.manditoryProfessorDetail}" style="width:100%;" data-index="{!index}">{!hc.courseName}</a>
+                            </aura:if>
+                            <aura:if isTrue="{!hc.isConfirmed}">
+                                {!hc.courseName}
+                            </aura:if>    
+                        </div>    
+                    </td>
+                    <aura:iteration items="{!hc.lstSection}" var="hcSec" indexVar="index">
+                    	<td>
+                            <div class="slds-truncate" style="text-align:center;">
+                        	<input type="checkbox" name="Assign" checked="{!hcSec.professorAssiened}" disabled="true"/>
+                            </div>    
+                        </td>    
+                    </aura:iteration>    
+                </tr>
+            </aura:iteration>    
+            </table>
+        </lightning:accordionSection>
+    </lightning:accordion>                
+<!--    </aura:if>    -->
+    
+    <aura:if isTrue="{!v.OpenTermPopup}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.CloseTermPopup}"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.courseName}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                    <lightning:tabset>
+                    <aura:iteration items="{!v.listProfessors}" var="prof" indexVar="index">
+                        <lightning:tab label="{!prof.Preferences}">
+                            <table class="slds-table slds-table_bordered slds-table_striped records-table">
+                            	<thead>
+                                <tr class="slds-text-title_caps"> 
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">
+                                            <aura:if isTrue="{!prof.Preferences == 'Preference - 1'}">
+                                            Professor Name (Primary)
+                                            </aura:if>
+                                            <aura:if isTrue="{!prof.Preferences != 'Preference - 1'}">
+                                            Professor Name
+                                            </aura:if>
+                                        </div> 
+                                    </th>
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">Designation</div> 
+                                    </th>
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">No of Years Exp</div> 
+                                    </th>
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">No of Sections Assigned Course</div> 
+                                    </th>
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">Total No of Sections Assigned Term</div> 
+                                    </th>
+                                 </tr>
+                            	</thead>                                
+                                <aura:iteration items="{!prof.lstPreferences}" var="sec" indexVar="index1">
+                                <tr>    
+                                    <td>
+                                        <div class="slds-truncate" style="text-align:center;">{!sec.Professor}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" style="text-align:center;">{!sec.Designation}</div>
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <div class="slds-truncate" style="text-align:center;">{!sec.sectionAssigned}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" style="text-align:center;">{!sec.totalSections}</div>
+                                    </td>
+                                </tr>    
+                                </aura:iteration>                                   
+                            </table> <br/>
+                            
+                        </lightning:tab>
+                    </aura:iteration>   
+                    </lightning:tabset>   
+                    <aura:if isTrue="{!v.tableView == 'default'}">
+                    <table class="slds-table slds-table_bordered slds-table_striped records-table">
+                        <thead>
+                            <tr class="slds-text-title_caps"> 
+                                <th> 
+                                    <div class="slds-truncate" style="text-align:center;">Preference</div> 
+                                </th>
+                                <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                                    </th>
+                                </aura:iteration>    
+                            </tr>
+                            <aura:iteration items="{!v.listProfessorsAssign}" var="prof" indexVar="index">
+                            <tr>
+                                <td>
+                                    <div class="slds-truncate" style="text-align:center;">{!prof.Preferences}</div>
+                                </td>
+                                <aura:iteration items="{!prof.lstPreferences}" var="profSec" indexVar="index1">
+                                <td>                                                                       
+                                    <aura:if isTrue="{!prof.PreferenceCount == 1}">
+                                        <lightning:select aura:id="Picklist1" value="{!profSec.professorId}">
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences1}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" /> 
+                                             <!--    <option value="{!item.label}" selected="{!item.label == profSec.professorId}">{!item.value}</option>  -->
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 2}">
+                                        <lightning:select aura:id="Picklist1" value="{!profSec.professorId}">
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences2}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />                       
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 3}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences3}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 4}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences4}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 5}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences5}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 6}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences6}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                </td>    
+                                </aura:iteration>    
+                            </tr>
+                            </aura:iteration>    
+                        </thead>
+                    </table>
+                    </aura:if>
+                    <aura:if isTrue="{!v.tableView == 'Practical'}">
+                        <table class="slds-table slds-table_bordered slds-table_striped records-table">
+                            <thead>
+                                <aura:iteration items="{!v.listBatch}" var="bch">
+                                <tr>
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">{!bch.groupName}</div> 
+                                    </th>
+                                </tr>
+                                <tr class="slds-text-title_caps"> 
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">Preference</div> 
+                                    </th>
+                                    <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                                        <th> 
+                                            <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                                        </th>
+                                    </aura:iteration>    
+                                </tr>
+                                <aura:iteration items="{!bch.mainProffesors}" var="prof" indexVar="index">
+                                <tr>
+                                    <td>
+                                        <div class="slds-truncate" style="text-align:center;">{!prof.Preferences}</div>
+                                    </td>
+                                    <aura:iteration items="{!prof.lstPreferences}" var="profSec" indexVar="index1">
+                                    <td>                                                                       
+                                        <aura:if isTrue="{!prof.PreferenceCount == 1}">
+                                            <lightning:select aura:id="Picklist1" value="{!profSec.professorId}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.Preferences1}" var="i" indexVar="key">
+                                                    <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" /> 
+                                                 <!--    <option value="{!item.label}" selected="{!item.label == profSec.professorId}">{!item.value}</option>  -->
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </aura:if>
+                                        <aura:if isTrue="{!prof.PreferenceCount == 2}">
+                                            <lightning:select aura:id="Picklist1" value="{!profSec.professorId}">
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.Preferences2}" var="i" indexVar="key">
+                                                    <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />                       
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </aura:if>
+                                        <aura:if isTrue="{!prof.PreferenceCount == 3}">
+                                            <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.Preferences3}" var="i" indexVar="key">
+                                                    <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </aura:if>
+                                        <aura:if isTrue="{!prof.PreferenceCount == 4}">
+                                            <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.Preferences4}" var="i" indexVar="key">
+                                                    <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </aura:if>
+                                        <aura:if isTrue="{!prof.PreferenceCount == 5}">
+                                            <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.Preferences5}" var="i" indexVar="key">
+                                                    <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </aura:if>
+                                        <aura:if isTrue="{!prof.PreferenceCount == 6}">
+                                            <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                                <option value="">--None--</option>
+                                                <aura:iteration items="{!v.Preferences6}" var="i" indexVar="key">
+                                                    <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </aura:if>
+                                    </td>    
+                                    </aura:iteration>    
+                                </tr>
+                                </aura:iteration>   
+                                </aura:iteration>    
+                            </thead>
+                        </table>
+                    </aura:if>   
+                    <aura:if isTrue="{!v.tableView == 'prElective'}">
+                        <table class="slds-table slds-table_bordered slds-table_striped records-table">
+                        <thead>
+                            <tr class="slds-text-title_caps"> 
+                                <th> 
+                                    <div class="slds-truncate" style="text-align:center;">Preference</div> 
+                                </th>
+                                <aura:iteration items="{!v.lstSection}" var="section" indexVar="index">
+                                    <th> 
+                                        <div class="slds-truncate" style="text-align:center;">{!section}</div> 
+                                    </th>
+                                </aura:iteration>    
+                            </tr>
+                            <aura:iteration items="{!v.lstElective}" var="prof" indexVar="index">
+                            <tr>
+                                <td>
+                                    <div class="slds-truncate" style="text-align:center;">{!prof.Preferences}</div>
+                                </td>
+                                <aura:iteration items="{!prof.mainProffesors}" var="profSec" indexVar="index1">
+                                <td>                                                                       
+                                    <aura:if isTrue="{!prof.PreferenceCount == 1}">
+                                        <lightning:select aura:id="Picklist1" value="{!profSec.professorId}">
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences1}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" /> 
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 2}">
+                                        <lightning:select aura:id="Picklist1" value="{!profSec.professorId}">
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences2}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />                       
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 3}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences3}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 4}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences4}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 5}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences5}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                    <aura:if isTrue="{!prof.PreferenceCount == 6}">
+                                        <lightning:select aura:id="Picklist" value="{!profSec.professorId}" >
+                                            <option value="">--None--</option>
+                                            <aura:iteration items="{!v.Preferences6}" var="i" indexVar="key">
+                                                <option text="{!i.value}" value="{!i.label}" selected="{!i.label == profSec.professorId}" />
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </aura:if>
+                                </td>    
+                                </aura:iteration>    
+                            </tr>
+                            </aura:iteration>    
+                        </thead>
+                    </table>
+                    </aura:if>    
+                    <br/>
+                    
+                    <div class="slds-grid slds-gutters">
+                      <div class="slds-col slds-size_1-of-3"></div>
+                      <div class="slds-col slds-size_1-of-3">
+                      		<lightning:select aura:id="Picklist1" value="{!v.primaryFaculty}" label="Quality Circle Head">
+                                <option value="">--None--</option>
+                                <aura:iteration items="{!v.Preferences1}" var="i" indexVar="key">
+                                    <option text="{!i.value}" value="{!i.label}" selected="{!i.label == v.primaryFaculty}" /> 
+                                </aura:iteration>
+                            </lightning:select>  	
+                      </div>
+                      <div class="slds-col slds-size_1-of-3"></div>  
+                    </div>
+                    
+                    
+                    
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand" label="Save" onclick="{!c.saveButton}"/>
+                    <lightning:button variant="brand" label="Save &amp; Confirm" onclick="{!c.saveConfirmButton}"/>
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.CloseTermPopup}"/>
+                </footer>    
+            </div>
+        </section>
+    </aura:if>    
+    
+    
+</aura:component>

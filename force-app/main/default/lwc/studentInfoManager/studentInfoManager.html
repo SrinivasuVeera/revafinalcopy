@@ -1,0 +1,123 @@
+<template>
+    <lightning-card title="Student Info" icon-name="standard:contact">
+        <div slot="actions" if:false={isEditMode}>
+            <lightning-button-icon icon-name="utility:edit" variant="border-filled" onclick={handleEdit}></lightning-button-icon>
+        </div>
+
+        <div class="slds-p-around_large">
+            <!-- VIEW MODE -->
+            <template if:false={isEditMode}>
+                <lightning-record-view-form record-id={recordId} object-api-name="Contact">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="slds-border_bottom ">
+                                <lightning-output-field field-name="Name"></lightning-output-field>
+                            </div>
+                            <div class="slds-border_bottom ">
+                                <lightning-output-field field-name="SRN_Number__c"></lightning-output-field>
+                            </div>
+                             <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Student_Status__c"></lightning-output-field>
+                             </div>
+                              <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Student_Status_Remarks__c"></lightning-output-field>
+                              </div>
+                               <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Readmission__c"></lightning-output-field>
+                               </div>
+                                <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Promotional_Eligibility__c"></lightning-output-field>
+                                </div>
+                                 <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Readmission_Semester__c"></lightning-output-field>
+                                 </div>
+                                  <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Readmission_Year__c"></lightning-output-field>
+                                  </div>
+                                   <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="File_Passport_Size_Photo__c"></lightning-output-field>
+                                   </div>
+                                    <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Active__c"></lightning-output-field>
+                                    </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                             <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Record_Type_Name__c"></lightning-output-field>
+                             </div>
+                              <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Application_Number__c"></lightning-output-field>
+                              </div>
+                               <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="MobilePhone"></lightning-output-field>
+                               </div>
+                                <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="hed__WorkEmail__c"></lightning-output-field>
+                                </div>
+                                 <div class="slds-border_bottom ">
+                            <lightning-output-field field-name="Attendance_Blocked__c"></lightning-output-field>
+                                 </div>
+                        </div>
+                    </div>
+                </lightning-record-view-form>
+            </template>
+           <!-- <div slot="actions" if:false={isEditMode}>
+            <lightning-button-icon icon-name="utility:edit" variant="border-filled" onclick={handleEdit}></lightning-button-icon>
+            </div> -->
+
+            <!-- EDIT MODE -->
+            <template if:true={isEditMode}>
+                <lightning-record-edit-form 
+                    record-id={recordId} 
+                    object-api-name="Contact"
+                    onsubmit={handleSubmit}  
+                    onerror={handleError}     
+                    onsuccess={handleSuccess} 
+                    onload={handleLoad}
+                    density="compact">
+                    
+                    <lightning-messages></lightning-messages>
+
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                            <lightning-input-field field-name="Name"></lightning-input-field>
+                            <lightning-input-field field-name="Student_Status__c" onchange={handleStatusChange}></lightning-input-field>                            
+                            <lightning-input-field field-name="Student_Status_Remarks__c"></lightning-input-field>
+                            
+                            <!-- DYNAMIC READMISSION -->
+                            <template if:true={showReadmissionField}>
+                                <lightning-input-field field-name="Readmission__c" onchange={handleReadmissionChange} required={isActionRequired}></lightning-input-field>
+                            </template>
+
+                            <!-- DYNAMIC PROMOTION -->
+                            <template if:true={showPromotionField}>
+                                <lightning-input-field field-name="Promotional_Eligibility__c" onchange={handlePromotionChange} required={isActionRequired}></lightning-input-field>
+                            </template>
+
+                            <!-- DYNAMIC SEMESTER -->
+                            <template if:true={showSemesterFields}>
+                                <lightning-input-field field-name="Readmission_Semester__c" required></lightning-input-field>
+                                <lightning-input-field field-name="Readmission_Year__c" required></lightning-input-field>
+                            </template>
+                            <lightning-input-field field-name="File_Passport_Size_Photo__c"></lightning-input-field>
+                            <lightning-input-field field-name="Active__c"></lightning-input-field>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                            <lightning-input-field field-name="Record_Type_Name__c"></lightning-input-field>
+                            <lightning-input-field field-name="Application_Number__c"></lightning-input-field>
+                            <lightning-input-field field-name="MobilePhone"></lightning-input-field>
+                            <lightning-input-field field-name="hed__WorkEmail__c"></lightning-input-field>
+                            <lightning-input-field field-name="Attendance_Blocked__c"></lightning-input-field>
+                        </div>
+                    </div>
+
+                    <div class="slds-m-top_medium slds-align_absolute-center">
+                        <lightning-button class="slds-m-right_small" label="Cancel" onclick={handleCancel} disabled={isSaving}></lightning-button>
+                        <lightning-button type="submit" variant="brand" label="Save" disabled={isSaving}></lightning-button>
+                    </div>
+                </lightning-record-edit-form>
+            </template>
+        </div>
+    </lightning-card>
+</template>

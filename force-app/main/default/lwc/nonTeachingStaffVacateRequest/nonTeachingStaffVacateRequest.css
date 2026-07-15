@@ -1,0 +1,14 @@
+.custom-orange-button {
+    color: #ff8c00; /* Orange color */
+    /*color: #ffffff; *//* White text color */
+    border: none; /* Optional: Remove border */
+}
+.custom-bold-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+/* Optional: Add hover effects */
+/*.custom-orange-button:hover {
+   background-color: #e07b00; 
+}*/

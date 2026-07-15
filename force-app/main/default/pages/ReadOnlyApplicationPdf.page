@@ -1,0 +1,31 @@
+<apex:page id="ReadOnlyApplicationPdf" controller="ReadOnlyApplicationController" renderAs="pdf">
+    <table style="table-layout: fixed; width: 100%;">
+        <div style="border:1px solid black;">       
+            <tr>
+                <td style="width: 30%;">
+                    <img src="{!$Resource.REVA_LOGO}" width="175px"/><br/> 
+                    
+                </td>
+                <td style="width: 30%; text-align: right;">
+                    <h4 style="text-align:center;" >
+                        {!schoolName} <br/> 
+                        Application No : {!applicationNumber}
+                        
+                    </h4>
+                    
+                </td>
+                <td style="width: 40%;">
+                    <div style="text-align:right;">
+                        <apex:image url="{!passportPhotoURL}" width="100px"/ >
+                        </div>
+                    </td>
+                    
+                </tr>
+            
+        </div>
+    </table>
+    <c:ReadOnlyPdfApplicationComponent /> 
+    
+    
+    
+</apex:page>

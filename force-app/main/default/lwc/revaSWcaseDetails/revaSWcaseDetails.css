@@ -1,0 +1,194 @@
+.custom-style {
+    font-weight: bold;
+    font-size: 16px;
+    color: blue;
+}
+.cancel-button {
+    margin-right: 8px; 
+    font-size: 13px;
+    --slds-c-button-text-color: red;
+    font-weight: bold;
+}
+
+.view-button {
+    margin-right: 8px;
+    font-size: 13px;
+    --slds-c-button-text-color: #0668B1;
+    font-weight: bold;
+}
+
+
+
+.custom-modal-container {
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    max-width: 800px; 
+    margin: 0 auto;
+    margin-top: 150px; 
+    background-color: #fff; 
+   
+}
+
+.custom-time-slot-input{
+    width: 100%; 
+    text-align: center; /* Center the text within the input */
+    border: .05px solid #ccc;
+    border-radius: 4px;
+    padding: 0px;
+}
+
+.custom-heading {
+    background-color: lightgrey; 
+    padding: 2px; 
+}
+
+.custom-container {
+    background-color: #EDEDED;
+    border: 1px solid #F07F07;
+    border-radius: 10px;
+    padding: 5px; 
+}
+
+.custom-vertical-radio-group {
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    
+}
+
+.book-appointment-button  {
+    font-size: 13px;
+    --slds-c-button-neutral-color-background: #EBCBB7;
+    --slds-c-button-neutral-color-border:  #EBCBB7;
+    --slds-c-button-neutral-color-border-hover: #F07F07;
+    --slds-c-button-neutral-color-background-hover: #F07F07;
+    --slds-c-button-text-color: white;
+    --slds-c-button-text-color-hover: white;
+    --slds-c-button-text-color-active: white;
+    --slds-c-button-neutral-color-background-active: #F07F07;
+    --slds-c-button-radius-border: 0px;
+    --slds-c-button-line-height : 42.2px;
+    }
+
+    .submit-button{
+        font-size: 13px;
+    --slds-c-button-neutral-color-background: #F07F07;
+    --slds-c-button-neutral-color-border:  #F07F07;
+    --slds-c-button-neutral-color-border-hover: #F07F07;
+    --slds-c-button-neutral-color-background-hover: #F07F07;
+    --slds-c-button-neutral-color-background-active: #F07F07;
+    --slds-c-button-text-color: white;
+    --slds-c-button-text-color-hover: white;
+    --slds-c-button-text-color-active: white;
+    }
+
+    
+
+.custom-heading2{
+    background-color:#F0DBC8;
+    padding: 2px; 
+    color: black;
+    font-size: 12px; 
+    word-wrap: break-word;
+}
+
+.custom-heading2:hover{
+    /* Add styling for the container when hovered */
+    cursor: pointer;
+    
+}
+
+.custom-top{
+    background-color:#c7c7c7; 
+    color:black; 
+    border:0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.custom-box1{
+    padding-left: 10px; 
+    font-size: 14px;
+}
+
+.custom-background{
+    background-color:#F07F07; 
+    color:black; 
+    border:0px; 
+    margin-right: 2px;
+}
+
+.appointment-table{
+    table-layout: fixed;
+    border: 0px #EDEDED; border-spacing: 0 5px;
+}
+
+.appointment-table thead th,.appointment-table tbody tr td {
+    white-space: normal;
+    word-wrap: break-word;
+}
+.appointment-table tbody tr td{
+    min-height: 3vw; color: black; background-color: #D3D3D3;
+}
+
+.custom-input-container:hover{
+    /* Add styling for the container when hovered */
+    cursor: pointer;
+}
+
+input[type="text"]:disabled {
+    /* Add styling for the disabled input */
+    cursor: no-drop;
+    color: lightgrey;
+}
+
+
+.custom-input-container{
+   margin: 4px;
+   width: 100%;
+   text-align: center;
+    padding: 5px; /* Add padding for better spacing */
+}
+
+input[type="text"]:focus {
+    /* Define the styles for the selected input boxes */
+    background-color: #F0DBC8; 
+    color: #555;
+}
+
+.custom-box2{
+    background-color:white;border: none; border-radius: 0; text-align: center; color:#0068B1; font-weight: bold;
+}
+
+@media (max-width: 767px) {
+ 
+    td{
+        display: grid;
+        grid-template-columns: 21ch auto;
+        gap:0.5rem;
+        padding: 0.5rem 1rem;
+       
+    }  
+ 
+    td:first-child{
+        padding-top: 2rem;
+    }
+ 
+    td:last-child{
+        padding-bottom: 2rem;
+    }
+    th{
+        display: none;
+    }
+    td::before{
+        content: attr(data-cell) " : ";
+        font-weight: 700;
+    }
+ 
+ .custom-background{
+    background-color:#F0DBC8; 
+    color:black; 
+    border:1px solid white !important; 
+    margin-right: 2px;
+}
+}

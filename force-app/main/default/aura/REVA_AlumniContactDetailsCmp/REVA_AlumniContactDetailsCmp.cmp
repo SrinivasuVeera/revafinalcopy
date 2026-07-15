@@ -1,0 +1,54 @@
+<aura:component controller="REVA_AlumniContactDetailsCtrl" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+	 <aura:attribute type="Contact" name="ContactDetails" /> 
+    <aura:attribute type="string" name="StudentFeeId" />
+    <aura:attribute type="string" name="CaseRelatedID" />
+    <aura:attribute type="string" name="ProfStuCourseId" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />   
+    
+    <lightning:card title="{!v.ContactDetails.Name}" >
+        <aura:set attribute="actions">
+            <lightning:button name="{!v.ContactDetails.Id}" label="Details" variant="brand" onclick="{!c.doRedirect}"/>
+        </aura:set>
+        <div class="slds-grid slds-gutters">
+
+            <div class="slds-col">  
+                <table cellpadding="3" class="slds-table">
+                    <tr>
+                        <td>SRN Number</td>
+                        <td>{!v.ContactDetails.SRN_No__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{!v.ContactDetails.Email}</td>
+                    </tr>
+                    <tr>
+                        <td>Program</td>
+                        <td>{!v.ContactDetails.Program__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Blood Group</td>
+                        <td>{!v.ContactDetails.Blood_Group__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Marital Status</td>
+                        <td>{!v.ContactDetails.Marital_Status__c}</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile Number</td>
+                        <td>{!v.ContactDetails.MobilePhone}</td>
+                    </tr>
+                    <tr>	
+                        <td>Gender</td>
+                        <td>{!v.ContactDetails.hed__Gender__c}</td>
+                    </tr>
+                    <tr>	
+                        <td>Company</td>
+                        <td>{!v.ContactDetails.Company__c}</td>
+                    </tr>  
+                    
+                </table>
+            </div>
+        </div>
+    </lightning:card>
+    <br/>
+</aura:component>

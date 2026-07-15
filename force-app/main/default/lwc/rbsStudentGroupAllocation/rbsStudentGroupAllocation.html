@@ -1,0 +1,320 @@
+<template>
+    <!-- Spinner -->
+    <lightning-card>
+        <template if:true={isLoading}>
+            <div class="slds-spinner_container">
+                <div class="slds-spinner slds-spinner_brand slds-spinner_large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <div class="slds-card">
+            <template if:true={courseDetails}>
+                <!-- Page Header -->
+                <div class="slds-page-header slds-p-around_medium">
+                    <div class="slds-align_absolute-center">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="standard:groups"
+                                    alternative-text="Student RBS Group Allocation"
+                                    title="Student RBS Group Allocation">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1 class="slds-text-align_center"
+                                            style="font-size: 1.5rem; font-weight: bold;">
+                                            <span class="slds-page-header__title slds-truncate">
+                                                Student RBS Group Allocation for the Program Batch <span
+                                                    style="color: orange;">{programName}</span> of Semester <span
+                                                    style="color: orange;">{termName}</span>
+                                            </span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="slds-p-around_medium">
+                    <lightning-tabset variant="vertical">
+                        <template for:each={courseDetails} for:item="course" for:index="indexElect">
+                            <lightning-tab key={course.key} label={course.key}>
+                                <table class="slds-table slds-table_bordered slds-table_striped">
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th class="slds-is-resizable"><b>Subjects</b></th>
+                                            <th class="slds-is-resizable"><b>No of Students</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={course.value} for:item="subject" for:index="indexSub">
+                                            <tr key={subject.subjectId} class="slds-hint-parent">
+                                                <td class="slds-cell-wrap">
+                                                    <div class="slds-truncate" style="white-space:normal;">
+                                                        <a data-elect={indexElect} data-sub={indexSub}
+                                                            onclick={handleSubjectClick}>
+                                                            {subject.subjectName}
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell-wrap">
+                                                    <div class="slds-truncate" style="white-space:normal;">
+                                                        {subject.totlNoOfStudents}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </lightning-tab>
+                        </template>
+                    </lightning-tabset>
+                </div>
+            </template>
+            <template if:false={courseDetails}>
+                <div class="slds-page-header slds-p-around_large">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:error" variant="error"
+                                        alternative-text="Records not found" title="Records not found">
+                                    </lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h1 class="slds-page-header__title slds-truncate slds-text-title_caps">
+                                        Records not found.
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <template if:true={subjectModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large"
+                aria-labelledby="modal-heading-01" aria-modal="true">
+                <div class="slds-modal__container modal-container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close" alternative-text="close" variant="bare-inverse"
+                            class="slds-modal__close" onclick={closeSubjectModel}></lightning-button-icon>
+
+                        <div class="slds-page-header">
+                            <div class="slds-page-header__row">
+                                <div class="slds-page-header__col-title" style="width: 100%;">
+                                    <lightning-layout vertical-align="center"
+                                        class="slds-p-around_small slds-grid slds-wrap" style="width: 100%;">
+                                        <lightning-layout-item class="slds-size_1-of-2 slds-align-middle">
+                                            <div class="slds-text-title_caps slds-grid slds-align-middle">
+                                                <lightning-icon icon-name="custom:custom55" size="medium"
+                                                    class="slds-m-right_small" alternative-text={selectedSubject}
+                                                    title={selectedSubject}>
+                                                </lightning-icon>
+                                                <span title={selectedSubject}>{selectedSubject}</span>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item class="slds-size_1-of-2 slds-text-align_right">
+                                            <lightning-button variant="brand" label="Allocate" title="Allocate"
+                                                onclick={allocateGroups} disabled={disableAllocateButton}>
+                                            </lightning-button>
+
+                                            <lightning-button variant="brand" label="Create Group" title="Create Group"
+                                                class="slds-m-left_small" onclick={createGroups}
+                                                disabled={disableCreateButton}>
+                                            </lightning-button>
+
+                                            <lightning-button variant="neutral" label="Cancel" title="Cancel"
+                                                class="slds-m-left_small" onclick={closeSubjectModel}>
+                                            </lightning-button>
+                                        </lightning-layout-item>
+
+                                    </lightning-layout>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <template if:true={saveModal}>
+                            <section role="dialog" class="slds-modal slds-fade-in-open">
+                                <div class="slds-modal__container">
+                                    <header class="slds-modal__header">
+                                        <h1 class="slds-text-heading--medium">Student RBS Group Allocation</h1>
+                                    </header>
+                                    <div class="slds-modal__content slds-p-around--medium">
+                                        <strong>Are you sure you want to allocate groups?</strong>
+                                    </div>
+                                    <footer class="slds-modal__footer">
+                                        <lightning-button label="No" onclick={cancelAssignGroup}></lightning-button>
+                                        <lightning-button class="slds-m-left_small" variant="brand" label="Yes"
+                                            onclick={assignGroups}></lightning-button>
+                                    </footer>
+                                </div>
+                            </section>
+                        </template>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-grid slds-wrap slds-gutters slds-theme_default slds-p-top_x-small">
+                            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <label class="slds-form-element__label">Total No of Students Enrolled</label>
+                                <br />
+                                {selectedTotalStud}
+                            </div>
+                            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <lightning-input data-id="groupInput" type="number" name="NoOfGroups"
+                                    label="No of Groups" disabled={disableCreateButton} value={noOfGroups} required
+                                    max={selectedTotalStud} min="1" onchange={handleInputChange}>
+                                </lightning-input>
+                            </div>
+
+                            <template if:true={disableCreateButton}>
+                                <div
+                                    class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                    <lightning-input data-id="groupInput" type="number" name="NoOfStudents"
+                                        label="No of Students Per Group" value={noOfStudPerGroup} required
+                                        disabled={disableAllocateButton} max={selectedTotalStud} min="1"
+                                        onchange={handleInputChange}> <!--  min={noOfGroups} -->
+                                    </lightning-input>
+                                </div>
+                            </template>
+                        </div>
+                        <template if:true={hasGroupOrUnassigned}>
+                            <lightning-tabset active-tab-value={selectedTab} onactive={handleTabChange}>
+
+                                <!-- Unassigned Tab -->
+                                <template if:true={lstUnassigned.length}>
+                                    <lightning-tab label={unassignedTabLabel} value="unassigned">
+                                        <table class="slds-table slds-table--bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th><b>Sl.No</b></th>
+                                                    <th><b>Student Name</b></th>
+                                                    <th><b>Section</b></th>
+                                                    <th><b>SRN Number</b></th>
+                                                    <th><b>Move To</b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={lstUnassigned} for:item="student" for:index="index">
+                                                    <tr key={student.srnNumber}>
+                                                        <td>{student.sNo}</td>
+                                                        <td>{student.contactName}</td>
+                                                        <td>{student.sectionName}</td>
+                                                        <td>{student.srnNumber}</td>
+                                                        <td>
+                                                            <lightning-combobox name={index} label=""
+                                                                variant="label-hidden" value={student.groupNo}
+                                                                placeholder="Select Group"
+                                                                options={student.unAssigenedgroupOptions}
+                                                                onchange={handleUnassignedGroupChange}>
+                                                            </lightning-combobox>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                        <template if:true={lstUnassigned.length}>
+                                            <div class="slds-align_absolute-center slds-p-top_xx-small">
+                                                <lightning-button variant="brand" label="Save" onclick={saveSTMGroup}
+                                                    disabled={isSaveDisable}>
+                                                </lightning-button>
+
+                                                <lightning-button class="slds-m-left_small" variant="brand-outline"
+                                                    label="Cancel" onclick={cancelSubjectModal}>
+                                                </lightning-button>
+                                            </div>
+                                        </template>
+                                    </lightning-tab>
+                                </template>
+
+                                <!-- Grouped Tabs -->
+                                <template for:each={groupDetailMap} for:item="item" for:index="indexGroup">
+                                    <lightning-tab label={item.label} value={item.value.groupNo} key={item.key}>
+                                        <table class="slds-table slds-table--bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th><b>Sl.No</b></th>
+                                                    <th><b>Student Name</b></th>
+                                                    <th><b>Section</b></th>
+                                                    <th><b>SRN Number</b></th>
+                                                    <th><b>Move To</b></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={item.value.lstcourseCons} for:item="student"
+                                                    for:index="indexCourse">
+                                                    <tr key={student.srnNumber}>
+                                                        <td>{student.serialNumber}</td>
+                                                        <td>{student.contactName}</td>
+                                                        <td>{student.sectionName}</td>
+                                                        <td>{student.srnNumber}</td>
+                                                        <td>
+                                                            <lightning-combobox name={student.comboName}
+                                                                value={student.groupNo}
+                                                                options={student.studentGroupOption}
+                                                                onchange={handleGroupChange} variant="label-hidden"
+                                                                placeholder="Select Group">
+                                                            </lightning-combobox>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+
+                                        <template if:true={item.value.lstcourseCons.length}>
+                                            <div class="slds-align_absolute-center slds-p-top_xx-small">
+                                                <lightning-button variant="brand" label="Save" onclick={saveSTMGroup}>
+                                                </lightning-button>
+
+                                                <lightning-button class="slds-m-left_small" variant="brand-outline"
+                                                    label="Cancel" onclick={cancelSubjectModal}>
+                                                </lightning-button>
+                                            </div>
+                                        </template>
+                                    </lightning-tab>
+                                </template>
+                            </lightning-tabset>
+                        </template>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <template if:true={recordExistModal}>
+            <section role="dialog" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close" alternative-text="close" variant="bare-inverse"
+                            class="slds-modal__close" onclick={closeSubjectCnfModel}></lightning-button-icon>
+                        <h1 class="slds-text-heading--medium">Student RBS Group Allocation</h1>
+                    </header>
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <Strong>
+                            <b>Already Group Allocation Records Exists. Do You Want to Continue With Existing
+                                Groups?</b>
+                        </Strong>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="No" onclick={deleteExistingGroups} name="No">
+                        </lightning-button>
+
+                        <lightning-button class="slds-m-left_small" variant="brand" label="Yes"
+                            onclick={showExistingGroups} name="Yes">
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,151 @@
+<aura:component controller="ATT_StudentAttendance_Ctrl"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute type="string" name="ProgName" />
+    <aura:attribute type="string" name="BatchRecType" />
+    <aura:attribute type="string" name="GroupRecType" />
+    <aura:attribute type="string" name="SemNo" />
+    <aura:attribute type="integer" name="TCompleted" />
+    <aura:attribute type="integer" name="TAttended" />
+    <aura:attribute type="integer" name="TPercentage" />
+    <aura:attribute type="string" name="SecName" />
+    <aura:attribute type="Map" name="MapFaculty" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+    <div class="attendance-wrapper">
+
+        <div class="attendance-heading">
+            <b>ATTENDANCE</b>
+        </div>
+        <div class="title">
+
+            <div class="title-info">Course Details: &nbsp;&nbsp;{!v.ProgName}</div>
+            <div class="title-info"><b>Section:&nbsp;&nbsp;{!v.SecName}</b>&nbsp;&nbsp; <b>Semester :
+                    &nbsp;&nbsp;{!v.SemNo}</b></div>
+        </div>
+        <!-- <div style="font-size:large"><b>{!v.ProgName}</b></div>
+           
+                <aura:if isTrue="{!not(empty(v.SemNo))}">
+                    <b>Semester : {!v.SemNo}</b>
+                </aura:if>                
+            <div class="slds-size_1-of-6">
+                
+            </div>
+            <div class="slds-size_1-of-6">
+            </div>
+            <div class="slds-size_1-of-6">
+            </div>
+            <div class="slds-size_1-of-6">
+            </div>
+            <div class="slds-size_1-of-6" style="text-align:right;">
+                <aura:if isTrue="{!not(empty(v.SecName))}">
+                    <b>Section: {!v.SecName}</b>
+                </aura:if>
+            </div>            
+        </div>        
+        <br/> -->
+        <aura:if isTrue="{!v.MapFaculty.length == 0}">
+            <div style="text-align:center;color:red; font-size:13px;font-weight:700">
+                No data to show
+            </div>
+
+        </aura:if>
+        <aura:if isTrue="{!v.MapFaculty.length > 0}">
+            <table class="slds-table slds-table--bordered table-attendance" style="overflow: visible;" width="100%">
+                <thead>
+                    <tr>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            COURSE CODE</th>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            CATEGORY</th>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            SUBJECT</th>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            BATCH/GROUP</th>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            PROFESSOR</th>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            TOTAL CLASSES COMPLETED</th>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            TOTAL CLASSES ATTENDED</th>
+                        <th scope="col" style="overflow-x: visible;overflow-y: visible;">
+                            ATTENDENCE PERCENTAGE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.MapFaculty}" var="Cour" indexVar="key">
+                        <tr>
+                            <td data-label="Course Code"
+                                style="overflow-x: visible;overflow-y: visible;">
+                                {!Cour.value.courseCode}
+                            </td>
+                            <td data-label="Category"
+                                style="overflow-x: visible;overflow-y: visible;">
+                                {!Cour.value.Category}
+                            </td>
+                            <td data-label="Subject" style="word-wrap:break-word;white-space: pre-wrap;">
+                                {!Cour.value.CourseOfferingName}
+                            </td>
+                            <td data-label="Batch/Group"
+                                style="overflow-x: visible;overflow-y: visible;">
+                                <aura:if isTrue="{!Cour.value.RecType == v.BatchRecType}">
+                                    Batch {!Cour.value.BatchNumber}
+                                </aura:if>
+                                <aura:if isTrue="{!Cour.value.RecType == v.GroupRecType}">
+                                    Group {!Cour.value.GroupNume}
+                                </aura:if>
+                            </td>
+                            <td data-label="Professor"
+                                style="overflow-x: visible;overflow-y: visible;">
+                                {!Cour.value.facultyName}</td>
+                            <td data-label="Total Classes Completed"
+                                style="overflow-x: visible;overflow-y: visible;">
+                                {!Cour.value.TotalClassCom}</td>
+                            <td data-label="Total Classes Attended"
+                                style="overflow-x: visible;overflow-y: visible;">
+                                {!Cour.value.TotalClassAtt}</td>
+                            <td data-label="Attendance Percentage"
+                                style="overflow-x: visible;overflow-y: visible;">
+                                <aura:if isTrue="{!not(empty(Cour.value.TotalPercentage))}">
+                                    {!Cour.value.TotalPercentage}%
+                                </aura:if>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                    <tr class="slds-is-resizable">
+                        <td>
+                            Total</td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            {!v.TCompleted}</td>
+                        <td>
+                            {!v.TAttended}</td>
+                        <td>
+                            <aura:if isTrue="{!not(empty(v.TPercentage))}">
+                                <lightning:formattedNumber value="{!v.TPercentage}" maximumFractionDigits="2" />%
+                            </aura:if>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </aura:if>
+    </div>
+</aura:component>

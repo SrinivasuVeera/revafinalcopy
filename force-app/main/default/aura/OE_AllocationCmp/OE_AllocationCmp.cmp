@@ -1,0 +1,331 @@
+<aura:component controller="OE_AllocationCtr" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="courseList" type="List"/>
+    <aura:attribute name="studentsList" type="List"/>
+    <aura:attribute name="connectionList" type="List"/>
+    
+    <aura:attribute name="groupingList" type="List"/>
+    <aura:attribute name="selectedFaculty" type="String" default="Engineering"/>
+    <aura:attribute name="selectedCourse" type="String"/>
+    <aura:attribute name="selectedSem" type="String" default='All'/>
+    <aura:attribute name="EnrolledStudentsCount" type="Integer"/>
+    <aura:attribute name="openPopUp" type="Boolean"/>
+    <aura:attribute name="openGroupPopUp" type="Boolean"/>
+    <aura:attribute name="onNextTrue" type="Boolean"/>
+    <aura:attribute name="inputNoOfBatches" type="Integer"/>
+    <aura:attribute name="inputNoOfGroups" type="Integer"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="oeNames" type="List" access="PRIVATE"/>
+    <aura:attribute name="selectedOEForMove" type="String" access="PRIVATE"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div style="background-color:white">
+        <lightning:card title="Open Elective Allocation">
+            <aura:set attribute="actions">
+                <lightning:layout >
+                    <lightning:layoutItem padding="around-small">
+                        <lightning:select name="select1" onchange="{!c.facultChange}" label="Faculty Type" required="true" value="{!v.selectedFaculty}">
+                            <option value="Engineering">Engineering</option>
+                            <option value="Non Engineering">Non Engineering</option>
+                        </lightning:select>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem padding="around-small">
+                        <lightning:select name="select1" label="Semester" required="true" value="{!v.selectedSem}" onchange="{!c.onSemChange}">
+                            <option value="All">All</option>
+                            <aura:iteration items="{!v.options}" var="eachCourse">  
+                                <option value="{!eachCourse.key}">{!eachCourse.value}</option>
+                            </aura:iteration>                             
+                        </lightning:select>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem padding="around-small"><br/>
+                        <lightning:button  type="button" variant="success" label="Edit Allocation" onclick="{!c.editAllocation}" disabled="{!v.selectedSem == 'All'}"/>
+                        
+                    </lightning:layoutItem>
+                </lightning:layout>
+                
+            </aura:set>
+            <p class="slds-p-horizontal_small">
+                
+            </p>
+        </lightning:card>
+        <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+            <thead>
+                <tr>
+                    <th colspan="2" style="text-align:center;">Offered By School</th>
+                    <th colspan="2" style="text-align:center;">Subject</th>
+                    <th style="text-align:center">Semester</th>
+                    <th style="text-align:center">Max Students</th>
+                    <th style="text-align:center">No of Preference 1</th>
+                    <!--<th style="text-align:center">No of Preference 2</th>
+                                <th style="text-align:center">No of Preference 3</th>-->
+                    <th colspan="2"  style="text-align:center">Action</th>
+                </tr>
+            </thead>            
+            <tbody class="CustomColumnText"> 
+                <aura:iteration items="{!v.courseList}" var="eachCourse" indexVar="indVal">                      
+                    <tr>                                
+                        <td colspan="2" class="slds-truncate" style="text-align:center">{!eachCourse.school}</td>
+                        <td colspan="2" style="text-align:center">{!eachCourse.subjName}</td>
+                        <td style="text-align:center">{!eachCourse.semNum}</td>
+                        <td style="text-align:center">{!eachCourse.maxStudents}</td>
+                        <td colspan="1" style="text-align:center">{!eachCourse.pref1}</td>
+                        <!--<td colspan="1" style="text-align:center">{!eachCourse.pref2}</td>
+                                    <td style="text-align:center">{!eachCourse.pref3}</td>-->                            
+                        <td colspan="2" style="text-align:center" class="td-fixed-width">
+                            <lightning:button name="{!eachCourse.subjName}" type="button" variant="brand" label="Start Group Allocation" onclick="{!c.courseClickedCtr}" disabled="{!v.selectedSem == 'All'}"/>
+                        </td>                            
+                    </tr>
+                </aura:iteration>
+            </tbody>                        
+        </table>               
+        
+        
+        <aura:if isTrue ="{!v.openPopUp}" >
+            <div class="demo-only demo-only_viewport">
+                
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                    <div class="slds-modal__container">
+                        <aura:if isTrue="{!v.Spinner}">
+                            <div aura:id="spinnerId" class="slds-spinner_container">
+                                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{!c.closeAction}"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">  
+                                Student Course Preference
+                            </h2>                        
+                        </header>
+                        <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">                    
+                            <div class="slds-grid slds-wrap">
+                                <lightning:tabset onselect="{!c.selectedTab}">
+                                    <aura:iteration items="{!v.studentsList}" var="eachOE" indexVar="tabIndex">
+                                        <lightning:tab label="{!eachOE.courseName}" id="{!eachOE.courseName}">      
+                                            <aura:if isTrue ="{!eachOE.lst_StuPref.length > 0}" >
+                                                <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="text-align:center;">Select</th>
+                                                            <th style="text-align:center;">S.No</th>
+                                                            <th style="text-align:center;">Student Name</th>    
+                                                            <th style="text-align:center">SRN Number</th>                                                                                                                    
+                                                            <th style="text-align:center">Section</th>
+                                                            <aura:if isTrue="{!eachOE.courseId == 'Unallocated'}">
+                                                                <th style="text-align:center">Preference 1</th>
+                                                                <th style="text-align:center">Preference 2</th>
+                                                                <th style="text-align:center">Preference 3</th>
+                                                            </aura:if>
+                                                        </tr>
+                                                    </thead>            
+                                                    <tbody class="CustomColumnText"> 
+                                                        <aura:iteration items="{!eachOE.lst_StuPref}" var="eachStudent" indexVar="indVal">                      
+                                                            <tr>                                
+                                                                <td scope="col" style="text-align:center;">
+                                                                    <span class="slds-truncate">
+                                                                        <lightning:input type="checkbox" aura:id="allCheck1" checked="{!eachStudent.isSelected}" disabled="{!eachStudent.hideInput}" />
+                                                                    </span>
+                                                                </td>
+                                                                <td colspan="1" style="text-align:center">{!indVal+1}</td>
+                                                                <td style="text-align:center">{!eachStudent.studentName}</td>
+                                                                <td colspan="1" style="text-align:center">{!eachStudent.srnNumber}</td>
+                                                                <td colspan="1" style="text-align:center">{!eachStudent.sectionName}</td>
+                                                                <aura:if isTrue="{!eachOE.courseId == 'Unallocated'}">
+                                                                    <td colspan="1" style="text-align:center">{!eachStudent.pref1}</td>
+                                                                    <td colspan="1" style="text-align:center">{!eachStudent.pref2}</td>
+                                                                    <td colspan="1" style="text-align:center">{!eachStudent.pref3}</td>
+                                                                    
+                                                                </aura:if>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                    
+                                                </table>
+                                                <lightning:layout >
+                                                    <lightning:layoutItem padding="around-small">
+                                                        <lightning:select name="colorId" label="Move To" aura:id="colorId" value="{!v.selectedOEForMove}">
+                                                            <option  text="---NONE---" value=""/>
+                                                            <aura:iteration items="{!eachOE.lst_options}" var="option">     
+                                                                <option  text="{!option.value}" value="{!option.key}"/>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </lightning:layoutItem>
+                                                    <lightning:layoutItem padding="around-small"><br/>
+                                                        <lightning:button name="{!tabIndex}"  type="button" variant="success" label="Move" onclick="{!c.moveAllocation}"/>
+                                                    </lightning:layoutItem>
+                                                </lightning:layout>
+                                            </aura:if>
+                                        </lightning:tab>  
+                                    </aura:iteration>
+                                </lightning:tabset>  
+                                
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="destructive" label="Cancel" onclick="{!c.closeAction}" />                    
+                            <lightning:button variant="brand" label="Allocate" onclick="{!c.onAllocate}" />                    
+                        </footer>
+                    </div>
+                    
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>  
+        </aura:if>
+        
+        <aura:if isTrue ="{!v.openGroupPopUp}" >
+            <div class="demo-only demo-only_viewport">
+                
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                    <div class="slds-modal__container">
+                        <aura:if isTrue="{!v.Spinner}">
+                            <div aura:id="spinnerId" class="slds-spinner_container">
+                                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{!c.closeAction}"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">  
+                                Group Allocation
+                            </h2>                        
+                        </header>
+                        <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">                    
+                            <div class="slds-grid slds-wrap">
+                                <aura:if isTrue ="{!!v.onNextTrue}" >  
+                                    
+                                    <lightning:layout >
+                                        <lightning:layoutItem padding="around-small">
+                                            <lightning:input type="number"  value="{!v.EnrolledStudentsCount}" label="Enrolled Count" disabled="true"/>
+                                        </lightning:layoutItem>
+                                        
+                                        <lightning:layoutItem padding="around-small">
+                                            <lightning:input type="number"  value="{!v.inputNoOfGroups}" label="No of Groups" disabled="{!v.connectionList.length gt  1}"/>
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem padding="around-small">   <br/>                                             
+                                            <lightning:button type="button" variant="success" label="Create" onclick="{!c.addNewGroup}" disabled="{!v.connectionList.length gt  1}"/>                                                    
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem padding="around-small">
+                                            <lightning:input type="number"  value="{!v.inputNoOfBatches}" label="Students per group"/>
+                                        </lightning:layoutItem>
+                                    </lightning:layout>
+                                    
+                                    <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+                                        <thead>
+                                            <tr>
+                                                
+                                                <th style="text-align:center;">Name</th>
+                                                <th style="text-align:center">No of Students</th>
+                                                <th style="text-align:center">Action</th>
+                                            </tr>
+                                        </thead>            
+                                        <tbody class="CustomColumnText"> 
+                                            <aura:iteration items="{!v.connectionList}" var="eachConn" indexVar="indVal">                      
+                                                <tr> 
+                                                    
+                                                    <td style="text-align:center">{!eachConn.termName}</td>
+                                                    <td colspan="1" style="text-align:center">{!eachConn.noEnrolled}</td>
+                                                    <td colspan="1" style="text-align:center">
+                                                        <aura:if isTrue="{!eachConn.termName != 'UnAllocated'}">
+                                                            <lightning:button name="{!eachConn.termName}" variant="destructive" label="Delete" onclick="{!c.onDeleteGroup}" />
+                                                        </aura:if>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>                                        
+                                    </table>
+                                </aura:if>  
+                                <aura:if isTrue ="{!v.onNextTrue}">
+                                    <lightning:tabset onselect="{!c.selectedTab}">
+                                        <aura:iteration items="{!v.groupingList}" var="eachOE" indexVar="tabIndex">
+                                            <lightning:tab label="{!eachOE.courseName}" id="{!eachOE.courseName}">      
+                                                <aura:if isTrue ="{!eachOE.lst_StuPref.length > 0}" >
+                                                    <table class="slds-table slds-table--bordered slds-table_col-bordered slds-table_striped  slds-border_right slds-border_left slds-table--fixed-layout"  >
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="text-align:center;">Select</th>
+                                                                <th style="text-align:center;">S.No</th>
+                                                                <th style="text-align:center;">Student Name</th>
+                                                                <th style="text-align:center">SRN Number</th>       
+                                                                <th style="text-align:center">Section</th>
+                                                            </tr>
+                                                        </thead>            
+                                                        <tbody class="CustomColumnText"> 
+                                                            <aura:iteration items="{!eachOE.lst_StuPref}" var="eachStudent" indexVar="indVar">                      
+                                                                <tr>                                
+                                                                    <td scope="col" style="text-align:center;">
+                                                                        <span class="slds-truncate">
+                                                                            <lightning:input type="checkbox" aura:id="allCheck1" checked="{!eachStudent.isSelected}" />
+                                                                        </span>
+                                                                    </td>
+                                                                    <td colspan="1" style="text-align:center">{!indVar+1}</td>
+                                                                    <td style="text-align:center">{!eachStudent.studentName}</td>
+                                                                    <td colspan="1" style="text-align:center">{!eachStudent.srnNumber}</td>
+                                                                    <td colspan="1" style="text-align:center">{!eachStudent.sectionName}</td>                 
+                                                                </tr>
+                                                            </aura:iteration>
+                                                        </tbody>
+                                                        
+                                                    </table>
+                                                    <lightning:layout >
+                                                        <lightning:layoutItem padding="around-small">
+                                                            <lightning:select name="colorId" label="Move To" aura:id="colorId" value="{!v.selectedOEForMove}">
+                                                                <option  text="---NONE---" value=""/>
+                                                                <aura:iteration items="{!eachOE.lst_options}" var="option">     
+                                                                    <option  text="{!option.value}" value="{!option.key}"/>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </lightning:layoutItem>
+                                                        <lightning:layoutItem padding="around-small"><br/>
+                                                            <lightning:button name="{!tabIndex}"  type="button" variant="success" label="Move" onclick="{!c.moveGroupAllocation}"/>
+                                                        </lightning:layoutItem>
+                                                    </lightning:layout>
+                                                </aura:if>
+                                            </lightning:tab>  
+                                        </aura:iteration>
+                                    </lightning:tabset>  
+                                    
+                                </aura:if>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="destructive" label="Cancel" onclick="{!c.closeAction}" />                    
+                            <aura:if isTrue ="{!!v.onNextTrue}">
+                                <lightning:button variant="brand" label="Next" onclick="{!c.onNext}" />
+                            </aura:if>
+                            <aura:if isTrue ="{!v.onNextTrue}">
+                                <lightning:button variant="brand" label="Save" onclick="{!c.onFinalSave}" /> 
+                            </aura:if>
+                        </footer>
+                    </div>                    
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>  
+        </aura:if>        
+    </div>
+</aura:component>

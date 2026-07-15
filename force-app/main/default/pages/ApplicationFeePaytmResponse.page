@@ -1,0 +1,179 @@
+<apex:page controller="FEE_PaytmResponse_API"  sidebar="false" showHeader="false" action="{!updateApplicantFee}" standardStylesheets="false" cache="false">
+
+<style type="text/css">
+body {
+font-family: 'NunitoSans', Helvetica !important;
+}
+
+.fees-response-wrapper{
+display: flex;
+flex-direction: column;
+gap: 30px;
+}
+.header-wrapper{
+display: flex;
+justify-content: space-between;
+}
+.reva-university img{
+height: 60px;
+width: 180px;
+object-fit: contain;
+}
+.reva-eleven-years img {
+height: 60px;
+width: 180px;
+object-fit: contain;
+float: right;
+}
+
+.content-wrapper {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.payment-information {
+background: #CDEAF8;
+border: 1px solid #9EC5E4;
+width: fit-content;
+border-radius: 10px;
+padding: 6px 12px;
+}
+
+.payment-information-content {
+display: flex; 
+width: 100%;
+padding: 5px 0;  
+}
+
+.back-to-home {
+display: flex;
+justify-content: center;
+}
+
+.btn {
+background: #00679A;
+color: white;
+padding: 10px;
+border: 1px solid #9EC5E4;
+border-radius: 5px;
+text-transform: uppercase;
+cursor: pointer;
+} 
+
+
+ .hidden {
+        display: none;
+    }
+
+    .para-text {
+     font-size: 18px;
+    }
+
+.table-heading{
+font-size: 20px;
+font-weight: 700;
+}
+.table-value{
+font-size: 18px;
+}
+</style>
+
+
+        <div class="fees-response-wrapper">
+            <div class="header-wrapper">
+                <div class="reva-university">
+                    
+                        <img src="{!URLFOR($Resource.SR_STUDENTPORTALASSETS, 'StudentPortalAssests/Logos/reva-university.png')}" alt="Reva University Logo"
+                        />
+                    
+                </div>
+                <div class="reva-eleven-years">
+                   
+                        <img src="{!URLFOR($Resource.SR_STUDENTPORTALASSETS, 'StudentPortalAssests/Logos/reva-eleven-years.png')}" alt="Reva 11 years Logo"
+                        />
+                
+                </div>
+            </div>
+        
+            <div class="content-wrapper">
+                <div class="payment-information">
+                    <apex:form id="success" styleClass="slds-scope">
+                        <table>
+                            <tr>
+                                <td class="table-heading">Payment Mode</td>
+                                <td>:</td>
+                                <td class="table-value">&nbsp;&nbsp;Paytm - Online</td>
+                            </tr>
+                            <tr>
+                                <td class="table-heading">Transaction ID</td>
+                                <td>:</td>
+                                <td class="table-value">&nbsp;&nbsp;{!paytmData.TXNID}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-heading">Amount</td>
+                                <td>:</td>
+                                <td class="table-value">&nbsp;&nbsp;{!paytmData.TXNAMOUNT}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-heading">Status</td>
+                                <td>:</td>
+                                <td class="table-value">&nbsp;&nbsp;{!paytmData.STATUS}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-heading">Purpose of Payment</td>
+                                <td>:</td>
+                                <td class="table-value">&nbsp;&nbsp;{!PurposeofPayment}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-heading">Date &amp; Time of Transaction</td>
+                                <td>:</td>
+                                <td class="table-value">&nbsp;&nbsp;{!paytmData.TXNDATE}</td>
+                            </tr>
+                        </table>
+                        <br/>
+        
+                        <div class="{!If(FEE_TYPE != 'Application Fee', 'hidden', '')}" style="font-size:18px;">
+                            <p class="para-text">
+                                Thank you for registering at REVA University.
+                                <br/>
+                                <b style="color:#00679A">Important Note:</b> Your Application No:
+                                <span style="font-weight:700;">{!applicationNumber}.</span>
+                                <br/>Kindly, reset the password for your applicant portal and complete the application form.
+                            </p>
+        
+                            <p class="para-text">
+                                The link is shared on your registered email ID (Mail id:
+                                <span style="font-weight:600;">{!emailAddress}).</span>
+                            </p>
+        
+                            <p class="para-text">
+                                If you have not received the mail, request you to contact the admission Counselor.Contact Number:
+                                <span style="font-weight:600;">+91-9021190211.</span>
+                            </p>
+                        </div>
+        
+                        <div class="{!If(FEE_TYPE == 'Application Fee', 'hidden', '')}">
+                            <p class="note-text">
+                                Provisional Admission Fee Receipt has been sent to the registered email Id.
+                                <br/>
+                            </p>
+                        </div>
+        
+                        <div class="back-to-home">
+                            <apex:commandButton styleClass="btn" title="Back" value="Back to Home" oncomplete="redirect();" />
+                        </div>
+                    </apex:form>
+                </div>
+            </div>
+        </div>
+
+
+
+<script>
+function redirect(){
+window.location = "{!applicationHomeUrl}";
+}
+</script>
+
+</apex:page>

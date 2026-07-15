@@ -1,0 +1,84 @@
+<template>
+    <div style="position:relative;">
+        <template if:true={showLoader}>
+            <div class="spinnerClass">
+                <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+            </div>
+        </template>
+        <div class="header" >
+            
+            <template if:true={showNotificationPage}>
+                <template if:true={showNotification}>
+                    <div>
+                            <div style="text-align: center;font-weight: bold;">
+                                    <p>
+                                    The dates for filling the online examination application forms by the student for {examMonthYear} semester end examination are given 
+                                    below.Kindly read the instructions.
+                                    </p>
+                                </div></br>
+                                <div class="slds-align_right" style="font-size:16px;background-color:rgb(5 5 5 / 63%)"><b style="color:white; padding-left:10px">SCHEDULE</b></div></br>
+                                <div class="slds-scrollable_x">
+                                <table   class="  slds-table slds-table_cell-buffer  slds-table-subject slds-no-row-hover">
+                                    <tr style="background-color: #a9a9a957">
+                                        <th style="">Semester</th>
+                                        <th style="">Dates</th>
+                                        <th style="">With Penalty RS.500/-</th>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" style="rgb(255 255 255 / 95%)">{notification.Rve_Semester__r.Name}</td>
+                                        <td style=""><lightning-formatted-date-time value={notification.Rve_Start_Date__c} year="numeric" month="numeric" day="2-digit"></lightning-formatted-date-time> TO <lightning-formatted-date-time value={notification.Rve_End_Date__c} year="numeric" month="numeric" day="2-digit"></lightning-formatted-date-time></td>
+                                        <td style=""><lightning-formatted-date-time value={penaltyStartDate} year="numeric" month="numeric" day="2-digit"></lightning-formatted-date-time> TO <lightning-formatted-date-time value={penaltyEndDate} year="numeric" month="numeric" day="2-digit"></lightning-formatted-date-time></td>
+                                    </tr>
+                                    <tr style="background-color:white">
+                                         <td scope="row">(*including 1st and 2nd sem Arrears Courses)</td>
+                                    </tr>
+
+                                </table><br/>
+                                </div>
+                                    <div class="slds-align_right" style="font-size:16px;background-color:rgb(5 5 5 / 63%)"><b style="color:white; padding-left:10px">EXAMINATION FEE</b></div></br>
+                                    <div class="slds-scrollable_x">
+                                    <table  class=" slds-table slds-table_cell-buffer  slds-table-subject slds-no-row-hover">
+                                        <tr  style="backgroud-color:#a9a9a957">
+                                            <td>Application fee</td>
+                                            <th scope="row">RS.{feeDetails.ApplicationFee}/- per semester</th>
+                                            
+                                        </tr>
+                                        <tr  style="backgroud-color:#a9a9a957">
+                                            <td>Arrears Subject</td>
+                                            <th>RS.{feeDetails.ArreasFee}/- per subject</th>
+                                            
+                                        </tr>
+                                    </table><br/>
+                                    </div>
+                            </div>
+                            <div>
+                                <div class="slds-align_right"><b>PROCEDURE FOR FILLING THE ONLINE APPLICATIONS</b></div></br>
+                                <div>
+                                    <p>1. The student should complete the examination application forms on or before the above mentioned dates.</p><br/>
+                                    <p>2. The respective school directors are requested to instruct the officials to make the necessary arrangements to inform the candidates for filling the examination application form.</p><br/>
+                                    <p>3. The examination application forms are online the fee payments must be remitted through the payment gateway only.</p><br/>
+                                    <p>4. Under any circumstances examination fee once paid cannot be adjusted or refunded.</p><br/>
+                                    <p>5. The student registration and examination application form user manual is furnished below.</p><br/>
+                                    <p>6. The photocopy will be available for 5 days and Re-evaluation will be available for 10 days from the date of announcement of results.</p>
+                                </div>
+                            </div></br>
+                           <div class="slds-clearfix">
+                        <div class="slds-float_right"> 
+                        <lightning-button class="button" variant="brand" label="Fill Application Form" title="Fill Application Form" onclick={handleClick} disabled={isNotEligible}></lightning-button>
+                        </div>
+                           </div>
+                </template>
+                <div>
+                    <template if:true={fillapplication}>
+                        <c-reva-exam-application notification-id={notificationId} oncancel={hideApplicationForm}></c-reva-exam-application>
+                    </template>
+                </div>
+            </template>
+            <template if:false={showNotificationPage}>
+                <div class="slds-text-title_caps" style="display: flex;justify-content: center;align-items: center;font-weight: bold;">
+                    <h1>No Notification is found.</h1>
+                </div>
+            </template>
+        </div>
+    </div>
+    </template>

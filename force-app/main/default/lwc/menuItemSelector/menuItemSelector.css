@@ -1,0 +1,51 @@
+.font-style{
+    font-weight: 600px;
+    font-size: 1.2rem;
+    text-transform:uppercase;
+    text-decoration: underline;
+    color: #F07F07;
+    margin: 5px;
+}
+.container{
+    border-bottom: 2px solid #F07F07;
+    margin-bottom: 15px;
+    padding: 1rem;
+}
+
+.selected-item-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.badge{
+    color: #F07F07;
+    font-size: 14px;
+    padding: 12px;
+    cursor: pointer;
+}
+
+@media(max-width:500px){
+    .container{
+        padding: 0px;
+        padding-bottom: 12px;
+    }
+}
+
+
+.options-container {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.option-item {
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.option-item.highlight {
+    background-color: #f4f4f4;
+    border-left: 3px solid #071af0;
+}

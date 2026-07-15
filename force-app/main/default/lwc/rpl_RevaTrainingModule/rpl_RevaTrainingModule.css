@@ -1,0 +1,79 @@
+.container{
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid orange;
+    border-radius: 10px;
+}
+
+.green{
+    background-color: rgb(142, 204, 142);
+    color: black;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.red{
+    background-color: rgb(255, 95, 95);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.yellow{
+    background-color: rgb(255, 255, 146);
+    color: black;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.overall-percentage{
+    text-align: center;
+}
+.overall-percentage strong{
+    margin-right: 1rem;
+}
+.header{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tabs{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap:0.5rem;
+    margin-bottom: 1rem;
+
+}
+
+.tab{
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex: 1;
+    background-color: #FEF3EA;
+    min-height: 2rem;
+    padding: 0.5rem;
+}
+
+.tab:first-child{
+    color: white;
+    background-color: #F57F26;
+}
+
+.body{
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width:900px){
+    .tab, .red, .green, .yellow{
+        font-size: 0.55rem;
+    }
+}

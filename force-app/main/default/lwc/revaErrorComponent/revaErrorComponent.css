@@ -1,0 +1,11 @@
+.error-container {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    background-image: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
+    border: none;
+    color: white;
+    font-size: medium;
+    border-radius: 15px;
+    padding: 1rem;
+}

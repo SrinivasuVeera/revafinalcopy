@@ -1,0 +1,173 @@
+<apex:page controller="FEE_EazyPayResponse_API"  action="{!updateStudentFee}" sidebar="false" showHeader="false" standardStylesheets="false">
+    <head>
+        <style type= "text/css">
+            .box {
+            width: 700px;
+            <!--  height: 450px;    -->        
+            padding: 30px 60px 30px 60px;
+            border: 3px solid rgb(235, 119, 52);
+            box-shadow: 0 0 10px #777777;
+            border-radius: 10px;
+            font-size: large;
+            font-family: 'Roboto', sans-serif;
+            
+            }
+            
+            .button{
+            margin-top: 5px;
+            display:flex;
+            justify-content:center;
+            }
+            
+            .btn {
+            margin: 2px;
+            padding: 7.5px 15px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size:large;
+            font-weight:bold;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white !important;
+            border-radius: 10px;
+            display: block;
+            border: 0px;
+            box-shadow: 0px 0px 14px -7px #f09819;
+            background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            }
+            
+            .btn:hover {
+            background-position: right center;
+            /* change the direction of the change here */
+            color: #fff;
+            text-decoration: none;
+            }
+            
+            .btn:active {
+            transform: scale(0.95);
+            }
+            
+            .progressBar{
+            vertical-align: middle;
+            text-align: center; 
+            height:70px;
+            padding: 10px 0;
+            }
+            
+        </style>
+    </head>
+    <apex:form id="success" styleClass="slds-scope">
+        <apex:slds />
+        <br/><br/><br/>        
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <span></span>
+            </div>           
+            <div class="slds-col" style="font-weight:bold;"> 
+                <!-- <span> <font size="3" color="blue"> Razorpay Payment Response..! </font> </span>-->
+                <div>
+                    
+                </div>
+                <div class="box">
+                    <div class="progressBar" style="{!If(FEE_TYPE != 'Application Fee', 'display:none;',"")}"> 
+                        <img src="{!$Resource.regFormStep5}" alt="Step 5" width="400" height="100" />   
+                    </div> 
+                    <apex:image value="{!$Resource.REVA_LOGO}" width="50%" style="text-align:top;"/>
+                    
+                    <div>
+                        <table>
+                            <tr>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td> Payment Mode</td>
+                                <td> :</td>
+                                <td>{!PaymentMode}</td>                                
+                            </tr> 
+                            <tr>
+                                <td> Tranasactionid</td>
+                                <td> :</td>
+                                <td>{!referenceNo}</td>                                
+                            </tr> 
+                            <tr>
+                                <td>Amount</td>
+                                <td> : </td>
+                                <td>{!totalAmount}</td>                                
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>:</td>
+                                <td>{!StatusMsg}</td>
+                            </tr>
+                            <tr>
+                                <td> Purpose of Payment</td>
+                                <td> :</td>
+                                <td>{!PurposeofPayment}</td>                                
+                            </tr>
+                            <!--  <tr>
+                                <td> Date &amp; Time of Transaction</td>
+                                <td> : </td>
+                                <td>
+                                <apex:outputtext value="{0,date,dd-MM-yyyy hh:mm:ss}">
+                                <apex:param value="{!transactionDate}" />
+                                </apex:outputtext>
+                                </td>                                
+                                </tr>      -->                 
+                        </table>                     
+                    </div>                    
+                </div>        
+            </div>            
+        </div>
+        <br/>
+        
+        <p style="text-align:center;font-weight:bold;font-color:blue; {!If(FEE_TYPE == 'Application Fee', "",'display:none;')}">
+            An Application payment receipt has been sent to the registered Email ID. <br/>
+            You will soon receive a login credential to the same Email ID to complete the application form. <br/>
+            Thank you for registering with REVA.
+            
+            <div class="button">
+                <apex:commandButton styleClass="btn" title="Back" value="Back to Home" oncomplete="redirect2();" rendered="{!FEE_TYPE == 'Application Fee'}"/>
+        </div>
+    </p>
+    <p style="text-align:center;font-weight:bold;font-color:blue; {!If(recordType == 'Student',"",'display:none;')}">
+        You will be able to Download the Receipt through <b>Payment Details</b> Section under the <b>Fee</b> Tab.
+        <br/><br/>
+        <div class="button">
+            <apex:commandButton styleClass="btn" title="Back" value="Back to Home" oncomplete="redirect();" rendered="{!recordType == 'Student'}"/>
+    </div>
+</p>
+
+<p style="text-align:center;font-weight:bold;font-color:blue; {!If(FEE_TYPE != 'Application Fee' && recordType != 'Student', "",'display:none;')}">
+    Provisional Admission Fee Receipt has been sent to the registered email Id.
+    
+    <div class="button">
+        <apex:commandButton styleClass="btn" title="Back" value="Back to Home" oncomplete="redirect1();" rendered="{!FEE_TYPE != 'Application Fee' && recordType != 'Student'}"/>
+</div>
+</p>
+
+
+</apex:form> 
+<script>
+function redirect(){
+    window.location = "{!homeUrl}";
+}
+
+function redirect2(){
+    window.location = "{!Applicant_HomeUrl}";
+    
+}  
+function redirect1(){
+    window.location = "{!Applicant_PortalUrl}";
+    
+}
+
+
+
+
+</script>
+
+</apex:page>

@@ -1,0 +1,89 @@
+<aura:component controller="WelcomeProfile" implements="forceCommunity:availableForAllPageTypes">
+<ltng:require styles="/resource/LDS100/assets/styles/salesforce-lightning-design-system.min.css"/>
+    <aura:attribute name="profileDepartmentImg" type="String"/><!-- used in conjunction with currentUser attribute above-->
+    <aura:attribute name="today" type="String"/><!--display todays date-->
+    <aura:attribute name="partOfDayGreeting" type="String"/><!--display greeting based on time of day-->
+    <aura:attribute name="displayLoader" type="Boolean" />
+    <aura:attribute name="currentUser" type="User" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class="wrapper">
+        <div id="department" style="{!'min-height: 150px; background-repeat: no-repeat; background-position: top; background-image: url(&quot;' + $SfdcSite.pathPrefix+v.profileDepartmentImg + '&quot;);'}">
+            <div style="padding-top: 90px; clear: left; float: left; position: relative; left: 50%; ">
+                <!--display profile photo-->
+                <a type="button" href="{!'profile/' + v.currentUser.Id}">
+                	<img style="width:80px;height:80px;border-radius:50px;border:3px solid white;display:block;float:left;position:relative;right:50%; object-fit: cover; object-position: 0 -5px;" src="{!v.currentUser.FullPhotoUrl}"/><br/>
+                </a>
+                <!-- ANIMATED LOADER --> 
+        		<center style="float:left;position:relative;right:25%;" >
+            		<aura:if isTrue="{!v.displayLoader}">
+                        <div class="slds">
+                            <div id="spinner" class="slds-spinner--medium">
+                                <img src="{!$SfdcSite.pathPrefix+'/resource/LDS100/assets/images/spinners/slds_spinner.gif'}" alt="Loading..." />
+                            </div>
+                        </div>
+            		</aura:if>
+                </center>
+
+                <!--Edit profile display edit icon to the right of the image-->
+        		<!--span style="position:absolute;left:30px;top:145px;">
+            		<a type="button" href="{!'profile/' + v.currentUser.Id}">
+                		<c:svg class="slds-icon slds-icon-dash-x-small slds-icon-text-default" xlinkHref="{!$SfdcSite.pathPrefix+'/resource/LDS100/assets/icons/action-sprite/svg/symbols.svg#edit'}"/> 
+            		</a>
+        		</span-->
+
+            </div>
+        </div>
+
+        <!--welcome-->
+        <table style="width: 100%;">
+            <tr>
+                <td colspan="2" style="width: 100%; text-align:center; height: 80px;">
+                    <span class="slds-form-element__label" style="color:#000000">{!v.today}</span><br/>
+                        <span class="slds-text-heading--large"><aura:unescapedHtml value="{!v.partOfDayGreeting}"/></span>                    
+                    <br/><br/>
+                </td>
+            </tr>
+            <!--hide edit profile and log case options. Uncomment if needed for a demo-->
+            <tr style="display:none">
+                <td style="width: 50%;">
+                    <div style="float: left; margin-left: 10%; margin-bottom: 10px;">
+                        <a class="contentitemlink" type="button" href="{!'profile/' + v.currentUser.Id}">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <span class="slds-avatar slds-avatar--circle slds-avatar--small" style="background-color:#54698D;">
+                                            <img style="position:relative;top:15%;left:18%" class="slds-icon--small" src="{!$SfdcSite.pathPrefix+'/resource/LDS100/assets/icons/action/edit_60.png'}"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="slds-form-element__label" style="display: inline-block;">&nbsp;Edit Profile</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </a>
+                    </div>
+                </td>
+                <td style="width: 50%;">
+                    <div style="float: right; margin-right:2%; margin-bottom: 10px;">
+                        <a class="contentitemlink" type="button" href="{!'contactsupport'}">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <span class="slds-avatar slds-avatar--circle slds-avatar--small" style="border:1px solid #000000;background-color:#54698D;">
+                                            <img style="position:relative;top:15%;left:18%;" class="slds-icon--small" src="{!$SfdcSite.pathPrefix+'/resource/LDS100/assets/icons/standard/case_60.png'}"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="slds-form-element__label" style="display: inline-block;">&nbsp;Log A Case</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</aura:component>

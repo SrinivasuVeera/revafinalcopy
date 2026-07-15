@@ -1,0 +1,215 @@
+<aura:component controller="STOB_DocumentsVerification_Ctrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithOutHeader" access="global" >
+    <aura:html tag="style">
+        
+        .slds-modal__container {
+        height : 100%;
+        width: 100%;
+        max-width: 95rem;
+        }
+    </aura:html> 
+    
+    
+    <aura:attribute name="lstDocuments" type="List"/>
+    <aura:attribute name="lstDataDocuments" type="List"/>
+    <aura:attribute name="strStudentName" type="String"/>
+    <aura:attribute name="strProgramName" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="lstVerfStatus" type="List" />
+    <aura:attribute name="SelectedVerfStatus" type="String"/>
+    <aura:attribute name="selectedDocumentId" type="string"/>    
+    <aura:attribute name="hasModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="lstDisableStatus" type="List"/>
+    <aura:attribute name="fileName" type="String"/>
+    <aura:attribute name="retrnfileNameUploaded" type="String"/>
+    <aura:attribute name="retrnfileName" type="String"/>
+    <aura:attribute name ="showdata" type="boolean"/>
+    <aura:attribute name="showConfirmDocuments" type="boolean" default="false"/>
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="doctype:image" alternativeText="Document Verification" title="Document Verification" /> &nbsp;
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate slds-text-title_caps" title="Document Verification">Document Verification For<br/>
+                                        {!v.strStudentName}  {!v.strProgramName}</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="slds-float_right">
+                            <lightning:button variant="brand" label="Save &amp; Return" onclick="{!c.saveReturn}"/> 
+                            <lightning:button variant="brand" label="Save &amp; Confirm"  onclick="{!c.generatedialog}"/>
+                            <lightning:button variant="neutral" label="Cancel" onclick="{!c.CancelDocument}"/>
+                        </div>
+                        <p class="slds-text-body_small"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <br/>
+    <div class="slds-table--header-fixed_container" style="height:450px;">
+        <div class="slds-scrollable_y" style="height:500%;">
+            <table class="slds-table slds-table_bordered slds-table--header-fixed">
+                <thead>
+                    <tr>
+                         <th scope="col" style="width:10%;">
+                            <div class="slds-truncate slds-cell-fixed" title="Education Name"> Education Name </div>
+                        </th>
+                        <th scope="col" style="width:20%;">
+                            <div class="slds-truncate slds-cell-fixed" title="Document List"> Document List </div>
+                        </th>
+                        <th scope="col" style="width:10%;">
+                            <div class="slds-truncate slds-cell-fixed"  title="Mandatory for SRN Generation">Mandatory for <br/> SRN Generation </div>
+                        </th>
+                        <th scope="col" style="width:10%;">
+                            <div class="slds-truncate slds-cell-fixed" title="Verification Status ">Verification Status </div>
+                        </th>
+                        <th scope="col" style="width:20%;">
+                            <div class="slds-truncate slds-cell-fixed" title="Status Remarks">Status Remarks</div>
+                        </th>
+                        <th scope="col" style="width:10%;">
+                            <div class="slds-truncate slds-cell-fixed" title="Received Hardcopy ?">Received <br/> Hardcopy ?</div>
+                        </th>
+                        <th scope="col"   style="width:30%;text-align:right;">                             
+                            <div class="slds-truncate slds-cell-fixed" title="Attachment">Attachment</div>                            
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.lstDocuments}" var="objdcumnt" indexVar="Index">
+                        <aura:if isTrue="{!objdcumnt.objEducationHistory.Data__c == false}" >
+                            <tr>
+                                <td>
+                                    {!objdcumnt.objEducationHistory.Name}
+                                </td>
+                                <td>
+                                    {!objdcumnt.objEducationHistory.Education_History_Name__c}
+                                </td>  
+                                <td style="width:10%;">                                    
+                                    <ui:inputCheckbox aura:id="checkbox" value="{!objdcumnt.objEducationHistory.Mandatory_for_SRN_Generation__c}" disabled="true" class="green-checkbox" />                                    
+                                </td>
+                                <td>
+                                    <aura:if isTrue="{!objdcumnt.objEducationHistory.Save_Confirm__c == true}" >
+                                        <p>  
+                                            {!objdcumnt.objEducationHistory.hed__Verification_Status__c}
+                                        </p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!objdcumnt.objEducationHistory.Save_Confirm__c == false}" >
+                                        <p>  
+                                            <lightning:select label="" name="verfstatus" variant="label-inline" value="{!objdcumnt.objEducationHistory.hed__Verification_Status__c}" onchange="{!c.onChangeVerificationStatus}"  class="slds-float_left" >                                           
+                                                <aura:iteration items="{!v.lstVerfStatus}" var="val" >
+                                                    <option value="{!val}"> {!val}</option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </p>
+                                    </aura:if>
+                                </td>
+                                <td>                                
+                                    <div>
+                                        <aura:if isTrue="{!objdcumnt.objEducationHistory.Save_Confirm__c == true}">
+                                            <aura:if isTrue="{!objdcumnt.objEducationHistory.hed__Verification_Status__c == 'Approved'}">
+                                                <lightning:input  name="comments" value="{!objdcumnt.objEducationHistory.Status_Remarks__c}"  class="slds-float_left" disabled="true" />
+                                            </aura:if>
+                                        </aura:if>
+                                        <aura:if isTrue="{!objdcumnt.objEducationHistory.Save_Confirm__c == false}" >
+                                            <aura:if isTrue="{!objdcumnt.objEducationHistory.hed__Verification_Status__c == 'Approved'}">
+                                                <lightning:input  name="comments" value="{!objdcumnt.objEducationHistory.Status_Remarks__c}"  class="slds-float_left"/>
+                                            </aura:if>
+                                        </aura:if>
+                                        <aura:if isTrue="{!objdcumnt.objEducationHistory.hed__Verification_Status__c == 'Pending'}">                                              
+                                            <lightning:input  name="comments" value="{!objdcumnt.objEducationHistory.Status_Remarks__c}" class="slds-float_left" disabled="true" />
+                                        </aura:if>
+                                        <aura:if isTrue="{!objdcumnt.objEducationHistory.hed__Verification_Status__c == 'Rejected'}">                                                                              
+                                            <lightning:input aura:id="inputReq"  name="comments" value="{!objdcumnt.objEducationHistory.Status_Remarks__c}"  class="slds-float_left" required="true"/>
+                                        </aura:if>
+                                    </div>
+                                </td>
+                                
+                                <td scope="col" >
+                                    <aura:if isTrue="{!objdcumnt.objEducationHistory.hed__Verification_Status__c == 'Pending'}">                                        
+                                        <ui:inputCheckbox aura:id="checkbox" value="{!objdcumnt.objEducationHistory.Received_Hardcopy__c}" disabled="true" class="green-checkbox" />                                        
+                                        <aura:set attribute="else">                                            
+                                            <ui:inputCheckbox aura:id="checkbox" value="{!objdcumnt.objEducationHistory.Received_Hardcopy__c}" disabled="{!objdcumnt.objEducationHistory.Save_Confirm__c == true}" class="green-checkbox" /> 
+                                        </aura:set>                                    
+                                    </aura:if>                        
+                                </td>
+                                <td scope="col">
+                                    <div>		
+                                        <aura:if isTrue="{!not(empty(objdcumnt.objEducationHistory.ContentDocumentLinks))}"> 
+                                            <p> 
+                                                <aura:iteration  items="{!objdcumnt.objEducationHistory.ContentDocumentLinks}" var="con" >
+                                                    <a onclick="{!c.getSelected}" data-Id="{!con.ContentDocument.Id}"> 
+                                                        <lightning:icon iconName="doctype:attachment" size="small"
+                                                                        alternativeText="Attachment file" title="Attachment" />  </a>  
+                                                    
+                                                </aura:iteration>&nbsp;&nbsp;
+                                                <lightning:buttonIcon  name="{!Index}" onclick="{!c.deleteFiles}" value="{!objdcumnt.objEducationHistory.Id}" iconName="utility:delete"  alternativeText="Delete" title="Delete" class="removeIconBg" size="small"  iconClass="removeIcon" />
+                                            </p>
+                                            <aura:if isTrue="{!v.hasModalOpen}">
+                                                <section onclick="{!c.closeModelf}"
+                                                         role="dialog"
+                                                         aria-modal="true"
+                                                         class="slds-modal slds-fade-in-open">
+                                                    <div class="slds-modal__container">                
+                                                        <div class='slds-grid slds-wrap'>
+                                                            <div class="slds-size--1-of-1 slds-align_absolute-center indicator">
+                                                                <lightning:fileCard fileId="{!v.selectedDocumentId}" description=" "/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                                <div class="slds-backdrop slds-backdrop_open"></div>
+                                            </aura:if>
+                                            <aura:set attribute="else">
+                                                <lightning:fileUpload name="fileUploader" multiple="false"
+                                                                      recordId="{!objdcumnt.objEducationHistory.Id}" onuploadfinished="{!c.handleFileUpload}" />
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>							
+                                </td>
+                            </tr>
+                        </aura:if>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+    </div>   
+    <br/>
+    <center>        
+        <aura:if isTrue="{!v.showConfirmDocuments}">
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading--medium">Documents Confirmation</h1>
+                    </header>                    
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center><b>Are you sure you want to Confirm the Documents?</b></center>
+                    </div>                    
+                    <footer class="slds-modal__footer">
+                        <lightning:button name='No' label='No' onclick='{!c.handleConfirmNo}'/>
+                        <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleConfirmYes}'/>
+                    </footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>            
+        </aura:if>       
+    </center>   
+</aura:component>
